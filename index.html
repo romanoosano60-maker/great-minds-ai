@@ -1,0 +1,53 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Great Minds AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef7ff;color:#19305a}
+header{background:linear-gradient(120deg,#6545e8,#00bcd4);color:white;text-align:center;padding:24px 16px}
+h1{font-size:32px;margin:8px 0}
+.hero{text-align:center;padding:25px 16px;background:linear-gradient(#c6efff,#fff0b9)}
+.rocket{font-size:75px}
+.people{font-size:42px;margin:12px}
+h2{margin:10px 0}
+button{border:0;border-radius:14px;padding:14px 20px;background:#6848ed;color:white;font-size:16px;font-weight:bold;cursor:pointer}
+.subjects{display:grid;grid-template-columns:repeat(2,1fr);gap:12px;padding:16px}
+.subject{background:white;border-radius:18px;padding:22px 8px;text-align:center;box-shadow:0 4px 12px #0001}
+.subject span{display:block;font-size:40px;margin-bottom:12px}
+.subject button{font-size:14px;width:100%;padding:12px 5px}
+footer{text-align:center;padding:25px;background:#243777;color:white}
+</style>
+</head>
+<body>
+<header>
+<h1>🌟 Great Minds AI</h1>
+<p>Learn • Explore • Imagine • Create</p>
+</header>
+<section class="hero">
+<div class="rocket">🚀🌎</div>
+<h2>Launch Your Learning Adventure!</h2>
+<p>Explore science, English, mathematics and more.</p>
+<div class="people">👩‍🏫 👧🏽 👦🏾 👧🏻</div>
+<p>Teachers and parents supporting every child ❤️</p>
+<button onclick="document.getElementById('subjects').scrollIntoView({behavior:'smooth'})">Start Learning 🚀</button>
+</section>
+<section id="subjects" class="subjects">
+<div class="subject"><span>🔬</span><button onclick="lesson('Science')">Science</button></div>
+<div class="subject"><span>🔢</span><button onclick="lesson('Mathematics')">Mathematics</button></div>
+<div class="subject"><span>📚</span><button onclick="lesson('English')">English</button></div>
+<div class="subject"><span>🎮</span><button onclick="lesson('Learning Games')">Learning Games</button></div>
+<div class="subject"><span>🤖</span><button onclick="lesson('AI Teacher')">AI Teacher</button></div>
+<div class="subject"><span>🌍</span><button onclick="lesson('Group Learning')">Group Learning</button></div>
+</section>
+<footer>Great Minds AI — Every Child Can Shine ✨</footer>
+<script>
+function lesson(subject){
+alert(subject+" lessons are coming soon!");
+}
+</script>
+</body>
+</html>
