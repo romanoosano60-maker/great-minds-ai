@@ -45,8 +45,24 @@ footer{text-align:center;padding:25px;background:#243777;color:white}
 </section>
 <footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
-function lesson(subject){
-alert(subject+" lessons are coming soon!");
+function lesson(subject) {
+  const pages = {
+    "Science": "science.html",
+    "Mathematics": "math.html",
+    "Math": "math.html",
+    "English": "english.html",
+    "Social Studies": "social.html",
+    "Computer Studies": "computer.html",
+    "Computer": "computer.html"
+  };
+
+  const page = pages[subject];
+
+  if (page) {
+    window.location.href = page;
+  } else {
+    alert(subject + " lessons are coming soon!");
+  }
 }
 </script>
 </body>
