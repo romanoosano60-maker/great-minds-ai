@@ -1,0 +1,109 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Mathematics - Great Minds AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#edf7ff;color:#24365b}
+header{background:linear-gradient(120deg,#6947ed,#00bcd4);color:white;text-align:center;padding:28px 12px}
+h1{margin:8px 0}
+main{max-width:700px;margin:auto;padding:16px}
+.card{background:white;border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 4px 12px #0001}
+h2{color:#6245d9}
+button,.back{display:block;width:100%;border:0;border-radius:13px;background:#6846ed;color:white;padding:15px;margin:12px 0;font-size:17px;text-decoration:none;text-align:center}
+button:disabled{opacity:.65}
+#feedback{font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>🔢 Mathematics Adventure</h1>
+<p>Learn • Practice • Grow</p>
+</header>
+<main>
+<a class="back" href="index.html">🏠 Back Home</a>
+<section class="card">
+<h2>📘 Lesson 1: Numbers</h2>
+<p>Mathematics helps us count, measure, and solve problems.</p>
+<p>➕ Addition: 3 + 2 = 5</p>
+<p>➖ Subtraction: 8 - 3 = 5</p>
+<p>✖️ Multiplication: 4 × 2 = 8</p>
+<p>Practice these examples before starting the quiz!</p>
+</section>
+<section class="card">
+<h2>🧠 Mathematics Quiz</h2>
+<p id="progress"></p>
+<h3 id="question"></h3>
+<div id="answers"></div>
+<p id="feedback" aria-live="polite"></p>
+<button id="next" onclick="nextQuestion()" hidden>Next ➡️</button>
+</section>
+<section class="card" id="result" hidden>
+<h2>🏆 Your Score</h2>
+<p id="score"></p>
+<button onclick="restart()">Try Again 🔄</button>
+</section>
+</main>
+<script>
+const questions=[
+{q:"What is 3 + 2?",a:["4","5","6"],correct:1},
+{q:"What is 8 - 3?",a:["5","6","4"],correct:0},
+{q:"What is 4 × 2?",a:["6","8","10"],correct:1},
+{q:"What is 10 + 5?",a:["12","14","15"],correct:2},
+{q:"What is 12 - 7?",a:["5","6","7"],correct:0}
+];
+let current=0,points=0,answered=false;
+function showQuestion(){
+answered=false;
+const q=questions[current];
+document.getElementById("progress").textContent="Question "+(current+1)+" of "+questions.length;
+document.getElementById("question").textContent=q.q;
+document.getElementById("feedback").textContent="";
+document.getElementById("next").hidden=true;
+const area=document.getElementById("answers");
+area.innerHTML="";
+q.a.forEach((answer,i)=>{
+const b=document.createElement("button");
+b.textContent=answer;
+b.onclick=()=>choose(i);
+area.appendChild(b);
+});
+}
+function choose(i){
+if(answered)return;
+answered=true;
+const q=questions[current];
+const buttons=document.querySelectorAll("#answers button");
+buttons.forEach(b=>b.disabled=true);
+if(i===q.correct){
+points++;
+document.getElementById("feedback").textContent="🌟 Correct! Well done!";
+}else{
+document.getElementById("feedback").textContent="Good try! The answer is "+q.a[q.correct]+".";
+}
+document.getElementById("next").hidden=false;
+document.getElementById("next").textContent=current===questions.length-1?"See Results 🏆":"Next Question ➡️";
+}
+function nextQuestion(){
+current++;
+if(current<questions.length){showQuestion();return;}
+document.getElementById("progress").textContent="Quiz completed!";
+document.getElementById("question").textContent="";
+document.getElementById("answers").innerHTML="";
+document.getElementById("feedback").textContent="";
+document.getElementById("next").hidden=true;
+document.getElementById("result").hidden=false;
+document.getElementById("score").textContent="You scored "+points+" out of "+questions.length+"! 🎉";
+}
+function restart(){
+current=0;points=0;
+document.getElementById("result").hidden=true;
+showQuestion();
+}
+showQuestion();
+</script>
+</body>
+</html>
