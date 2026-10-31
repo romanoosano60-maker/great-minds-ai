@@ -1,0 +1,112 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Science - Great Minds AI</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eaf7ff;color:#20345b}
+header{background:linear-gradient(120deg,#6345ed,#00bcd4);color:white;text-align:center;padding:25px 15px}
+h1{margin:10px 0}
+main{max-width:700px;margin:auto;padding:16px}
+.card{background:white;border-radius:20px;padding:20px;margin:15px 0;box-shadow:0 4px 12px #0001}
+h2{color:#5940d5}
+button,.back{display:block;width:100%;border:0;border-radius:12px;background:#6545ed;color:white;padding:15px;margin:10px 0;font-size:17px;text-align:center;text-decoration:none}
+button:disabled{opacity:.6}
+.correct{background:#d7f8df}
+.wrong{background:#ffe0df}
+#feedback{font-weight:bold}
+</style>
+</head>
+<body>
+<header>
+<h1>🔬 Science Adventure</h1>
+<p>Great Minds AI Learning Academy</p>
+</header>
+<main>
+<a class="back" href="index.html">🏠 Back Home</a>
+<div class="card">
+<h2>🌱 Lesson 1: Living Things</h2>
+<p>Living things need water, air, and nutrients to survive.</p>
+<p>Plants use sunlight to make their own food.</p>
+<p>Animals eat plants or other animals for energy.</p>
+<p>Examples of living things include trees, birds, humans, and insects.</p>
+</div>
+<div class="card">
+<h2>🧠 Science Quiz</h2>
+<p id="progress"></p>
+<h3 id="question"></h3>
+<div id="answers"></div>
+<p id="feedback" aria-live="polite"></p>
+<button id="next" onclick="nextQuestion()" hidden>Next Question ➡️</button>
+</div>
+<div class="card" id="result" hidden>
+<h2>🏆 Your Results</h2>
+<p id="score"></p>
+<button onclick="restart()">Try Again 🔄</button>
+</div>
+</main>
+<script>
+const questions=[
+{q:"Which of these is a living thing?",a:["Rock","Tree","Chair"],correct:1},
+{q:"What do plants use to make food?",a:["Sunlight","Plastic","Sand"],correct:0},
+{q:"Which of these do humans need to survive?",a:["Toys","Water","Television"],correct:1},
+{q:"Which animal can fly?",a:["Fish","Elephant","Bird"],correct:2},
+{q:"What helps plants grow?",a:["Water","Glass","Metal"],correct:0}
+];
+let current=0,points=0,answered=false;
+function showQuestion(){
+answered=false;
+document.getElementById("progress").textContent="Question "+(current+1)+" of "+questions.length;
+document.getElementById("question").textContent=questions[current].q;
+document.getElementById("feedback").textContent="";
+document.getElementById("next").hidden=true;
+const area=document.getElementById("answers");
+area.innerHTML="";
+questions[current].a.forEach((answer,i)=>{
+const b=document.createElement("button");
+b.textContent=answer;
+b.onclick=()=>choose(i);
+area.appendChild(b);
+});
+}
+function choose(i){
+if(answered)return;
+answered=true;
+const q=questions[current];
+const buttons=document.querySelectorAll("#answers button");
+buttons.forEach(b=>b.disabled=true);
+if(i===q.correct){
+points++;
+buttons[i].className="correct";
+document.getElementById("feedback").textContent="🌟 Correct! Great job!";
+}else{
+buttons[i].className="wrong";
+buttons[q.correct].className="correct";
+document.getElementById("feedback").textContent="Keep learning! The correct answer is "+q.a[q.correct]+".";
+}
+document.getElementById("next").hidden=false;
+document.getElementById("next").textContent=current===questions.length-1?"See Results 🏆":"Next Question ➡️";
+}
+function nextQuestion(){
+current++;
+if(current<questions.length){showQuestion();return;}
+document.getElementById("progress").textContent="Quiz completed!";
+document.getElementById("question").textContent="";
+document.getElementById("answers").innerHTML="";
+document.getElementById("feedback").textContent="";
+document.getElementById("next").hidden=true;
+document.getElementById("result").hidden=false;
+document.getElementById("score").textContent="You scored "+points+" out of "+questions.length+"! 🎉";
+}
+function restart(){
+current=0;points=0;
+document.getElementById("result").hidden=true;
+showQuestion();
+}
+showQuestion();
+</script>
+</body>
+</html>
