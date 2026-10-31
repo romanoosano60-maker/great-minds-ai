@@ -1,0 +1,202 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI - Computer Studies</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#edf5ff;color:#24334d}
+header{background:linear-gradient(120deg,#6738e8,#00b8d9);color:white;text-align:center;padding:30px 15px}
+header h1{font-size:30px}
+header a{color:white}
+main{max-width:850px;margin:auto;padding:15px}
+section{background:white;border-radius:18px;padding:20px;margin:18px 0;box-shadow:0 4px 12px #cbd9ee}
+h2{color:#5838cb}
+button{background:#6040e8;color:white;border:0;border-radius:12px;padding:13px;margin:5px;font-size:16px;cursor:pointer}
+button:focus-visible{outline:3px solid orange}
+.card{background:#eaf3ff;padding:16px;border-radius:14px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+.grid button{background:#ffc33d;color:#273149;font-weight:bold;margin:0}
+input{width:100%;padding:13px;border:2px solid #a8bce8;border-radius:10px;font-size:17px}
+.feedback{font-weight:bold;min-height:25px}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 Great Minds AI</h1>
+<h2>💻 Computer Studies</h2>
+<p>Learn • Code • Create • Explore</p>
+<a href="index.html">🏠 Home</a>
+</header>
+<main>
+<section>
+<h2>🖥️ Lesson 1: Computer Basics</h2>
+<p>A computer is an electronic device that processes information.</p>
+<div class="grid" id="parts"></div>
+<p class="card" id="partInfo">Tap a computer part to learn about it.</p>
+</section>
+<section>
+<h2>⌨️ Lesson 2: Typing Practice</h2>
+<p>Type the following sentence exactly:</p>
+<div class="card">I love learning computers</div>
+<input id="typing" placeholder="Type here" autocomplete="off">
+<button onclick="checkTyping()">Check Typing</button>
+<p id="typingResult" class="feedback" aria-live="polite"></p>
+</section>
+<section>
+<h2>🌐 Lesson 3: Internet Safety</h2>
+<div class="card">
+<p>Keep personal information private. Never share passwords, and ask a trusted adult before communicating with strangers online.</p>
+<button onclick="speak('Keep your passwords private. Ask a trusted adult if something online makes you uncomfortable.')">🔊 Listen</button>
+</div>
+<p>Should you share your password with strangers?</p>
+<button onclick="feedback('safety',false)">Yes</button>
+<button onclick="feedback('safety',true)">No</button>
+<p id="safety" class="feedback"></p>
+</section>
+<section>
+<h2>👨‍💻 Lesson 4: Coding Basics</h2>
+<p>Coding means writing instructions that a computer can follow.</p>
+<div class="card">
+<p>Help the robot move three steps!</p>
+<p id="robot" style="font-size:38px">🤖</p>
+<p id="steps">Steps: 0 / 3</p>
+<button onclick="moveRobot()">➡️ Move Robot</button>
+<button onclick="resetRobot()">🔄 Reset</button>
+<p id="codingResult" class="feedback"></p>
+</div>
+</section>
+<section>
+<h2>🧠 Lesson 5: Artificial Intelligence</h2>
+<p>Artificial intelligence, or AI, is technology that can recognize patterns, generate responses and help people solve problems.</p>
+<div class="card">
+<p>Examples include translation tools, voice assistants and image recognition.</p>
+<button onclick="speak('Artificial intelligence helps computers perform tasks such as recognizing speech, understanding language and finding patterns.')">🔊 Listen</button>
+</div>
+<p>Can AI sometimes make mistakes?</p>
+<button onclick="feedback('ai',true)">Yes</button>
+<button onclick="feedback('ai',false)">No</button>
+<p id="ai" class="feedback"></p>
+</section>
+<section>
+<h2>🤖 Lesson 6: Robotics</h2>
+<p>A robot is a machine that can perform tasks automatically or under human control.</p>
+<div class="card">
+<p>Some robots use sensors to detect light, distance or movement.</p>
+<button onclick="speak('Robots can use sensors to learn about their surroundings.')">🔊 Listen</button>
+</div>
+</section>
+<section>
+<h2>🏆 Lesson 7: Computer Quiz</h2>
+<p id="question"></p>
+<div id="answers"></div>
+<p id="quizFeedback" class="feedback" aria-live="polite"></p>
+<p id="score">Score: 0</p>
+<button onclick="nextQuestion()">Next Question ➜</button>
+</section>
+</main>
+<script>
+function speak(text){
+if(!("speechSynthesis" in window)){
+alert("Speech is not supported in this browser.");
+return;
+}
+speechSynthesis.cancel();
+const u=new SpeechSynthesisUtterance(text);
+u.lang="en-US";
+u.rate=0.85;
+speechSynthesis.speak(u);
+}
+const parts=[
+["🖥️ Monitor","A monitor displays images and text."],
+["⌨️ Keyboard","A keyboard is used to type letters and numbers."],
+["🖱️ Mouse","A mouse helps select and move items on a screen."],
+["🧠 CPU","The central processing unit carries out instructions."],
+["🔊 Speakers","Speakers produce sound."],
+["📷 Webcam","A webcam captures video and images."]
+];
+parts.forEach(part=>{
+const b=document.createElement("button");
+b.textContent=part[0];
+b.onclick=()=>{
+document.getElementById("partInfo").textContent=part[1];
+speak(part[1]);
+};
+document.getElementById("parts").appendChild(b);
+});
+function checkTyping(){
+const typed=document.getElementById("typing").value.trim();
+document.getElementById("typingResult").textContent=
+typed==="I love learning computers"?"🎉 Excellent typing!":"Try again. Check every word.";
+}
+function feedback(id,correct){
+document.getElementById(id).textContent=
+correct?"✅ Correct! Well done!":"❌ Not quite. Try again!";
+}
+let steps=0;
+function moveRobot(){
+if(steps<3)steps++;
+document.getElementById("steps").textContent="Steps: "+steps+" / 3";
+document.getElementById("robot").style.transform="translateX("+(steps*20)+"px)";
+if(steps===3){
+document.getElementById("codingResult").textContent="🎉 Mission complete!";
+}
+}
+function resetRobot(){
+steps=0;
+document.getElementById("steps").textContent="Steps: 0 / 3";
+document.getElementById("robot").style.transform="translateX(0)";
+document.getElementById("codingResult").textContent="";
+}
+const questions=[
+{q:"Which device helps you type?",a:["Keyboard","Monitor","Speaker"],correct:0},
+{q:"What does CPU stand for?",a:["Computer Power Unit","Central Processing Unit","Control Print Utility"],correct:1},
+{q:"What should you keep private?",a:["Your password","Your favorite color","A public weather report"],correct:0},
+{q:"What is coding?",a:["Cooking food","Writing computer instructions","Painting walls"],correct:1},
+{q:"Can robots use sensors?",a:["Yes","No"],correct:0}
+];
+let current=0,score=0,answered=false;
+function showQuestion(){
+const q=questions[current];
+document.getElementById("question").textContent=q.q;
+document.getElementById("quizFeedback").textContent="";
+const box=document.getElementById("answers");
+box.replaceChildren();
+answered=false;
+q.a.forEach((text,i)=>{
+const b=document.createElement("button");
+b.textContent=text;
+b.onclick=()=>{
+if(answered)return;
+answered=true;
+if(i===q.correct){
+score++;
+document.getElementById("quizFeedback").textContent="🎉 Correct!";
+}else{
+document.getElementById("quizFeedback").textContent="Correct answer: "+q.a[q.correct];
+}
+document.getElementById("score").textContent="Score: "+score;
+};
+box.appendChild(b);
+});
+}
+function nextQuestion(){
+if(!answered){
+document.getElementById("quizFeedback").textContent="Choose an answer first.";
+return;
+}
+current++;
+if(current>=questions.length){
+document.getElementById("question").textContent="🎉 Quiz complete!";
+document.getElementById("answers").replaceChildren();
+document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
+return;
+}
+showQuestion();
+}
+showQuestion();
+</script>
+</body>
+</html>
