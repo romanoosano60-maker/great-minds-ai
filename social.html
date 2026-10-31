@@ -1,0 +1,188 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI - Social Studies</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:#eef7ff;color:#24344e}
+header{background:linear-gradient(120deg,#00a884,#3454df);color:white;text-align:center;padding:28px 15px}
+header h1{font-size:29px}
+header a{color:white}
+main{max-width:850px;margin:auto;padding:15px}
+section{background:white;padding:20px;border-radius:18px;margin:18px 0;box-shadow:0 4px 12px #ccd9e8}
+h2{color:#3454bb}
+button{background:#3556e8;color:white;border:0;border-radius:12px;padding:13px;margin:5px;font-size:16px;cursor:pointer}
+button:focus-visible{outline:3px solid orange}
+.card{background:#e9f4ff;border-radius:12px;padding:15px;margin:12px 0}
+.grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
+.grid button{background:#ffbf37;color:#24344e;font-weight:bold}
+.feedback{font-weight:bold;min-height:24px}
+</style>
+</head>
+<body>
+<header>
+<h1>🌍 Great Minds AI</h1>
+<h2>Social Studies</h2>
+<p>Explore Our World • Learn • Play</p>
+<a href="index.html">🏠 Home</a>
+</header>
+<main>
+<section>
+<h2>🌎 Lesson 1: Geography</h2>
+<p>Geography is the study of Earth, places, people and environments.</p>
+<div class="card">
+<h3>Our Seven Continents</h3>
+<div class="grid" id="continents"></div>
+<p id="continentInfo" aria-live="polite">Tap a continent to learn about it.</p>
+</div>
+</section>
+<section>
+<h2>🌊 Lesson 2: Oceans</h2>
+<p>Earth has five named oceans.</p>
+<div class="grid" id="oceans"></div>
+<p id="oceanInfo" aria-live="polite"></p>
+</section>
+<section>
+<h2>🏛️ Lesson 3: History</h2>
+<div class="card">
+<p>History helps us understand how people lived in the past and how societies changed.</p>
+<p>Ancient Egyptians built pyramids. Many early civilizations developed farming, writing and trade.</p>
+<button onclick="speak('History is the study of the past. People learn about history using objects, documents and stories.')">🔊 Listen</button>
+</div>
+<p>What does history study?</p>
+<button onclick="answer('history',true,'Correct! History studies the past.')">The past</button>
+<button onclick="answer('history',false,'Try again!')">Only the future</button>
+<p class="feedback" id="history"></p>
+</section>
+<section>
+<h2>🎭 Lesson 4: Culture</h2>
+<p>Culture includes languages, food, music, clothing, art and traditions.</p>
+<div class="card">
+<p>People around the world have different traditions. We should respect each other's cultures.</p>
+<button onclick="speak('We should respect people from different cultures and backgrounds.')">🔊 Listen</button>
+</div>
+</section>
+<section>
+<h2>🤝 Lesson 5: Citizenship</h2>
+<p>Good citizens help their communities and respect others.</p>
+<div class="card">
+<p>Examples: Follow fair rules, care for public places, help people and respect their rights.</p>
+</div>
+<p>Which action shows good citizenship?</p>
+<button onclick="answer('citizen',true,'Excellent! Helping others is good citizenship.')">Helping a neighbor</button>
+<button onclick="answer('citizen',false,'Try again!')">Throwing rubbish on the road</button>
+<p class="feedback" id="citizen"></p>
+</section>
+<section>
+<h2>🌱 Lesson 6: Environment</h2>
+<p>Our environment includes air, water, land, plants and animals.</p>
+<div class="card">
+<p>Protect Earth by saving water, reducing waste and caring for nature.</p>
+<button onclick="speak('Protect our planet. Save water, reduce waste and plant trees where appropriate.')">🔊 Listen</button>
+</div>
+<p>Which action helps the environment?</p>
+<button onclick="answer('environment',true,'Correct! Saving water helps.')">Saving water</button>
+<button onclick="answer('environment',false,'Try again!')">Wasting water</button>
+<p class="feedback" id="environment"></p>
+</section>
+<section>
+<h2>🏆 Lesson 7: Social Studies Quiz</h2>
+<p id="question"></p>
+<div id="choices"></div>
+<p class="feedback" id="quizFeedback" aria-live="polite"></p>
+<p id="score">Score: 0</p>
+<button onclick="nextQuestion()">Next Question ➜</button>
+</section>
+</main>
+<script>
+function speak(text){
+if(!("speechSynthesis" in window)){
+alert("Speech is not supported in this browser.");
+return;
+}
+speechSynthesis.cancel();
+const utterance=new SpeechSynthesisUtterance(text);
+utterance.lang="en-US";
+utterance.rate=0.85;
+speechSynthesis.speak(utterance);
+}
+const continents=[
+["Africa","Africa has 54 widely recognized countries."],
+["Asia","Asia is the largest continent by area."],
+["Europe","Europe has many countries and languages."],
+["North America","North America includes Canada, the United States, Mexico and other countries."],
+["South America","South America contains the Amazon rainforest."],
+["Australia/Oceania","Australia is a continent. Oceania is a wider region including Pacific islands."],
+["Antarctica","Antarctica is the coldest continent."]
+];
+continents.forEach(item=>{
+const b=document.createElement("button");
+b.textContent=item[0];
+b.onclick=()=>{
+document.getElementById("continentInfo").textContent=item[1];
+speak(item[0]+". "+item[1]);
+};
+document.getElementById("continents").appendChild(b);
+});
+const oceans=["Pacific","Atlantic","Indian","Southern","Arctic"];
+oceans.forEach(name=>{
+const b=document.createElement("button");
+b.textContent=name+" Ocean";
+b.onclick=()=>{
+document.getElementById("oceanInfo").textContent=name+" Ocean";
+speak(name+" Ocean");
+};
+document.getElementById("oceans").appendChild(b);
+});
+function answer(id,correct,message){
+document.getElementById(id).textContent=(correct?"✅ ":"❌ ")+message;
+}
+const questions=[
+{q:"How many continents are there?",a:["Five","Seven","Nine"],correct:1},
+{q:"Which is the largest ocean?",a:["Pacific","Arctic","Indian"],correct:0},
+{q:"Which continent is the coldest?",a:["Africa","Europe","Antarctica"],correct:2},
+{q:"What should good citizens do?",a:["Help others","Damage parks","Waste water"],correct:0},
+{q:"What does history study?",a:["Only weather","The past","Only oceans"],correct:1}
+];
+let current=0,score=0,answered=false;
+function showQuestion(){
+const q=questions[current];
+document.getElementById("question").textContent=q.q;
+document.getElementById("quizFeedback").textContent="";
+const choices=document.getElementById("choices");
+choices.replaceChildren();
+answered=false;
+q.a.forEach((text,i)=>{
+const b=document.createElement("button");
+b.textContent=text;
+b.onclick=()=>{
+if(answered)return;
+answered=true;
+if(i===q.correct){
+score++;
+document.getElementById("quizFeedback").textContent="🎉 Correct!";
+}else{
+document.getElementById("quizFeedback").textContent="Try again next time! Correct answer: "+q.a[q.correct];
+}
+document.getElementById("score").textContent="Score: "+score;
+};
+choices.appendChild(b);
+});
+}
+function nextQuestion(){
+current++;
+if(current>=questions.length){
+document.getElementById("question").textContent="🎉 Quiz complete!";
+document.getElementById("choices").replaceChildren();
+document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
+return;
+}
+showQuestion();
+}
+showQuestion();
+</script>
+</body>
+</html>
