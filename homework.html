@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI | Homework Manager</title>
+<style>
+*{box-sizing:border-box}body{font-family:Arial,sans-serif;margin:0;background:linear-gradient(140deg,#dbeafe,#fef3c7);color:#172554}
+header{background:#2563eb;color:white;text-align:center;padding:22px}main{max-width:850px;margin:auto;padding:16px}
+.card{background:white;border-radius:18px;padding:18px;margin:15px 0;box-shadow:0 3px 14px #0001}
+button,input,select,textarea{font:inherit;padding:11px;border-radius:9px}input,select,textarea{width:100%;border:1px solid #94a3b8;margin:6px 0 12px}
+button{border:0;background:#2563eb;color:white;margin:4px;cursor:pointer}button.secondary{background:#475569}button.danger{background:#b91c1c}
+nav{display:flex;flex-wrap:wrap;gap:5px}nav button{flex:1;min-width:100px}nav button.active{background:#15803d}
+.hidden{display:none}.task{border:1px solid #cbd5e1;border-radius:12px;padding:12px;margin:12px 0}
+small,.muted{color:#475569}.pill{display:inline-block;background:#dbeafe;border-radius:30px;padding:4px 9px}
+label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:8px}
+.answer{background:#eff6ff;padding:10px;border-radius:10px;margin-top:10px}a{color:#1d4ed8}
+</style></head><body>
+<header><h1>🎓 Great Minds AI</h1><p>Homework Manager</p></header>
+<main>
+<div class="card warning"><strong>Prototype only:</strong> This page stores homework in this browser on this device. Teacher, student and parent views are demonstrations, not secure accounts. Do not enter real children's names or personal information. Homework is not shared across devices.</div>
+<nav><button id="tabTeacher" onclick="tab('teacher')">👩‍🏫 Teacher</button><button id="tabStudent" onclick="tab('student')">🎒 Student</button><button id="tabParent" onclick="tab('parent')">👪 Parent</button></nav>
+<section id="teacher" class="card">
+<h2>Create or edit homework</h2>
+<form id="taskForm">
+<input type="hidden" id="editId">
+<label>Subject</label><select id="subject" required><option>Mathematics</option><option>English</option><option>Science</option><option>General</option></select>
+<label>Title</label><input id="title" maxlength="90" required placeholder="e.g. Addition practice">
+<label>Instructions / question</label><textarea id="instructions" maxlength="1500" required placeholder="Write the assignment"></textarea>
+<label>Answer type</label><select id="answerType"><option value="text">Written answer (teacher reviews)</option><option value="exact">Exact-answer quiz (automatic marking)</option></select>
+<label>Correct answer (only for exact-answer quiz)</label><input id="correct" maxlength="200" placeholder="e.g. 12">
+<label>Due date</label><input id="due" type="date" required>
+<label>Maximum points</label><input id="maxPoints" type="number" min="1" max="100" value="10" required>
+<button type="submit">💾 Save homework</button><button type="button" class="secondary" onclick="clearForm()">Clear form</button>
+</form>
+<h2>Assignments</h2><div id="teacherTasks"></div>
+</section>
+<section id="student" class="card hidden"><h2>Student assignments</h2><p class="muted">Complete homework here. This is a local demonstration.</p><div id="studentTasks"></div></section>
+<section id="parent" class="card hidden"><h2>Parent overview</h2><div id="parentStats"></div><div id="parentTasks"></div></section>
+<div class="card"><button class="secondary" onclick="location.href='parents-teachers.html'">← Parents & Teachers</button><button class="secondary" onclick="location.href='index.html'">🏠 Home</button></div>
+</main>
+<script>
+const STORAGE='greatMindsHomeworkV1';
+let tasks=[];
+function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||'[]');tasks=Array.isArray(x)?x:[]}catch(e){tasks=[]}}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(tasks));return true}catch(e){alert('Unable to save on this device. Check browser storage.');return false}}
+function el(tag,txt,cls){const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n}
+function btn(label,fn,cls){const b=el('button',label,cls);b.type='button';b.onclick=fn;return b}
+function tab(name){['teacher','student','parent'].forEach(k=>{document.getElementById(k).classList.toggle('hidden',k!==name);document.getElementById('tab'+k[0].toUpperCase()+k.slice(1)).classList.toggle('active',k===name)});render()}
+function clearForm(){document.getElementById('taskForm').reset();document.getElementById('editId').value='';document.getElementById('maxPoints').value=10}
+document.getElementById('taskForm').addEventListener('submit',e=>{
+e.preventDefault();
+const id=document.getElementById('editId').value;
+const t={id:id||String(Date.now())+Math.random().toString(36).slice(2),subject:document.getElementById('subject').value,title:document.getElementById('title').value.trim(),instructions:document.getElementById('instructions').value.trim(),answerType:document.getElementById('answerType').value,correct:document.getElementById('correct').value.trim(),due:document.getElementById('due').value,maxPoints:Number(document.getElementById('maxPoints').value),submission:null};
+if(!t.title||!t.instructions||!t.due||t.maxPoints<1||t.maxPoints>100){alert('Complete all required fields.');return}
+if(t.answerType==='exact'&&!t.correct){alert('Enter the correct answer for automatic marking.');return}
+const index=tasks.findIndex(x=>x.id===id);
+if(index>=0){t.submission=tasks[index].submission;tasks[index]=t}else tasks.push(t);
+if(save()){clearForm();render();alert('Homework saved on this device.')}
+});
+function editTask(id){const t=tasks.find(x=>x.id===id);if(!t)return;
+['subject','title','instructions','answerType','correct','due','maxPoints'].forEach(k=>document.getElementById(k).value=t[k]);
+document.getElementById('editId').value=id;tab('teacher');window.scrollTo(0,0)}
+function deleteTask(id){if(!confirm('Delete this homework and its local submission?'))return;tasks=tasks.filter(x=>x.id!==id);save();render()}
+function submitAnswer(id,input){const t=tasks.find(x=>x.id===id);if(!t)return;const answer=input.value.trim();if(!answer){alert('Enter your answer first.');return}
+const auto=t.answerType==='exact';const correct=auto&&answer.toLocaleLowerCase()===t.correct.trim().toLocaleLowerCase();
+t.submission={answer,submittedAt:new Date().toISOString(),score:auto?(correct?t.maxPoints:0):null,feedback:auto?(correct?'Correct! Great work.':'Not quite. Your teacher can review this answer.'):'Waiting for teacher review'};
+if(save()){render();alert('Answer saved on this device.')}
+}
+function mark(id,score,feedback){const t=tasks.find(x=>x.id===id);if(!t||!t.submission)return;
+const n=Number(score.value);if(score.value===''||!Number.isFinite(n)||n<0||n>t.maxPoints){alert('Enter a valid score.');return}
+t.submission.score=n;t.submission.feedback=feedback.value.trim();save();render()}
+function summary(t){const x=el('div',undefined,'task');x.append(el('h3',t.title),el('span',t.subject+' • Due: '+t.due,'pill'),el('p',t.instructions),el('small','Maximum points: '+t.maxPoints));return x}
+function render(){
+const teacher=document.getElementById('teacherTasks'),student=document.getElementById('studentTasks'),parent=document.getElementById('parentTasks');
+teacher.replaceChildren();student.replaceChildren();parent.replaceChildren();
+if(!tasks.length){[teacher,student,parent].forEach(x=>x.append(el('p','No homework created yet.')))}
+tasks.forEach(t=>{
+const a=summary(t);a.append(btn('✏️ Edit',()=>editTask(t.id)),btn('🗑 Delete',()=>deleteTask(t.id),'danger'));
+if(t.submission){const sub=el('div',undefined,'answer');sub.append(el('strong','Submitted answer:'),el('p',t.submission.answer));
+sub.append(el('p',t.submission.score===null?'Awaiting marking':'Score: '+t.submission.score+'/'+t.maxPoints));
+const score=el('input');score.type='number';score.min=0;score.max=t.maxPoints;score.placeholder='Score';score.value=t.submission.score===null?'':t.submission.score;
+const feedback=el('textarea');feedback.value=t.submission.feedback||'';feedback.placeholder='Teacher feedback';
+sub.append(el('label','Teacher score'),score,el('label','Feedback'),feedback,btn('Save marking',()=>mark(t.id,score,feedback)));a.append(sub)}
+teacher.append(a);
+const b=summary(t);
+if(t.submission){b.append(el('p','Submitted: '+new Date(t.submission.submittedAt).toLocaleString()),el('p',t.submission.score===null?'Awaiting teacher review':'Score: '+t.submission.score+'/'+t.maxPoints),el('p','Feedback: '+t.submission.feedback))}
+else{const input=el('textarea');input.placeholder='Type your homework answer';input.maxLength=3000;b.append(input,btn('Submit answer',()=>submitAnswer(t.id,input)))}
+student.append(b);
+const c=summary(t);c.append(el('p',t.submission?(t.submission.score===null?'Submitted — awaiting marking':'Marked: '+t.submission.score+'/'+t.maxPoints):'Not submitted'));
+if(t.submission&&t.submission.feedback)c.append(el('p','Feedback: '+t.submission.feedback));parent.append(c)
+});
+const done=tasks.filter(t=>t.submission).length,marked=tasks.filter(t=>t.submission&&t.submission.score!==null);
+const stats=document.getElementById('parentStats');stats.replaceChildren(el('p','Total: '+tasks.length+' | Submitted: '+done+' | Pending: '+(tasks.length-done)),el('p','Marked: '+marked.length));
+}
+load();tab('teacher');
+</script></body></html>
