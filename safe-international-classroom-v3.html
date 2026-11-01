@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Safe International Classroom V3 | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf6ff;color:#173153;font:16px Arial,sans-serif}header{background:linear-gradient(120deg,#b8e7ff,#e7d7ff,#fff0bd);padding:22px;text-align:center}h1{margin:0 0 8px}.wrap{max-width:780px;margin:auto;padding:14px}.card{background:#fff;padding:19px;margin:15px 0;border-radius:17px;box-shadow:0 3px 10px #2231}.row{display:flex;gap:9px;flex-wrap:wrap}button,.link{background:#574bd5;color:white;border:0;border-radius:10px;padding:12px 14px;margin:5px 4px 5px 0;font:inherit;font-weight:bold;cursor:pointer;text-decoration:none;display:inline-block}button:disabled{opacity:.5;cursor:not-allowed}.secondary{background:#137d80}.warning{background:#fff4d3;border-left:5px solid #dba221;padding:14px;border-radius:9px;line-height:1.5}input,select,textarea{width:100%;padding:12px;border:1px solid #b8c6d9;border-radius:10px;font:inherit;margin:7px 0 12px}label{font-weight:bold;display:block}.hidden{display:none}.pill{display:inline-block;background:#e6ebff;padding:8px 12px;border-radius:99px;margin:3px}.good{color:#176a45;font-weight:bold}.small{color:#586b7d;font-size:14px}.entry{border-bottom:1px solid #e0e6f0;padding:12px 0}footer{text-align:center;padding:20px}button:focus,a:focus,input:focus{outline:3px solid #ecb744}
+</style></head>
+<body>
+<header><h1>🌍 Great Minds AI</h1><h2>Safe International Classroom V3</h2><a class="link" href="index.html">🏠 Home</a><a class="link" href="group-learning.html">Previous Group Learning</a></header>
+<div class="wrap">
+<div class="warning"><strong>Local classroom demonstration only.</strong> No real students are connected. Names, approvals, teacher controls and messages are stored only in this browser. There is no real parent verification, identity check, moderation service or live international chat. Use fictional names only.</div>
+<section class="card"><h2>1. Choose a classroom</h2>
+<label for="room">Classroom</label><select id="room"><option value="Math Explorers">➕ Math Explorers</option><option value="English Friends">📚 English Friends</option><option value="Science Discoverers">🔬 Science Discoverers</option></select>
+<label for="alias">Practice nickname (not a real name)</label><input id="alias" maxlength="25" placeholder="Example: StarLearner">
+<label for="role">Demo role</label><select id="role"><option value="student">Student</option><option value="teacher">Teacher</option><option value="parent">Parent</option></select>
+<button id="join">Enter demo classroom</button><p id="joinStatus" aria-live="polite"></p></section>
+<section class="card hidden" id="parentPanel"><h2>2. Parent approval demonstration</h2><p>This is a <strong>simulated approval</strong> and does not verify a parent or guardian.</p><label><input type="checkbox" id="approved" style="width:auto;margin-right:8px">I am testing the parent-approval demonstration</label><button id="saveApproval">Save demo approval</button><p id="approvalStatus" aria-live="polite"></p></section>
+<section class="card hidden" id="teacherPanel"><h2>3. Teacher controls</h2><p>Only a role selected in this browser. Not secure authentication.</p><label><input type="checkbox" id="classOpen" style="width:auto;margin-right:8px">Classroom open for student activities</label><button id="saveTeacher">Save classroom setting</button><button id="clearMsgs" class="secondary">Clear demo messages</button><p id="teacherStatus" aria-live="polite"></p></section>
+<section class="card hidden" id="classroomPanel"><h2 id="roomTitle">Classroom</h2><p id="statusLine"></p><div class="row"><span class="pill">🌍 Africa</span><span class="pill">🌏 Asia</span><span class="pill">🌍 Europe</span></div><p class="small">These are example regions, not live connected users.</p>
+<h3>Group quiz</h3><p id="question"></p><label for="answer">Your answer</label><input id="answer" maxlength="80" placeholder="Type your answer"><button id="check">Check answer</button><p id="quizResult" aria-live="polite"></p>
+<h3>Supervised message practice</h3><p class="small">No real messages are sent. The demo blocks common contact-sharing patterns; this is not a complete moderation system.</p><label for="message">Practice message</label><textarea id="message" maxlength="160" rows="3" placeholder="I think the answer is..."></textarea><button id="post">Post demo message</button><p id="messageStatus" aria-live="polite"></p><div id="messages"></div></section>
+<section class="card"><h2>What's needed before real international learning?</h2><p>Secure logins, verified parent consent, teacher permissions, private class membership, a server/database, real-time messaging, reporting and moderation, and child privacy reviews.</p><button class="secondary" id="reset">Reset this demo</button></section>
+</div><footer>Great Minds AI • V3 Classroom Prototype</footer>
+<script>
+"use strict";
+const KEY="greatMindsSafeClassroomV3";
+const questions={
+"Math Explorers":{q:"What is 8 + 7?",a:["15"]},
+"English Friends":{q:"What is the opposite of 'happy'?",a:["sad","unhappy"]},
+"Science Discoverers":{q:"Which planet do we live on?",a:["earth"]}
+};
+const $=id=>document.getElementById(id);
+const defaultData=()=>({rooms:{},messages:{},approvals:{},scores:{}});
+function load(){try{return {...defaultData(),...JSON.parse(localStorage.getItem(KEY)||"{}")}}catch{return defaultData()}}
+function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
+function safe(t){return String(t??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+let current=null;
+function render(){
+ if(!current)return;
+ const d=load(),room=current.room,role=current.role;
+ $("parentPanel").classList.toggle("hidden",role!=="parent");
+ $("teacherPanel").classList.toggle("hidden",role!=="teacher");
+ $("classroomPanel").classList.remove("hidden");
+ $("roomTitle").textContent=room;
+ $("question").textContent=questions[room].q;
+ $("approved").checked=!!d.approvals[room];
+ $("classOpen").checked=!!d.rooms[room];
+ const approved=!!d.approvals[room],open=!!d.rooms[room];
+ $("statusLine").textContent=`Demo: ${current.alias} (${role}). Class ${open?"open":"closed"}; parent demo approval ${approved?"saved":"not saved"}.`;
+ const canParticipate=role==="student"&&approved&&open;
+ $("answer").disabled=!canParticipate;$("check").disabled=!canParticipate;
+ $("message").disabled=!canParticipate;$("post").disabled=!canParticipate;
+ $("quizResult").textContent=canParticipate?"You may answer the quiz.":role==="student"?"Demo participation requires an open class and saved parent approval.":"Quiz and messaging are available in student demo mode.";
+ const messages=d.messages[room]||[];
+ $("messages").innerHTML=messages.length?messages.map(m=>`<div class="entry"><b>${safe(m.alias)}</b>: ${safe(m.text)}</div>`).join(""):"<p class='small'>No demo messages yet.</p>";
+}
+$("join").onclick=()=>{
+ const alias=$("alias").value.trim(),role=$("role").value,room=$("room").value;
+ if(!alias){$("joinStatus").textContent="Please enter a fictional nickname.";return}
+ current={alias:alias.slice(0,25),role,room};$("joinStatus").textContent=`Entered ${room} demonstration.`;render();
+};
+$("saveApproval").onclick=()=>{if(!current||current.role!=="parent")return;const d=load();d.approvals[current.room]=$("approved").checked;save(d);$("approvalStatus").textContent="Demo approval setting saved in this browser.";render()};
+$("saveTeacher").onclick=()=>{if(!current||current.role!=="teacher")return;const d=load();d.rooms[current.room]=$("classOpen").checked;save(d);$("teacherStatus").textContent="Demo teacher setting saved.";render()};
+$("clearMsgs").onclick=()=>{if(!current||current.role!=="teacher")return;if(!confirm("Clear messages for this demo classroom?"))return;const d=load();d.messages[current.room]=[];save(d);render()};
+$("check").onclick=()=>{if(!current||current.role!=="student")return;const d=load();if(!d.approvals[current.room]||!d.rooms[current.room])return;const a=$("answer").value.trim().toLowerCase();if(!a){$("quizResult").textContent="Enter an answer first.";return}const correct=questions[current.room].a.includes(a);const scoreKey=current.room+"|"+current.alias.toLowerCase();d.scores[scoreKey]=Math.max(d.scores[scoreKey]||0,correct?10:0);save(d);$("quizResult").textContent=correct?"Correct! Your demo quiz score is 10/10.":"Not quite. Try again!"};
+$("post").onclick=()=>{
+ if(!current||current.role!=="student")return;
+ const d=load();if(!d.approvals[current.room]||!d.rooms[current.room])return;
+ const msg=$("message").value.trim();if(!msg){$("messageStatus").textContent="Write a message first.";return}
+ const risky=/(?:@|https?:\/\/|www\.|\b\d[\d\s\-()]{6,}\d\b|\b(?:whatsapp|telegram|snapchat|instagram|address|phone number|email)\b)/i;
+ if(risky.test(msg)){$("messageStatus").textContent="Demo safety filter: don't share contact information or outside links.";return}
+ d.messages[current.room]=d.messages[current.room]||[];
+ d.messages[current.room].push({alias:current.alias,text:msg.slice(0,160)});
+ d.messages[current.room]=d.messages[current.room].slice(-30);
+ save(d);$("message").value="";$("messageStatus").textContent="Message saved locally (not sent online).";render();
+};
+$("reset").onclick=()=>{if(confirm("Delete all V3 demonstration records from this browser?")){localStorage.removeItem(KEY);location.reload()}};
+</script></body></html>
