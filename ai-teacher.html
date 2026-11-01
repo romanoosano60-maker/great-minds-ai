@@ -1,0 +1,108 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI Teacher</title>
+<style>
+*{box-sizing:border-box}
+body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#e0f2fe,#f3e8ff);color:#243454;text-align:center}
+header{background:#2946a3;color:white;padding:30px 12px}
+h1{font-size:30px}
+main{max-width:650px;margin:auto;padding:18px}
+.card{background:white;border-radius:22px;padding:24px 16px;margin:18px 0;box-shadow:0 5px 16px #0001}
+button,select,input{font-size:17px;padding:13px;border-radius:12px;margin:7px;max-width:95%}
+button{background:#2863e6;color:white;border:0;cursor:pointer}
+button:disabled{opacity:.5}
+input{border:1px solid #aaa;width:90%}
+select{border:1px solid #aaa}
+#reply{background:#e9fff1;padding:20px;border-radius:16px;min-height:85px;line-height:1.6}
+.avatar{font-size:75px}
+small{color:#555}
+</style>
+</head>
+<body>
+<header>
+<h1>🤖 Great Minds AI</h1>
+<h2>Your Friendly AI Teacher</h2>
+<p>Learn • Ask • Discover • Grow 🚀</p>
+</header>
+<main>
+<section class="card">
+<div class="avatar">👩‍🏫</div>
+<h2>Hello, Young Explorer! 🌟</h2>
+<p>I'm your learning assistant. Choose a subject and ask me a question!</p>
+<label for="subject">Choose your subject</label>
+<br>
+<select id="subject">
+<option>Mathematics</option>
+<option>English</option>
+<option>Science</option>
+<option>Computer Studies</option>
+<option>General Knowledge</option>
+</select>
+</section>
+<section class="card">
+<h2>💬 Ask Your Teacher</h2>
+<input id="question" placeholder="Type your question here">
+<br>
+<button onclick="answer()">Ask Teacher 🎓</button>
+<button onclick="listen()">🔊 Listen</button>
+<div id="reply" role="status" aria-live="polite">Your teacher is ready!</div>
+</section>
+<section class="card">
+<h2>🎯 Try a Lesson</h2>
+<button onclick="example()">Give Me a Question</button>
+<p id="exercise"></p>
+</section>
+<section class="card">
+<h2>🛡️ Learning Safety</h2>
+<p>Never share passwords, addresses, phone numbers, or private photos.</p>
+<small>This is an offline demonstration with prepared answers. Live AI is not connected yet.</small>
+</section>
+<a href="index.html">🏠 Back to Home</a>
+</main>
+<script>
+let lastReply="";
+const lessons={
+"Mathematics":["What is 8 + 7?","8 + 7 = 15."],
+"English":["What is the opposite of hot?","The opposite of hot is cold."],
+"Science":["Which planet is called the Red Planet?","Mars is called the Red Planet."],
+"Computer Studies":["What is a keyboard?","A keyboard is used to type letters and numbers."],
+"General Knowledge":["How many days are in a week?","There are seven days in a week."]
+};
+function say(t){
+lastReply=t;
+document.getElementById("reply").textContent=t;
+}
+function answer(){
+const q=document.getElementById("question").value.trim().toLowerCase();
+const subject=document.getElementById("subject").value;
+if(!q){say("Please type your question first.");return}
+const lesson=lessons[subject];
+if(q===lesson[0].toLowerCase() || q.includes(lesson[0].toLowerCase().replace("?",""))){
+say("Excellent question! "+lesson[1]);
+}else{
+say("That's a good question! This demonstration has limited prepared answers. Try the practice question for "+subject+".");
+}
+}
+function example(){
+const subject=document.getElementById("subject").value;
+const lesson=lessons[subject];
+document.getElementById("exercise").textContent=lesson[0];
+document.getElementById("question").value=lesson[0];
+say("Try answering this question, then tap Ask Teacher to learn the answer.");
+}
+function listen(){
+if(!lastReply){say("Ask a question first.");return}
+if(!("speechSynthesis" in window)){say("Voice playback is not supported in this browser.");return}
+speechSynthesis.cancel();
+const speech=new SpeechSynthesisUtterance(lastReply);
+speech.lang="en-US";
+speech.rate=.9;
+speechSynthesis.speak(speech);
+}
+</script>
+</body>
+</html>
