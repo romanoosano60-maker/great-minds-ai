@@ -1,0 +1,128 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Great Minds AI - Student Profile</title>
+<style>
+body {
+  font-family: Arial, sans-serif;
+  background: linear-gradient(135deg,#dbeafe,#fef3c7);
+  margin: 0;
+  padding: 20px;
+  text-align: center;
+}
+.card {
+  background: white;
+  max-width: 420px;
+  margin: 20px auto;
+  padding: 22px;
+  border-radius: 20px;
+  box-shadow: 0 5px 20px #0002;
+}
+h1 { color: #2563eb; }
+input, select, button {
+  width: 100%;
+  padding: 13px;
+  margin: 9px 0;
+  border-radius: 10px;
+  box-sizing: border-box;
+  font-size: 16px;
+}
+input, select { border: 1px solid #aaa; }
+button {
+  background: #2563eb;
+  color: white;
+  border: none;
+  font-weight: bold;
+}
+.stats {
+  background: #eff6ff;
+  padding: 15px;
+  border-radius: 12px;
+  margin-top: 15px;
+}
+</style>
+</head>
+<body>
+<div class="card">
+<h1>🎓 Great Minds AI</h1>
+<h2>Student Profile</h2>
+<p>Welcome, future genius! 🚀</p>
+
+<input id="studentName" placeholder="Student nickname" maxlength="30">
+<input id="studentAge" type="number" placeholder="Age" min="3" max="100">
+
+<select id="studentLevel">
+<option value="">Select learning level</option>
+<option>Beginner</option>
+<option>Primary</option>
+<option>Secondary</option>
+<option>Advanced</option>
+</select>
+
+<button onclick="saveProfile()">Save My Profile</button>
+
+<div class="stats">
+<h3 id="welcome">My Learning Progress</h3>
+<p>⭐ Stars: <span id="stars">0</span></p>
+<p>🏆 Points: <span id="points">0</span></p>
+<p>📚 Lessons Completed: <span id="lessons">0</span></p>
+<p>🎖️ Certificates: <span id="certificates">0</span></p>
+</div>
+
+<button onclick="goHome()">🏠 Back to Home</button>
+</div>
+
+<script>
+const key = "greatMindsStudentProfile";
+
+function saveProfile() {
+  const name = document.getElementById("studentName").value.trim();
+  const age = Number(document.getElementById("studentAge").value);
+  const level = document.getElementById("studentLevel").value;
+
+  if (!name || !Number.isInteger(age) ||
+      age < 3 || age > 100 || !level) {
+    alert("Please enter a nickname, valid age and level.");
+    return;
+  }
+
+  const old = JSON.parse(localStorage.getItem(key) || "{}");
+  const profile = {
+    name, age, level,
+    stars: old.stars || 0,
+    points: old.points || 0,
+    lessons: old.lessons || 0,
+    certificates: old.certificates || 0
+  };
+
+  localStorage.setItem(key, JSON.stringify(profile));
+  showProfile(profile);
+  alert("Profile saved successfully!");
+}
+
+function showProfile(p) {
+  document.getElementById("studentName").value = p.name || "";
+  document.getElementById("studentAge").value = p.age || "";
+  document.getElementById("studentLevel").value = p.level || "";
+  document.getElementById("welcome").textContent =
+    "Welcome, " + (p.name || "Student") + "!";
+  ["stars","points","lessons","certificates"].forEach(id => {
+    document.getElementById(id).textContent = p[id] || 0;
+  });
+}
+
+function goHome() {
+  window.location.href = "index.html";
+}
+
+const saved = localStorage.getItem(key);
+if (saved) {
+  try { showProfile(JSON.parse(saved)); }
+  catch (e) { console.log("Profile could not load"); }
+}
+</script>
+</body>
+</html>
