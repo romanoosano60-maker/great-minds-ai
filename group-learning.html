@@ -1,0 +1,212 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Great Minds AI - Group Learning</title>
+<style>
+*{box-sizing:border-box}
+body{
+ margin:0;
+ font-family:Arial,sans-serif;
+ background:linear-gradient(135deg,#dff5ff,#f5e7ff);
+ color:#243454;
+ text-align:center;
+}
+header{
+ background:#2645a8;
+ color:white;
+ padding:25px 12px;
+}
+h1{margin:8px 0}
+main{max-width:650px;margin:auto;padding:16px}
+.card{
+ background:white;
+ padding:20px;
+ margin:18px 0;
+ border-radius:18px;
+ box-shadow:0 4px 12px #0002;
+}
+button,select{
+ padding:13px;
+ margin:7px;
+ border-radius:10px;
+ border:1px solid #bbb;
+ font-size:16px;
+}
+button{
+ background:#2764e7;
+ color:white;
+ border:0;
+ cursor:pointer;
+}
+button:hover{background:#173fa4}
+.room{background:#f1f6ff}
+#activity{
+ background:#e8fff1;
+ padding:15px;
+ border-radius:12px;
+ margin-top:12px;
+}
+.warning{
+ background:#fff2d8;
+ padding:15px;
+ border-radius:12px;
+}
+a{color:#2454d4}
+</style>
+</head>
+<body>
+
+<header>
+<h1>🌍 Great Minds AI</h1>
+<h2>International Group Learning</h2>
+<p>Learn Together, Grow Together!</p>
+</header>
+
+<main>
+
+<div class="card">
+<h2>🌎 Choose Your Country</h2>
+<select id="country">
+<option value="">Select your country</option>
+<option>Uganda</option>
+<option>Rwanda</option>
+<option>Kenya</option>
+<option>Nigeria</option>
+<option>South Africa</option>
+<option>United Arab Emirates</option>
+<option>United Kingdom</option>
+<option>United States</option>
+<option>Pakistan</option>
+<option>India</option>
+<option>Other Country</option>
+</select>
+<p id="welcome"></p>
+<button onclick="join()">Continue</button>
+</div>
+
+<div class="card">
+<h2>🏫 Learning Rooms</h2>
+<p>Choose a subject to practise together.</p>
+
+<div class="room">
+<h3>🔢 Mathematics Room</h3>
+<button onclick="start('math')">
+Enter Math Room
+</button>
+</div>
+
+<div class="room">
+<h3>🔬 Science Room</h3>
+<button onclick="start('science')">
+Enter Science Room
+</button>
+</div>
+
+<div class="room">
+<h3>📚 English Room</h3>
+<button onclick="start('english')">
+Enter English Room
+</button>
+</div>
+
+<div class="room">
+<h3>💻 Computer Room</h3>
+<button onclick="start('computer')">
+Enter Computer Room
+</button>
+</div>
+
+<div id="activity" aria-live="polite">
+Choose a room to start learning!
+</div>
+</div>
+
+<div class="card">
+<h2>🏆 Group Learning Rewards</h2>
+<p>Complete activities to earn stars!</p>
+<h2 id="stars">⭐ 0 Stars</h2>
+<p id="feedback"></p>
+</div>
+
+<div class="card warning">
+<h2>🛡️ Learning Safety</h2>
+<p>Never share your address, phone number,
+password, school name or private photos.</p>
+<p>Live group communication is not enabled
+in this demonstration.</p>
+<p>Future live rooms will require adult
+supervision, safety controls and moderation.</p>
+</div>
+
+<p><a href="index.html">🏠 Back to Home</a></p>
+
+</main>
+
+<script>
+let score=0;
+let currentAnswer="";
+
+function join(){
+ const country=document.getElementById("country").value;
+ document.getElementById("welcome").textContent=
+ country
+ ? "Welcome, learner from "+country+"! 🌟"
+ : "Please choose your country.";
+}
+
+function start(room){
+ let question="";
+ let answer="";
+
+ if(room==="math"){
+ question="What is 8 + 7?";
+ answer="15";
+ }
+ if(room==="science"){
+ question="Which planet is called the Red Planet?";
+ answer="mars";
+ }
+ if(room==="english"){
+ question="What is the opposite of HOT?";
+ answer="cold";
+ }
+ if(room==="computer"){
+ question="What device is used to type letters?";
+ answer="keyboard";
+ }
+
+ currentAnswer=answer;
+
+ document.getElementById("activity").innerHTML=
+ "<h3>"+question+"</h3>"+
+ '<input id="answer" placeholder="Your answer" '+
+ 'aria-label="Your answer">'+
+ '<button onclick="check()">Submit Answer</button>';
+
+ document.getElementById("feedback").textContent="";
+}
+
+function check(){
+ const input=document.getElementById("answer");
+ if(!input)return;
+
+ const answer=input.value.trim().toLowerCase();
+
+ if(answer===currentAnswer){
+ score++;
+ document.getElementById("stars").textContent=
+ "⭐ "+score+" Stars";
+ document.getElementById("feedback").textContent=
+ "Excellent! Correct answer! 🎉";
+ }else{
+ document.getElementById("feedback").textContent=
+ "Good try! Please try again. 💪";
+ }
+}
+</script>
+
+</body>
+</html>
