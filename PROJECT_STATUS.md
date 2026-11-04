@@ -338,3 +338,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Uses the device/browser SpeechSynthesis voice only; this is not the conversational AI Teacher voice service.
 - Re-fetched all five updated pages and syntax-checked their inline scripts. All five passed; each page contains five lesson sections and the read-aloud button creation logic.
 - Android speech playback and voice availability still need device testing.
+
+
+## Reading and Writing interactive lesson — 2026-11-04
+- Rebuilt reading-writing.html as an interactive beginner learning page: short story, device/browser read-aloud and stop controls, two comprehension questions with feedback and retry/score, and a short writing exercise.
+- Writing can be saved locally on the current device; the page clearly states this is device-only and asks learners not to enter private information.
+- Committed as 7f397be03d3e90301b056a346d0c5fe640bdf133.
+- Re-fetched the committed file and verified story, speech controls, both quiz questions, writing area and local save logic. Inline JavaScript syntax check passed.
+- Android display, speech playback, quiz interaction and local save still require a real-device test. This is not cloud-synced student progress.
