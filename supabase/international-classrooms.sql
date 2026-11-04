@@ -1,7 +1,15 @@
 -- Great Minds AI: international classroom membership
--- Run in Supabase SQL Editor after reviewing the existing classrooms table.
--- Existing classrooms columns expected: id bigint, classroom_name text,
--- classroom_code text, teacher_id uuid.
+-- Safe for the existing project schema. Preserves the legacy "classroom code"
+-- column while adding the canonical classroom_code column used by the frontend.
+
+alter table public.classrooms add column if not exists classroom_code text;
+update public.classrooms
+set classroom_code = "classroom code"
+where classroom_code is null and nullif(trim("classroom code"), '') is not null;
+
+create unique index if not exists classrooms_classroom_code_unique
+on public.classrooms (lower(trim(classroom_code)))
+where nullif(trim(classroom_code), '') is not null;
 
 create table if not exists public.classroom_members (
   id uuid primary key default gen_random_uuid(),
@@ -44,11 +52,15 @@ with check (
   )
 );
 
--- Restrict writes: students join only through the RPC below.
-revoke insert, update, delete on public.classroom_members from anon, authenticated;
+revoke all on public.classroom_members from anon, authenticated;
 grant select on public.classroom_members to authenticated;
 grant update (membership_status) on public.classroom_members to authenticated;
+create index if not exists classroom_members_user_id_idx on public.classroom_members(user_id);
 
+-- SECURITY DEFINER is intentional here: a signed-in student must look up a
+-- classroom by secret join code even though classroom SELECT is teacher-only.
+-- The function validates auth.uid(), limits the code, returns no student data,
+-- and only inserts a pending request with pending guardian consent.
 create or replace function public.join_classroom_by_code(p_code text)
 returns table (classroom_id bigint, classroom_name text, request_status text)
 language plpgsql
@@ -96,7 +108,6 @@ $$;
 revoke all on function public.join_classroom_by_code(text) from public, anon;
 grant execute on function public.join_classroom_by_code(text) to authenticated;
 
--- Add membership events to Supabase Realtime only if not already published.
 do $$
 begin
   if exists (select 1 from pg_publication where pubname = 'supabase_realtime')
