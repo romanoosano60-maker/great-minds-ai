@@ -1,108 +1,30 @@
-
 <!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width,initial-scale=1">
-<title>Great Minds AI Teacher</title>
+<html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#e0f2fe"><title>Great Minds AI Teacher</title>
 <style>
-*{box-sizing:border-box}
-body{margin:0;font-family:Arial,sans-serif;background:linear-gradient(135deg,#e0f2fe,#f3e8ff);color:#243454;text-align:center}
-header{background:#2946a3;color:white;padding:30px 12px}
-h1{font-size:30px}
-main{max-width:650px;margin:auto;padding:18px}
-.card{background:white;border-radius:22px;padding:24px 16px;margin:18px 0;box-shadow:0 5px 16px #0001}
-button,select,input{font-size:17px;padding:13px;border-radius:12px;margin:7px;max-width:95%}
-button{background:#2863e6;color:white;border:0;cursor:pointer}
-button:disabled{opacity:.5}
-input{border:1px solid #aaa;width:90%}
-select{border:1px solid #aaa}
-#reply{background:#e9fff1;padding:20px;border-radius:16px;min-height:85px;line-height:1.6}
-.avatar{font-size:75px}
-small{color:#555}
-</style>
-</head>
-<body>
-<header>
-<h1>🤖 Great Minds AI</h1>
-<h2>Your Friendly AI Teacher</h2>
-<p>Learn • Ask • Discover • Grow 🚀</p>
-</header>
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,Arial,sans-serif;background:linear-gradient(135deg,#e0f2fe,#f3e8ff);color:#243454}header{background:#2946a3;color:white;padding:26px 14px;text-align:center}h1{font-size:clamp(27px,6vw,36px);margin:5px}main{max-width:700px;margin:auto;padding:16px}.card{background:white;border-radius:22px;padding:22px 16px;margin:16px 0;box-shadow:0 5px 16px #0001}.avatar{font-size:65px;text-align:center}button,select,input{font-size:16px;padding:13px;border-radius:12px;margin:6px 4px;max-width:100%}button{background:#2863e6;color:white;border:0;cursor:pointer;font-weight:700}button.secondary{background:#e5edff;color:#24447f}button:disabled{opacity:.55;cursor:not-allowed}input{border:1px solid #aaa;width:100%}select{border:1px solid #aaa;width:100%}#reply{background:#e9fff1;padding:18px;border-radius:16px;min-height:80px;line-height:1.6;white-space:pre-wrap}.small{color:#58677d;font-size:13px;line-height:1.5}.notice{background:#fff4d3;border-left:5px solid #d9a52e;padding:13px;border-radius:10px;line-height:1.5}.controls{display:flex;gap:8px;flex-wrap:wrap}.controls button{flex:1 1 145px}a{color:#214da5}button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #e8a528;outline-offset:3px}
+</style></head><body>
+<header><h1>🤖 Great Minds AI</h1><h2>Your Friendly AI Teacher</h2><p>Learn • Ask • Discover • Grow 🚀</p></header>
 <main>
-<section class="card">
-<div class="avatar">👩‍🏫</div>
-<h2>Hello, Young Explorer! 🌟</h2>
-<p>I'm your learning assistant. Choose a subject and ask me a question!</p>
-<label for="subject">Choose your subject</label>
-<br>
-<select id="subject">
-<option>Mathematics</option>
-<option>English</option>
-<option>Science</option>
-<option>Computer Studies</option>
-<option>General Knowledge</option>
-</select>
-</section>
-<section class="card">
-<h2>💬 Ask Your Teacher</h2>
-<input id="question" placeholder="Type your question here">
-<br>
-<button onclick="answer()">Ask Teacher 🎓</button>
-<button onclick="listen()">🔊 Listen</button>
-<div id="reply" role="status" aria-live="polite">Your teacher is ready!</div>
-</section>
-<section class="card">
-<h2>🎯 Try a Lesson</h2>
-<button onclick="example()">Give Me a Question</button>
-<p id="exercise"></p>
-</section>
-<section class="card">
-<h2>🛡️ Learning Safety</h2>
-<p>Never share passwords, addresses, phone numbers, or private photos.</p>
-<small>This is an offline demonstration with prepared answers. Live AI is not connected yet.</small>
-</section>
-<a href="index.html">🏠 Back to Home</a>
+<section class="card"><div class="avatar" aria-hidden="true">👩‍🏫</div><h2>Hello, Young Explorer! 🌟</h2><p>Choose a subject and ask a learning question.</p><label for="subject">Choose your subject</label><select id="subject"><option>Mathematics</option><option>English</option><option>Science</option><option>Computer Studies</option><option>General Knowledge</option></select></section>
+<section class="card"><h2>💬 Talk with your teacher</h2><label for="question">Your question</label><input id="question" maxlength="300" placeholder="Type or use the microphone..."><div class="controls"><button type="button" id="ask">Ask Teacher 🎓</button><button type="button" class="secondary" id="mic">🎙️ Speak question</button></div><div class="controls"><button type="button" class="secondary" id="listen">🔊 Read answer aloud</button><button type="button" class="secondary" id="stop">⏹ Stop voice</button></div><p id="voiceStatus" class="small" aria-live="polite">Voice input depends on browser support and microphone permission.</p><div id="reply" role="status" aria-live="polite">Your teacher is ready!</div></section>
+<section class="card"><h2>🎯 Try a lesson</h2><button type="button" id="example">Give me a practice question</button><p id="exercise"></p></section>
+<section class="card"><h2>🛡️ Learning safety and connection status</h2><div class="notice"><strong>Current mode: offline demonstration.</strong> Answers come from a small set of prepared examples. The live AI backend is not connected yet. Microphone speech recognition, when supported, converts your speech into text in the browser; this page does not send audio to an AI service.</div><p class="small">Never share passwords, addresses, phone numbers or private photos. Ask a parent or teacher before using the microphone.</p></section>
+<p><a href="index.html">🏠 Back to Great Minds Home</a></p>
 </main>
 <script>
-let lastReply="";
+'use strict';
+let lastReply="Your teacher is ready!",recognition=null;
+const $=id=>document.getElementById(id);
 const lessons={
-"Mathematics":["What is 8 + 7?","8 + 7 = 15."],
-"English":["What is the opposite of hot?","The opposite of hot is cold."],
-"Science":["Which planet is called the Red Planet?","Mars is called the Red Planet."],
-"Computer Studies":["What is a keyboard?","A keyboard is used to type letters and numbers."],
-"General Knowledge":["How many days are in a week?","There are seven days in a week."]
+"Mathematics":["What is 8 + 7?","8 + 7 = 15. You can count on from 8: 9, 10, 11, 12, 13, 14, 15."],
+"English":["What is the opposite of hot?","The opposite of hot is cold. Opposite words are also called antonyms."],
+"Science":["Which planet is called the Red Planet?","Mars is called the Red Planet because iron-rich dust gives its surface a reddish colour."],
+"Computer Studies":["What is a keyboard?","A keyboard is an input device. We use it to type letters, numbers and instructions."],
+"General Knowledge":["How many days are in a week?","There are seven days in a week: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."]
 };
-function say(t){
-lastReply=t;
-document.getElementById("reply").textContent=t;
-}
-function answer(){
-const q=document.getElementById("question").value.trim().toLowerCase();
-const subject=document.getElementById("subject").value;
-if(!q){say("Please type your question first.");return}
-const lesson=lessons[subject];
-if(q===lesson[0].toLowerCase() || q.includes(lesson[0].toLowerCase().replace("?",""))){
-say("Excellent question! "+lesson[1]);
-}else{
-say("That's a good question! This demonstration has limited prepared answers. Try the practice question for "+subject+".");
-}
-}
-function example(){
-const subject=document.getElementById("subject").value;
-const lesson=lessons[subject];
-document.getElementById("exercise").textContent=lesson[0];
-document.getElementById("question").value=lesson[0];
-say("Try answering this question, then tap Ask Teacher to learn the answer.");
-}
-function listen(){
-if(!lastReply){say("Ask a question first.");return}
-if(!("speechSynthesis" in window)){say("Voice playback is not supported in this browser.");return}
-speechSynthesis.cancel();
-const speech=new SpeechSynthesisUtterance(lastReply);
-speech.lang="en-US";
-speech.rate=.9;
-speechSynthesis.speak(speech);
-}
-</script>
-</body>
-</html>
+function say(text){lastReply=text;$("reply").textContent=text}
+function answer(){const raw=$("question").value.trim();const q=raw.toLowerCase();const subject=$("subject").value;if(!q){say("Please type or speak your question first.");return}const lesson=lessons[subject];const key=lesson[0].toLowerCase().replace("?","");if(q===lesson[0].toLowerCase()||q.includes(key)||q.includes(key.replace(/[0-9+ ]/g,"").trim())){say("Excellent question! "+lesson[1])}else{say("That's a thoughtful question! This offline demonstration has a limited set of prepared answers. Try the practice question for "+subject+". The live AI Teacher connection is still being built.")}}
+function startMic(){const API=window.SpeechRecognition||window.webkitSpeechRecognition;if(!API){$("voiceStatus").textContent="Speech recognition is not supported in this browser. You can type your question instead.";return}try{if(recognition)recognition.abort();recognition=new API();recognition.lang="en-US";recognition.interimResults=false;recognition.maxAlternatives=1;$("mic").disabled=true;$("voiceStatus").textContent="Listening... Speak clearly, then pause.";recognition.onresult=e=>{$("question").value=e.results[0][0].transcript;$("voiceStatus").textContent="I heard: "+e.results[0][0].transcript+" — check the text, then tap Ask Teacher."};recognition.onerror=e=>{$("voiceStatus").textContent=e.error==="not-allowed"?"Microphone permission was denied. You can type instead.":"Voice input stopped ("+e.error+"). You can type instead."};recognition.onend=()=>{$("mic").disabled=false};recognition.start()}catch(e){$("mic").disabled=false;$("voiceStatus").textContent="Could not start the microphone. Check browser permission or type instead."}}
+function speak(){if(!lastReply){say("Ask a question first.");return}if(!("speechSynthesis" in window)){$("voiceStatus").textContent="Voice playback is not supported in this browser.";return}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(lastReply);u.lang="en-US";u.rate=.9;window.speechSynthesis.speak(u)}
+$("ask").addEventListener("click",answer);$("mic").addEventListener("click",startMic);$("listen").addEventListener("click",speak);$("stop").addEventListener("click",()=>{if(recognition)recognition.abort();if("speechSynthesis" in window)window.speechSynthesis.cancel();$("voiceStatus").textContent="Voice stopped."});$("example").addEventListener("click",()=>{const lesson=lessons[$("subject").value];$("question").value=lesson[0];$("exercise").textContent="Practice: "+lesson[0];say("Try answering this question, then tap Ask Teacher to see an explanation.")});$("question").addEventListener("keydown",e=>{if(e.key==="Enter")answer()});
+</script></body></html>
