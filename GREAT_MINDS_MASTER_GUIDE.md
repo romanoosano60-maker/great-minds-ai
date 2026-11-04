@@ -178,3 +178,9 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Connected student, teacher and parent demo pages now listen for changes to the shared browser demo record and refresh their displayed values when another tab in the same browser saves changes.
 - This improves same-browser multi-tab visibility only. It is not realtime database synchronization, does not work across separate devices, and does not provide account authorization.
 - Re-test by opening the student profile and the connected parent/teacher/student pages in separate tabs of the same browser, adding a fictional practice activity, and confirming the other open tabs refresh. Use fictional data only.
+
+
+## 12. Unified navigation rollout — 4 November 2026
+- Added a return path to the Unified Learning & Classroom Hub across Homework, Games, English, Mathematics, Science, Social Studies, History, World Atlas, Dictionary, Encyclopedia, Guided Research, AI Teacher, Group Learning and the International Classroom demo.
+- Re-fetched all 14 pages after updates. Each page contains the hub link and its inline JavaScript passed syntax parsing.
+- These navigation checks verify source structure only. Android layout, button behavior, browser runtime and the underlying live services still require device testing.
