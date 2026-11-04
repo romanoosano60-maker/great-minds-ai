@@ -242,3 +242,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Included legacy practice points in the shared progress summary, keeping the student, parent and teacher demo views aligned.
 - Commit: `7aba80559b53f36800999129ca9e97d85b44c501`.
 - Re-fetched the updated profile and verified both calculation changes. Runtime/browser and multi-device tests remain outstanding.
+
+
+## Teacher classroom access check hardening — 2026-11-04
+- The unified hub now reads the authenticated Supabase user ID after teacher sign-in and scopes the classroom list query to `teacher_id=eq.<authenticated-user-id>`.
+- The result message distinguishes authentication and an ownership-filtered query from verified teacher approval. Server-side RLS remains mandatory.
+- Commits: `198d79386b491cca13c9891d4583a3ca8104ee7e` and clarification `cceb469a184b6e4d9827a657e2e248790359fa60`.
+- Re-fetched the hub and verified the user-ID filter and security limitation text. No real teacher credentials were used; live Supabase login and RLS behaviour remain untested.
