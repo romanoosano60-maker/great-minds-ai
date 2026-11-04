@@ -82,3 +82,10 @@ English should combine listening, speaking, reading, writing and play:
 
 ## Progress reporting rule
 Report separate statuses for frontend development, backend integration, testing and launch readiness. A prior 94% figure was an estimate only and must not be presented as a verified completion percentage. Increase completion only after evidence and tests. Keep unfinished tasks visible and carry this file forward at each meaningful checkpoint.
+
+
+## Completed development increment — Little Learners Dictionary — 2026-11-04
+- Created `dictionary.html` with a searchable starter set of 14 child-friendly entries, simple definitions, pronunciation guides, example sentences, browser text-to-speech buttons, topic filters, word of the day and sentence practice saved locally on the device.
+- Added a Little Learners Dictionary tile to the existing home screen.
+- Commits: dictionary page `16edac3a85fb538387b2967e331f5ee3e1a37d1b`; home-screen link `7e0b36058f14b126e955af736b2a12daa6169b3e`.
+- Code is committed. Live GitHub Pages rendering, Android speech voices, search behaviour, and local saving still need browser/device testing. Do not mark this module tested or launch-ready yet.
