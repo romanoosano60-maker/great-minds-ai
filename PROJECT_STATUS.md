@@ -199,3 +199,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a live Supabase Auth endpoint reachability check using the existing shared public project configuration. The display explicitly distinguishes endpoint reachability from successful teacher authentication, role authorization and student-data synchronization.
 - Added the unified hub as a single entry in the permanent rocket home screen.
 - Source files committed and verified. Browser runtime, actual teacher login, real classroom queries, cross-device synchronization and child-safety controls still require live tests; they are not marked complete.
+
+
+## Shared Student Profile practice summary integration — 2026-11-04
+- Student Profile V2 now publishes a summary of its nickname, homework completions, quiz counts, stars, points and practice certificates into the shared same-browser demo record (`greatMindsConnectedDemoV1`).
+- Connected student, teacher and parent demo views now read that shared Student Profile summary and include its completed homework records in their views.
+- Unified hub routes its teacher and parent tiles to those shared-record views. Student, teacher and parent pages link back to the unified hub.
+- Source checks: all inline JavaScript in the seven touched pages parses successfully; GitHub files were re-fetched after commits.
+- Important limit: this joins local browser storage only. It does not sync between devices, authenticate a parent/teacher/student, or replace Supabase RLS. The existing secure-data warning remains in place. Live account, cross-device and child-safety tests are still required.
