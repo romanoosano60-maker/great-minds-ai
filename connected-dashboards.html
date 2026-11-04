@@ -55,10 +55,12 @@ document.getElementById('teacherLogin').addEventListener('click',async()=>{
   document.getElementById('teacherPassword').value='';
   if(!login.ok||!data.access_token)throw new Error(data.msg||data.error_description||'Sign-in failed (HTTP '+login.status+').');
   teacherAccessToken=data.access_token;
-  const q=await fetch(cfg.url+'/rest/v1/classrooms?select=id,classroom_name,teacher_id&limit=10',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+teacherAccessToken,Accept:'application/json'},cache:'no-store'});
+  const userId=data.user&&data.user.id;
+  if(!userId)throw new Error('Sign-in succeeded but the account ID was not returned; classroom ownership cannot be checked.');
+  const q=await fetch(cfg.url+'/rest/v1/classrooms?select=id,classroom_name,teacher_id&teacher_id=eq.'+encodeURIComponent(userId)+'&limit=10',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+teacherAccessToken,Accept:'application/json'},cache:'no-store'});
   const rows=await q.json().catch(()=>[]);
-  if(!q.ok)throw new Error('Signed in, but classroom query failed (HTTP '+q.status+'). Check table permissions and RLS.');
-  authStatus.textContent='Teacher account authenticated. RLS returned '+(Array.isArray(rows)?rows.length:0)+' classroom(s). This is not yet proof of an approved teacher role; role approval and membership must be separately enforced.';
+  if(!q.ok)throw new Error('Signed in, but the owned-classroom query failed (HTTP '+q.status+'). Check the teacher_id column, table permissions and RLS.');
+  authStatus.textContent='Teacher account authenticated. RLS returned '+(Array.isArray(rows)?rows.length:0)+' classroom(s) owned by this account. This does not independently prove teacher approval; a protected role/approval record is still required.';
  }catch(e){teacherAccessToken=null;authStatus.textContent='Teacher check failed: '+e.message}
 });
 document.getElementById('teacherLogout').addEventListener('click',()=>{
