@@ -13,4 +13,6 @@ feedbackList.innerHTML=d.feedback.length?d.feedback.map(x=>`<div class="item">${
 saveName.onclick=()=>{const d=read();d.student=nickname.value.trim()||'Demo Learner';save(d);render()};
 document.addEventListener('click',e=>{const id=e.target.getAttribute('data-submit');if(!id)return;const input=[...document.querySelectorAll('[data-answer]')].find(x=>x.getAttribute('data-answer')===id);if(!input||!input.value.trim()){alert('Please enter an answer.');return}const d=read(),h=d.homework.find(x=>x.id===id);if(!h||h.submitted)return;h.response=input.value.trim();h.correct=h.response.toLocaleLowerCase()===h.answer.toLocaleLowerCase();h.submitted=true;d.lessons+=1;if(h.correct){d.points+=10;d.stars+=1;d.certificates=Math.floor(d.stars/5)}save(d);render()});
 render();
+// Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
+window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script></body></html>
