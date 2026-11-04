@@ -331,3 +331,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Extracted and syntax-checked inline JavaScript blocks on all 49 pages: no syntax errors were detected. This is a static syntax check, not a full browser interaction test.
 - Rechecked the 3D gallery: 15 distinct embedded image payloads are present; all 15 have the expected WebP RIFF base64 signature and descriptive alt text. A lightbox/dialog is present in the page source.
 - Remaining verification: open the gallery on Android to confirm images decode and display, and tap through the actual app routes and interactive controls. Static checks cannot certify browser rendering, accessibility, authentication, or cross-device behaviour.
+
+
+## Extra-subject lesson accessibility improvement — 2026-11-04
+- Added a browser-based “Hear this question” read-aloud control to each of the five lessons in English Extra, Maths Extra, Science Extra, Computer Extra and Social Studies Extra.
+- Uses the device/browser SpeechSynthesis voice only; this is not the conversational AI Teacher voice service.
+- Re-fetched all five updated pages and syntax-checked their inline scripts. All five passed; each page contains five lesson sections and the read-aloud button creation logic.
+- Android speech playback and voice availability still need device testing.
