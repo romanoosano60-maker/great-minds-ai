@@ -6,7 +6,13 @@
 </style></head><body>
 <header><h1>🚀 Great Minds AI</h1><h2>One Learning & Classroom Hub</h2><p>One home for students, parents, teachers and international learning</p></header>
 <main>
-<section class="card"><h2>🔌 Shared connection status</h2><div id="connection" class="status" role="status">Checking configured project…</div><p><button id="checkConnection">Check connection again</button> <a class="home" href="supabase-connect.html">Open teacher sign-in test</a></p><p class="note">A reachable project is not the same as a verified account. Real student records stay disabled until role approval, classroom membership, parental consent and database security are tested.</p></section>
+<section class="card"><h2>🔌 Shared connection status</h2><div id="connection" class="status" role="status">Checking configured project…</div><p><button id="checkConnection">Check connection again</button></p>
+ <h3>Teacher account check</h3>
+ <label for="teacherEmail">Test teacher email</label><input id="teacherEmail" type="email" autocomplete="username" style="width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit">
+ <label for="teacherPassword">Password</label><input id="teacherPassword" type="password" autocomplete="current-password" style="width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit">
+ <button id="teacherLogin">Sign in and check classrooms</button> <button id="teacherLogout" type="button">Clear session</button>
+ <div id="teacherAuthStatus" class="status" role="status" aria-live="polite">No teacher session.</div>
+ <p class="note">A reachable project is not the same as a verified account. Real student records stay disabled until role approval, classroom membership, parental consent and database security are tested.</p></section>
 <section class="card"><h2>🎒 Student learning</h2><div class="grid">
 <a class="tile" href="student-profile.html"><span>👩‍🎓</span>Student Profile & Progress</a>
 <a class="tile" href="homework.html"><span>📝</span>Homework & Practice</a>
@@ -30,16 +36,33 @@
 </main><footer>Great Minds AI • Unified navigation hub</footer>
 <script>
 const statusEl=document.getElementById('connection');
+const authStatus=document.getElementById('teacherAuthStatus');
+let teacherAccessToken=null;
+function project(){const cfg=window.greatMindsSupabaseConfig;if(!cfg||!cfg.url||!cfg.publishableKey)throw new Error('Shared Supabase configuration is missing.');return cfg}
 async function checkConnection(){
- const cfg=window.greatMindsSupabaseConfig;
- if(!cfg||!cfg.url||!cfg.publishableKey){statusEl.textContent='Project configuration is missing. Online features are not connected.';return}
- statusEl.textContent='Checking Supabase Auth endpoint…';
- try{
-  const res=await fetch(cfg.url+'/auth/v1/settings',{headers:{apikey:cfg.publishableKey,Accept:'application/json'},cache:'no-store'});
-  if(res.ok){statusEl.textContent='Project endpoint reachable. This confirms network connection only — teacher login, classroom permissions and live student sync are not yet verified.'}
-  else{statusEl.textContent='Project endpoint responded with HTTP '+res.status+'. Check project status and public configuration.'}
- }catch(e){statusEl.textContent='Could not reach the project endpoint. Check internet access and project configuration.'}
+ try{const cfg=project();statusEl.textContent='Checking Supabase Auth endpoint…';const res=await fetch(cfg.url+'/auth/v1/settings',{headers:{apikey:cfg.publishableKey,Accept:'application/json'},cache:'no-store'});statusEl.textContent=res.ok?'Project endpoint reachable. This confirms network connection only — teacher approval and student sync still need verification.':'Project endpoint responded with HTTP '+res.status+'. Check project status and public configuration.'}
+ catch(e){statusEl.textContent='Could not reach the project: '+e.message}
 }
 document.getElementById('checkConnection').addEventListener('click',checkConnection);
+document.getElementById('teacherLogin').addEventListener('click',async()=>{
+ const email=document.getElementById('teacherEmail').value.trim(),password=document.getElementById('teacherPassword').value;
+ authStatus.textContent='Checking teacher sign-in…';teacherAccessToken=null;
+ if(!email||!password){authStatus.textContent='Enter the test teacher email and password.';return}
+ try{
+  const cfg=project();
+  const login=await fetch(cfg.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:cfg.publishableKey,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({email,password}),cache:'no-store'});
+  const data=await login.json().catch(()=>({}));
+  document.getElementById('teacherPassword').value='';
+  if(!login.ok||!data.access_token)throw new Error(data.msg||data.error_description||'Sign-in failed (HTTP '+login.status+').');
+  teacherAccessToken=data.access_token;
+  const q=await fetch(cfg.url+'/rest/v1/classrooms?select=id,classroom_name,teacher_id&limit=10',{headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+teacherAccessToken,Accept:'application/json'},cache:'no-store'});
+  const rows=await q.json().catch(()=>[]);
+  if(!q.ok)throw new Error('Signed in, but classroom query failed (HTTP '+q.status+'). Check table permissions and RLS.');
+  authStatus.textContent='Teacher account authenticated. RLS returned '+(Array.isArray(rows)?rows.length:0)+' classroom(s). This is not yet proof of an approved teacher role; role approval and membership must be separately enforced.';
+ }catch(e){teacherAccessToken=null;authStatus.textContent='Teacher check failed: '+e.message}
+});
+document.getElementById('teacherLogout').addEventListener('click',()=>{
+ teacherAccessToken=null;document.getElementById('teacherPassword').value='';authStatus.textContent='Session token cleared from this page. Credentials were not saved.';
+});
 checkConnection();
 </script></body></html>
