@@ -271,3 +271,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Existing shared demo fields are preserved; the dedicated `great-minds-games-v1` store remains the game's own source of truth.
 - Commit: `451c78d97dcb85b15be065358be0d30596135fbb`.
 - Re-fetched the updated file and verified the mirror function and reward fields. Same-browser localStorage integration only; no cloud sync or Android runtime test has been performed.
+
+
+## Mathematics lesson result sharing — 2026-11-04
+- On completion of the 10-question Mathematics challenge, the lesson now appends a subject-tagged result (score percentage, correct count, question count and timestamp) to the shared `greatMindsConnectedDemoV1.quizzes` record.
+- The shared list is capped at the latest 100 entries. The lesson's quiz scoring and restart flow remain unchanged.
+- Commit: `c4381af235e0a6682af46f5e5d70994afa496c08`.
+- Re-fetched the file and verified the result-sharing helper and completion hook. Same-browser demo storage only; no cloud sync or Android runtime test has been performed.
