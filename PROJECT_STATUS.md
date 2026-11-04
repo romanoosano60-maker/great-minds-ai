@@ -221,3 +221,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Created `GREAT_MINDS_MASTER_GUIDE.md` to consolidate the integration notes, known Supabase schema, safe read-only inspection queries, child-safety gates, AI backend requirements and end-to-end acceptance tests.
 - Linked the Supabase preparation and international classroom preparation pages to the master guide and unified hub. README now points to the master guide as the authoritative project reference.
 - The guide explicitly distinguishes source-code completion from live-service verification and does not label the app 100% complete.
+
+
+## Unified parent/teacher entry consolidation — 2026-11-04
+- Updated `connected-dashboards.html` so the Parents & Teachers section links directly to the connected Teacher and Parent demo dashboards rather than sending users to a second, legacy dashboard implementation.
+- Replaced the older `parents-teachers.html` duplicate local-data dashboard with a simple compatibility landing page that directs users to the Unified Learning Hub. Existing links to that filename remain valid.
+- Commits: hub `81dea505cc7765ac0a03054007076ed030569144`; compatibility page `7837531b80cf4bbfa0efd4e14a5f23660124b129`.
+- Both changed files were re-fetched from GitHub; the landing-page destination was verified in source. This is navigation/source verification only. The connected role dashboards still use same-browser local demo storage, not authenticated cloud records.
