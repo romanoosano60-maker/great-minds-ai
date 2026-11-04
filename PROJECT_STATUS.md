@@ -153,3 +153,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Expanded the interactive quiz to ten questions, with feedback, scoring, restart and safe-science guidance for children.
 - Commit: `b1f0706c8e2726063a963707a6d3590a9f2887f6`.
 - Re-fetched the committed page, verified all eight topic headings and ten quiz questions, and checked inline JavaScript syntax successfully. Android device testing remains pending.
+
+
+## English learning module improvement — 2026-11-04
+- Rebuilt `english.html` with interactive alphabet pronunciation, six vocabulary words with child-friendly definitions and examples, a new three-question reading-comprehension activity, spelling practice, grammar identification, spoken sentence practice and a five-question English challenge.
+- Added visible speech/browser limitation guidance and accessible live feedback. Speech uses browser text-to-speech; no audio is uploaded to an AI service.
+- Commit: `4ceb219de301738a9b9e4385e50c00c8826ffa9b`.
+- Re-fetched the committed page and checked inline JavaScript syntax successfully. Android voice quality, touch interaction, layout and learning usability still need device testing.
