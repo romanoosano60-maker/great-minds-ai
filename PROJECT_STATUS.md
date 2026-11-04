@@ -314,3 +314,12 @@ Report separate statuses for frontend development, backend integration, testing 
 - Audited navigation and inline JavaScript syntax in Student Profile, Parents & Teachers, Homework, Games, Group Learning, Safe International Classroom and AI Teacher. Found and fixed one stale Student Profile link from parent-dashboard.html to connected-parent.html; commit 7f4202113055d65d3e72f4b9b308010937e6b266.
 - Re-fetched Student Profile and verified the corrected link. Static JavaScript syntax checks passed for the seven reviewed pages.
 - Limitations: these are repository/static checks, not a live Android browser test. The gallery actual image rendering, all navigation taps, Supabase login and cross-device behaviour still require device/account verification.
+
+
+## Further continuation and dashboard navigation fixes — 2026-11-04
+- Audited the four continuation pages, four setup checklists, Parent Dashboard and Teacher Dashboard for local navigation targets and inline JavaScript syntax.
+- Found two outdated local links: gm-continuation-navigation.html referenced the old safe-international-classroom.html name; teacher-dashboard.html referenced the old parent-dashboard.html name.
+- Corrected the links to safe-international-classroom-v3.html and connected-parent.html respectively.
+- Commits: continuation navigation 0ba4fbde78fe27cba33834c075005b8cf9a6fe46; teacher dashboard 0a79b7a236051023d536b750efd911ccf1b87f8c.
+- Re-fetched both pages and verified the new destinations and removal of the old hrefs. Inline JavaScript syntax checks passed on the reviewed pages.
+- These remain repository-level checks. Live browser navigation and user-device rendering are still pending.
