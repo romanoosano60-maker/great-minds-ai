@@ -235,3 +235,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Removed duplicate teacher and parent dashboard tiles; each role now has one clear entry.
 - Commit: `da0c3599ed84b37bffce17085baa0398baa99ec2`.
 - Re-fetched the updated hub and verified one teacher link, one parent link and the student demo link. This is a source/navigation check, not a live account or cross-device test.
+
+
+## Student progress calculation correction — 2026-11-04
+- Corrected the Student Profile V2 summary so legacy practice stars are not counted twice in its own display.
+- Included legacy practice points in the shared progress summary, keeping the student, parent and teacher demo views aligned.
+- Commit: `7aba80559b53f36800999129ca9e97d85b44c501`.
+- Re-fetched the updated profile and verified both calculation changes. Runtime/browser and multi-device tests remain outstanding.
