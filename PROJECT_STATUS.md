@@ -113,3 +113,9 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added the Guided Research Centre to the existing home screen.
 - Commits: page `f281957d73dadee05fc643800439d3b1271a16d9`; home-screen link `2355a2dade3df9d4ad1abcb57a8a9bcebbe2f1cd`.
 - Code is committed; live Pages rendering, Android note saving and interaction, accessibility and adult review of content remain pending.
+
+
+## Repository navigation and gallery inspection — 2026-11-04
+- Re-fetched the updated home page and checked 18 locally linked `.html` destinations against the repository root: no missing destination was found in this static link scan.
+- Inspected `gm-3d-graphics-gallery-1.html`: it contains 16 image elements, including embedded WebP data images rather than external image file paths. This means missing external asset paths are not evident from the source; whether the large gallery renders correctly on Android still needs a live device check.
+- This is a source-level inspection only, not a browser test. Do not treat it as proof that every navigation control or gallery image works at runtime.
