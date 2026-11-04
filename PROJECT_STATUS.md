@@ -249,3 +249,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - The result message distinguishes authentication and an ownership-filtered query from verified teacher approval. Server-side RLS remains mandatory.
 - Commits: `198d79386b491cca13c9891d4583a3ca8104ee7e` and clarification `cceb469a184b6e4d9827a657e2e248790359fa60`.
 - Re-fetched the hub and verified the user-ID filter and security limitation text. No real teacher credentials were used; live Supabase login and RLS behaviour remain untested.
+
+
+## Student profile data-scope clarification — 2026-11-04
+- Updated the Student Profile notice to accurately describe the shared same-browser summary now consumed by the connected Student, Teacher and Parent demo dashboards.
+- Explicitly states that records do not sync across devices, older standalone learning pages do not automatically send records to this profile, and the demo is not a secure account system.
+- Commit: `75892dabcd1500094394665177df13a370d5702c`.
+- Re-fetched the profile and verified the notice text. This is documentation/UI accuracy, not a live cloud integration or runtime test.
