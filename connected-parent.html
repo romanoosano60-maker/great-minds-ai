@@ -11,4 +11,6 @@ function render(){const d=read();studentName.textContent=d.student;metrics.inner
 const allHomework=[...d.homework,...(d.profileV2?.homework||[])];results.innerHTML=allHomework.length?allHomework.map(h=>`<div class="item"><b>${esc(h.subject)}</b>: ${esc(h.question)}<small>${h.submitted?'Student answered: '+esc(h.response)+' — '+(h.correct?'10/10':'0/10'):'Not yet submitted'}</small></div>`).join(''):'No assignments yet.';
 feedbackList.innerHTML=d.feedback.length?d.feedback.map(x=>`<div class="item">${esc(x)}</div>`).join(''):'No feedback yet.'}
 render();
+// Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
+window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script></body></html>
