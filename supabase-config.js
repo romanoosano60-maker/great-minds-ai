@@ -13,5 +13,6 @@ const supabaseClient = window.supabase.createClient(
 );
 
 window.greatMindsDB = supabaseClient;
+window.greatMindsSupabaseConfig = { url: SUPABASE_URL, publishableKey: SUPABASE_PUBLISHABLE_KEY };
 
 console.log("Great Minds AI Supabase client ready");
