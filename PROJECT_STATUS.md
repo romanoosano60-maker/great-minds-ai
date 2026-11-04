@@ -119,3 +119,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Re-fetched the updated home page and checked 18 locally linked `.html` destinations against the repository root: no missing destination was found in this static link scan.
 - Inspected `gm-3d-graphics-gallery-1.html`: it contains 16 image elements, including embedded WebP data images rather than external image file paths. This means missing external asset paths are not evident from the source; whether the large gallery renders correctly on Android still needs a live device check.
 - This is a source-level inspection only, not a browser test. Do not treat it as proof that every navigation control or gallery image works at runtime.
+
+
+## AI Teacher interface improvement — 2026-11-04
+- Updated `ai-teacher.html` with a microphone button using the browser SpeechRecognition API when available, editable speech-to-text transcription, Enter-to-submit, read-aloud answer, stop-voice controls and accessible status announcements.
+- Kept the offline demonstration disclosure explicit: prepared sample answers remain the only answer source; speech recognition is not a live AI connection and browser support/permission varies. No microphone audio is sent to an AI backend by this page.
+- Commit: `5dffc9590f36ed7badc2d4d2adf7419cc7d0efb5`.
+- Re-fetched the committed file and checked the inline JavaScript syntax successfully. Actual Android microphone permissions, speech recognition, voice quality and device compatibility remain untested. Cloudflare Worker `/ask` and secure AI backend integration remain pending.
