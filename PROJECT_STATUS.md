@@ -126,3 +126,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Kept the offline demonstration disclosure explicit: prepared sample answers remain the only answer source; speech recognition is not a live AI connection and browser support/permission varies. No microphone audio is sent to an AI backend by this page.
 - Commit: `5dffc9590f36ed7badc2d4d2adf7419cc7d0efb5`.
 - Re-fetched the committed file and checked the inline JavaScript syntax successfully. Actual Android microphone permissions, speech recognition, voice quality and device compatibility remain untested. Cloudflare Worker `/ask` and secure AI backend integration remain pending.
+
+
+## Social Studies learning module improvement — 2026-11-04
+- Expanded `social-studies.html` from three introductory text cards into six age-appropriate learning topics: communities, community helpers, rights/responsibilities, culture/traditions, environment and maps.
+- Added a five-question scored quiz with answer feedback, progress and restart, plus a discussion prompt.
+- Commit: `4d03e96354789af6b33d30f80f7cd968fc9e30e4`.
+- Re-fetched the committed page and checked its inline JavaScript syntax. Android rendering, interaction and age/content review remain pending.
