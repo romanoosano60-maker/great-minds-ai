@@ -286,3 +286,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Both append to the latest-100 shared quiz history and preserve other dashboard data.
 - Science commit: `42c9be3d74e19ef51c902bf88efd027ad1527ce0`. English commit: `08a82880eaf03f11cad769443a78bdeed49db675`.
 - Both files were re-fetched and the helper/completion hooks verified. Same-browser demo storage only; no live cloud sync or Android runtime test.
+
+
+## Social Studies, History and Geography result sharing — 2026-11-04
+- Social Studies and History quiz completion now append subject-tagged scores, correct-answer counts, question counts and timestamps to `greatMindsConnectedDemoV1.quizzes`.
+- Geography World Explorer quiz completion mirrors the same result fields.
+- Each shared quiz list retains the latest 100 records; unrelated profile/dashboard fields are preserved.
+- Commits: Social Studies `f92fd943c422d7f205eec33069a6f0e94a722d3f`; History `0db5b761bcdf410cfb7101b8bcee2b21bb472cb3`; Geography `85b1922ce54efa59b432e5686e699874afdcf111`.
+- Each page was re-fetched and its result-sharing helper and completion hook verified. This is same-browser demo storage, not cloud sync; no Android runtime test has been performed.
