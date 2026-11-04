@@ -215,3 +215,9 @@ Report separate statuses for frontend development, backend integration, testing 
 - The result distinguishes successful authentication and RLS-filtered classroom query from proof of teacher approval. No claim of verified teacher role is made.
 - Re-fetched seven related pages after commits; all inline JavaScript parses successfully.
 - Still pending: real approved/unapproved teacher account tests, parent/student role and guardian consent model, RLS policies for all child data tables, classroom membership restrictions, realtime filtering, and cross-device tests. The current student/parent/teacher practice bridge remains same-browser local storage, not production cloud sync.
+
+
+## Single source of truth — 2026-11-04
+- Created `GREAT_MINDS_MASTER_GUIDE.md` to consolidate the integration notes, known Supabase schema, safe read-only inspection queries, child-safety gates, AI backend requirements and end-to-end acceptance tests.
+- Linked the Supabase preparation and international classroom preparation pages to the master guide and unified hub. README now points to the master guide as the authoritative project reference.
+- The guide explicitly distinguishes source-code completion from live-service verification and does not label the app 100% complete.
