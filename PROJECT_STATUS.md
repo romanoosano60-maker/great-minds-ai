@@ -256,3 +256,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Explicitly states that records do not sync across devices, older standalone learning pages do not automatically send records to this profile, and the demo is not a secure account system.
 - Commit: `75892dabcd1500094394665177df13a370d5702c`.
 - Re-fetched the profile and verified the notice text. This is documentation/UI accuracy, not a live cloud integration or runtime test.
+
+
+## Homework Manager to role-dashboard demo sync — 2026-11-04
+- Homework Manager now mirrors its assignment list and submission/marking summary into the shared `greatMindsConnectedDemoV1` browser record.
+- The mirror tags its records as `homework-manager` and replaces only its own mirrored entries, preserving other shared demo homework records.
+- The Homework Manager refreshes its local view when its own storage key changes in another tab.
+- Commit: `7cff9de92c7f72d29d1645f52f91460ed164b7eb`.
+- Re-fetched the file and verified the sync function and source tag. This is same-browser localStorage integration only; it is not Supabase/cloud sync and has not been runtime-tested on Android or across devices.
