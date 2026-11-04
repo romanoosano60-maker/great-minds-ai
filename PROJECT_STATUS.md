@@ -168,3 +168,12 @@ Report separate statuses for frontend development, backend integration, testing 
 - Commit: `6bc8212fa9bfe074893b3ecc54f2f00c54c6aca7`.
 - Re-fetched `index.html`, verified all 15 mapped route targets exist in the repository and checked inline JavaScript syntax. This is a source-level navigation check; published GitHub Pages taps still need Android verification.
 - Also re-audited the current `geography.html`, `encyclopedia.html` and `guided-research.html`; their inline JavaScript parses successfully. World Atlas already contains continent/country information and an interactive quiz; encyclopedia search/filter and guided research activities are present. Their live behaviour still requires device testing.
+
+
+## Supabase and classroom integration audit — 2026-11-04
+- Inspected `supabase-config.js`: it contains the project's Supabase URL and a publishable client key, not a service-role/secret key. The client is exposed as `window.greatMindsDB`. A publishable key is intended for frontend use only when database Row Level Security and policies are correctly enforced; this source inspection does not verify those policies.
+- Inspected `connected-student.html`, `connected-teacher.html`, `connected-parent.html`, `group-learning.html` and `safe-international-classroom-v3.html`. These pages currently use browser `localStorage` demo data and do not call Supabase or subscribe to realtime changes. Their own on-page notices correctly describe the demo limitations.
+- The role selection and simulated parent approval in the V3 classroom are browser-side demonstrations, not verified identities or permissions. The connected dashboards share demo records only in the same browser/device and are not secure accounts.
+- The separate `supabase-connect.html` test page is the only previously inspected frontend page that attempts Supabase Auth and a classrooms REST query. A successful query alone does not establish teacher approval or secure class membership.
+- No production integration changes made during this audit: connecting children, parent consent, teacher authorization, realtime messaging and cross-device/international access require verified database policies and end-to-end testing before enabling.
+- Source audit only; no credentials were entered or disclosed, and no live account/database test was performed.
