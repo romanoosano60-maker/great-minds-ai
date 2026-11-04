@@ -1,12 +1,14 @@
 -- Great Minds AI: international classroom membership
--- Safe for the existing project schema. Preserves the legacy "classroom code"
--- column while adding the canonical classroom_code column used by the frontend.
+-- Applied to the connected project on 2026-11-04 and verified.
+-- The legacy classroom column is named "classroom code" (with a space).
+-- Preserve it while adding classroom_code for the frontend/API.
 
 alter table public.classrooms add column if not exists classroom_code text;
 update public.classrooms
 set classroom_code = "classroom code"
 where classroom_code is null and nullif(trim("classroom code"), '') is not null;
 
+-- Existing project was checked for duplicate normalized codes before this index.
 create unique index if not exists classrooms_classroom_code_unique
 on public.classrooms (lower(trim(classroom_code)))
 where nullif(trim(classroom_code), '') is not null;
@@ -24,44 +26,57 @@ create table if not exists public.classroom_members (
 );
 
 alter table public.classroom_members enable row level security;
+revoke all on public.classroom_members from anon, authenticated;
+grant select on public.classroom_members to authenticated;
+grant update (membership_status) on public.classroom_members to authenticated;
+create index if not exists classroom_members_user_id_idx
+on public.classroom_members(user_id);
 
 drop policy if exists "Members and classroom teachers read memberships" on public.classroom_members;
-create policy "Members and classroom teachers read memberships"
+drop policy if exists "Members and approved classroom teachers read memberships" on public.classroom_members;
+create policy "Members and approved classroom teachers read memberships"
 on public.classroom_members for select to authenticated
 using (
   user_id = (select auth.uid())
   or exists (
     select 1 from public.classrooms c
-    where c.id = classroom_id and c.teacher_id = (select auth.uid())
+    join public.teacher_profiles tp on tp.user_id = c.teacher_id
+    where c.id = classroom_id
+      and c.teacher_id = (select auth.uid())
+      and tp.approved = true
   )
 );
 
 drop policy if exists "Classroom teachers update membership status" on public.classroom_members;
-create policy "Classroom teachers update membership status"
+drop policy if exists "Approved classroom teachers update membership status" on public.classroom_members;
+create policy "Approved classroom teachers update membership status"
 on public.classroom_members for update to authenticated
 using (
   exists (
     select 1 from public.classrooms c
-    where c.id = classroom_id and c.teacher_id = (select auth.uid())
+    join public.teacher_profiles tp on tp.user_id = c.teacher_id
+    where c.id = classroom_id
+      and c.teacher_id = (select auth.uid())
+      and tp.approved = true
   )
 )
 with check (
   exists (
     select 1 from public.classrooms c
-    where c.id = classroom_id and c.teacher_id = (select auth.uid())
+    join public.teacher_profiles tp on tp.user_id = c.teacher_id
+    where c.id = classroom_id
+      and c.teacher_id = (select auth.uid())
+      and tp.approved = true
   )
 );
 
-revoke all on public.classroom_members from anon, authenticated;
-grant select on public.classroom_members to authenticated;
-grant update (membership_status) on public.classroom_members to authenticated;
-create index if not exists classroom_members_user_id_idx on public.classroom_members(user_id);
+-- Privileged join-code lookup is kept in a non-exposed schema.
+-- It authenticates the caller and can only create a pending request.
+create schema if not exists private;
+revoke all on schema private from public, anon;
+grant usage on schema private to authenticated;
 
--- SECURITY DEFINER is intentional here: a signed-in student must look up a
--- classroom by secret join code even though classroom SELECT is teacher-only.
--- The function validates auth.uid(), limits the code, returns no student data,
--- and only inserts a pending request with pending guardian consent.
-create or replace function public.join_classroom_by_code(p_code text)
+create or replace function private.join_classroom_by_code(p_code text)
 returns table (classroom_id bigint, classroom_name text, request_status text)
 language plpgsql
 security definer
@@ -103,6 +118,18 @@ begin
   from public.classroom_members m
   where m.classroom_id = v_class_id and m.user_id = v_user;
 end;
+$$;
+
+revoke all on function private.join_classroom_by_code(text) from public, anon;
+grant execute on function private.join_classroom_by_code(text) to authenticated;
+
+create or replace function public.join_classroom_by_code(p_code text)
+returns table (classroom_id bigint, classroom_name text, request_status text)
+language sql
+security invoker
+set search_path = ''
+as $$
+  select * from private.join_classroom_by_code(p_code);
 $$;
 
 revoke all on function public.join_classroom_by_code(text) from public, anon;
