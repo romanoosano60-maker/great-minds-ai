@@ -67,7 +67,7 @@ English should combine listening, speaking, reading, writing and play:
 ## Open work — not yet verified complete
 1. Inspect all existing pages and their navigation; identify broken links, overlapping pages and genuinely unused files before any cleanup.
 2. Review existing English, vocabulary and reading/writing pages; design/integrate the agreed story, comprehension, spelling, writing and music experience without duplicating working features.
-3. Browser-test the committed Dictionary and World Atlas on Android; then build the Encyclopedia and Guided Research Centre.
+3. Browser-test the committed Dictionary, World Atlas and Encyclopedia on Android; then build the Guided Research Centre.
 4. Check 3D gallery image paths/assets and restore missing images if confirmed.
 5. Verify GitHub Pages deployment and test every main navigation path on Android.
 6. Verify Supabase frontend configuration and real teacher sign-in/classroom creation. Never put a service-role or secret key in browser code.
@@ -97,3 +97,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added responsive styling, keyboard-accessible continent cards and live feedback announcements. No external services, child accounts or personal data are required by this static module.
 - Commit: `6aab758828cff9b490a814ac6934ae09d2a75b74`.
 - The committed file was re-fetched from GitHub and verified to contain the Atlas, seven continent cards, 18 fact/country cards and the quiz. This verifies repository content only; GitHub Pages rendering, Android interaction and accessibility still require device testing.
+
+
+## Completed development increment — Little Learners Encyclopedia — 2026-11-04
+- Created `encyclopedia.html` with 16 child-friendly topic cards across space, nature, animals, science, human body, history, world and technology.
+- Added live text search, category filters, responsive cards and short 'Did you know?' facts. Content is curated in the page; there is no unrestricted external browsing and no child personal data collection.
+- Added a Little Learners Encyclopedia tile to the existing home screen.
+- Commits: encyclopedia page `4fab162ec78fcbd5e7a73b3de39dbe746b1be5fc`; home-screen link `0b11ae093ecba64306512cc6e9d05afca488d2e1`.
+- Repository commits are complete; live GitHub Pages rendering, Android search/filter behaviour, factual review and accessibility still require testing.
