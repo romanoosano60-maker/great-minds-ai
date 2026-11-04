@@ -72,8 +72,17 @@ document.getElementById('teacherLogin').addEventListener('click',async()=>{
   authStatus.textContent='Teacher account authenticated. RLS returned '+(Array.isArray(rows)?rows.length:0)+' classroom(s) owned by this account. The ownership filter is an additional check; RLS must still enforce access on the server. Teacher approval requires a protected role/approval record and has not been verified here.';
  }catch(e){teacherAccessToken=null;authStatus.textContent='Teacher check failed: '+e.message}
 });
-document.getElementById('teacherLogout').addEventListener('click',()=>{
- teacherAccessToken=null;document.getElementById('teacherPassword').value='';authStatus.textContent='Session token cleared from this page. Credentials were not saved.';
+document.getElementById('teacherLogout').addEventListener('click',async()=>{
+ const token=teacherAccessToken;
+ teacherAccessToken=null;
+ document.getElementById('teacherPassword').value='';
+ if(!token){authStatus.textContent='No active teacher session on this page.';return}
+ try{
+  const cfg=project();
+  const res=await fetch(cfg.url+'/auth/v1/logout',{method:'POST',headers:{apikey:cfg.publishableKey,Authorization:'Bearer '+token},cache:'no-store'});
+  if(!res.ok)throw new Error('Supabase sign-out returned HTTP '+res.status+'.');
+  authStatus.textContent='Supabase sign-out confirmed; this page also cleared its in-memory token.';
+ }catch(e){authStatus.textContent='This page cleared its in-memory token, but server sign-out could not be confirmed: '+e.message;}
 });
 checkConnection();
 </script></body></html>
