@@ -303,3 +303,14 @@ Report separate statuses for frontend development, backend integration, testing 
 - Improved the teacher test sign-out in `connected-dashboards.html`: it now calls Supabase Auth sign-out when an in-memory access token exists, clears that token and the password field, and distinguishes confirmed sign-out from an unconfirmed server response.
 - Sign-out code commit: `9dcde94d50f311a8e20c74da20e8b476f9d87baa`; re-fetched the page and verified the updated handler.
 - Remaining live verification is deliberately scheduled for the next session: create a real adult-controlled teacher test account, sign in, verify the classroom query under RLS, and test sign-out. Do not use example credentials or real children's data.
+
+
+## Graphics gallery repair and navigation audit — 2026-11-04
+- Replaced the legacy gm-3d-graphics-gallery.html page with a lightweight redirect and manual fallback to gm-3d-graphics-gallery-1.html, which contains 15 embedded WebP artwork images and does not rely on separate missing image files.
+- Added a direct 3D Graphics Gallery link to connected-dashboards.html.
+- Commits: legacy gallery redirect 1988e5159badd7bdb721d894f92d9211252685b2; dashboard gallery link d3196ed5b32c97962777f645dbad32281d6545b1.
+- Re-fetched both pages and verified the redirect, fallback link, dashboard link and 15 embedded image sources.
+- Audited 18 local navigation targets on index.html and 22 on connected-dashboards.html; all 40 targets exist in the repository.
+- Audited navigation and inline JavaScript syntax in Student Profile, Parents & Teachers, Homework, Games, Group Learning, Safe International Classroom and AI Teacher. Found and fixed one stale Student Profile link from parent-dashboard.html to connected-parent.html; commit 7f4202113055d65d3e72f4b9b308010937e6b266.
+- Re-fetched Student Profile and verified the corrected link. Static JavaScript syntax checks passed for the seven reviewed pages.
+- Limitations: these are repository/static checks, not a live Android browser test. The gallery actual image rendering, all navigation taps, Supabase login and cross-device behaviour still require device/account verification.
