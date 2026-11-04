@@ -1,0 +1,37 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Little Learners Dictionary | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#eef6ff;color:#20345c;font:17px/1.55 Arial,sans-serif}header{background:linear-gradient(120deg,#6545e8,#00bcd4);color:white;text-align:center;padding:24px 14px}header a{color:white}main{max-width:850px;margin:auto;padding:14px}section{background:#fff;border-radius:17px;padding:18px;margin:14px 0;box-shadow:0 3px 12px #24377718}h2{color:#563bc9;margin-top:0}input,select{width:100%;padding:13px;border:2px solid #c5d5ed;border-radius:11px;font:inherit;margin:6px 0}button{border:0;border-radius:11px;padding:11px 15px;background:#6545e8;color:#fff;font-size:16px;margin:5px 3px;cursor:pointer}.word{background:#f1f6ff;padding:14px;border-radius:12px;margin:9px 0}.meaning{font-size:19px}.muted{color:#5c6a83;font-size:14px}.chips button{background:#e8efff;color:#293c70}.feedback{min-height:24px;font-weight:bold;color:#176b49}
+</style></head><body>
+<header><div style="font-size:44px">🔤📚</div><h1>Little Learners Dictionary</h1><p>Discover words • Hear them • Understand them • Use them</p><a href="index.html">🏠 Back to Great Minds Home</a></header>
+<main>
+<section><h2>🔎 Find a word</h2><label for="search">Type a word or choose a topic</label><input id="search" type="search" placeholder="Try: curious, habitat, brave..."><div class="chips"><button data-topic="all">All words</button><button data-topic="nature">Nature</button><button data-topic="feelings">Feelings</button><button data-topic="school">School</button></div><p class="muted">This starter dictionary contains child-friendly words and explanations. More entries can be added as lessons grow.</p></section>
+<section><h2>📖 Word of the day</h2><div id="daily" class="word"></div></section>
+<section><h2>Dictionary results</h2><div id="results" aria-live="polite"></div></section>
+<section><h2>✏️ Use a word</h2><p>Choose one word and write your own sentence with it.</p><input id="chosen" placeholder="Word you want to practise"><textarea id="sentence" rows="3" style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit" placeholder="My sentence..."></textarea><button id="save">Save practice on this device</button><p id="saveMsg" class="feedback" aria-live="polite"></p><p class="muted">Your sentence is stored only in this browser on this device.</p></section>
+</main>
+<script>
+const words=[
+{w:"adventure",p:"ad-VEN-chur",d:"An exciting experience or journey.",e:"Our class went on an adventure in the garden.",t:"school"},
+{w:"brave",p:"brayv",d:"Ready to face something difficult even when you feel afraid.",e:"The brave child asked for help.",t:"feelings"},
+{w:"careful",p:"KAIR-ful",d:"Taking time to avoid mistakes or danger.",e:"Be careful when carrying the glass.",t:"school"},
+{w:"curious",p:"KYOOR-ee-us",d:"Wanting to learn or know more about something.",e:"The curious student asked how birds fly.",t:"school"},
+{w:"discover",p:"dis-KUV-er",d:"To find or learn something for the first time.",e:"We can discover tiny insects under a leaf.",t:"nature"},
+{w:"gentle",p:"JEN-tul",d:"Kind, soft, and not rough.",e:"Use a gentle touch with the kitten.",t:"feelings"},
+{w:"habitat",p:"HAB-ih-tat",d:"The natural home of a plant or animal.",e:"A pond is a habitat for frogs.",t:"nature"},
+{w:"honest",p:"ON-ist",d:"Telling the truth and being fair.",e:"It is honest to admit a mistake.",t:"feelings"},
+{w:"observe",p:"ub-ZURV",d:"To look at something carefully to learn about it.",e:"We observe the clouds before drawing them.",t:"school"},
+{w:"protect",p:"pruh-TEKT",d:"To keep someone or something safe from harm.",e:"Trees help protect the soil.",t:"nature"},
+{w:"respect",p:"ri-SPEKT",d:"Treating people and things with care.",e:"We show respect by listening to others.",t:"feelings"},
+{w:"tiny",p:"TYE-nee",d:"Very small.",e:"A tiny seed can grow into a big tree.",t:"nature"},
+{w:"wonder",p:"WUN-der",d:"A feeling of surprise and curiosity.",e:"The stars filled us with wonder.",t:"feelings"},
+{w:"whisper",p:"WIS-per",d:"To speak very quietly.",e:"Please whisper in the library.",t:"school"}
+];
+let topic="all";
+function speak(w){if(!("speechSynthesis"in window)){alert("Speech is not available in this browser.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(w);u.lang="en-US";u.rate=.85;speechSynthesis.speak(u)}
+function render(){let q=document.getElementById("search").value.trim().toLowerCase();let found=words.filter(x=>(topic==="all"||x.t===topic)&&(!q||x.w.includes(q)||x.d.toLowerCase().includes(q)));document.getElementById("results").innerHTML=found.length?found.map(x=>'<article class="word"><div class="meaning"><strong>'+x.w+'</strong> <span class="muted">('+x.p+')</span></div><p>'+x.d+'</p><p><strong>Example:</strong> '+x.e+'</p><button data-hear="'+x.w+'">🔊 Hear pronunciation</button><button class="use" data-word="'+x.w+'">Practise this word</button></article>').join(""):'<p>No matching word yet. Try another spelling or choose All words.</p>';document.querySelectorAll("[data-hear]").forEach(b=>b.onclick=()=>speak(b.dataset.hear));document.querySelectorAll(".use").forEach(b=>b.onclick=()=>{document.getElementById("chosen").value=b.dataset.word;document.getElementById("sentence").focus()})}
+document.getElementById("search").addEventListener("input",render);document.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{topic=b.dataset.topic;render()});
+let today=words[new Date().getDate()%words.length];document.getElementById("daily").innerHTML='<strong>'+today.w+'</strong><p>'+today.d+'</p><p><strong>Example:</strong> '+today.e+'</p><button id="dailyHear">🔊 Hear word</button>';document.getElementById("dailyHear").onclick=()=>speak(today.w);
+document.getElementById("save").onclick=()=>{let w=document.getElementById("chosen").value.trim(),s=document.getElementById("sentence").value.trim();if(!w||s.length<8){document.getElementById("saveMsg").textContent="Choose a word and write a complete sentence first.";return}try{let a=JSON.parse(localStorage.getItem("gm_dictionary_practice")||"[]");a.push({word:w,sentence:s});localStorage.setItem("gm_dictionary_practice",JSON.stringify(a));document.getElementById("saveMsg").textContent="🌟 Your sentence has been saved on this device."}catch(e){document.getElementById("saveMsg").textContent="Could not save in this browser. Your sentence is still on screen."}};
+render();
+</script></body></html>
