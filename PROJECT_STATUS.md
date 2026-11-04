@@ -177,3 +177,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - The separate `supabase-connect.html` test page is the only previously inspected frontend page that attempts Supabase Auth and a classrooms REST query. A successful query alone does not establish teacher approval or secure class membership.
 - No production integration changes made during this audit: connecting children, parent consent, teacher authorization, realtime messaging and cross-device/international access require verified database policies and end-to-end testing before enabling.
 - Source audit only; no credentials were entered or disclosed, and no live account/database test was performed.
+
+
+## GitHub Pages deployment verification — 2026-11-04
+- Queried the GitHub Actions run for commit `30e33714fb4056ba1e902b0691ceda80d9201c34`.
+- Build, deploy-to-GitHub-Pages, and build-status reporting jobs all completed with `success`.
+- This confirms GitHub's build and deployment workflow completed for that commit. It does not verify every page in a live browser, Android rendering, audio, Supabase login, or classroom data flows.
+- Live site fetch was not independently confirmed in this audit; retain Android browser verification as an open item.
