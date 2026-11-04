@@ -19,4 +19,6 @@ document.getElementById('hwform').onsubmit=e=>{e.preventDefault();const d=read()
 document.getElementById('fbform').onsubmit=e=>{e.preventDefault();const d=read();d.feedback.push(feedback.value.trim());save(d);e.target.reset();render()};
 document.getElementById('planform').onsubmit=e=>{e.preventDefault();const d=read();d.plans.push({topic:topic.value.trim(),instructions:instructions.value.trim()});save(d);e.target.reset();render()};
 render();
+// Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
+window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script></body></html>
