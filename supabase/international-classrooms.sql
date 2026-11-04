@@ -32,6 +32,19 @@ grant update (membership_status) on public.classroom_members to authenticated;
 create index if not exists classroom_members_user_id_idx
 on public.classroom_members(user_id);
 
+-- Require an approved teacher profile to create classrooms.
+drop policy if exists "Teachers create classrooms" on public.classrooms;
+create policy "Teachers create classrooms"
+on public.classrooms for insert to authenticated
+with check (
+  teacher_id = (select auth.uid())
+  and exists (
+    select 1 from public.teacher_profiles tp
+    where tp.user_id = (select auth.uid())
+      and tp.approved = true
+  )
+);
+
 drop policy if exists "Members and classroom teachers read memberships" on public.classroom_members;
 drop policy if exists "Members and approved classroom teachers read memberships" on public.classroom_members;
 create policy "Members and approved classroom teachers read memberships"
