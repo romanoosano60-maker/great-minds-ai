@@ -56,6 +56,14 @@ English should combine listening, speaking, reading, writing and play:
 - A prior identical-blob scan reported no byte-for-byte duplicate files. Similar names alone are not evidence of duplication.
 - No repository files have been deleted.
 
+
+## Completed development increment — 2026-11-04
+- Added `english-story-studio.html`: a sample story with browser read-aloud, four vocabulary words with pronunciation, spelling practice, four comprehension questions with scoring, and a short writing activity saved locally on the device.
+- Added optional gentle generated tones with explicit start/stop and volume controls; audio does not autoplay.
+- Added the Story Studio link to the existing home screen without replacing the rocket design.
+- Commits: Story Studio `dda78f08d831c0fc13cd46ecd1642f26476e7020`; home link `0a9b36348fb014f2862fb0d45b4d2442a09e257b`.
+- Both files were re-fetched from GitHub and the new page and home-screen link were confirmed present. GitHub Pages live rendering, Android audio, accessibility and child usability remain untested; this is a development completion, not launch readiness.
+
 ## Open work — not yet verified complete
 1. Inspect all existing pages and their navigation; identify broken links, overlapping pages and genuinely unused files before any cleanup.
 2. Review existing English, vocabulary and reading/writing pages; design/integrate the agreed story, comprehension, spelling, writing and music experience without duplicating working features.
