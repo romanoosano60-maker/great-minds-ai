@@ -5,14 +5,14 @@
 <div class="card"><h2>Teacher feedback</h2><form id="fbform"><label for="feedback">Feedback visible to student and parent</label><textarea id="feedback" required maxlength="300" placeholder="Great effort!"></textarea><button type="submit">Save feedback</button></form><div id="feedbackList"></div></div>
 <div class="card"><h2>Lesson plan</h2><form id="planform"><label for="topic">Lesson topic</label><input id="topic" required maxlength="100"><label for="instructions">Instructions</label><textarea id="instructions" required maxlength="300"></textarea><button type="submit">Save lesson plan</button></form><div id="plans"></div></div></main><footer>Great Minds AI • Local demonstration</footer><script>
 const KEY='greatMindsConnectedDemoV1';
-const empty=()=>({student:'Demo Learner',stars:0,points:0,lessons:0,certificates:0,homework:[],feedback:[],plans:[]});
+const empty=()=>({student:'Demo Learner',stars:0,points:0,lessons:0,certificates:0,homework:[],feedback:[],plans:[],profileV2:{stars:0,points:0,lessons:0,certificates:0,homework:[],quizCount:0}}});
 function read(){try{return {...empty(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return empty()}}
 function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
 function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
 function resetDemo(){if(confirm('Erase the connected demo data stored in this browser?')){localStorage.removeItem(KEY);location.reload()}}
 </script><script>
-function render(){const d=read();document.getElementById('summary').textContent=`${d.student} • ${d.points} points • ${d.stars} stars • ${d.lessons} completed`;
-document.getElementById('assignments').innerHTML=d.homework.length?d.homework.map(h=>`<div class="item"><b>${esc(h.subject)}:</b> ${esc(h.question)}<small>${h.submitted?'Submitted: '+esc(h.response)+' — '+(h.correct?'Correct (10/10)':'Not correct (0/10)'):'Awaiting student answer'}</small></div>`).join(''):'No assignments yet';
+function render(){const d=read();document.getElementById('summary').textContent=`${d.student} • ${d.points+(d.profileV2?.points||0)} points • ${d.stars+(d.profileV2?.stars||0)} stars • ${d.lessons+(d.profileV2?.lessons||0)} completed`;
+const allHomework=[...d.homework,...(d.profileV2?.homework||[])];document.getElementById('assignments').innerHTML=allHomework.length?allHomework.map(h=>`<div class="item"><b>${esc(h.subject)}:</b> ${esc(h.question)}<small>${h.submitted?'Submitted: '+esc(h.response)+' — '+(h.correct?'Correct (10/10)':'Not correct (0/10)'):'Awaiting student answer'}</small></div>`).join(''):'No assignments yet';
 document.getElementById('feedbackList').innerHTML=d.feedback.map(x=>`<div class="item">${esc(x)}</div>`).join('');
 document.getElementById('plans').innerHTML=d.plans.map(x=>`<div class="item"><b>${esc(x.topic)}</b>: ${esc(x.instructions)}</div>`).join('')}
 document.getElementById('hwform').onsubmit=e=>{e.preventDefault();const d=read();d.homework.push({id:Date.now()+'-'+Math.random(),subject:subject.value,question:question.value.trim(),answer:answer.value.trim(),submitted:false});save(d);e.target.reset();notice.textContent='Homework saved in this browser.';render()};
