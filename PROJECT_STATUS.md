@@ -278,3 +278,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - The shared list is capped at the latest 100 entries. The lesson's quiz scoring and restart flow remain unchanged.
 - Commit: `c4381af235e0a6682af46f5e5d70994afa496c08`.
 - Re-fetched the file and verified the result-sharing helper and completion hook. Same-browser demo storage only; no cloud sync or Android runtime test has been performed.
+
+
+## Science and English quiz result sharing — 2026-11-04
+- Science completion now mirrors score percentage, correct count, question count, subject and timestamp to `greatMindsConnectedDemoV1.quizzes`.
+- English Challenge completion mirrors the same fields; its five-question score is converted to a percentage.
+- Both append to the latest-100 shared quiz history and preserve other dashboard data.
+- Science commit: `42c9be3d74e19ef51c902bf88efd027ad1527ce0`. English commit: `08a82880eaf03f11cad769443a78bdeed49db675`.
+- Both files were re-fetched and the helper/completion hooks verified. Same-browser demo storage only; no live cloud sync or Android runtime test.
