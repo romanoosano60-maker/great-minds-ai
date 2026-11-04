@@ -133,3 +133,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a five-question scored quiz with answer feedback, progress and restart, plus a discussion prompt.
 - Commit: `4d03e96354789af6b33d30f80f7cd968fc9e30e4`.
 - Re-fetched the committed page and checked its inline JavaScript syntax. Android rendering, interaction and age/content review remain pending.
+
+
+## History learning module improvement — 2026-11-04
+- Expanded `history.html` with a child-friendly timeline from prehistory to modern times, an introduction to historical evidence (photographs, letters, objects/buildings and oral histories), and a guided thinking activity.
+- Added a five-question scored History Detective quiz with feedback and restart.
+- Commit: `8851ef9ad43e02f8ed4e57eb9f515de83abdaae9`.
+- Re-fetched the committed page and checked inline JavaScript syntax. Device testing and historical-content review remain pending.
