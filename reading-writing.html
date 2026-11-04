@@ -1,2 +1,61 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Reading and Writing — Great Minds AI</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#20345c;background:#eaf5ff}header{text-align:center;background:linear-gradient(155deg,#c9f7fa,#fff1b8);padding:42px 18px}h1{font-size:clamp(30px,6vw,44px);margin:12px 0}h2{text-align:center;margin:28px 10px 12px}header p{font-size:19px;line-height:1.5}.fig{font-size:54px}.support{font-size:26px}.btn{display:inline-block;background:#6747e9;color:white;text-decoration:none;border-radius:18px;padding:16px 20px;font-size:18px;font-weight:bold;text-align:center}.hero-btn{margin:15px auto}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;padding:18px;max-width:950px;margin:auto}.tile{background:white;border-radius:24px;padding:22px 12px;text-align:center;box-shadow:0 4px 12px #24436c13;min-width:0}.emoji{font-size:48px;margin-bottom:18px}.tile .btn{display:block;font-size:16px;padding:15px 6px}.note{max-width:900px;margin:15px auto;padding:16px;border-left:5px solid #e8a528;background:#fff9e8;border-radius:12px;line-height:1.5}footer{background:#273e7b;color:white;text-align:center;padding:25px;margin-top:20px}@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}</style></head><body><header><div class="fig">✍️</div><h1>Reading and Writing</h1><p>Great Minds AI • Beginner lessons</p><a class="btn" href="index.html">🏠 Back to Home</a></header><main><h2>Learn and Practice</h2><section class="grid"><article class="tile" style="text-align:left"><h3>Read</h3><p style="line-height:1.6">The sun shines. A bird sings. The child smiles.</p></article><article class="tile" style="text-align:left"><h3>Understand</h3><p style="line-height:1.6">What is shining? The sun.</p></article><article class="tile" style="text-align:left"><h3>Write</h3><p style="line-height:1.6">Write two sentences about your favorite animal.</p></article></section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer></body></html>
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Reading and Writing | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:#edf5ff;color:#20345c;font-family:Arial,sans-serif;line-height:1.55}
+header{padding:28px 16px;text-align:center;background:linear-gradient(140deg,#c9f7fa,#fff1b8)}
+h1{font-size:clamp(30px,6vw,44px);margin:8px}header p{font-size:17px}
+nav{display:flex;justify-content:center;gap:10px;flex-wrap:wrap}
+a,button{display:inline-block;border:0;border-radius:13px;padding:12px 16px;background:#6747e9;color:white;text-decoration:none;font-size:16px;font-weight:bold;cursor:pointer}
+button.alt,a.alt{background:#087f8c}button:focus-visible,a:focus-visible,textarea:focus-visible{outline:3px solid #e8a528;outline-offset:3px}
+main{max-width:850px;margin:auto;padding:14px}.card{background:white;border-radius:20px;padding:20px;margin:16px 0;box-shadow:0 4px 14px #24436c13}
+h2{color:#5238bd;margin-top:0}.passage{font-size:20px;line-height:1.8;background:#f5f8ff;padding:16px;border-radius:14px}
+.choices{display:grid;gap:9px}.choices button{text-align:left;background:#eef0ff;color:#28375d;border:2px solid #d9dcff}
+.feedback{min-height:25px;font-weight:bold}.writebox{width:100%;min-height:135px;border:2px solid #ccd6f0;border-radius:12px;padding:12px;font:17px Arial;resize:vertical}
+.small{font-size:14px;color:#596985}.score{font-weight:bold;color:#087f8c}footer{text-align:center;background:#273e7b;color:white;padding:22px}
+</style></head>
+<body>
+<header><div style="font-size:48px" aria-hidden="true">📖✍️</div><h1>Reading and Writing</h1>
+<p>Read a story, listen carefully, answer questions and practise writing.</p>
+<nav><a href="index.html">🏠 Home</a><a class="alt" href="connected-dashboards.html">Learning Hub</a></nav></header>
+<main>
+<section class="card"><h2>1. Read the story</h2>
+<p class="passage" id="story">Mina has a little garden. Every morning, she waters the plants. One sunny day, a yellow butterfly visits the flowers. Mina watches it gently and smiles. She knows plants need sunlight, water and care to grow.</p>
+<button id="listen">🔊 Listen to the story</button> <button class="alt" id="stop">⏹ Stop</button>
+<p class="small">This uses the speech voice available on your phone or browser.</p></section>
+<section class="card"><h2>2. Reading comprehension</h2>
+<p><strong>Question 1:</strong> What does Mina water every morning?</p>
+<div class="choices" id="q1"><button data-correct="false">The road</button><button data-correct="true">The plants</button><button data-correct="false">Her shoes</button></div><p class="feedback" id="f1" aria-live="polite"></p>
+<p><strong>Question 2:</strong> What visits the flowers?</p>
+<div class="choices" id="q2"><button data-correct="false">A dog</button><button data-correct="false">A bird</button><button data-correct="true">A yellow butterfly</button></div><p class="feedback" id="f2" aria-live="polite"></p>
+<p class="score" id="score" aria-live="polite">Score: 0/2</p><button class="alt" id="retry">Try again</button></section>
+<section class="card"><h2>3. Your writing challenge</h2>
+<p>Write two or three sentences about an animal you like. Describe what it looks like and what it does.</p>
+<label for="writing"><strong>My writing</strong></label><textarea id="writing" class="writebox" maxlength="1200" placeholder="I like ..."></textarea>
+<p class="small"><span id="count">0</span>/1200 characters. Use a nickname only. Do not write private information.</p>
+<button id="save">💾 Save on this device</button> <button class="alt" id="clear">Clear writing</button><p class="feedback" id="saveStatus" aria-live="polite"></p>
+</section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer>
+<script>
+const story=document.getElementById("story");
+document.getElementById("listen").addEventListener("click",function(){
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("saveStatus").textContent="Read-aloud is not supported in this browser.";return;}
+ window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance(story.textContent);voice.lang="en-US";voice.rate=0.88;window.speechSynthesis.speak(voice);
+});
+document.getElementById("stop").addEventListener("click",function(){if("speechSynthesis" in window)window.speechSynthesis.cancel();});
+let answers={};function score(){document.getElementById("score").textContent="Score: "+Object.values(answers).filter(Boolean).length+"/2";}
+document.querySelectorAll(".choices").forEach(function(group){group.querySelectorAll("button").forEach(function(button){button.addEventListener("click",function(){
+ if(Object.prototype.hasOwnProperty.call(answers,group.id))return;
+ const correct=button.dataset.correct==="true";answers[group.id]=correct;
+ group.querySelectorAll("button").forEach(function(item){item.disabled=true;});
+ document.getElementById(group.id==="q1"?"f1":"f2").textContent=correct?"✅ Correct! Well done.":"Not quite. Read the story again and try the next question.";score();
+});});});
+document.getElementById("retry").addEventListener("click",function(){answers={};document.querySelectorAll(".choices button").forEach(function(b){b.disabled=false;});document.getElementById("f1").textContent="";document.getElementById("f2").textContent="";score();});
+const writing=document.getElementById("writing"),key="gm_reading_writing_v1";
+function count(){document.getElementById("count").textContent=writing.value.length;}
+try{writing.value=localStorage.getItem(key)||"";}catch(e){}
+count();writing.addEventListener("input",count);
+document.getElementById("save").addEventListener("click",function(){try{localStorage.setItem(key,writing.value);document.getElementById("saveStatus").textContent="Saved on this device only.";}catch(e){document.getElementById("saveStatus").textContent="Unable to save in this browser.";}});
+document.getElementById("clear").addEventListener("click",function(){writing.value="";count();try{localStorage.removeItem(key);}catch(e){}document.getElementById("saveStatus").textContent="Writing cleared from this device.";});
+</script></body></html>
