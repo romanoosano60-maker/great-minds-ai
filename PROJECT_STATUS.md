@@ -207,3 +207,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Unified hub routes its teacher and parent tiles to those shared-record views. Student, teacher and parent pages link back to the unified hub.
 - Source checks: all inline JavaScript in the seven touched pages parses successfully; GitHub files were re-fetched after commits.
 - Important limit: this joins local browser storage only. It does not sync between devices, authenticate a parent/teacher/student, or replace Supabase RLS. The existing secure-data warning remains in place. Live account, cross-device and child-safety tests are still required.
+
+
+## Unified hub teacher sign-in test — 2026-11-04
+- Embedded the teacher sign-in and classroom visibility check directly in `connected-dashboards.html`, removing the need to leave the central hub for the basic test.
+- The form uses the shared project URL and publishable key, clears the password after submission, keeps the access token in page memory only, and provides a clear-session action.
+- The result distinguishes successful authentication and RLS-filtered classroom query from proof of teacher approval. No claim of verified teacher role is made.
+- Re-fetched seven related pages after commits; all inline JavaScript parses successfully.
+- Still pending: real approved/unapproved teacher account tests, parent/student role and guardian consent model, RLS policies for all child data tables, classroom membership restrictions, realtime filtering, and cross-device tests. The current student/parent/teacher practice bridge remains same-browser local storage, not production cloud sync.
