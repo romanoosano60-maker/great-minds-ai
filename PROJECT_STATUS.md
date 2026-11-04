@@ -192,3 +192,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - The Parents & Teachers Center now links directly to the shared Supabase connection and teacher-access check.
 - The main home screen now presents one combined Parents & Teachers Center entry instead of separate parent and teacher entry tiles, preserving the existing rocket home screen.
 - GitHub source updates committed and re-fetched for verification. This is an integration/navigation improvement only: live teacher role verification, profile/classroom data synchronization, RLS testing with separate accounts, parent consent, Realtime membership filters and cross-device operation remain unverified. Do not treat this increment as production completion.
+
+
+## Unified learning hub — 2026-11-04
+- Rebuilt `connected-dashboards.html` as the central navigation hub for student learning, parents/teachers, international classroom demos and the AI Teacher prototype.
+- Added a live Supabase Auth endpoint reachability check using the existing shared public project configuration. The display explicitly distinguishes endpoint reachability from successful teacher authentication, role authorization and student-data synchronization.
+- Added the unified hub as a single entry in the permanent rocket home screen.
+- Source files committed and verified. Browser runtime, actual teacher login, real classroom queries, cross-device synchronization and child-safety controls still require live tests; they are not marked complete.
