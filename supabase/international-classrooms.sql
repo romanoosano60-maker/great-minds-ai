@@ -262,3 +262,11 @@ end;
 $$;
 revoke all on function private.redeem_guardian_consent_code(text,boolean) from public, anon;
 grant execute on function private.redeem_guardian_consent_code(text,boolean) to authenticated;
+
+
+-- Final verified hardening (2026-11-04):
+-- Enforce case-insensitive, whitespace-normalized uniqueness for classroom codes.
+-- The connected project was checked for duplicate normalized codes before applying.
+create unique index if not exists classrooms_classroom_code_normalized_uidx
+on public.classrooms (lower(btrim(classroom_code)))
+where classroom_code is not null and btrim(classroom_code) <> '';
