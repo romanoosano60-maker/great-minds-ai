@@ -264,3 +264,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - The Homework Manager refreshes its local view when its own storage key changes in another tab.
 - Commit: `7cff9de92c7f72d29d1645f52f91460ed164b7eb`.
 - Re-fetched the file and verified the sync function and source tag. This is same-browser localStorage integration only; it is not Supabase/cloud sync and has not been runtime-tested on Android or across devices.
+
+
+## Games and Rewards to role-dashboard demo sync — 2026-11-04
+- Games now mirrors stars, completed game wins, best streak, earned badge labels and update time into `greatMindsConnectedDemoV1.games`.
+- Existing shared demo fields are preserved; the dedicated `great-minds-games-v1` store remains the game's own source of truth.
+- Commit: `451c78d97dcb85b15be065358be0d30596135fbb`.
+- Re-fetched the updated file and verified the mirror function and reward fields. Same-browser localStorage integration only; no cloud sync or Android runtime test has been performed.
