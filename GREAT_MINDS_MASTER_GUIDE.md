@@ -172,3 +172,9 @@ Do not mark the app 100% complete or launch-ready until all relevant acceptance 
 ## 10. One place to start
 
 Open the deployed app's permanent home screen, then choose **Unified Learning & Classroom Hub**. Use the embedded teacher sign-in test with a test account. Never send passwords, access tokens or secret keys in chat. Use the read-only SQL checks above before changing database policies.
+
+
+## 11. Latest role-dashboard refresh improvement — 4 November 2026
+- Connected student, teacher and parent demo pages now listen for changes to the shared browser demo record and refresh their displayed values when another tab in the same browser saves changes.
+- This improves same-browser multi-tab visibility only. It is not realtime database synchronization, does not work across separate devices, and does not provide account authorization.
+- Re-test by opening the student profile and the connected parent/teacher/student pages in separate tabs of the same browser, adding a fictional practice activity, and confirming the other open tabs refresh. Use fictional data only.
