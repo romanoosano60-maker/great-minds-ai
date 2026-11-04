@@ -184,3 +184,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Build, deploy-to-GitHub-Pages, and build-status reporting jobs all completed with `success`.
 - This confirms GitHub's build and deployment workflow completed for that commit. It does not verify every page in a live browser, Android rendering, audio, Supabase login, or classroom data flows.
 - Live site fetch was not independently confirmed in this audit; retain Android browser verification as an open item.
+
+
+## Unified connection and adult-entry improvement — 2026-11-04
+- The shared Supabase configuration now exposes only the existing project URL and publishable key to the browser client; no service-role or secret key was added.
+- The Supabase connection test now loads the same shared configuration as the app instead of requiring the project URL and publishable key to be re-entered. The fields are read-only, and teacher test credentials remain session-only.
+- The Parents & Teachers Center now links directly to the shared Supabase connection and teacher-access check.
+- The main home screen now presents one combined Parents & Teachers Center entry instead of separate parent and teacher entry tiles, preserving the existing rocket home screen.
+- GitHub source updates committed and re-fetched for verification. This is an integration/navigation improvement only: live teacher role verification, profile/classroom data synchronization, RLS testing with separate accounts, parent consent, Realtime membership filters and cross-device operation remain unverified. Do not treat this increment as production completion.
