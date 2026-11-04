@@ -294,3 +294,12 @@ Report separate statuses for frontend development, backend integration, testing 
 - Each shared quiz list retains the latest 100 records; unrelated profile/dashboard fields are preserved.
 - Commits: Social Studies `f92fd943c422d7f205eec33069a6f0e94a722d3f`; History `0db5b761bcdf410cfb7101b8bcee2b21bb472cb3`; Geography `85b1922ce54efa59b432e5686e699874afdcf111`.
 - Each page was re-fetched and its result-sharing helper and completion hook verified. This is same-browser demo storage, not cloud sync; no Android runtime test has been performed.
+
+
+## International classroom safety and sign-out review — 2026-11-04
+- Reviewed `safe-international-classroom-v3.html`: it clearly labels itself as a local-only demonstration; parent approval is simulated, role selection is browser-side, and demo messages are stored in localStorage. It must not be presented as verified parent consent, secure role authorization, or live international messaging.
+- Reviewed `group-learning.html`: classroom challenges and best scores are local to the current browser; no accounts or online chat are active.
+- Reviewed Supabase preparation checklists 06 and 07: they are planning checklists, not evidence that the listed security and consent tests have passed.
+- Improved the teacher test sign-out in `connected-dashboards.html`: it now calls Supabase Auth sign-out when an in-memory access token exists, clears that token and the password field, and distinguishes confirmed sign-out from an unconfirmed server response.
+- Sign-out code commit: `9dcde94d50f311a8e20c74da20e8b476f9d87baa`; re-fetched the page and verified the updated handler.
+- Remaining live verification is deliberately scheduled for the next session: create a real adult-controlled teacher test account, sign in, verify the classroom query under RLS, and test sign-out. Do not use example credentials or real children's data.
