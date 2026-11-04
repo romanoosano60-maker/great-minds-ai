@@ -42,7 +42,8 @@ label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;
 const STORAGE='greatMindsHomeworkV1';
 let tasks=[];
 function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||'[]');tasks=Array.isArray(x)?x:[]}catch(e){tasks=[]}}
-function save(){try{localStorage.setItem(STORAGE,JSON.stringify(tasks));return true}catch(e){alert('Unable to save on this device. Check browser storage.');return false}}
+function syncHomeworkToRoleDashboards(){try{const key='greatMindsConnectedDemoV1';const d=JSON.parse(localStorage.getItem(key)||'{}');const shared=Array.isArray(d.homework)?d.homework:[];d.homework=shared.filter(x=>x.source!=='homework-manager').concat(tasks.map(t=>({id:String(t.id),subject:t.subject,question:t.title,answer:t.correct||'',submitted:!!t.submission,response:t.submission?.answer||'',correct:!!(t.submission&&t.submission.score!==null&&t.submission.score>0),source:'homework-manager',feedback:t.submission?.feedback||''})));localStorage.setItem(key,JSON.stringify(d))}catch(e){console.warn('Homework dashboard sync unavailable',e)}}
+function save(){try{localStorage.setItem(STORAGE,JSON.stringify(tasks));syncHomeworkToRoleDashboards();return true}catch(e){alert('Unable to save on this device. Check browser storage.');return false}}
 function el(tag,txt,cls){const n=document.createElement(tag);if(txt!==undefined)n.textContent=txt;if(cls)n.className=cls;return n}
 function btn(label,fn,cls){const b=el('button',label,cls);b.type='button';b.onclick=fn;return b}
 function tab(name){['teacher','student','parent'].forEach(k=>{document.getElementById(k).classList.toggle('hidden',k!==name);document.getElementById('tab'+k[0].toUpperCase()+k.slice(1)).classList.toggle('active',k===name)});render()}
@@ -92,5 +93,7 @@ if(t.submission&&t.submission.feedback)c.append(el('p','Feedback: '+t.submission
 const done=tasks.filter(t=>t.submission).length,marked=tasks.filter(t=>t.submission&&t.submission.score!==null);
 const stats=document.getElementById('parentStats');stats.replaceChildren(el('p','Total: '+tasks.length+' | Submitted: '+done+' | Pending: '+(tasks.length-done)),el('p','Marked: '+marked.length));
 }
-load();tab('teacher');
+load();syncHomeworkToRoleDashboards();tab('teacher');
+// Refresh the local role-dashboard mirror when this homework page is open in another tab.
+window.addEventListener('storage',event=>{if(event.key===STORAGE){load();syncHomeworkToRoleDashboards();render()}});
 </script></body></html>
