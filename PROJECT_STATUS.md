@@ -160,3 +160,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added visible speech/browser limitation guidance and accessible live feedback. Speech uses browser text-to-speech; no audio is uploaded to an AI service.
 - Commit: `4ceb219de301738a9b9e4385e50c00c8826ffa9b`.
 - Re-fetched the committed page and checked inline JavaScript syntax successfully. Android voice quality, touch interaction, layout and learning usability still need device testing.
+
+
+## Home navigation audit and repair — 2026-11-04
+- Audited the home page's internal anchor links and JavaScript subject routes against the repository root. All discovered internal links and mapped destinations exist.
+- Corrected the Social Studies route to open the updated `social-studies.html` learning module (rather than the older `social.html` page). Added explicit route aliases for Geography/World Atlas, History, Encyclopedia and Guided Research.
+- Commit: `6bc8212fa9bfe074893b3ecc54f2f00c54c6aca7`.
+- Re-fetched `index.html`, verified all 15 mapped route targets exist in the repository and checked inline JavaScript syntax. This is a source-level navigation check; published GitHub Pages taps still need Android verification.
+- Also re-audited the current `geography.html`, `encyclopedia.html` and `guided-research.html`; their inline JavaScript parses successfully. World Atlas already contains continent/country information and an interactive quiz; encyclopedia search/filter and guided research activities are present. Their live behaviour still requires device testing.
