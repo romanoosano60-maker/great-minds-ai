@@ -67,7 +67,7 @@ English should combine listening, speaking, reading, writing and play:
 ## Open work — not yet verified complete
 1. Inspect all existing pages and their navigation; identify broken links, overlapping pages and genuinely unused files before any cleanup.
 2. Review existing English, vocabulary and reading/writing pages; design/integrate the agreed story, comprehension, spelling, writing and music experience without duplicating working features.
-3. Browser-test the committed Dictionary, World Atlas and Encyclopedia on Android; then build the Guided Research Centre.
+3. Browser-test the committed Dictionary, World Atlas, Encyclopedia and Guided Research Centre on Android; then inspect and improve existing learning modules.
 4. Check 3D gallery image paths/assets and restore missing images if confirmed.
 5. Verify GitHub Pages deployment and test every main navigation path on Android.
 6. Verify Supabase frontend configuration and real teacher sign-in/classroom creation. Never put a service-role or secret key in browser code.
@@ -105,3 +105,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a Little Learners Encyclopedia tile to the existing home screen.
 - Commits: encyclopedia page `4fab162ec78fcbd5e7a73b3de39dbe746b1be5fc`; home-screen link `0b11ae093ecba64306512cc6e9d05afca488d2e1`.
 - Repository commits are complete; live GitHub Pages rendering, Android search/filter behaviour, factual review and accessibility still require testing.
+
+
+## Completed development increment — Guided Research Centre — 2026-11-04
+- Created `guided-research.html` with four curated child-friendly inquiry topics (rain, bees, planets and trees), short explanations and investigation questions.
+- Added a research-plan helper for a child's own question, local-device-only notes saving, and clear privacy guidance. It does not perform unrestricted web searches or collect personal data.
+- Added the Guided Research Centre to the existing home screen.
+- Commits: page `f281957d73dadee05fc643800439d3b1271a16d9`; home-screen link `2355a2dade3df9d4ad1abcb57a8a9bcebbe2f1cd`.
+- Code is committed; live Pages rendering, Android note saving and interaction, accessibility and adult review of content remain pending.
