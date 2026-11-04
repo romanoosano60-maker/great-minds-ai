@@ -140,3 +140,16 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a five-question scored History Detective quiz with feedback and restart.
 - Commit: `8851ef9ad43e02f8ed4e57eb9f515de83abdaae9`.
 - Re-fetched the committed page and checked inline JavaScript syntax. Device testing and historical-content review remain pending.
+
+
+## Mathematics learning module improvement — 2026-11-04
+- Rebuilt `math.html` with eight lesson areas: addition, subtraction, multiplication, division, fractions, shapes, time and measurement.
+- Expanded the interactive challenge to ten questions, with feedback, scoring, restart and encouragement based on the result.
+- Commit: `44c6cc31fc6ba5ec935a140b08e2399c6bd76c2a`.
+- Re-fetched the committed page, verified all eight lesson headings and ten quiz questions, and checked inline JavaScript syntax successfully. Android device testing remains pending.
+
+## Science learning module improvement — 2026-11-04
+- Rebuilt `science.html` with eight learning areas: living things, water cycle, space, forces and magnets, energy, states of matter, human body and Earth science.
+- Expanded the interactive quiz to ten questions, with feedback, scoring, restart and safe-science guidance for children.
+- Commit: `b1f0706c8e2726063a963707a6d3590a9f2887f6`.
+- Re-fetched the committed page, verified all eight topic headings and ten quiz questions, and checked inline JavaScript syntax successfully. Android device testing remains pending.
