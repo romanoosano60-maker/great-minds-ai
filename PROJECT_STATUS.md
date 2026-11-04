@@ -228,3 +228,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Replaced the older `parents-teachers.html` duplicate local-data dashboard with a simple compatibility landing page that directs users to the Unified Learning Hub. Existing links to that filename remain valid.
 - Commits: hub `81dea505cc7765ac0a03054007076ed030569144`; compatibility page `7837531b80cf4bbfa0efd4e14a5f23660124b129`.
 - Both changed files were re-fetched from GitHub; the landing-page destination was verified in source. This is navigation/source verification only. The connected role dashboards still use same-browser local demo storage, not authenticated cloud records.
+
+
+## Unified hub navigation cleanup — 2026-11-04
+- Added the connected student dashboard to the Student Learning section so all three role dashboards are reachable from the central hub.
+- Removed duplicate teacher and parent dashboard tiles; each role now has one clear entry.
+- Commit: `da0c3599ed84b37bffce17085baa0398baa99ec2`.
+- Re-fetched the updated hub and verified one teacher link, one parent link and the student demo link. This is a source/navigation check, not a live account or cross-device test.
