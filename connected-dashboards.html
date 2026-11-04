@@ -1,9 +1,44 @@
-<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Connected Dashboards — Demo | Great Minds AI</title><style>
-:root{font-family:Arial,sans-serif;color:#1c3156}*{box-sizing:border-box}body{margin:0;background:#eff7ff}header{padding:22px;background:linear-gradient(125deg,#d4f5ff,#fff0c8);text-align:center}h1{margin:8px}main{max-width:850px;margin:20px auto;padding:0 15px}.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 2px 9px #2342}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}button,.link{background:#5d4be0;color:white;border:0;padding:12px 15px;border-radius:10px;cursor:pointer;display:inline-block;margin:8px 5px 8px 0;text-decoration:none;font-weight:bold}button:focus,.link:focus{outline:3px solid #f8bd31}.secondary{background:#177a79}.warn{background:#fff7dc;border-left:5px solid #e5aa2e;padding:13px;line-height:1.5;border-radius:8px}.muted{color:#58677c}.row{display:flex;gap:10px;flex-wrap:wrap}.metric{background:#edf0ff;border-radius:12px;padding:14px;min-width:105px;flex:1;text-align:center}.metric strong{display:block;font-size:26px}.item{padding:12px;border-bottom:1px solid #dde5f0}.status{color:#17684e;font-weight:bold}small{display:block}footer{text-align:center;padding:20px}.danger{background:#b53343}</style></head><body><header><h1>🚀 Great Minds AI</h1><h2>Connected Dashboards — Demo</h2><nav><a class="link" href="connected-dashboards.html">🏠 Hub</a><a class="link" href="connected-student.html">🎒 Student</a><a class="link" href="connected-teacher.html">👩‍🏫 Teacher</a><a class="link" href="connected-parent.html">👨‍👩‍👧 Parent</a></nav></header><main><div class="warn"><strong>Demo only — not a secure account system.</strong> All three pages share data only in this browser on this device, when opened on the same website. Anyone using this browser can view or change the demo records. Use made-up student names only. No live international messaging or automatic connection to the older dashboards.</div><div class="card"><h2>One shared practice record</h2><p>Test a simple flow: Teacher assigns homework → Student submits an answer → Parent sees the result.</p><a class="link" href="connected-teacher.html">1. Create homework</a><a class="link" href="connected-student.html">2. Answer homework</a><a class="link" href="connected-parent.html">3. Review progress</a></div><div class="card"><h2>Demo tools</h2><button class="danger" onclick="resetDemo()">Reset all demo data</button></div></main><footer>Great Minds AI • Local demonstration</footer><script>
-const KEY='greatMindsConnectedDemoV1';
-const empty=()=>({student:'Demo Learner',stars:0,points:0,lessons:0,certificates:0,homework:[],feedback:[],plans:[]});
-function read(){try{return {...empty(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return empty()}}
-function save(d){localStorage.setItem(KEY,JSON.stringify(d))}
-function esc(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
-function resetDemo(){if(confirm('Erase the connected demo data stored in this browser?')){localStorage.removeItem(KEY);location.reload()}}
-</script><script></script></body></html>
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Great Minds AI | Unified Learning Hub</title>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#e5f3ff,#fff6d9);color:#1b3152;font:16px Arial,sans-serif}header{text-align:center;padding:25px 14px;background:linear-gradient(120deg,#b9eaff,#e8dfff,#fff0bd)}main{max-width:900px;margin:auto;padding:14px}.card{background:#fff;border-radius:17px;padding:19px;margin:14px 0;box-shadow:0 3px 12px #20305018}h1{margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.tile{display:block;padding:17px;border-radius:14px;background:#edf3ff;text-decoration:none;color:#183b80;font-weight:bold}.tile span{display:block;font-size:28px;margin-bottom:8px}.note{padding:13px;border-radius:10px;background:#fff3d5;line-height:1.5}.status{padding:12px;border-radius:10px;background:#eef3f8;line-height:1.5}button{padding:12px 16px;border:0;border-radius:10px;background:#4c49ce;color:white;font-weight:bold;font-size:16px}a.home{color:#3147b2}footer{text-align:center;padding:20px;color:#52627a}
+</style></head><body>
+<header><h1>🚀 Great Minds AI</h1><h2>One Learning & Classroom Hub</h2><p>One home for students, parents, teachers and international learning</p></header>
+<main>
+<section class="card"><h2>🔌 Shared connection status</h2><div id="connection" class="status" role="status">Checking configured project…</div><p><button id="checkConnection">Check connection again</button> <a class="home" href="supabase-connect.html">Open teacher sign-in test</a></p><p class="note">A reachable project is not the same as a verified account. Real student records stay disabled until role approval, classroom membership, parental consent and database security are tested.</p></section>
+<section class="card"><h2>🎒 Student learning</h2><div class="grid">
+<a class="tile" href="student-profile.html"><span>👩‍🎓</span>Student Profile & Progress</a>
+<a class="tile" href="homework.html"><span>📝</span>Homework & Practice</a>
+<a class="tile" href="games.html"><span>🎮</span>Games, Stars & Rewards</a>
+<a class="tile" href="english.html"><span>🔤</span>English</a>
+<a class="tile" href="math.html"><span>➗</span>Mathematics</a>
+<a class="tile" href="science.html"><span>🔬</span>Science</a>
+</div></section>
+<section class="card"><h2>👨‍👩‍👧 Parents & teachers</h2><div class="grid">
+<a class="tile" href="parents-teachers.html"><span>🤝</span>Parents & Teachers Center</a>
+<a class="tile" href="teacher-dashboard.html"><span>👩‍🏫</span>Teacher Dashboard</a>
+<a class="tile" href="connected-dashboards.html"><span>🔄</span>Shared Practice Demo</a>
+</div></section>
+<section class="card"><h2>🌍 International classrooms</h2><div class="grid">
+<a class="tile" href="safe-international-classroom-v3.html"><span>🌐</span>International Classroom Demo</a>
+<a class="tile" href="group-learning.html"><span>🧩</span>Group Learning</a>
+</div><p class="note">International classroom pages remain local demonstrations until verified student and teacher identities, parent permissions, private classroom membership, reporting and moderation are active.</p></section>
+<section class="card"><h2>🤖 AI Teacher</h2><a class="tile" href="ai-teacher.html"><span>🎙️</span>AI Teacher voice prototype</a><p class="note">Voice controls are a prototype; live AI responses depend on the secure backend and still require end-to-end testing.</p></section>
+<p><a class="home" href="index.html">← Return to the colourful Great Minds home screen</a></p>
+</main><footer>Great Minds AI • Unified navigation hub</footer>
+<script>
+const statusEl=document.getElementById('connection');
+async function checkConnection(){
+ const cfg=window.greatMindsSupabaseConfig;
+ if(!cfg||!cfg.url||!cfg.publishableKey){statusEl.textContent='Project configuration is missing. Online features are not connected.';return}
+ statusEl.textContent='Checking Supabase Auth endpoint…';
+ try{
+  const res=await fetch(cfg.url+'/auth/v1/settings',{headers:{apikey:cfg.publishableKey,Accept:'application/json'},cache:'no-store'});
+  if(res.ok){statusEl.textContent='Project endpoint reachable. This confirms network connection only — teacher login, classroom permissions and live student sync are not yet verified.'}
+  else{statusEl.textContent='Project endpoint responded with HTTP '+res.status+'. Check project status and public configuration.'}
+ }catch(e){statusEl.textContent='Could not reach the project endpoint. Check internet access and project configuration.'}
+}
+document.getElementById('checkConnection').addEventListener('click',checkConnection);
+checkConnection();
+</script></body></html>
