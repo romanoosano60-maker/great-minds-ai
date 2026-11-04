@@ -160,3 +160,66 @@ begin
     alter publication supabase_realtime add table public.classroom_members;
   end if;
 end $$;
+
+
+-- Final hardening additions applied to the connected project:
+-- Teachers may reject at any time, but may only approve after guardian consent.
+drop policy if exists "Approved classroom teachers update membership status" on public.classroom_members;
+create policy "Approved classroom teachers update membership status"
+on public.classroom_members for update to authenticated
+using (
+  exists (
+    select 1 from public.classrooms c
+    join public.teacher_profiles tp on tp.user_id = c.teacher_id
+    where c.id = classroom_id
+      and c.teacher_id = (select auth.uid())
+      and tp.approved = true
+  )
+)
+with check (
+  exists (
+    select 1 from public.classrooms c
+    join public.teacher_profiles tp on tp.user_id = c.teacher_id
+    where c.id = classroom_id
+      and c.teacher_id = (select auth.uid())
+      and tp.approved = true
+  )
+  and (membership_status <> 'approved' or parent_consent_status = 'approved')
+);
+
+-- Keep the guardian code table inaccessible to all direct client queries.
+alter table private.guardian_consent_codes enable row level security;
+drop policy if exists "No direct client access to guardian consent codes" on private.guardian_consent_codes;
+create policy "No direct client access to guardian consent codes"
+on private.guardian_consent_codes for all to anon, authenticated
+using (false) with check (false);
+
+-- Revoke all linked children's classroom requests if a guardian revokes consent.
+create or replace function private.revoke_guardian_consent()
+returns text language plpgsql security definer set search_path = ''
+as $$
+declare
+  v_guardian uuid := auth.uid();
+begin
+  if v_guardian is null then raise exception 'Sign in to the guardian account first'; end if;
+  with revoked as (
+    update public.guardian_relationships
+    set relationship_status='revoked', revoked_at=now()
+    where guardian_id=v_guardian and relationship_status='active'
+    returning student_id
+  )
+  update public.classroom_members m
+  set parent_consent_status='rejected', membership_status='rejected'
+  where m.user_id in (select student_id from revoked);
+  if not exists (
+    select 1 from public.guardian_relationships
+    where guardian_id=v_guardian and relationship_status='revoked'
+      and revoked_at > now() - interval '1 minute'
+  ) then
+    raise exception 'No active guardian link was found';
+  end if;
+  return 'Guardian consent revoked for linked child accounts. Their classroom membership requests have been blocked.';
+end;
+$$;
+revoke all on function private.revoke_guardian_consent() from public, anon;
+grant execute on function private.revoke_guardian_consent() to authenticated;
