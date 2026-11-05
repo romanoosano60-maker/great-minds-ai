@@ -507,3 +507,4 @@ Report separate statuses for frontend development, backend integration, testing 
 - Re-fetched the shared language script and AI Teacher files and passed JavaScript syntax checks. This is source verification only; lesson completeness, live rendering, Android audio and all language layouts still need device testing.
 - Updated OWNER_ACTIONS.md and PRODUCTION_READINESS.md to reflect the database verification report: guardian-consent revocation and homework maximum-score migrations were applied and rollback-tested. The remaining real-account and cross-device workflows are still pending.
 - The AI Teacher Worker remains a source template and is not deployed. Its endpoint URL is intentionally blank until Cloudflare deployment and configuration are completed.
+- Fixed shared language matching so emoji-prefixed page labels can match either their complete translation key or the text-only fallback; this prevents some icon-prefixed headings and buttons from being skipped.
