@@ -13,6 +13,20 @@ button{border:0;border-radius:12px;padding:11px 15px;margin:5px 3px;background:#
 button.secondary{background:#168b83}input,textarea{width:100%;padding:12px;border:2px solid #c6d5ee;border-radius:10px;font:inherit}
 textarea{min-height:90px}.word{display:inline-block;background:#e9f1ff;border-radius:12px;padding:9px;margin:5px}
 .feedback{font-weight:bold;min-height:25px}.small{font-size:14px;color:#53647f}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style></head>
 <body>
 <header><h1>📖 English Story Studio</h1><p>Listen • Read • Learn Words • Spell • Understand • Write</p><a href="index.html">🏠 Back to Great Minds AI</a></header>
