@@ -68,7 +68,7 @@ document.querySelectorAll(".choices").forEach(function(group){group.querySelecto
 });});});
 document.getElementById("retry").addEventListener("click",function(){answers={};cloudSaveAttempted=false;document.getElementById("cloudProgressStatus").textContent="Complete both questions to save a new quiz score. Your writing stays on this device.";document.querySelectorAll(".choices button").forEach(function(b){b.disabled=false;});document.getElementById("f1").textContent="";document.getElementById("f2").textContent="";score();});
 const writing=document.getElementById("writing"),key="gm_reading_writing_v1";
-function count(){document.getElementById("count").textContent=writing.value.length;const words=writing.value.trim()?writing.value.trim().split(/\\s+/).length:0;document.getElementById("wordCount").textContent=words;}
+function count(){document.getElementById("count").textContent=writing.value.length;const words=writing.value.trim()?writing.value.trim().split(/\s+/).length:0;document.getElementById("wordCount").textContent=words;}
 try{writing.value=localStorage.getItem(key)||"";}catch(e){}
 count();writing.addEventListener("input",count);
 document.getElementById("save").addEventListener("click",function(){try{localStorage.setItem(key,writing.value);document.getElementById("saveStatus").textContent="Saved on this device only.";}catch(e){document.getElementById("saveStatus").textContent="Unable to save in this browser.";}});
