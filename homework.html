@@ -113,7 +113,18 @@ async function cloudHomeworkRefresh(){
     item.append(el('label','Mark score'),score,el('label','Teacher feedback'),feedback,btn('Save mark',async()=>{const n=Number(score.value);if(score.value===''||!Number.isInteger(n)||n<0||n>a.max_points){alert('Enter a whole-number score within the maximum.');return}const r=await api.markSubmission(s.id,n,feedback.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}));card.append(item);
    }
   }else if(mine){card.append(el('p','Your answer has been submitted.'),el('p',mine.answer),el('p',mine.score===null?'Awaiting teacher marking':'Score: '+mine.score+'/'+a.max_points),el('p','Feedback: '+(mine.feedback||'Not yet provided')))}
-  else{const answer=el('textarea');answer.maxLength=3000;answer.placeholder='Write your homework answer here';card.append(el('p','Submit your answer for this classroom assignment.'),answer,btn('Submit homework',async()=>{const r=await api.submitAnswer(a.id,answer.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}))}
+  else{
+   const enrolled=await api.isEnrolledStudent(a.classroom_id);
+   if(enrolled.ok&&enrolled.isStudent){
+    const answer=el('textarea');answer.maxLength=3000;answer.placeholder='Write your homework answer here';
+    card.append(el('p','Submit your answer for this classroom assignment.'),answer,btn('Submit homework',async()=>{const r=await api.submitAnswer(a.id,answer.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}));
+   }else if(sub.rows.length){
+    card.append(el('p','Parent/guardian view — linked student submissions allowed by Supabase are shown below.'));
+    sub.rows.forEach(s=>card.append(el('div','Student account '+s.student_id.slice(0,8)+'… • '+s.answer+' • '+(s.score===null?'Awaiting marking':'Score '+s.score+'/'+a.max_points)+' • '+(s.feedback||'No feedback yet'),'answer')));
+   }else{
+    card.append(el('p','This account can view the assignment, but is not enrolled as the student. No linked submission is visible yet.'));
+   }
+  }
   root.append(card);
  }
 }
