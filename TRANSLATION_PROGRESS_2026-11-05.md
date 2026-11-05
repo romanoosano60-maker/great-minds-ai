@@ -11,3 +11,9 @@
 - This is a source-level update, not proof of correct rendering on every phone.
 - Dynamic quiz feedback, every lesson passage, microphone permissions, spoken output, right-to-left layout and translation quality still need browser/Android checks and fluent-speaker review.
 - No Supabase settings or Cloudflare deployment were changed.
+
+## Additional update — English learning and dictionary pages
+- Added Hindi, Bengali, Tamil, Telugu and Marathi translations for visible navigation, lesson headings, instructions, music controls, spelling practice, reading-comprehension controls, writing-save privacy notes and dictionary controls on the English Language, English Story Studio and Little Learners Dictionary pages.
+- English alphabet examples, story passages, vocabulary meanings and target-language practice content remain in English where they are the material being learned.
+- The updated shared language script passed a JavaScript syntax check after the additions.
+- The user confirmed the previous Advanced Learning Studio, Reading & Writing and Vocabulary pages display correctly on their Android device. The newly updated English and dictionary pages still need a separate on-device language-switch check.
