@@ -44,18 +44,18 @@ abc:{lyrics:"A, B, C, D, E, F, G — come and sing along with me! H, I, J, K, L,
 twinkle:{lyrics:"Twinkle, twinkle, little star, how I wonder what you are! Up above the world so high, like a diamond in the sky! Twinkle, twinkle, little star, how I wonder what you are!",notes:[262,262,392,392,440,440,392,349,349,330,330,294,294,262,392,392,349,349,330,330,294,392,392,349,349,330,330,294,262,262,392,392,440,440,392]},
 count:{lyrics:"One, two, three, four, five — count and clap and feel alive! Six, seven, eight, nine, ten — let's count them all again!",notes:[262,294,330,349,392,392,349,330,294,262,262,330,392,440,392,330,294,262,294,330]}
 };
-let ctx=null,timer=null,index=0,current=null,paused=false,voice=null;
+let ctx=null,timer=null,index=0,current=null,paused=false,voice=null,resumeCurrent=null;
 const $=id=>document.getElementById(id);
 function speed(){return Number($("songSpeed").value)}
 function stop(){if(timer){clearTimeout(timer);timer=null}if(voice&&speechSynthesis)speechSynthesis.cancel();paused=false}
-function play(id,from=0){stop();current=id;index=from;const s=songs[id];const status=$(id+"Status");status.textContent="Playing — sing along!";if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC){status.textContent="Audio is not supported on this browser.";return}ctx=new AC()}ctx.resume();const words=s.lyrics.split(/(?<=[.!?])\s+/);let beat=0;
+function play(id,from=0){if(paused&&current===id&&resumeCurrent){paused=false;ctx.resume();resumeCurrent();$(id+"Status").textContent="Playing — sing along!";return}stop();current=id;index=from;const s=songs[id];const status=$(id+"Status");status.textContent="Playing — sing along!";if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC){status.textContent="Audio is not supported on this browser.";return}ctx=new AC()}ctx.resume();const words=s.lyrics.split(/(?<=[.!?])\s+/);let beat=0;
 function tick(){if(current!==id)return;if(index>=s.notes.length){status.textContent="Song finished! Great singing!";$(id+"Lyrics").textContent=s.lyrics;stop();return}
 const freq=s.notes[index];const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type="sine";osc.frequency.value=freq;gain.gain.setValueAtTime(0.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.12,ctx.currentTime+0.025);gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.24/speed());osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+0.26/speed());
 const line=words[Math.min(words.length-1,Math.floor(index/Math.max(1,Math.ceil(s.notes.length/words.length))))];$(id+"Lyrics").textContent=line;index++;timer=setTimeout(tick,300/speed());}
 tick();}
 document.querySelectorAll("#learningSongs [data-song]").forEach(b=>b.addEventListener("click",()=>play(b.dataset.song)));
 document.querySelectorAll("#learningSongs [data-replay]").forEach(b=>b.addEventListener("click",()=>play(b.dataset.replay,0)));
-document.querySelectorAll("#learningSongs [data-stop]").forEach(b=>b.addEventListener("click",()=>{if(current){const id=current;stop();$(id+"Status").textContent="Paused. Press Play to start again.";}}));
+document.querySelectorAll("#learningSongs [data-stop]").forEach(b=>b.addEventListener("click",()=>{if(current&&!paused){if(timer){clearTimeout(timer);timer=null}paused=true;$(current+"Status").textContent="Paused. Press Play to continue.";}}));
 $("songSpeed").addEventListener("input",()=>{$("songSpeedLabel").textContent=speed()<0.9?"Slow":speed()>1.1?"Fast":"Normal";});
 })();
 </script></body></html>
