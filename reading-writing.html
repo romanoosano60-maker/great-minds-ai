@@ -37,8 +37,8 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <main>
 <section class="card"><h2>1. Read the story</h2>
 <p class="passage" id="story">Mina has a little garden. Every morning, she waters the plants. One sunny day, a yellow butterfly visits the flowers. Mina watches it gently and smiles. She knows plants need sunlight, water and care to grow.</p>
-<button type="button" id="listen">🔊 Listen to the story</button> <button type="button" class="alt" id="stop">⏹ Stop</button>
-<p class="small">This uses the voice available on your phone or browser and follows your selected language when a suitable voice is installed.</p><p class="feedback" id="readStatus" aria-live="polite"></p></section>
+<button type="button" id="listen">🔊 Listen to the story</button> <button type="button" class="alt" id="testVoice">🎧 Test voice</button> <button type="button" class="alt" id="stop">⏹ Stop</button>
+<p class="small">Choose your language using the language bar at the top. If the story is silent, tap Test voice to check whether your phone's speech engine is working.</p><p class="feedback" id="readStatus" aria-live="polite">Voice check: not tested yet.</p></section>
 <section class="card"><h2>2. Reading comprehension</h2>
 <p><strong>Question 1:</strong> What does Mina water every morning?</p>
 <div class="choices" id="q1"><button type="button" data-correct="false">The road</button><button type="button" data-correct="true">The plants</button><button type="button" data-correct="false">Her shoes</button></div><p class="feedback" id="f1" aria-live="polite"></p>
@@ -53,36 +53,56 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script><script>
 const story=document.getElementById("story");
-document.getElementById("listen").addEventListener("click",function(){
- const status=document.getElementById("readStatus");
- if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){status.textContent="This browser does not provide text-to-speech. Open this page in Chrome and check Android text-to-speech settings.";return;}
- const synth=window.speechSynthesis;
- synth.cancel();
- const selected=(document.documentElement.lang||"en").toLowerCase();
+const voiceStatus=document.getElementById("readStatus");
+let speechRun=0;
+function selectedSpeechLocale(){
+ let selected=(document.documentElement.lang||"en").toLowerCase();
+ try{selected=localStorage.getItem("gm_language")||selected;}catch(e){}
  const locales={en:"en-US",hi:"hi-IN",bn:"bn-BD",ta:"ta-IN",te:"te-IN",mr:"mr-IN",de:"de-DE",fr:"fr-FR",es:"es-ES",zh:"zh-CN",ar:"ar-SA"};
- const wanted=locales[selected]||selected;
- const text=story.textContent.trim();
- const speakNow=()=>{
-   const voices=synth.getVoices()||[];
-   const voice=voices.find(v=>v.lang.toLowerCase()===wanted.toLowerCase())||voices.find(v=>v.lang.toLowerCase().startsWith(selected+"-"))||voices.find(v=>v.default)||voices[0]||null;
-   const utterance=new SpeechSynthesisUtterance(text);
-   utterance.lang=voice?voice.lang:wanted;
-   utterance.rate=0.88;
-   if(voice)utterance.voice=voice;
-   utterance.onstart=()=>{status.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 Reading aloud…":"🔊 Reading aloud using the phone's available voice. Install the selected language voice in Android settings for a closer match.";};
-   utterance.onend=()=>{status.textContent="Story finished. Well done!";};
-   utterance.onerror=()=>{status.textContent="The phone could not play speech. In Android Settings, search for Text-to-speech output and install or select a speech voice.";};
-   synth.speak(utterance);
- };
- if(synth.getVoices().length){speakNow();}else{
-   status.textContent="Loading the phone's speech voice…";
-   let done=false;
-   const ready=()=>{if(done)return;done=true;synth.removeEventListener("voiceschanged",ready);speakNow();};
-   synth.addEventListener("voiceschanged",ready);
-   setTimeout(()=>{if(!done){synth.removeEventListener("voiceschanged",ready);done=true;speakNow();}},1200);
+ return {selected,locale:locales[selected]||selected};
+}
+function speakReading(text,label){
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){
+  voiceStatus.textContent="Speech is unavailable in this browser. Open this page in Google Chrome and enable Android Text-to-speech.";
+  return;
  }
-});
-document.getElementById("stop").addEventListener("click",function(){if("speechSynthesis" in window)window.speechSynthesis.cancel();document.getElementById("readStatus").textContent="Reading stopped.";});
+ const synth=window.speechSynthesis;
+ const run=++speechRun;
+ synth.cancel();
+ voiceStatus.textContent="Preparing your phone's voice…";
+ const {selected,locale}=selectedSpeechLocale();
+ const chunks=String(text).match(/[^.!?]+[.!?]+|[^.!?]+$/g)||[String(text)];
+ let index=0;
+ function speakNext(){
+  if(run!==speechRun||index>=chunks.length){
+   if(run===speechRun)voiceStatus.textContent=label+" finished. Well done!";
+   return;
+  }
+  const voices=synth.getVoices()||[];
+  const voice=voices.find(v=>v.lang.toLowerCase()===locale.toLowerCase())||
+   voices.find(v=>v.lang.toLowerCase().startsWith(selected+"-"))||
+   voices.find(v=>v.default)||voices[0]||null;
+  const utterance=new SpeechSynthesisUtterance(chunks[index].trim());
+  utterance.lang=voice?voice.lang:locale;
+  utterance.rate=0.88;
+  if(voice)utterance.voice=voice;
+  utterance.onstart=()=>{if(run===speechRun)voiceStatus.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 "+label+"…":"🔊 Speaking with the phone's available voice. Install the selected language voice for a closer match.";};
+  utterance.onend=()=>{if(run!==speechRun)return;index++;setTimeout(speakNext,120);};
+  utterance.onerror=(event)=>{if(run!==speechRun)return;voiceStatus.textContent="The phone's speech engine stopped ("+(event.error||"unknown error")+"). Check Android Text-to-speech settings and try Test voice again.";};
+  synth.speak(utterance);
+ }
+ const begin=()=>{if(run===speechRun)setTimeout(speakNext,180);};
+ if(synth.getVoices().length){begin();}
+ else{
+  let ready=false;
+  const onReady=()=>{if(ready)return;ready=true;synth.removeEventListener("voiceschanged",onReady);begin();};
+  synth.addEventListener("voiceschanged",onReady);
+  setTimeout(()=>{if(!ready){ready=true;synth.removeEventListener("voiceschanged",onReady);begin();}},1800);
+ }
+}
+document.getElementById("listen").addEventListener("click",()=>speakReading(story.textContent.trim(),"Story reading"));
+document.getElementById("testVoice").addEventListener("click",()=>speakReading("Hello! Welcome to Great Minds AI. Your reading voice is ready to practise.","Voice test"));
+document.getElementById("stop").addEventListener("click",function(){speechRun++;if("speechSynthesis" in window){window.speechSynthesis.cancel();}voiceStatus.textContent="Reading stopped.";});
 let answers={},cloudSaveAttempted=false;function score(){const total=Object.values(answers).filter(Boolean).length;document.getElementById("score").textContent="Score: "+total+"/2";if(Object.keys(answers).length===2&&!cloudSaveAttempted){cloudSaveAttempted=true;saveReadingScore(total);}}async function saveReadingScore(total){const status=document.getElementById("cloudProgressStatus");if(typeof window.gmSaveStudentProgress!=="function"){status.textContent="Cloud save is not configured here. Your quiz score is shown on this page; your writing stays on this device.";return;}status.textContent="Checking your account and saving the reading quiz score…";try{const result=await window.gmSaveStudentProgress({subject:"English",activity_key:"reading-writing-story-quiz",score:total,max_score:2,correct_count:total,question_count:2,source:"reading-writing"});status.textContent=result&&result.saved?"Reading quiz score saved to your secure learning profile. Your writing stays on this device.":(result&&result.reason?result.reason:"Cloud save could not be confirmed.")+" Your writing stays on this device.";}catch(error){console.warn("Reading and Writing quiz cloud save failed:",error);status.textContent="Cloud save could not be confirmed. Your quiz score remains visible here, and your writing stays on this device.";}}
 document.querySelectorAll(".choices").forEach(function(group){group.querySelectorAll("button").forEach(function(button){button.addEventListener("click",function(){
  if(Object.prototype.hasOwnProperty.call(answers,group.id))return;
