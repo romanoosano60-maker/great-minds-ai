@@ -62,8 +62,16 @@
  async function markSubmission(submissionId,score,feedback){
   const client=db();if(!client)return {ok:false,message:"Supabase is not configured."};
   const {user,error:userError}=await currentUser();if(userError||!user)return {ok:false,message:"Sign in with the approved teacher account first."};
-  const n=Number(score);if(!Number.isInteger(n)||n<0||!String(submissionId||"").trim())return {ok:false,message:"Enter a valid non-negative whole-number score."};
-  const {error}=await client.from("homework_submissions").update({score:n,feedback:String(feedback||"").trim().slice(0,1500),marked_by:user.id,marked_at:new Date().toISOString()}).eq("id",String(submissionId));
+  const id=String(submissionId||"").trim();
+  const n=Number(score);
+  if(!Number.isInteger(n)||n<0||!id)return {ok:false,message:"Enter a valid non-negative whole-number score."};
+  // Check the assignment maximum before marking; database RLS still decides whether this teacher may update it.
+  const {data:submission,error:submissionError}=await client.from("homework_submissions").select("assignment_id").eq("id",id).maybeSingle();
+  if(submissionError||!submission)return {ok:false,message:"The submission could not be found for this teacher account."};
+  const {data:assignment,error:assignmentError}=await client.from("homework_assignments").select("max_points").eq("id",submission.assignment_id).maybeSingle();
+  if(assignmentError||!assignment)return {ok:false,message:"The assignment details could not be loaded for this teacher account."};
+  if(n>Number(assignment.max_points))return {ok:false,message:"The score cannot be higher than the assignment maximum of "+assignment.max_points+" points."};
+  const {error}=await client.from("homework_submissions").update({score:n,feedback:String(feedback||"").trim().slice(0,1500),marked_by:user.id,marked_at:new Date().toISOString()}).eq("id",id);
   if(error){console.warn("Homework marking failed:",error);return {ok:false,message:"Marking not accepted. Only the approved classroom teacher can mark this work."};}
   return {ok:true,message:"Mark and feedback saved."};
  }
