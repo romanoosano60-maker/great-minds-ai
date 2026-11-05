@@ -496,3 +496,14 @@ Report separate statuses for frontend development, backend integration, testing 
 - Fixed the AI Teacher Social Studies lesson link to open social-studies.html.
 - Added a secure cloud-progress viewer to connected-progress.html and enabled the small Connected Practice quiz to submit permitted results through the existing cloud progress helper. The helper now allows student, guardian and approved-teacher accounts to view only the rows permitted by RLS.
 - The cloud homework workflow remains separated from local demo tabs. It supports secure assignment publishing, student submission and teacher marking when account, membership and consent policies permit.
+
+
+## Language coverage and repository-wide page audit — 5 November 2026
+
+- Expanded the shared language dictionaries for Hindi, Bengali, Tamil, Telugu and Marathi with additional navigation, quiz, English-learning instructions, mathematics and science explanations, Home Science safety content and Social Studies text.
+- Added matching Indian-language choices, greeting practice and AI request language mapping to the AI Teacher frontend; added the same five languages to the Cloudflare Worker allowlist.
+- Updated the Cloudflare setup notes to correct the Supabase project URL and document all twelve supported AI teaching languages.
+- Audited all 52 root HTML pages. All 51 non-home pages load gm-language.js; index.html uses its own inline 11-language translation system. All 52 pages include a mobile viewport declaration.
+- Re-fetched the shared language script and AI Teacher files and passed JavaScript syntax checks. This is source verification only; lesson completeness, live rendering, Android audio and all language layouts still need device testing.
+- Updated OWNER_ACTIONS.md and PRODUCTION_READINESS.md to reflect the database verification report: guardian-consent revocation and homework maximum-score migrations were applied and rollback-tested. The remaining real-account and cross-device workflows are still pending.
+- The AI Teacher Worker remains a source template and is not deployed. Its endpoint URL is intentionally blank until Cloudflare deployment and configuration are completed.
