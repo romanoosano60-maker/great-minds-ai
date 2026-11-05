@@ -5,6 +5,20 @@
 <title>Great Minds AI | Learning Games & Rewards</title>
 <style>
 :root{font-family:Arial,sans-serif;color:#213453;background:#edf5ff}*{box-sizing:border-box}body{margin:0}header{background:linear-gradient(120deg,#6840ed,#00a9d9);color:white;text-align:center;padding:26px 16px}header h1{margin:0 0 8px;font-size:clamp(25px,6vw,38px)}header p{margin:7px}main{max-width:900px;margin:auto;padding:16px}.panel{background:white;border-radius:20px;padding:22px;margin:16px 0;box-shadow:0 4px 15px #17386612}h2{color:#5b37c9;margin:0 0 15px}button,.button{background:#6540ed;color:white;border:0;border-radius:13px;padding:13px 16px;font-size:16px;font-weight:700;cursor:pointer;min-height:48px}button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible{outline:3px solid orange;outline-offset:2px}button:disabled{opacity:.6}button.secondary{background:#e7eaff;color:#2a3772}button.correct{background:#16834c}button.wrong{background:#b22d4b}a{color:inherit}.home{display:inline-block;color:white;margin-top:10px}.stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}.stat{background:#f1ecff;padding:14px 8px;border-radius:14px;text-align:center}.stat strong{font-size:23px;display:block}.games{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}.games button{min-height:80px}.row{display:flex;gap:10px;flex-wrap:wrap;align-items:center}.answers{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-top:15px}.question{font-size:24px;font-weight:700;margin:18px 0}.feedback{min-height:28px;font-weight:bold;margin-top:14px}.muted{color:#59677d}.memory{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:9px}.tile{font-size:29px;min-height:75px;background:#5844d6}.tile.revealed{background:#dceaff;color:#1d3357}.tile.matched{background:#c6f3d9;color:#155d37}.badge{display:inline-block;padding:10px;border-radius:12px;background:#fff2c5;margin:5px;font-weight:bold}.hidden{display:none}select,input{font-size:16px;padding:10px;border-radius:10px;border:2px solid #c9d1e5;max-width:100%}.small{font-size:13px}.notice{background:#e9f4ff;border-radius:12px;padding:12px}footer{text-align:center;padding:25px;color:#536078}@media(max-width:420px){.games{grid-template-columns:1fr 1fr}.games button{font-size:14px;padding:10px}.panel{padding:16px}.memory .tile{min-height:63px}}@media print{header,.games,.controls,#play,#reset,#printBtn,.home,footer{display:none!important}body{background:white}.panel{box-shadow:none}#certificate{display:block!important}}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select{touch-action:manipulation}
+button{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+section,.card,.game-card,.reward-card{overflow-wrap:anywhere}
+img,svg,canvas{max-width:100%}
+@media(max-width:480px){body{font-size:16px}main{padding:10px}.grid,.games-grid,.rewards-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,.game-card,.reward-card{padding:14px}button{width:auto;max-width:100%}}
+@media(max-width:340px){.grid,.games-grid,.rewards-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
