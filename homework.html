@@ -141,7 +141,7 @@ document.getElementById('cloudCreate').addEventListener('click',async()=>{const 
 document.getElementById('cloudRefresh').addEventListener('click',cloudHomeworkRefresh);
 load();syncHomeworkToRoleDashboards();tab('teacher');
 const classroomFromUrl=new URLSearchParams(location.search).get('classroom');
-if(classroomFromUrl&&/^\\d+$/.test(classroomFromUrl)){document.getElementById('cloudClassroomId').value=classroomFromUrl;cloudHomeworkRefresh();}
+if(classroomFromUrl&&/^\d+$/.test(classroomFromUrl)){document.getElementById('cloudClassroomId').value=classroomFromUrl;cloudHomeworkRefresh();}
 // Refresh the local role-dashboard mirror when this homework page is open in another tab.
 window.addEventListener('storage',event=>{if(event.key===STORAGE){load();syncHomeworkToRoleDashboards();render()}});
 </script></body></html>
