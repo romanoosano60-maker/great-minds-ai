@@ -123,5 +123,5 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 ## Additional GitHub-only improvement — Student Profile quiz progress
 
 - `student-profile.html` now attempts a secure progress insert when a quiz result is recorded, using the shared authenticated helper and a 0–100 score validation.
-- The page clearly reports whether the result was saved locally only or also confirmed in cloud progress. Manual self-marked homework remains local and is not represented as teacher-verified cloud homework.
+- The page clearly reports whether the result was saved locally only or also confirmed in cloud progress, and temporarily disables the quiz-save button while the cloud request is in flight to reduce accidental duplicate taps. Manual self-marked homework remains local and is not represented as teacher-verified cloud homework.
 - Live verification still requires the approved student sign-in and guardian consent test; no cloud success is assumed from the source change alone.
