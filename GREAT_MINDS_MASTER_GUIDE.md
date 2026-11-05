@@ -200,3 +200,12 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - `supabase/least-privilege-grants.sql` documents tightened grants: no anonymous/public privileges on the five core tables; authenticated permissions are limited by table and RLS. Verified all five tables still have RLS enabled and anonymous SELECT/INSERT are false.
 - This is source integration only until tested in a real signed-in browser session with a test student account and an active guardian link. A successful code commit is not proof that REST inserts/reads work.
 - Homework assignment/submission storage and parent/teacher dashboard cloud views are not implemented yet. Child-to-child messaging remains disabled. Leaked-password protection is still reported disabled by the Supabase security advisor and must be enabled before real family accounts.
+
+
+## 15. Secure cloud homework — first increment (5 November 2026)
+- Live Supabase tables: `homework_assignments` and `homework_submissions`. Both have RLS and no anon/public grants.
+- Teacher assignment writes require an approved teacher profile and ownership of the target classroom. Student assignment visibility/submission requires approved membership, approved parent-consent status and an active guardian relationship. A student can submit once per assignment.
+- Guardian read access requires an active guardian link. Teacher read/mark access requires the teacher to own the assignment's classroom, have an approved teacher profile, and the student's membership/consent/active guardian checks to remain valid. Marking is limited to score, feedback, marker and timestamp fields; score cannot exceed the assignment maximum.
+- `student-cloud-homework.js` exposes authenticated methods for assignment creation, listing, submission, reading and marking. The Homework Manager has a separate secure Supabase section; its older local demo tabs are not cloud synced.
+- Parent dashboard now loads cloud progress and guardian-visible homework/submissions. Teacher dashboard now loads teacher-visible progress/submissions. RLS, not dashboard code, is the authority.
+- Source and policies are committed. Real authenticated end-to-end tests remain mandatory. Tables currently contain no assignments/submissions. Do not describe homework sync as verified until a test teacher publishes, a consented student submits, the teacher marks, and the linked parent sees the result on a separate device.
