@@ -486,3 +486,13 @@ Report separate statuses for frontend development, backend integration, testing 
 - Current database counts: 1 classroom; 0 classroom memberships; 1 active guardian relationship; 0 student progress rows; 0 homework assignments; 0 homework submissions. This means live student/parent/teacher workflows are not yet end-to-end verified.
 - Security advisor still reports leaked-password protection disabled. This Auth setting requires dashboard access; it has not been changed. Performance advisor reports two multiple-permissive-policy warnings (homework assignment SELECT and student progress SELECT) and five unused-index notices; no policy was weakened to silence these warnings.
 - Real account signup/sign-in, guardian consent, student join, teacher approval, homework submission/marking, cross-device progress visibility, Android UI tests and the live AI backend remain for supervised verification.
+
+
+## AI Teacher backend preparation and cloud progress follow-up — 2026-11-05
+
+- Added a Cloudflare Worker source template at cloudflare/worker.js and setup notes at cloudflare/README.md. The template implements POST /ask, Supabase access-token verification, active guardian-link checks, subject allowlisting, per-user rate-limit binding, child-focused tutoring instructions and OpenAI Responses API calls with store=false.
+- Wired ai-teacher.html to use a configurable endpoint from ai-teacher-config.js when one is supplied. It retrieves the signed-in Supabase access token, sends the selected subject and recent text conversation, and displays the returned answer. If the endpoint URL is empty, the page safely remains in offline demonstration mode.
+- The Cloudflare Worker has NOT been installed or deployed. It requires the user's Cloudflare Worker settings: OPENAI_API_KEY secret, Supabase URL and publishable key variables, and AI_RATE_LIMITER binding. The deployed Worker URL must then be entered in ai-teacher-config.js. A consented real-account request is still required to verify it.
+- Fixed the AI Teacher Social Studies lesson link to open social-studies.html.
+- Added a secure cloud-progress viewer to connected-progress.html and enabled the small Connected Practice quiz to submit permitted results through the existing cloud progress helper. The helper now allows student, guardian and approved-teacher accounts to view only the rows permitted by RLS.
+- The cloud homework workflow remains separated from local demo tabs. It supports secure assignment publishing, student submission and teacher marking when account, membership and consent policies permit.
