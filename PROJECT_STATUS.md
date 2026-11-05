@@ -430,3 +430,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Confirmed all eight main subject pages load Supabase JS v2, the shared publishable-key config, and the cloud progress helper. Extra quiz pages listed above now do likewise.
 - Confirmed the homework date input matches the database `due_at` date type, and the cloud progress timestamp has a database default.
 - Static parsing is not a live browser execution test. GitHub Pages URLs were not retrievable from the automated browsing environment in this session, and the actual Auth/consent/teacher/student/parent workflow remains pending a user-controlled test session.
+
+
+## Main home screen and graphics gallery navigation (5 November 2026)
+- Added a direct “3D Learning Graphics Gallery” tile to the permanent Great Minds AI home screen, preserving the existing rocket home screen and its subject/dashboard navigation.
+- The gallery artwork is embedded in `gm-3d-graphics-gallery-1.html` rather than relying on separate image files; the gallery page contains 15 embedded artwork images and a larger-image viewer.
+- Verified the new home-screen gallery link points to an existing repository file. Rechecked internal references on the home screen, unified hub, parent/teacher centre, student profile, homework manager and graphics gallery; no missing internal file references were found in those checked pages.
+- This is a repository/link check, not a live Android browser visual test; the user should still open the gallery on their device when convenient.
