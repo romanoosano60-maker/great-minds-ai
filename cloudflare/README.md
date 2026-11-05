@@ -9,7 +9,7 @@ This folder contains the server-side source for the Great Minds AI Teacher endpo
 - Verifies the signed-in account with Supabase Auth.
 - Requires the signed-in student to have an active guardian relationship before using live AI.
 - Applies a per-user Cloudflare rate limit before calling OpenAI.
-- Allows only the nine Great Minds subjects and limits each question to 500 characters.
+- Allows only the nine Great Minds subjects and twelve approved teaching languages, including Hindi, Bengali, Tamil, Telugu and Marathi, and limits each question to 500 characters.
 - Calls the OpenAI Responses API from the server. The OpenAI API key is never placed in browser code.
 - Uses store=false and does not send the child's email, account ID or profile fields to OpenAI.
 - Accepts up to six recent text turns from the browser so a later frontend connection can support conversational context.
@@ -22,7 +22,7 @@ Secret:
 - OPENAI_API_KEY — use the existing OpenAI project key as a Cloudflare Worker secret. Never paste it into GitHub or a chat.
 
 Environment variables:
-- SUPABASE_URL = https://ryuchmmnyjyldwouidyy.supabase.co
+- SUPABASE_URL = https://ryuchmmnyjyldwouidy.supabase.co
 - SUPABASE_PUBLISHABLE_KEY = the project's public publishable key, not a service-role or secret key.
 - OPENAI_MODEL = gpt-5.4-mini (optional; the Worker uses this default if omitted).
 
