@@ -501,6 +501,7 @@ Report separate statuses for frontend development, backend integration, testing 
 ## Language coverage and repository-wide page audit — 5 November 2026
 
 - Expanded the shared language dictionaries for Hindi, Bengali, Tamil, Telugu and Marathi with additional navigation, quiz, English-learning instructions, mathematics and science explanations, Home Science safety content and Social Studies text.
+- Continued the translation pass for international classroom sign-in and consent controls, game instructions and rewards, Computer Studies, History, Geography and discovery facts. English target-language examples such as alphabet lyrics and spelling words are intentionally kept in English where that is the lesson objective.
 - Added matching Indian-language choices, greeting practice and AI request language mapping to the AI Teacher frontend; added the same five languages to the Cloudflare Worker allowlist.
 - Updated the Cloudflare setup notes to correct the Supabase project URL and document all twelve supported AI teaching languages.
 - Audited all 52 root HTML pages. All 51 non-home pages load gm-language.js; index.html uses its own inline 11-language translation system. All 52 pages include a mobile viewport declaration.
