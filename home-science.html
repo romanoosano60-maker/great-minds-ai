@@ -11,6 +11,20 @@ main{max-width:980px;margin:auto;padding:16px}.toplinks{display:flex;gap:10px;ju
 a.btn,button{border:0;border-radius:13px;padding:11px 15px;background:var(--blue);color:white;font-weight:700;text-decoration:none;cursor:pointer;font-size:1rem}a.btn.alt{background:#fff;color:var(--blue);border:1px solid #c8e2f5}
 .grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}.card{background:white;border:1px solid #dceaf4;border-radius:18px;padding:17px;box-shadow:0 5px 18px #23476612}.card h2,.card h3{margin-top:0}.emoji{font-size:2rem}.tag{display:inline-block;background:var(--sky);padding:4px 9px;border-radius:20px;font-size:.82rem;font-weight:700}
 .lesson{margin:12px 0;padding:12px;background:#f5faff;border-radius:12px}.lesson button{margin-top:8px;padding:8px 12px;font-size:.9rem}.quizq{padding:12px 0;border-top:1px solid #e5edf3}.quizq label{display:block;padding:5px 0}.result{padding:12px;border-radius:12px;background:var(--green);font-weight:700;margin-top:12px}.notice{background:#fff7dc;border-left:4px solid var(--gold);padding:12px;border-radius:10px}.muted{color:#587087;font-size:.92rem}footer{text-align:center;padding:24px;color:#587087}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style></head>
 <body>
 <header><div class="emoji">🏡 🥗 🧼 🌱</div><h1>Home Science</h1><p>Learn useful everyday skills for a healthy, safe and caring home.</p><div class="toplinks"><a class="btn alt" href="index.html">🏠 Main Home</a><a class="btn alt" href="connected-dashboards.html">Learning Hub</a></div></header>
