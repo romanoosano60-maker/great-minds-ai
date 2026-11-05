@@ -397,3 +397,15 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a Cloud Learning Progress section to `student-profile.html` so the signed-in student can refresh and view their own server records. Source files were committed; live browser execution, real account/guardian test, and cross-device verification have NOT yet been completed.
 - Homework remains local demo storage. There is not yet a verified server-side homework assignment/submission schema and workflow; do not claim homework cloud sync is implemented. Parent/teacher dashboards also still need cloud reads.
 - No real student records were created and no passwords, access tokens or secret keys were requested or exposed.
+
+
+## Secure cloud homework increment — 5 November 2026
+- Created live Supabase tables `public.homework_assignments` and `public.homework_submissions`. Both have RLS enabled and no anonymous/public table privileges. Authenticated grants are limited: teachers can manage their own approved-classroom assignments; students can insert one submission per assignment; teachers can update only marking fields.
+- Applied classroom policies: approved teacher ownership is required to publish/manage assignments; student assignment visibility and submission require approved classroom membership, parent-consent status and an active guardian relationship. Guardians can read linked-child assignments/submissions only while their relationship is active. Teachers can read/mark submissions only for approved, consented students in their own classroom. Database policy checks also prevent marks above the assignment maximum.
+- Added indexes for classroom, teacher, student, assignment and marking foreign-key lookups. Supabase security advisor shows only the existing leaked-password-protection-disabled warning; performance advisor still notes multiple permissive SELECT policies and unused indexes (informational on an empty test dataset).
+- Added `student-cloud-homework.js` for teacher assignment creation, student submission, guardian/teacher reading, and teacher marking via authenticated Supabase sessions.
+- Added a secure classroom homework section to `homework.html`; the older Teacher/Student/Parent tabs remain local demo data and are clearly labelled as such.
+- Connected Parent Dashboard to show cloud progress and consent-filtered cloud homework/submissions under RLS.
+- Connected Teacher Dashboard to show cloud progress and submissions permitted for an approved teacher account, and linked to the secure Homework Manager.
+- Verified source files were committed and re-fetched. Live browser execution and real teacher/student/guardian tests remain pending; the new homework tables currently contain 0 assignments and 0 submissions. No child records were fabricated.
+- Leaked-password protection remains disabled and must be enabled before real family accounts. Cross-device testing and actual parent/teacher account linking remain pending.
