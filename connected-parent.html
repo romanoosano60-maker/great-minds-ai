@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Parent Dashboard — Connected Demo | Great Minds AI</title><style>
-:root{font-family:Arial,sans-serif;color:#1c3156}*{box-sizing:border-box}body{margin:0;background:#eff7ff}header{padding:22px;background:linear-gradient(125deg,#d4f5ff,#fff0c8);text-align:center}h1{margin:8px}main{max-width:850px;margin:20px auto;padding:0 15px}.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 2px 9px #2342}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}button,.link{background:#5d4be0;color:white;border:0;padding:12px 15px;border-radius:10px;cursor:pointer;display:inline-block;margin:8px 5px 8px 0;text-decoration:none;font-weight:bold}button:focus,.link:focus{outline:3px solid #f8bd31}.secondary{background:#177a79}.warn{background:#fff7dc;border-left:5px solid #e5aa2e;padding:13px;line-height:1.5;border-radius:8px}.muted{color:#58677c}.row{display:flex;gap:10px;flex-wrap:wrap}.metric{background:#edf0ff;border-radius:12px;padding:14px;min-width:105px;flex:1;text-align:center}.metric strong{display:block;font-size:26px}.item{padding:12px;border-bottom:1px solid #dde5f0}.status{color:#17684e;font-weight:bold}small{display:block}footer{text-align:center;padding:20px}.danger{background:#b53343}</style></head><body><header><h1>🚀 Great Minds AI</h1><h2>Parent Dashboard — Connected Demo</h2><nav><a class="link" href="connected-dashboards.html">🏠 Hub</a><a class="link" href="connected-student.html">🎒 Student</a><a class="link" href="connected-teacher.html">👩‍🏫 Teacher</a><a class="link" href="connected-parent.html">👨‍👩‍👧 Parent</a></nav></header><main><div class="warn"><strong>Demo only — not a secure account system.</strong> All three pages share data only in this browser on this device, when opened on the same website. Anyone using this browser can view or change the demo records. Use made-up student names only. No live international messaging or automatic connection to the older dashboards.</div><div class="card"><h2>Learning overview</h2><h3 id="studentName"></h3><div id="metrics" class="row"></div></div><div class="card"><h2>Homework results</h2><div id="results"></div></div><div class="card"><h2>Teacher feedback</h2><div id="feedbackList"></div></div><div class="card"><button class="secondary" onclick="render()">Refresh demo progress</button></div></main><footer>Great Minds AI • Local demonstration</footer><script>
+:root{font-family:Arial,sans-serif;color:#1c3156}*{box-sizing:border-box}body{margin:0;background:#eff7ff}header{padding:22px;background:linear-gradient(125deg,#d4f5ff,#fff0c8);text-align:center}h1{margin:8px}main{max-width:850px;margin:20px auto;padding:0 15px}.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 2px 9px #2342}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}button,.link{background:#5d4be0;color:white;border:0;padding:12px 15px;border-radius:10px;cursor:pointer;display:inline-block;margin:8px 5px 8px 0;text-decoration:none;font-weight:bold}button:focus,.link:focus{outline:3px solid #f8bd31}.secondary{background:#177a79}.warn{background:#fff7dc;border-left:5px solid #e5aa2e;padding:13px;line-height:1.5;border-radius:8px}.muted{color:#58677c}.row{display:flex;gap:10px;flex-wrap:wrap}.metric{background:#edf0ff;border-radius:12px;padding:14px;min-width:105px;flex:1;text-align:center}.metric strong{display:block;font-size:26px}.item{padding:12px;border-bottom:1px solid #dde5f0}.status{color:#17684e;font-weight:bold}small{display:block}footer{text-align:center;padding:20px}.danger{background:#b53343}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script></head><body><header><h1>🚀 Great Minds AI</h1><h2>Parent Dashboard — Connected Demo</h2><nav><a class="link" href="connected-dashboards.html">🏠 Hub</a><a class="link" href="connected-student.html">🎒 Student</a><a class="link" href="connected-teacher.html">👩‍🏫 Teacher</a><a class="link" href="connected-parent.html">👨‍👩‍👧 Parent</a></nav></header><main><div class="warn"><strong>Demo only — not a secure account system.</strong> All three pages share data only in this browser on this device, when opened on the same website. Anyone using this browser can view or change the demo records. Use made-up student names only. No live international messaging or automatic connection to the older dashboards.</div><div class="card" id="parentCloud"><h2>🔐 Parent cloud account</h2><p class="muted">Sign in with the Parent test account to view progress permitted by the database security rules.</p><label for="parentEmail">Parent email</label><input id="parentEmail" type="email" autocomplete="username"><label for="parentPassword">Password</label><input id="parentPassword" type="password" autocomplete="current-password"><div class="row"><button id="parentLogin">Sign in</button><button id="parentLogout" class="secondary" type="button">Sign out</button><button id="refreshCloud" class="secondary" type="button">Refresh cloud progress</button></div><p id="parentCloudStatus" class="status" role="status">Not signed in to cloud progress.</p><div id="cloudRecords" aria-live="polite">Sign in to load cloud progress.</div></div><div class="card"><h2>Learning overview</h2><h3 id="studentName"></h3><div id="metrics" class="row"></div></div><div class="card"><h2>Homework results</h2><div id="results"></div></div><div class="card"><h2>Teacher feedback</h2><div id="feedbackList"></div></div><div class="card"><button class="secondary" onclick="render()">Refresh demo progress</button></div></main><footer>Great Minds AI • Local demonstration</footer><script>
 const KEY='greatMindsConnectedDemoV1';
 const empty=()=>({student:'Demo Learner',stars:0,points:0,lessons:0,certificates:0,homework:[],feedback:[],plans:[],profileV2:{stars:0,points:0,lessons:0,certificates:0,homework:[],quizCount:0}});
 function read(){try{return {...empty(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return empty()}}
@@ -13,4 +13,44 @@ feedbackList.innerHTML=d.feedback.length?d.feedback.map(x=>`<div class="item">${
 render();
 // Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
 window.addEventListener('storage',event=>{if(event.key===KEY)render()});
+</script><script>
+(function(){
+ const el=id=>document.getElementById(id);const status=el('parentCloudStatus'),records=el('cloudRecords');
+ let db=null,user=null;
+ function say(t){status.textContent=t}
+ function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
+ async function load(){
+  if(!db||!user){say('Please sign in with the Parent test account first.');return}
+  say('Loading progress allowed for this Parent account…');records.textContent='Loading…';
+  const {data,error}=await db.from('student_learning_progress').select('subject,activity_key,score,max_score,source,completed_at').order('completed_at',{ascending:false}).limit(50);
+  if(error){say('Cloud read failed: '+error.message);records.textContent='No cloud records could be loaded.';return}
+  if(!data.length){say('Signed in. No cloud progress is visible yet. The Student must sign in and save progress first.');records.textContent='No cloud progress records yet.';return}
+  say('Cloud read successful. Showing '+data.length+' record(s) permitted by Supabase RLS.');
+  records.innerHTML=data.map(r=>'<div class="item"><b>'+escCloud(r.subject)+'</b><p>Score: '+escCloud(r.score)+' / '+escCloud(r.max_score)+'</p><small>'+escCloud(r.source)+' • '+escCloud(new Date(r.completed_at).toLocaleString())+'</small></div>').join('');
+ }
+ async function init(){
+  const cfg=window.greatMindsSupabaseConfig;
+  if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable. The local demo remains available.');return}
+  db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
+  const {data,error}=await db.auth.getSession();
+  if(error){say('Session check failed: '+error.message);return}
+  user=data.session?.user||null;
+  if(user){say('Parent session found.');await load()}else say('Not signed in to cloud progress.');
+ }
+ el('parentLogin').addEventListener('click',async()=>{
+  if(!db){say('Cloud service unavailable.');return}
+  const email=el('parentEmail').value.trim(),password=el('parentPassword').value;
+  if(!email||!password){say('Enter the Parent test account email and password.');return}
+  say('Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password});
+  el('parentPassword').value='';
+  if(error){say('Sign-in failed: '+error.message);return}
+  user=data.user;await load();
+ });
+ el('parentLogout').addEventListener('click',async()=>{
+  if(!db)return;const {error}=await db.auth.signOut();user=null;records.textContent='Sign in to load cloud progress.';
+  say(error?'Sign-out issue: '+error.message:'Signed out of cloud progress.');
+ });
+ el('refreshCloud').addEventListener('click',load);
+ init();
+})();
 </script></body></html>
