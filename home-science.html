@@ -1,0 +1,44 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Home Science | Great Minds AI</title>
+<style>
+:root{--ink:#18324b;--blue:#1769aa;--sky:#eaf6ff;--gold:#ffcf5a;--green:#dff5e8;--pink:#fff0ed}
+*{box-sizing:border-box}body{margin:0;font-family:system-ui,-apple-system,Segoe UI,sans-serif;color:var(--ink);background:linear-gradient(160deg,#eaf6ff,#fff9e8);line-height:1.55}
+header{padding:24px 16px 20px;background:linear-gradient(120deg,#155b98,#258bc0);color:white;text-align:center}header a{color:white}h1{margin:4px 0;font-size:clamp(1.7rem,5vw,2.5rem)}header p{margin:6px auto;max-width:650px}
+main{max-width:980px;margin:auto;padding:16px}.toplinks{display:flex;gap:10px;justify-content:center;flex-wrap:wrap;margin:12px}
+a.btn,button{border:0;border-radius:13px;padding:11px 15px;background:var(--blue);color:white;font-weight:700;text-decoration:none;cursor:pointer;font-size:1rem}a.btn.alt{background:#fff;color:var(--blue);border:1px solid #c8e2f5}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:14px}.card{background:white;border:1px solid #dceaf4;border-radius:18px;padding:17px;box-shadow:0 5px 18px #23476612}.card h2,.card h3{margin-top:0}.emoji{font-size:2rem}.tag{display:inline-block;background:var(--sky);padding:4px 9px;border-radius:20px;font-size:.82rem;font-weight:700}
+.lesson{margin:12px 0;padding:12px;background:#f5faff;border-radius:12px}.lesson button{margin-top:8px;padding:8px 12px;font-size:.9rem}.quizq{padding:12px 0;border-top:1px solid #e5edf3}.quizq label{display:block;padding:5px 0}.result{padding:12px;border-radius:12px;background:var(--green);font-weight:700;margin-top:12px}.notice{background:#fff7dc;border-left:4px solid var(--gold);padding:12px;border-radius:10px}.muted{color:#587087;font-size:.92rem}footer{text-align:center;padding:24px;color:#587087}
+</style></head>
+<body>
+<header><div class="emoji">🏡 🥗 🧼 🌱</div><h1>Home Science</h1><p>Learn useful everyday skills for a healthy, safe and caring home.</p><div class="toplinks"><a class="btn alt" href="index.html">🏠 Main Home</a><a class="btn alt" href="connected-dashboards.html">Learning Hub</a></div></header>
+<main>
+<section class="card"><span class="tag">Great Minds AI • Learn & practise</span><h2>Welcome, young home scientist!</h2><p>Explore food and nutrition, hygiene, home safety, caring for clothes, saving resources and helping your family. Ask a trusted adult before trying an activity.</p><p class="muted">This page is a learning activity, not a substitute for adult supervision.</p></section>
+<h2>Choose a learning topic</h2>
+<section class="grid">
+<article class="card"><div class="emoji">🥗</div><h3>Food & Nutrition</h3><p>Learn about balanced meals, food groups, clean water and safe food handling.</p><div class="lesson"><b>Remember:</b> Wash hands before preparing or eating food. Eat a variety of fruits and vegetables.</div><button onclick="speak('A balanced meal includes different food groups. Wash your hands before eating and drink clean water.')">🔊 Listen</button></article>
+<article class="card"><div class="emoji">🧼</div><h3>Personal Hygiene</h3><p>Discover handwashing, dental care, bathing and keeping personal items clean.</p><div class="lesson"><b>Remember:</b> Wash hands with soap and water, especially before eating and after using the toilet.</div><button onclick="speak('Wash your hands with soap and clean water. Brush your teeth in the morning and before bed.')">🔊 Listen</button></article>
+<article class="card"><div class="emoji">🧯</div><h3>Home Safety</h3><p>Recognise hazards and learn when to ask an adult for help.</p><div class="lesson"><b>Remember:</b> Never touch medicines, matches, electrical sockets or cleaning chemicals without an adult.</div><button onclick="speak('Stay away from medicines, matches, electrical sockets and cleaning chemicals. Tell a trusted adult if you see danger.')">🔊 Listen</button></article>
+<article class="card"><div class="emoji">👕</div><h3>Clothing & Care</h3><p>Learn why clothes need washing, drying and careful storage.</p><div class="lesson"><b>Remember:</b> Follow clothing labels. Ask an adult before using an iron or washing machine.</div><button onclick="speak('Keep clothes clean and dry. Ask an adult before using an iron or washing machine.')">🔊 Listen</button></article>
+<article class="card"><div class="emoji">♻️</div><h3>Home & Environment</h3><p>Explore saving water and electricity, reducing waste and recycling.</p><div class="lesson"><b>Remember:</b> Turn off taps and lights when they are not needed, with adult guidance.</div><button onclick="speak('Save water by turning off taps. Switch off lights when they are not needed. Reuse and recycle when possible.')">🔊 Listen</button></article>
+<article class="card"><div class="emoji">🤝</div><h3>Family & Caring</h3><p>Practise kindness, sharing responsibilities and keeping shared spaces tidy.</p><div class="lesson"><b>Remember:</b> Choose age-appropriate chores and ask for help with anything unsafe or too heavy.</div><button onclick="speak('A caring home is built by kindness, teamwork and respect. Choose safe tasks and ask for help.')">🔊 Listen</button></article>
+</section>
+<section class="card" style="margin-top:18px"><h2>🧠 Home Science Challenge</h2><p>Choose one answer for each question, then check your score.</p>
+<form id="quiz">
+<div class="quizq"><b>1. What should you do before eating?</b><label><input type="radio" name="q1" value="a"> Play outside</label><label><input type="radio" name="q1" value="b"> Wash your hands</label><label><input type="radio" name="q1" value="c"> Touch cleaning chemicals</label></div>
+<div class="quizq"><b>2. Who should help you use an iron?</b><label><input type="radio" name="q2" value="a"> A trusted adult</label><label><input type="radio" name="q2" value="b"> Nobody</label><label><input type="radio" name="q2" value="c"> A younger child</label></div>
+<div class="quizq"><b>3. Which helps save water?</b><label><input type="radio" name="q3" value="a"> Leave the tap running</label><label><input type="radio" name="q3" value="b"> Use water for games all day</label><label><input type="radio" name="q3" value="c"> Turn off the tap when not needed</label></div>
+<div class="quizq"><b>4. What is part of a balanced diet?</b><label><input type="radio" name="q4" value="a"> Only sweets</label><label><input type="radio" name="q4" value="b"> A variety of foods</label><label><input type="radio" name="q4" value="c"> No water</label></div>
+<div class="quizq"><b>5. What should you do if you find unknown medicine?</b><label><input type="radio" name="q5" value="a"> Taste it</label><label><input type="radio" name="q5" value="b"> Hide it</label><label><input type="radio" name="q5" value="c"> Do not touch it; tell an adult</label></div>
+<button type="submit">Check my answers</button></form><div id="result" aria-live="polite"></div><p class="muted">Quiz results are saved only in this browser's local demo progress. They are not sent to Supabase or another device.</p></section>
+<section class="notice" style="margin-top:16px"><b>Safety first:</b> Never taste unknown substances, mix cleaning products, handle sharp tools, use appliances, or attempt cooking or experiments without an adult's permission and supervision.</section>
+</main><footer>Great Minds AI • Learn something helpful every day 🌟</footer>
+<script>
+function speak(text){if(!('speechSynthesis'in window)){alert('Audio reading is not supported in this browser.');return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.9;window.speechSynthesis.speak(u);}
+document.getElementById('quiz').addEventListener('submit',function(e){e.preventDefault();const answers={q1:'b',q2:'a',q3:'c',q4:'b',q5:'c'};let correct=0;for(const [q,a] of Object.entries(answers)){const selected=this.querySelector('input[name="'+q+'"]:checked');if(selected&&selected.value===a)correct++;}
+const score=Math.round(correct/5*100);document.getElementById('result').className='result';document.getElementById('result').textContent='You scored '+correct+' out of 5 ('+score+'%). '+(correct===5?'Excellent work!':correct>=3?'Good effort — review the topics and try again.':'Keep learning — listen to the lessons and try again.');
+try{const key='greatMindsConnectedDemoV1';const data=JSON.parse(localStorage.getItem(key)||'{}');data.quizzes=Array.isArray(data.quizzes)?data.quizzes:[];data.quizzes.push({subject:'Home Science',score:score,total:100,correct:correct,questions:5,completedAt:new Date().toISOString(),source:'home-science'});data.quizzes=data.quizzes.slice(-100);localStorage.setItem(key,JSON.stringify(data));}catch(err){console.warn('Local demo progress could not be saved.',err);}
+});
+</script></body></html>
