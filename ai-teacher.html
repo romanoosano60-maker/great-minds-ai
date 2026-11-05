@@ -5,7 +5,7 @@
 </style></head><body>
 <header><h1>🤖 Great Minds AI</h1><h2>Your Friendly AI Teacher</h2><p>Learn • Ask • Discover • Grow 🚀</p><a href="connected-dashboards.html">🌐 Unified Hub</a></header>
 <main>
-<section class="card"><div class="avatar" aria-hidden="true">👩‍🏫</div><h2>Hello, Young Explorer! 🌟</h2><p>Choose a subject and ask a learning question.</p><label for="subject">Choose your subject</label><select id="subject"><option>Mathematics</option><option>English</option><option>Science</option><option>Computer Studies</option><option>General Knowledge</option></select></section>
+<section class="card"><div class="avatar" aria-hidden="true">👩‍🏫</div><h2>Hello, Young Explorer! 🌟</h2><p>Choose a subject and ask a learning question.</p><label for="subject">Choose your subject</label><select id="subject"><option>Mathematics</option><option>English</option><option>Science</option><option>Computer Studies</option><option>General Knowledge</option><option>Social Studies</option><option>History</option><option>Geography</option><option>Home Science</option></select></section>
 <section class="card"><h2>💬 Talk with your teacher</h2><label for="question">Your question</label><input id="question" maxlength="300" placeholder="Type or use the microphone..."><div class="controls"><button type="button" id="ask">Ask Teacher 🎓</button><button type="button" class="secondary" id="mic">🎙️ Speak question</button></div><div class="controls"><button type="button" class="secondary" id="listen">🔊 Read answer aloud</button><button type="button" class="secondary" id="stop">⏹ Stop voice</button></div><p id="voiceStatus" class="small" aria-live="polite">Voice input depends on browser support and microphone permission.</p><div id="reply" role="status" aria-live="polite">Your teacher is ready!</div></section>
 <section class="card"><h2>🎯 Try a lesson</h2><button type="button" id="example">Give me a practice question</button><p id="exercise"></p></section>
 <section class="card"><h2>📚 Continue learning</h2><p>After practising with the teacher, open the full lesson for your selected subject.</p><a id="lessonLink" href="math.html">Open Mathematics lesson →</a></section>
@@ -21,10 +21,18 @@ const lessons={
 "English":["What is the opposite of hot?","The opposite of hot is cold. Opposite words are also called antonyms."],
 "Science":["Which planet is called the Red Planet?","Mars is called the Red Planet because iron-rich dust gives its surface a reddish colour."],
 "Computer Studies":["What is a keyboard?","A keyboard is an input device. We use it to type letters, numbers and instructions."],
-"General Knowledge":["How many days are in a week?","There are seven days in a week: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."]
+"General Knowledge":["How many days are in a week?","There are seven days in a week: Monday, Tuesday, Wednesday, Thursday, Friday, Saturday and Sunday."],
+"Social Studies":["What is a community?","A community is a group of people who live, work or learn in the same area and help one another."],
+"History":["What do historians study?","Historians study the past using evidence such as documents, objects, photographs and oral stories."],
+"Geography":["What does geography study?","Geography studies places, people, environments and the features of Earth, including land, water and climate."],
+"Home Science":["Why should we wash our hands before eating?","Washing hands with soap and clean water helps remove germs and lowers the chance of spreading illness."]
 };
 function say(text){lastReply=text;$("reply").textContent=text}
-const lessonPages={"Mathematics":"math.html","English":"english.html","Science":"science.html","Computer Studies":"computer.html","General Knowledge":"general-knowledge.html"};
+const lessonPages={"Mathematics":"math.html","English":"english.html","Science":"science.html","Computer Studies":"computer.html","General Knowledge":"general-knowledge.html",
+"Social Studies":"social.html",
+"History":"history.html",
+"Geography":"geography.html",
+"Home Science":"home-science.html"};
 function updateLessonLink(){$("lessonLink").href=lessonPages[$("subject").value]||"connected-dashboards.html"}
 $("subject").addEventListener("change",updateLessonLink);updateLessonLink();
 function answer(){const raw=$("question").value.trim();const q=raw.toLowerCase();const subject=$("subject").value;if(!q){say("Please type or speak your question first.");return}const lesson=lessons[subject];const key=lesson[0].toLowerCase().replace("?","");if(q===lesson[0].toLowerCase()||q.includes(key)||q.includes(key.replace(/[0-9+ ]/g,"").trim())){say("Excellent question! "+lesson[1])}else{say("That's a thoughtful question! This offline demonstration has a limited set of prepared answers. Try the practice question for "+subject+". The live AI Teacher connection is still being built.")}}
