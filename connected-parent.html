@@ -16,7 +16,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script><script>
 (function(){
  const el=id=>document.getElementById(id);const status=el('parentCloudStatus'),records=el('cloudRecords');
- let db=null,user=null,cloudChannel=null;
+ let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('parent-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
  let db=null,user=null;
  function say(t){status.textContent=t}
