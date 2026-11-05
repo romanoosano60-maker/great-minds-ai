@@ -446,3 +446,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - AI Teacher remains clearly labelled as an offline voice prototype in its safety notice and Unified Hub; the live AI endpoint is not yet connected. Group Learning remains a local demo, not a live multi-country classroom. Do not describe either as live online service.
 
 - Group Learning now also offers a subject-aware link to the matching full Mathematics, English or Science lesson. The page's JavaScript syntax and internal file references were rechecked after the change; no errors or missing targets were found.
+
+
+## Unified hub navigation and dashboard syntax audit (5 November 2026)
+- Added direct Student Learning Hub tiles for Connected Practice, Progress Overview and Certificates & Achievements, making the existing three connected demo pages easier to reach from the unified hub.
+- Rechecked the unified hub after the change: its JavaScript parses without syntax errors, all checked local href/src references resolve to files in the repository, and all three new tiles point to existing pages.
+- Re-ran static JavaScript syntax and duplicate HTML-ID checks on the home screen, unified hub, student/parent/teacher dashboards, international classroom page, homework page, AI Teacher page, Group Learning page and student profile. No syntax errors or duplicate IDs were found in those inspected pages.
+- These are source-level checks, not live Android/browser, account, cross-device or end-to-end classroom tests.
