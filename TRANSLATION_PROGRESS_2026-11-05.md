@@ -17,3 +17,9 @@
 - English alphabet examples, story passages, vocabulary meanings and target-language practice content remain in English where they are the material being learned.
 - The updated shared language script passed a JavaScript syntax check after the additions.
 - The user confirmed the previous Advanced Learning Studio, Reading & Writing and Vocabulary pages display correctly on their Android device. The newly updated English and dictionary pages still need a separate on-device language-switch check.
+
+## Additional update — Home Science and Social Studies
+- Added Hindi, Bengali, Tamil, Telugu and Marathi translations for the Home Science topic cards, practical safety reminders, quiz questions and answer choices.
+- Added the same five languages for Social Studies community topics, explanations, quiz prompt and discussion activity.
+- The shared language script passed a JavaScript syntax check after this update.
+- These new translations are committed to GitHub. Their on-device display and the translated quiz feedback still need user testing.
