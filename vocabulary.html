@@ -34,7 +34,7 @@ document.getElementById("checkSentence").addEventListener("click",function(){
 const text=sentence.value.trim();
 if(text.length<8){feedback.textContent="Write a little more so we can practise your sentence.";return;}
 if(!/[.!?]$/.test(text)){feedback.textContent="Good start! Add a full stop, question mark or exclamation mark at the end.";return;}
-feedback.textContent="🌟 Well done! You wrote a complete sentence. Read it aloud and check that it uses your chosen word: "+word.value+".";
+if(!new RegExp("\\b"+word.value+"\\b","i").test(text)){feedback.textContent="Your sentence looks complete. Try including the chosen word (“"+word.value+"”) so you can practise it.";return;} feedback.textContent="🌟 Excellent! Your sentence is complete and uses the chosen word.";
 });
 })();
 </script><footer>Great Minds AI — Every Child Can Shine ✨</footer></body></html>
