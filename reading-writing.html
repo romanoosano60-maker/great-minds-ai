@@ -37,19 +37,19 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <main>
 <section class="card"><h2>1. Read the story</h2>
 <p class="passage" id="story">Mina has a little garden. Every morning, she waters the plants. One sunny day, a yellow butterfly visits the flowers. Mina watches it gently and smiles. She knows plants need sunlight, water and care to grow.</p>
-<button id="listen">🔊 Listen to the story</button> <button class="alt" id="stop">⏹ Stop</button>
+<button type="button" id="listen">🔊 Listen to the story</button> <button type="button" class="alt" id="stop">⏹ Stop</button>
 <p class="small">This uses the speech voice available on your phone or browser.</p></section>
 <section class="card"><h2>2. Reading comprehension</h2>
 <p><strong>Question 1:</strong> What does Mina water every morning?</p>
-<div class="choices" id="q1"><button data-correct="false">The road</button><button data-correct="true">The plants</button><button data-correct="false">Her shoes</button></div><p class="feedback" id="f1" aria-live="polite"></p>
+<div class="choices" id="q1"><button type="button" data-correct="false">The road</button><button type="button" data-correct="true">The plants</button><button type="button" data-correct="false">Her shoes</button></div><p class="feedback" id="f1" aria-live="polite"></p>
 <p><strong>Question 2:</strong> What visits the flowers?</p>
-<div class="choices" id="q2"><button data-correct="false">A dog</button><button data-correct="false">A bird</button><button data-correct="true">A yellow butterfly</button></div><p class="feedback" id="f2" aria-live="polite"></p>
-<p class="score" id="score" aria-live="polite">Score: 0/2</p><button class="alt" id="retry">Try again</button></section>
+<div class="choices" id="q2"><button type="button" data-correct="false">A dog</button><button type="button" data-correct="false">A bird</button><button type="button" data-correct="true">A yellow butterfly</button></div><p class="feedback" id="f2" aria-live="polite"></p>
+<p class="score" id="score" aria-live="polite">Score: 0/2</p><button type="button" class="alt" id="retry">Try again</button></section>
 <section class="card"><h2>3. Your writing challenge</h2>
 <p>Write two or three sentences about an animal you like. Describe what it looks like and what it does.</p>
 <label for="writing"><strong>My writing</strong></label><textarea id="writing" class="writebox" maxlength="1200" placeholder="I like ..."></textarea>
 <p class="small"><span id="count">0</span>/1200 characters. Use a nickname only. Do not write private information.</p>
-<button id="save">💾 Save on this device</button> <button class="alt" id="clear">Clear writing</button><p class="feedback" id="saveStatus" aria-live="polite"></p>
+<button type="button" id="save">💾 Save on this device</button> <button type="button" class="alt" id="clear">Clear writing</button><p class="feedback" id="saveStatus" aria-live="polite"></p>
 </section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 const story=document.getElementById("story");
