@@ -115,3 +115,12 @@ Device-level voice playback, installed Android voice availability, and visual/fu
 - Rechecked the shared homework client: it requires authenticated users, validates assignment fields and score bounds, and treats database row-level security as the authorization boundary.
 - Small cleanup: simplified the guardian consent RPC response handling to remove a duplicated fallback property reference.
 - These are source-level checks only. Real guardian consent, teacher approval, cross-device classroom membership, realtime updates, and child-safety workflows remain unverified until tested with separate accounts on devices.
+
+
+## Additional cloud-progress integration — 5 November 2026
+
+- Added authenticated cloud progress saves for completed five-question check-ins in Advanced Learning Studio. The local history remains available and is clearly distinguished from the secure cloud copy.
+- Added authenticated cloud progress saves for completed Math, English Word Wizard, Science and Memory learning games. Local stars, wins, streaks and printable game rewards remain device-local; only completed game scores are sent to the student progress table.
+- Added authenticated cloud progress saves for the two-question Reading and Writing story quiz. Student writing remains on-device and is not uploaded.
+- All three updated pages load the existing Supabase configuration and shared progress helper. The helper continues to require a signed-in account and relies on database RLS/active guardian consent for permission.
+- JavaScript syntax checks passed for all three updated pages. These integrations are not yet live-account tested; successful cloud saves still require approved student sign-in, guardian consent and the existing Supabase policies.
