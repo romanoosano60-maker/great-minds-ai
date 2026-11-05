@@ -96,7 +96,7 @@ Do not enable child-to-child messaging or open international chat until account 
 - Rechecked the international classroom account, guardian-consent, join-request, teacher-approval and realtime-refresh handlers. A duplicate fallback in consent-code response handling was removed from `international-classrooms.html`.
 - Rechecked `homework.html` and `student-cloud-homework.js`: cloud homework is separate from the local role-play tabs; user-entered answers and feedback are inserted into the page with text nodes/textContent rather than interpreted as HTML. Database RLS remains the access-control boundary.
 - Rechecked the AI Teacher Worker source: it restricts requests to the GitHub Pages origin, verifies the Supabase bearer token, requires an active guardian relationship, applies per-user rate limiting, bounds question/history input, and keeps the OpenAI key server-side. It remains a source template until deployed and tested.
-- Rechecked lesson-page cloud progress integration. The main subject quiz pages and extra subject quiz pages use the shared cloud progress helper. Reading/Writing, Vocabulary, Advanced Learning, Games and certificate/reward records still include device-local demonstrations and should not be described as fully cloud-synchronised.
+- Rechecked lesson-page cloud progress integration. The main subject quiz pages and extra subject quiz pages use the shared cloud progress helper. Advanced Learning, selected Games, Reading/Writing story quizzes, and Vocabulary word-practice completion now have selected cloud-save paths. Writing text, local stars/wins, and certificate/reward summaries remain device-local; these modules are not fully cloud-synchronised.
 - Confirmed `ai-teacher-config.js` is deliberately blank until a real Worker URL is deployed. No secrets were added to frontend files.
 - Remaining live tests are unchanged: real separate-account classroom/consent journey, cross-device progress/homework, Android microphone/audio, Worker deployment and safe AI test, full device navigation, privacy/legal approval, and native store packaging.
 
@@ -111,3 +111,10 @@ After the approved student and guardian test accounts are ready, test the new sa
 5. Repeat once while signed out or without guardian approval and confirm the page clearly reports that the score stayed local.
 
 These new integrations passed source-level JavaScript syntax checks but are not considered complete until the authenticated live tests above pass.
+
+
+## Additional GitHub-only improvement — Vocabulary privacy and progress
+
+- `vocabulary.html` now loads the existing authenticated progress helper and offers a cloud record for a completed word-practice activity.
+- The selected word's completion is recorded at most once per browser profile; the child's sentence text is never included in the cloud request or stored by this feature.
+- This is a selected activity sync path, not full vocabulary or writing synchronisation. It still requires the approved student/guardian live test listed above.
