@@ -191,3 +191,12 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Added Home Science, General Knowledge, Computer Studies, Reading & Writing and Vocabulary Practice to the Unified Learning & Classroom Hub.
 - Source changes are committed and re-fetched from GitHub. The Home Science quiz record remains local demo storage; it is not yet a Supabase write or cross-device progress sync.
 - Android testing is still required for responsive layout, speech playback, quiz scoring and hub navigation.
+
+
+## 14. Student cloud progress — first integration increment (5 November 2026)
+- Live table `public.student_learning_progress` is RLS-protected and append-only for authenticated client writes. Students may insert their own rows only when an active guardian link exists. Students can read their own rows; active guardians and approved teachers can read rows only through their relationship/classroom policies.
+- `student-cloud-progress.js` validates record shape and gets the current authenticated user via Supabase Auth; it never accepts a student ID from page form data. The database RLS policy remains authoritative.
+- Mathematics, Science, Social Studies, Geography and Home Science now attempt cloud saves at quiz completion. Existing local demo history remains in place as a fallback. Student Profile includes a cloud progress refresh/read panel.
+- `supabase/least-privilege-grants.sql` documents tightened grants: no anonymous/public privileges on the five core tables; authenticated permissions are limited by table and RLS. Verified all five tables still have RLS enabled and anonymous SELECT/INSERT are false.
+- This is source integration only until tested in a real signed-in browser session with a test student account and an active guardian link. A successful code commit is not proof that REST inserts/reads work.
+- Homework assignment/submission storage and parent/teacher dashboard cloud views are not implemented yet. Child-to-child messaging remains disabled. Leaked-password protection is still reported disabled by the Supabase security advisor and must be enabled before real family accounts.
