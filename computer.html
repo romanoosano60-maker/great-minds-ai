@@ -97,6 +97,7 @@ input{width:100%;padding:13px;border:2px solid #a8bce8;border-radius:10px;font-s
 <button onclick="nextQuestion()">Next Question ➜</button>
 </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
 function speak(text){
 if(!("speechSynthesis" in window)){
@@ -192,6 +193,7 @@ if(current>=questions.length){
 document.getElementById("question").textContent="🎉 Quiz complete!";
 document.getElementById("answers").replaceChildren();
 document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
+if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Computer Studies",activity_key:"computer-basics-quiz",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"computer-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+r.reason)})}
 return;
 }
 showQuestion();
