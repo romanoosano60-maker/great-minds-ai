@@ -42,6 +42,16 @@
   if(error){console.warn("Homework submission failed:",error);return {ok:false,message:error.code==="23505"?"You have already submitted this assignment.":"Submission not accepted. Check your approved classroom membership and parent consent."};}
   return {ok:true,message:"Homework submitted to your classroom."};
  }
+ async function isEnrolledStudent(classroomId){
+  const client=db();if(!client)return {ok:false,isStudent:false};
+  const {user,error:userError}=await currentUser();if(userError||!user)return {ok:false,isStudent:false};
+  const id=Number(classroomId);if(!Number.isSafeInteger(id)||id<=0)return {ok:false,isStudent:false};
+  const {data,error}=await client.from("classroom_members").select("id")
+   .eq("classroom_id",id).eq("user_id",user.id)
+   .eq("membership_status","approved").eq("parent_consent_status","approved").maybeSingle();
+  if(error){console.warn("Student membership check failed:",error);return {ok:false,isStudent:false};}
+  return {ok:true,isStudent:!!data};
+ }
  async function listSubmissions(assignmentId){
   const client=db();if(!client)return {ok:false,rows:[],message:"Supabase is not configured."};
   let query=client.from("homework_submissions").select("id,assignment_id,student_id,answer,submitted_at,score,feedback,marked_by,marked_at").order("submitted_at",{ascending:false}).limit(200);
@@ -57,5 +67,5 @@
   if(error){console.warn("Homework marking failed:",error);return {ok:false,message:"Marking not accepted. Only the approved classroom teacher can mark this work."};}
   return {ok:true,message:"Mark and feedback saved."};
  }
- window.gmHomeworkCloud={currentUser,createAssignment,listAssignments,submitAnswer,listSubmissions,markSubmission};
+ window.gmHomeworkCloud={currentUser,createAssignment,listAssignments,isEnrolledStudent,submitAnswer,listSubmissions,markSubmission};
 })();
