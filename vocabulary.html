@@ -25,16 +25,31 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <textarea id="practiceSentence" rows="3" maxlength="500" placeholder="Write your own sentence here..." style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit"></textarea>
 <button class="btn" id="checkSentence" type="button">Check my sentence</button>
 <p id="practiceFeedback" role="status" aria-live="polite"></p>
-<p class="muted">Your writing is checked on this page only; it is not sent to a teacher or stored online.</p>
+<p id="cloudFeedback" role="status" aria-live="polite" class="muted">Only a word-practice completion may be sent to your signed-in student progress record. Your sentence text stays on this device.</p>
+<p class="muted">Your writing is checked on this page only; the sentence is not sent to a teacher or stored online.</p>
 </section></main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="student-cloud-progress.js"></script>
 <script>
 (function(){
-const word=document.getElementById("practiceWord"),sentence=document.getElementById("practiceSentence"),feedback=document.getElementById("practiceFeedback");
-document.getElementById("checkSentence").addEventListener("click",function(){
-const text=sentence.value.trim();
+const word=document.getElementById("practiceWord"),sentence=document.getElementById("practiceSentence"),feedback=document.getElementById("practiceFeedback"),cloud=document.getElementById("cloudFeedback"),button=document.getElementById("checkSentence");
+const key="gm_vocabulary_completed_words_v1";
+function savedWords(){try{const a=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(a)?a:[]}catch{return []}}
+button.addEventListener("click",async function(){
+const text=sentence.value.trim(),chosen=word.value;
 if(text.length<8){feedback.textContent="Write a little more so we can practise your sentence.";return;}
 if(!/[.!?]$/.test(text)){feedback.textContent="Good start! Add a full stop, question mark or exclamation mark at the end.";return;}
-if(!new RegExp("\\b"+word.value+"\\b","i").test(text)){feedback.textContent="Your sentence looks complete. Try including the chosen word (“"+word.value+"”) so you can practise it.";return;} feedback.textContent="🌟 Excellent! Your sentence is complete and uses the chosen word.";
+if(!new RegExp("\\b"+chosen+"\\b","i").test(text)){feedback.textContent="Your sentence looks complete. Try including the chosen word (“"+chosen+"”) so you can practise it.";return;}
+feedback.textContent="🌟 Excellent! Your sentence is complete and uses the chosen word.";
+if(savedWords().includes(chosen)){cloud.textContent="This word-practice completion is already recorded on this device.";return;}
+if(!window.gmSaveStudentProgress){cloud.textContent="Cloud progress helper is unavailable. Your sentence remains on this device.";return;}
+button.disabled=true;cloud.textContent="Saving the word-practice completion (not your sentence)…";
+try{const result=await window.gmSaveStudentProgress({subject:"English",activity_key:"vocabulary-word-"+chosen,score:1,max_score:1,correct_count:1,question_count:1,source:"vocabulary"});
+if(result&&result.saved){const a=savedWords();if(!a.includes(chosen))a.push(chosen);localStorage.setItem(key,JSON.stringify(a));cloud.textContent="Word-practice completion saved to cloud progress. Your sentence was not uploaded."}
+else cloud.textContent="Cloud save not confirmed: "+((result&&result.reason)||"please sign in and try again");
+}catch(error){cloud.textContent="Cloud save failed. Your sentence remains on this device."}
+finally{button.disabled=false}
 });
 })();
 </script><footer>Great Minds AI — Every Child Can Shine ✨</footer>
