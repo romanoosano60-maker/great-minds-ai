@@ -29,7 +29,7 @@ nav button{min-height:46px}
 <main>
 <div class="card warning"><strong>Two separate modes:</strong> The secure classroom section below uses Supabase accounts and database permissions. The older Teacher, Student and Parent tabs are still local demonstrations saved only on this device. Do not enter real children's personal information in the local demo tabs.</div>
 <section class="card"><h2>☁️ Secure classroom homework</h2><p class="muted">Supabase account permissions protect this section. Approved teachers publish assignments; students need approved classroom membership and parent consent to submit. The local demo remains separate.</p><div id="cloudHomeworkStatus" class="warning" role="status">Sign in on the International Classroom page, then return here.</div><label for="cloudClassroomId">Classroom ID (teachers need this to publish)</label><input id="cloudClassroomId" type="number" min="1"><h3>Teacher: publish an assignment</h3><label for="cloudSubject">Subject</label><select id="cloudSubject"><option>Mathematics</option><option>English</option><option>Science</option><option>Social Studies</option><option>Home Science</option><option>General</option></select><label for="cloudTitle">Title</label><input id="cloudTitle" maxlength="90"><label for="cloudInstructions">Instructions</label><textarea id="cloudInstructions" maxlength="1500"></textarea><label for="cloudDue">Due date</label><input id="cloudDue" type="date"><label for="cloudMax">Maximum points</label><input id="cloudMax" type="number" min="1" max="100" value="10"><button id="cloudCreate" type="button">Publish to classroom</button><button id="cloudRefresh" type="button" class="secondary">Load secure classroom homework</button><div id="cloudAssignments"></div></section>
-<nav><button id="tabTeacher" onclick="tab('teacher')">👩‍🏫 Teacher</button><button id="tabStudent" onclick="tab('student')">🎒 Student</button><button id="tabParent" onclick="tab('parent')">👪 Parent</button></nav>
+<nav><button id="tabTeacher" type="button" onclick="tab('teacher')">👩‍🏫 Teacher</button><button id="tabStudent" type="button" onclick="tab('student')">🎒 Student</button><button id="tabParent" type="button" onclick="tab('parent')">👪 Parent</button></nav>
 <section id="teacher" class="card">
 <h2>Create or edit homework</h2>
 <form id="taskForm">
@@ -47,7 +47,7 @@ nav button{min-height:46px}
 </section>
 <section id="student" class="card hidden"><h2>Student assignments</h2><p class="muted">Complete homework here. This is a local demonstration.</p><div id="studentTasks"></div></section>
 <section id="parent" class="card hidden"><h2>Parent overview</h2><div id="parentStats"></div><div id="parentTasks"></div></section>
-<div class="card"><button class="secondary" onclick="location.href='parents-teachers.html'">← Parents & Teachers</button><button class="secondary" onclick="location.href='index.html'">🏠 Home</button></div>
+<div class="card"><button type="button" class="secondary" onclick="location.href='parents-teachers.html'">← Parents & Teachers</button><button type="button" class="secondary" onclick="location.href='index.html'">🏠 Home</button></div>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-homework.js"></script><script>
 const STORAGE='greatMindsHomeworkV1';
