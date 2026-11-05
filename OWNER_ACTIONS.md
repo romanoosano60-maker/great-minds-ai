@@ -125,3 +125,12 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 - `student-profile.html` now attempts a secure progress insert when a quiz result is recorded, using the shared authenticated helper and a 0–100 score validation.
 - The page clearly reports whether the result was saved locally only or also confirmed in cloud progress, and temporarily disables the quiz-save button while the cloud request is in flight to reduce accidental duplicate taps. Manual self-marked homework remains local and is not represented as teacher-verified cloud homework.
 - Live verification still requires the approved student sign-in and guardian consent test; no cloud success is assumed from the source change alone.
+
+
+## Additional GitHub-only improvement — secure homework form resilience
+
+- The secure classroom homework form now marks its required fields explicitly and validates the classroom ID and whole-number score maximum before sending a request.
+- Publishing is temporarily disabled while the request is in progress to prevent duplicate taps; the button is restored after success or failure.
+- Missing cloud helper, sign-in lookup failures, assignment-list failures, submission-list failures and membership-check failures now produce safe status messages instead of leaving the user with an unhandled page error.
+- These are frontend safeguards only. Supabase authentication and Row Level Security remain the authority for who may publish, view, submit and mark work; no live classroom workflow is claimed until separate-account testing passes.
+- Latest homework.html inline JavaScript syntax check passed.
