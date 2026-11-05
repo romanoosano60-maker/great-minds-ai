@@ -18,6 +18,7 @@ label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;
 <header><h1>🎓 Great Minds AI</h1><p>Homework Manager</p><a href="connected-dashboards.html">🌐 Unified Learning Hub</a></header>
 <main>
 <div class="card warning"><strong>Prototype only:</strong> This page stores homework in this browser on this device. Teacher, student and parent views are demonstrations, not secure accounts. Do not enter real children's names or personal information. Homework is not shared across devices.</div>
+<section class="card"><h2>☁️ Secure classroom homework</h2><p class="muted">Supabase account permissions protect this section. Approved teachers publish assignments; students need approved classroom membership and parent consent to submit. The local demo remains separate.</p><div id="cloudHomeworkStatus" class="warning" role="status">Sign in on the International Classroom page, then return here.</div><label for="cloudClassroomId">Classroom ID (teachers need this to publish)</label><input id="cloudClassroomId" type="number" min="1"><h3>Teacher: publish an assignment</h3><label for="cloudSubject">Subject</label><select id="cloudSubject"><option>Mathematics</option><option>English</option><option>Science</option><option>Social Studies</option><option>Home Science</option><option>General</option></select><label for="cloudTitle">Title</label><input id="cloudTitle" maxlength="90"><label for="cloudInstructions">Instructions</label><textarea id="cloudInstructions" maxlength="1500"></textarea><label for="cloudDue">Due date</label><input id="cloudDue" type="date"><label for="cloudMax">Maximum points</label><input id="cloudMax" type="number" min="1" max="100" value="10"><button id="cloudCreate" type="button">Publish to classroom</button><button id="cloudRefresh" type="button" class="secondary">Load secure classroom homework</button><div id="cloudAssignments"></div></section>
 <nav><button id="tabTeacher" onclick="tab('teacher')">👩‍🏫 Teacher</button><button id="tabStudent" onclick="tab('student')">🎒 Student</button><button id="tabParent" onclick="tab('parent')">👪 Parent</button></nav>
 <section id="teacher" class="card">
 <h2>Create or edit homework</h2>
@@ -38,7 +39,7 @@ label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;
 <section id="parent" class="card hidden"><h2>Parent overview</h2><div id="parentStats"></div><div id="parentTasks"></div></section>
 <div class="card"><button class="secondary" onclick="location.href='parents-teachers.html'">← Parents & Teachers</button><button class="secondary" onclick="location.href='index.html'">🏠 Home</button></div>
 </main>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-homework.js"></script><script>
 const STORAGE='greatMindsHomeworkV1';
 let tasks=[];
 function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||'[]');tasks=Array.isArray(x)?x:[]}catch(e){tasks=[]}}
@@ -93,6 +94,31 @@ if(t.submission&&t.submission.feedback)c.append(el('p','Feedback: '+t.submission
 const done=tasks.filter(t=>t.submission).length,marked=tasks.filter(t=>t.submission&&t.submission.score!==null);
 const stats=document.getElementById('parentStats');stats.replaceChildren(el('p','Total: '+tasks.length+' | Submitted: '+done+' | Pending: '+(tasks.length-done)),el('p','Marked: '+marked.length));
 }
+async function cloudHomeworkRefresh(){
+ const status=document.getElementById('cloudHomeworkStatus'),root=document.getElementById('cloudAssignments');root.replaceChildren();status.textContent='Loading secure homework…';
+ const api=window.gmHomeworkCloud;if(!api){status.textContent='Cloud helper unavailable.';return}
+ const who=await api.currentUser();if(who.error||!who.user){status.textContent='Sign in on the International Classroom page first.';return}
+ const classroomId=document.getElementById('cloudClassroomId').value.trim();const result=await api.listAssignments(classroomId);if(!result.ok){status.textContent=result.message;return}
+ status.textContent='Signed in. '+result.message+' Database permissions control what you can see.';
+ if(!result.rows.length){root.textContent='No secure assignments visible to this account yet.';return}
+ for(const a of result.rows){
+  const card=el('div',undefined,'task');card.append(el('h3',a.title),el('span',a.subject+' • Due '+a.due_at+' • '+a.max_points+' points','pill'),el('p',a.instructions));
+  const sub=await api.listSubmissions(a.id);if(!sub.ok){card.append(el('p',sub.message));root.append(card);continue}
+  const mine=sub.rows.find(x=>x.student_id===who.user.id);
+  if(who.user.id===a.teacher_id){
+   card.append(el('strong','Teacher view — submissions in your classroom.'));if(!sub.rows.length)card.append(el('p','No submissions yet.'));
+   for(const s of sub.rows){const item=el('div',undefined,'answer');item.append(el('p','Student account: '+s.student_id),el('p','Answer: '+s.answer),el('p',s.score===null?'Awaiting marking':'Score: '+s.score+'/'+a.max_points));
+    const score=el('input');score.type='number';score.min=0;score.max=a.max_points;score.placeholder='Score';score.value=s.score===null?'':s.score;
+    const feedback=el('textarea');feedback.maxLength=1500;feedback.placeholder='Feedback';feedback.value=s.feedback||'';
+    item.append(el('label','Mark score'),score,el('label','Teacher feedback'),feedback,btn('Save mark',async()=>{const n=Number(score.value);if(score.value===''||!Number.isInteger(n)||n<0||n>a.max_points){alert('Enter a whole-number score within the maximum.');return}const r=await api.markSubmission(s.id,n,feedback.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}));card.append(item);
+   }
+  }else if(mine){card.append(el('p','Your answer has been submitted.'),el('p',mine.answer),el('p',mine.score===null?'Awaiting teacher marking':'Score: '+mine.score+'/'+a.max_points),el('p','Feedback: '+(mine.feedback||'Not yet provided')))}
+  else{const answer=el('textarea');answer.maxLength=3000;answer.placeholder='Write your homework answer here';card.append(el('p','Submit your answer for this classroom assignment.'),answer,btn('Submit homework',async()=>{const r=await api.submitAnswer(a.id,answer.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}))}
+  root.append(card);
+ }
+}
+document.getElementById('cloudCreate').addEventListener('click',async()=>{const input={classroom_id:document.getElementById('cloudClassroomId').value,subject:document.getElementById('cloudSubject').value,title:document.getElementById('cloudTitle').value,instructions:document.getElementById('cloudInstructions').value,due_at:document.getElementById('cloudDue').value,max_points:document.getElementById('cloudMax').value};const r=await window.gmHomeworkCloud.createAssignment(input);document.getElementById('cloudHomeworkStatus').textContent=r.message;if(r.ok){document.getElementById('cloudTitle').value='';document.getElementById('cloudInstructions').value='';cloudHomeworkRefresh()}});
+document.getElementById('cloudRefresh').addEventListener('click',cloudHomeworkRefresh);
 load();syncHomeworkToRoleDashboards();tab('teacher');
 // Refresh the local role-dashboard mirror when this homework page is open in another tab.
 window.addEventListener('storage',event=>{if(event.key===STORAGE){load();syncHomeworkToRoleDashboards();render()}});
