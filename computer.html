@@ -56,18 +56,18 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Type the following sentence exactly:</p>
 <div class="card">I love learning computers</div>
 <input id="typing" placeholder="Type here" autocomplete="off">
-<button onclick="checkTyping()">Check Typing</button>
+<button type="button" onclick="checkTyping()">Check Typing</button>
 <p id="typingResult" class="feedback" aria-live="polite"></p>
 </section>
 <section>
 <h2>🌐 Lesson 3: Internet Safety</h2>
 <div class="card">
 <p>Keep personal information private. Never share passwords, and ask a trusted adult before communicating with strangers online.</p>
-<button onclick="speak('Keep your passwords private. Ask a trusted adult if something online makes you uncomfortable.')">🔊 Listen</button>
+<button type="button" onclick="speak('Keep your passwords private. Ask a trusted adult if something online makes you uncomfortable.')">🔊 Listen</button>
 </div>
 <p>Should you share your password with strangers?</p>
-<button onclick="feedback('safety',false)">Yes</button>
-<button onclick="feedback('safety',true)">No</button>
+<button type="button" onclick="feedback('safety',false)">Yes</button>
+<button type="button" onclick="feedback('safety',true)">No</button>
 <p id="safety" class="feedback"></p>
 </section>
 <section>
@@ -77,8 +77,8 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Help the robot move three steps!</p>
 <p id="robot" style="font-size:38px">🤖</p>
 <p id="steps">Steps: 0 / 3</p>
-<button onclick="moveRobot()">➡️ Move Robot</button>
-<button onclick="resetRobot()">🔄 Reset</button>
+<button type="button" onclick="moveRobot()">➡️ Move Robot</button>
+<button type="button" onclick="resetRobot()">🔄 Reset</button>
 <p id="codingResult" class="feedback"></p>
 </div>
 </section>
@@ -87,11 +87,11 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Artificial intelligence, or AI, is technology that can recognize patterns, generate responses and help people solve problems.</p>
 <div class="card">
 <p>Examples include translation tools, voice assistants and image recognition.</p>
-<button onclick="speak('Artificial intelligence helps computers perform tasks such as recognizing speech, understanding language and finding patterns.')">🔊 Listen</button>
+<button type="button" onclick="speak('Artificial intelligence helps computers perform tasks such as recognizing speech, understanding language and finding patterns.')">🔊 Listen</button>
 </div>
 <p>Can AI sometimes make mistakes?</p>
-<button onclick="feedback('ai',true)">Yes</button>
-<button onclick="feedback('ai',false)">No</button>
+<button type="button" onclick="feedback('ai',true)">Yes</button>
+<button type="button" onclick="feedback('ai',false)">No</button>
 <p id="ai" class="feedback"></p>
 </section>
 <section>
@@ -99,7 +99,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>A robot is a machine that can perform tasks automatically or under human control.</p>
 <div class="card">
 <p>Some robots use sensors to detect light, distance or movement.</p>
-<button onclick="speak('Robots can use sensors to learn about their surroundings.')">🔊 Listen</button>
+<button type="button" onclick="speak('Robots can use sensors to learn about their surroundings.')">🔊 Listen</button>
 </div>
 </section>
 <section>
@@ -108,7 +108,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <div id="answers"></div>
 <p id="quizFeedback" class="feedback" aria-live="polite"></p>
 <p id="score">Score: 0</p>
-<button onclick="nextQuestion()">Next Question ➜</button>
+<button type="button" onclick="nextQuestion()">Next Question ➜</button>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
