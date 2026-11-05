@@ -42,6 +42,14 @@ label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-homework.js"></script><script>
 const STORAGE='greatMindsHomeworkV1';
 let tasks=[];
+let cloudHomeworkChannel=null,cloudRefreshTimer=null;
+function watchSecureHomework(){
+ const client=window.greatMindsDB;if(!client||cloudHomeworkChannel)return;
+ cloudHomeworkChannel=client.channel('great-minds-secure-homework')
+  .on('postgres_changes',{event:'*',schema:'public',table:'homework_assignments'},()=>{clearTimeout(cloudRefreshTimer);cloudRefreshTimer=setTimeout(cloudHomeworkRefresh,250)})
+  .on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>{clearTimeout(cloudRefreshTimer);cloudRefreshTimer=setTimeout(cloudHomeworkRefresh,250)})
+  .subscribe();
+}
 function load(){try{const x=JSON.parse(localStorage.getItem(STORAGE)||'[]');tasks=Array.isArray(x)?x:[]}catch(e){tasks=[]}}
 function syncHomeworkToRoleDashboards(){try{const key='greatMindsConnectedDemoV1';const d=JSON.parse(localStorage.getItem(key)||'{}');const shared=Array.isArray(d.homework)?d.homework:[];d.homework=shared.filter(x=>x.source!=='homework-manager').concat(tasks.map(t=>({id:String(t.id),subject:t.subject,question:t.title,answer:t.correct||'',submitted:!!t.submission,response:t.submission?.answer||'',correct:!!(t.submission&&t.submission.score!==null&&t.submission.score>0),source:'homework-manager',feedback:t.submission?.feedback||''})));localStorage.setItem(key,JSON.stringify(d))}catch(e){console.warn('Homework dashboard sync unavailable',e)}}
 function save(){try{localStorage.setItem(STORAGE,JSON.stringify(tasks));syncHomeworkToRoleDashboards();return true}catch(e){alert('Unable to save on this device. Check browser storage.');return false}}
@@ -98,6 +106,7 @@ async function cloudHomeworkRefresh(){
  const status=document.getElementById('cloudHomeworkStatus'),root=document.getElementById('cloudAssignments');root.replaceChildren();status.textContent='Loading secure homework…';
  const api=window.gmHomeworkCloud;if(!api){status.textContent='Cloud helper unavailable.';return}
  const who=await api.currentUser();if(who.error||!who.user){status.textContent='Sign in on the International Classroom page first.';return}
+ watchSecureHomework();
  const classroomId=document.getElementById('cloudClassroomId').value.trim();const result=await api.listAssignments(classroomId);if(!result.ok){status.textContent=result.message;return}
  status.textContent='Signed in. '+result.message+' Database permissions control what you can see.';
  if(!result.rows.length){root.textContent='No secure assignments visible to this account yet.';return}
@@ -107,7 +116,7 @@ async function cloudHomeworkRefresh(){
   const mine=sub.rows.find(x=>x.student_id===who.user.id);
   if(who.user.id===a.teacher_id){
    card.append(el('strong','Teacher view — submissions in your classroom.'));if(!sub.rows.length)card.append(el('p','No submissions yet.'));
-   for(const s of sub.rows){const item=el('div',undefined,'answer');item.append(el('p','Student account: '+s.student_id),el('p','Answer: '+s.answer),el('p',s.score===null?'Awaiting marking':'Score: '+s.score+'/'+a.max_points));
+   for(const s of sub.rows){const item=el('div',undefined,'answer');item.append(el('p','Student account: '+String(s.student_id).slice(0,8)+'…'),el('p','Answer: '+s.answer),el('p',s.score===null?'Awaiting marking':'Score: '+s.score+'/'+a.max_points));
     const score=el('input');score.type='number';score.min=0;score.max=a.max_points;score.placeholder='Score';score.value=s.score===null?'':s.score;
     const feedback=el('textarea');feedback.maxLength=1500;feedback.placeholder='Feedback';feedback.value=s.feedback||'';
     item.append(el('label','Mark score'),score,el('label','Teacher feedback'),feedback,btn('Save mark',async()=>{const n=Number(score.value);if(score.value===''||!Number.isInteger(n)||n<0||n>a.max_points){alert('Enter a whole-number score within the maximum.');return}const r=await api.markSubmission(s.id,n,feedback.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}));card.append(item);
