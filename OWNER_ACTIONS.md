@@ -16,7 +16,7 @@ This file lists only actions that still need the project owner or a real-device 
 1. Open the existing Cloudflare Worker `great-minds-ai-backend`.
 2. Deploy the current source from `cloudflare/worker.js`.
 3. Add the secret `OPENAI_API_KEY` in Cloudflare Secrets. Never put it in GitHub or browser code.
-4. Add variables `SUPABASE_URL=https://ryuchmmnyjyldwouidyy.supabase.co`, `SUPABASE_PUBLISHABLE_KEY` (public publishable key only), and `OPENAI_MODEL=gpt-5.4-mini`.
+4. Add variables `SUPABASE_URL=https://ryuchmmnyjyldwouidy.supabase.co`, `SUPABASE_PUBLISHABLE_KEY` (public publishable key only), and `OPENAI_MODEL=gpt-5.4-mini`.
 5. Add the `AI_RATE_LIMITER` binding required by the Worker source.
 6. Test `GET /health`, then configure the actual deployed Worker URL ending in `/ask` in `ai-teacher-config.js`.
 7. Test with an adult-controlled student test account that has an active guardian relationship. Confirm the chosen subject is included in the answer, unauthorised accounts are rejected, and rate limiting works.
