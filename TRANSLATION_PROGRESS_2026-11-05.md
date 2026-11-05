@@ -105,3 +105,13 @@ Device-level voice playback, installed Android voice availability, and visual/fu
 - Confirmed the Advanced Learning page labels its current progress record as device-local and demo-only. Dictionary and Writing Studio pages also explain when practice is saved only on the current device.
 - No cloud credentials, live child records, or account data were created or changed during this GitHub-only audit.
 - Remaining: live Android/browser testing, actual voice playback, real authentication and RLS tests, classroom cross-device tests, and deployment of the secure AI endpoint. Do not treat source-level checks as proof of production readiness.
+
+
+## Further international classroom and dashboard review — 5 November 2026
+
+- Rechecked the international classroom page's sign-in, account-purpose selection, classroom creation/join request, guardian-consent code, consent redemption/revocation, membership display, and realtime refresh paths.
+- Confirmed the standalone Safe International Classroom V3 page clearly labels itself as a local-only demonstration and explicitly says its parent approval, teacher controls, and messages are not real identity checks or live student connections.
+- Rechecked connected student, parent, and teacher dashboard pages: local browser records are visibly separated from cloud records; cloud views require sign-in and rely on database policies for access filtering.
+- Rechecked the shared homework client: it requires authenticated users, validates assignment fields and score bounds, and treats database row-level security as the authorization boundary.
+- Small cleanup: simplified the guardian consent RPC response handling to remove a duplicated fallback property reference.
+- These are source-level checks only. Real guardian consent, teacher approval, cross-device classroom membership, realtime updates, and child-safety workflows remain unverified until tested with separate accounts on devices.
