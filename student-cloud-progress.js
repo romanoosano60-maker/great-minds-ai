@@ -66,7 +66,7 @@
       const { data: userData, error: userError } = await db.auth.getUser();
       if (userError) throw userError;
       if (!userData || !userData.user) {
-        return { loaded: false, reason: "Sign in with the student account first.", rows: [] };
+        return { loaded: false, reason: "Sign in with the student, parent/guardian or approved teacher account first.", rows: [] };
       }
       const { data, error } = await db.from("student_learning_progress")
         .select("subject,activity_key,score,max_score,correct_count,question_count,source,completed_at")
