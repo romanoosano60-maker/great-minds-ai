@@ -1,5 +1,5 @@
 <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Student Dashboard — Connected Demo | Great Minds AI</title><style>
-:root{font-family:Arial,sans-serif;color:#1c3156}*{box-sizing:border-box}body{margin:0;background:#eff7ff}header{padding:22px;background:linear-gradient(125deg,#d4f5ff,#fff0c8);text-align:center}h1{margin:8px}main{max-width:850px;margin:20px auto;padding:0 15px}.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 2px 9px #2342}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}button,.link{background:#5d4be0;color:white;border:0;padding:12px 15px;border-radius:10px;cursor:pointer;display:inline-block;margin:8px 5px 8px 0;text-decoration:none;font-weight:bold}button:focus,.link:focus{outline:3px solid #f8bd31}.secondary{background:#177a79}.warn{background:#fff7dc;border-left:5px solid #e5aa2e;padding:13px;line-height:1.5;border-radius:8px}.muted{color:#58677c}.row{display:flex;gap:10px;flex-wrap:wrap}.metric{background:#edf0ff;border-radius:12px;padding:14px;min-width:105px;flex:1;text-align:center}.metric strong{display:block;font-size:26px}.item{padding:12px;border-bottom:1px solid #dde5f0}.status{color:#17684e;font-weight:bold}small{display:block}footer{text-align:center;padding:20px}.danger{background:#b53343}</style></head><body><header><h1>🚀 Great Minds AI</h1><h2>Student Dashboard — Connected Demo</h2><nav><a class="link" href="connected-dashboards.html">🏠 Hub</a><a class="link" href="connected-student.html">🎒 Student</a><a class="link" href="connected-teacher.html">👩‍🏫 Teacher</a><a class="link" href="connected-parent.html">👨‍👩‍👧 Parent</a></nav></header><main><div class="warn"><strong>Demo only — not a secure account system.</strong> All three pages share data only in this browser on this device, when opened on the same website. Anyone using this browser can view or change the demo records. Use made-up student names only. No live international messaging or automatic connection to the older dashboards.</div><div class="card"><h2>My profile</h2><label for="nickname">Made-up nickname</label><input id="nickname" maxlength="35"><button id="saveName">Save nickname</button><div id="metrics" class="row"></div></div><div class="card"><h2>My homework</h2><div id="assignments"></div></div><div class="card"><h2>Teacher feedback</h2><div id="feedbackList"></div></div></main><footer>Great Minds AI • Local demonstration</footer><script>
+:root{font-family:Arial,sans-serif;color:#1c3156}*{box-sizing:border-box}body{margin:0;background:#eff7ff}header{padding:22px;background:linear-gradient(125deg,#d4f5ff,#fff0c8);text-align:center}h1{margin:8px}main{max-width:850px;margin:20px auto;padding:0 15px}.card{background:white;padding:18px;border-radius:18px;margin:14px 0;box-shadow:0 2px 9px #2342}label{display:block;font-weight:bold;margin:12px 0 5px}input,select,textarea{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}button,.link{background:#5d4be0;color:white;border:0;padding:12px 15px;border-radius:10px;cursor:pointer;display:inline-block;margin:8px 5px 8px 0;text-decoration:none;font-weight:bold}button:focus,.link:focus{outline:3px solid #f8bd31}.secondary{background:#177a79}.warn{background:#fff7dc;border-left:5px solid #e5aa2e;padding:13px;line-height:1.5;border-radius:8px}.muted{color:#58677c}.row{display:flex;gap:10px;flex-wrap:wrap}.metric{background:#edf0ff;border-radius:12px;padding:14px;min-width:105px;flex:1;text-align:center}.metric strong{display:block;font-size:26px}.item{padding:12px;border-bottom:1px solid #dde5f0}.status{color:#17684e;font-weight:bold}small{display:block}footer{text-align:center;padding:20px}.danger{background:#b53343}</style><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script></head><body><header><h1>🚀 Great Minds AI</h1><h2>Student Dashboard — Connected Demo</h2><nav><a class="link" href="connected-dashboards.html">🏠 Hub</a><a class="link" href="connected-student.html">🎒 Student</a><a class="link" href="connected-teacher.html">👩‍🏫 Teacher</a><a class="link" href="connected-parent.html">👨‍👩‍👧 Parent</a></nav></header><main><div class="warn"><strong>Demo only — not a secure account system.</strong> All three pages share data only in this browser on this device, when opened on the same website. Anyone using this browser can view or change the demo records. Use made-up student names only. No live international messaging or automatic connection to the older dashboards.</div><div class="card" id="cloudAccount"><h2>🔐 Student cloud account</h2><p class="muted">Sign in with the Student test account. Your progress is saved only when you press the cloud-save button.</p><label for="cloudEmail">Student email</label><input id="cloudEmail" type="email" autocomplete="username"><label for="cloudPassword">Password</label><input id="cloudPassword" type="password" autocomplete="current-password"><div class="row"><button id="cloudLogin">Sign in</button><button id="cloudLogout" class="secondary" type="button">Sign out</button></div><p id="cloudStatus" class="status" role="status">Not signed in to cloud progress.</p><button id="saveCloudProgress" class="secondary" type="button" disabled>Save my progress to Supabase</button></div><div class="card"><h2>My profile</h2><label for="nickname">Made-up nickname</label><input id="nickname" maxlength="35"><button id="saveName">Save nickname</button><div id="metrics" class="row"></div></div><div class="card"><h2>My homework</h2><div id="assignments"></div></div><div class="card"><h2>Teacher feedback</h2><div id="feedbackList"></div></div></main><footer>Great Minds AI • Local demonstration</footer><script>
 const KEY='greatMindsConnectedDemoV1';
 const empty=()=>({student:'Demo Learner',stars:0,points:0,lessons:0,certificates:0,homework:[],feedback:[],plans:[],profileV2:{stars:0,points:0,lessons:0,certificates:0,homework:[],quizCount:0}});
 function read(){try{return {...empty(),...JSON.parse(localStorage.getItem(KEY)||'{}')}}catch(e){return empty()}}
@@ -15,4 +15,52 @@ document.addEventListener('click',e=>{const id=e.target.getAttribute('data-submi
 render();
 // Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
 window.addEventListener('storage',event=>{if(event.key===KEY)render()});
+</script><script>
+(function(){
+ const el=id=>document.getElementById(id);
+ const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');
+ let db=null,user=null;
+ function setStatus(t){status.textContent=t}
+ function init(){
+  const cfg=window.greatMindsSupabaseConfig;
+  if(!cfg||!window.supabase||!window.supabase.createClient){setStatus('Cloud service unavailable. The local dashboard still works.');return}
+  db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
+  db.auth.getSession().then(({data,error})=>{
+   if(error)throw error;
+   user=data.session?.user||null;
+   setStatus(user?'Student signed in. You can save this device’s progress to the cloud.':'Not signed in to cloud progress.');
+   saveBtn.disabled=!user;
+  }).catch(e=>setStatus('Could not check session: '+e.message));
+ }
+ el('cloudLogin').addEventListener('click',async()=>{
+  if(!db){setStatus('Cloud service is unavailable.');return}
+  const email=el('cloudEmail').value.trim(),password=el('cloudPassword').value;
+  if(!email||!password){setStatus('Enter the Student test account email and password.');return}
+  setStatus('Signing in…');
+  const {data,error}=await db.auth.signInWithPassword({email,password});
+  el('cloudPassword').value='';
+  if(error){setStatus('Sign-in failed: '+error.message);return}
+  user=data.user;saveBtn.disabled=!user;setStatus('Student signed in. Your cloud save is ready.');
+ });
+ el('cloudLogout').addEventListener('click',async()=>{
+  if(!db)return;const {error}=await db.auth.signOut();user=null;saveBtn.disabled=true;
+  setStatus(error?'Sign-out issue: '+error.message:'Signed out of cloud progress.');
+ });
+ saveBtn.addEventListener('click',async()=>{
+  if(!db||!user){setStatus('Please sign in first.');return}
+  saveBtn.disabled=true;setStatus('Saving progress securely…');
+  const d=read(),stars=Number(d.stars||0)+Number(d.profileV2?.stars||0),
+   points=Number(d.points||0)+Number(d.profileV2?.points||0),
+   lessons=Number(d.lessons||0)+Number(d.profileV2?.lessons||0);
+  const now=new Date().toISOString();
+  const row={student_id:user.id,subject:'Overall learning',activity_key:'dashboard-'+Date.now(),
+   score:points,max_score:Math.max(points,1),source:'student_dashboard_snapshot',
+   completed_at:now};
+  const {error}=await db.from('student_learning_progress').insert(row);
+  saveBtn.disabled=false;
+  if(error){setStatus('Cloud save was not accepted: '+error.message+'. Check that the Parent account is linked and approved.');return}
+  setStatus('Saved to Supabase: '+lessons+' lessons, '+stars+' stars and '+points+' points. Your linked Parent account can now refresh its cloud view.');
+ });
+ init();
+})();
 </script></body></html>
