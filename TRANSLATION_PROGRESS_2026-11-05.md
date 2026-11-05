@@ -37,3 +37,8 @@
 - The shared language script passed a JavaScript syntax check after the additions.
 - The app's saved rewards and quiz logic were not changed; only language dictionary entries were added.
 - On-device checks are still required for translated labels and dynamic feedback.
+
+## Additional update — Computer Studies
+- Added Hindi, Bengali, Tamil, Telugu and Marathi translations for the seven Computer Studies lesson headings, computer basics, typing instructions, internet-safety reminder, coding activity, AI and robotics explanations, and quiz controls.
+- The shared language script passed a JavaScript syntax check after the additions.
+- English typing-practice content remains intentionally distinct where it is part of the activity. The page still needs an Android check for translated layout and dynamic robot/quiz messages.
