@@ -346,3 +346,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Committed as 7f397be03d3e90301b056a346d0c5fe640bdf133.
 - Re-fetched the committed file and verified story, speech controls, both quiz questions, writing area and local save logic. Inline JavaScript syntax check passed.
 - Android display, speech playback, quiz interaction and local save still require a real-device test. This is not cloud-synced student progress.
+
+
+## Unified hub integration increment — 2026-11-05
+- Audited the current repository root and confirmed that `general-knowledge.html`, `computer.html`, `reading-writing.html` and `vocabulary.html` exist, while the expected `home-science.html` filename does not. No broken home-science link was added.
+- Added the four existing learning modules to the existing Unified Learning & Classroom Hub, preserving the permanent rocket home screen and current navigation.
+- Commit: `4dd1b709b676b0eccf4bd6567f97a6cb107fe6ab`. The updated hub was re-fetched and all four new links were confirmed present.
+- Still not verified: GitHub Pages deployment/rendering, Android tap-through tests, home-science module availability, and live Supabase cross-device classroom data. The local demo storage is not cloud sync.
