@@ -1,6 +1,6 @@
 const ORIGIN = "https://romanoosano60-maker.github.io";
 const SUBJECTS = ["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science"];
-const LANGUAGES = ["English","Arabic","Urdu","Swahili","French","German","Chinese (Mandarin)"];
+const LANGUAGES = ["English","Hindi","Bengali","Tamil","Telugu","Marathi","Arabic","Urdu","Swahili","French","German","Chinese (Mandarin)"];
 const cors = origin => ({
   "Access-Control-Allow-Origin": origin,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
