@@ -31,6 +31,10 @@ This file lists only actions that still need the project owner or a real-device 
 - Current row counts: 1 classroom, 1 teacher profile, 1 active guardian relationship, 0 classroom memberships.
 - No real student progress, homework assignments or homework submissions exist yet.
 
+**Database correction prepared in GitHub (not yet applied)**
+- Review `supabase/migrations/20261105_fix_guardian_consent_revocation.sql`. It corrects the revocation function so it reports success only when an active guardian link was actually revoked, and blocks the linked student's pending/approved classroom memberships.
+- The connected database migration tool blocked the automatic DDL change, so the live function remains unchanged until this migration is applied through the Supabase SQL Editor or migration workflow.
+
 **Owner actions**
 1. In Supabase Auth, create/use adult-controlled test accounts for one approved teacher, one student, and one parent/guardian. Do not use a real child's personal details during testing.
 2. Verify the guardian account's email and complete the explicit guardian-consent process on the International Classroom page.
