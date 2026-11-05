@@ -437,3 +437,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - The gallery artwork is embedded in `gm-3d-graphics-gallery-1.html` rather than relying on separate image files; the gallery page contains 15 embedded artwork images and a larger-image viewer.
 - Verified the new home-screen gallery link points to an existing repository file. Rechecked internal references on the home screen, unified hub, parent/teacher centre, student profile, homework manager and graphics gallery; no missing internal file references were found in those checked pages.
 - This is a repository/link check, not a live Android browser visual test; the user should still open the gallery on their device when convenient.
+
+
+## Connected home-screen navigation improvement (5 November 2026)
+- Added direct main-home-screen entry points for English Lessons, AI Teacher — Voice Demo, and Group Learning Demo, alongside the previously added 3D Graphics Gallery tile. Existing rocket home screen and current subject/dashboard links remain intact.
+- Added a subject-aware “Continue learning” link to the AI Teacher prototype. The link routes Mathematics, English, Science, Computer Studies and General Knowledge to their corresponding full lesson pages.
+- Rechecked JavaScript syntax on the home screen, AI Teacher, Unified Hub and Group Learning pages. All inline scripts parsed without syntax errors. Checked all local href/src references on these four pages against the repository tree; no missing internal targets were found.
+- AI Teacher remains clearly labelled as an offline voice prototype in its safety notice and Unified Hub; the live AI endpoint is not yet connected. Group Learning remains a local demo, not a live multi-country classroom. Do not describe either as live online service.
