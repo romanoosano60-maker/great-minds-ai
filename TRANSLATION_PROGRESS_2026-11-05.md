@@ -30,3 +30,10 @@
 - Proper names of continents, countries and major places remain unchanged where appropriate.
 - The shared language script passed a JavaScript syntax check after the additions.
 - Android rendering and translated quiz interaction still require a device check.
+
+## Additional update — Learning Games and General Knowledge
+- Added Hindi, Bengali, Tamil, Telugu and Marathi translations for game selection, reward labels, level descriptions, certificate and privacy notes, and progress controls.
+- Added the same five languages for General Knowledge lesson headings, question prompts, answer choices and navigation.
+- The shared language script passed a JavaScript syntax check after the additions.
+- The app's saved rewards and quiz logic were not changed; only language dictionary entries were added.
+- On-device checks are still required for translated labels and dynamic feedback.
