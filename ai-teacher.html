@@ -64,8 +64,11 @@ const teacherPhrases={
 "zh-CN":[["Hello! How are you?","你好！你好吗？"],["Thank you.","谢谢。"]]
 };
 let teacherPhraseIndex=0;
-function showTeacherPhrase(){const lang=$("teacherLanguage").value;const p=teacherPhrases[lang][teacherPhraseIndex%teacherPhrases[lang].length];$("teacherPhrase").textContent=p[1]}
-$("teacherLanguage").addEventListener("change",()=>{teacherPhraseIndex=0;showTeacherPhrase()});
+const TEACHER_LANGUAGE_KEY="gm_ai_teacher_language_v1";
+try{const savedLanguage=localStorage.getItem(TEACHER_LANGUAGE_KEY);if(savedLanguage&&teacherPhrases[savedLanguage])$("teacherLanguage").value=savedLanguage}catch(e){}
+function showTeacherPhrase(){const lang=$("teacherLanguage").value;const phrases=teacherPhrases[lang]||teacherPhrases["en-US"];const p=phrases[teacherPhraseIndex%phrases.length];$("teacherPhrase").textContent=p[1]}
+$("teacherLanguage").addEventListener("change",()=>{teacherPhraseIndex=0;try{localStorage.setItem(TEACHER_LANGUAGE_KEY,$("teacherLanguage").value)}catch(e){}showTeacherPhrase()});
+showTeacherPhrase();
 $("teacherPhraseNext").addEventListener("click",()=>{teacherPhraseIndex++;showTeacherPhrase()});
 $("teacherPhraseSpeak").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported in this browser.";return}const p=teacherPhrases[$("teacherLanguage").value][teacherPhraseIndex%teacherPhrases[$("teacherLanguage").value].length];const u=new SpeechSynthesisUtterance(p[1]);u.lang=$("teacherLanguage").value;u.rate=.88;speechSynthesis.cancel();speechSynthesis.speak(u)});
 
