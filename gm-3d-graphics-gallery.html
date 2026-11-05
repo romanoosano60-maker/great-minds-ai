@@ -9,6 +9,20 @@
 body{margin:0;padding:24px;font:16px/1.5 system-ui,sans-serif;color:#18366e;background:linear-gradient(145deg,#dff3ff,#f3e6ff);min-height:100vh;display:grid;place-items:center;text-align:center}
 main{max-width:520px;background:#fff;padding:28px;border-radius:22px;box-shadow:0 8px 24px #16387020}
 a{display:inline-block;margin-top:12px;padding:12px 18px;border-radius:12px;background:#255bd7;color:#fff;text-decoration:none;font-weight:700}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main,.wrap{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button,.link{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main,.wrap{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 <script>location.replace("gm-3d-graphics-gallery-1.html");</script>
 </head>
