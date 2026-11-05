@@ -20,7 +20,7 @@
 <section class="card"><span class="tag">2 · Personal daily learning coach</span><h2>📅 Your suggested 15-minute plan</h2><p id="plan" class="status">Complete a check-in to receive a plan based on your practice.</p><button id="makePlan">Create my learning plan</button></section>
 
 <section class="card"><span class="tag">3 · Multilingual learning</span><h2>🌐 Learn useful words in another language</h2>
-<label for="language">Choose a practice language</label><select id="language"><option value="ar">Arabic</option><option value="ur">Urdu</option><option value="sw">Swahili</option><option value="fr">French</option><option value="en">English</option></select>
+<label for="language">Choose a practice language</label><select id="language"><option value="ar">Arabic</option><option value="ur">Urdu</option><option value="sw">Swahili</option><option value="fr">French</option><option value="de">German</option><option value="zh-CN">Chinese (Mandarin)</option><option value="en">English</option></select>
 <div class="status" style="margin:10px 0"><div class="small">Today's phrase</div><h3 id="phrase" style="margin:6px 0">Hello! How are you?</h3><div id="translation">Arabic: مرحباً! كيف حالك؟</div></div>
 <div class="row"><button id="hearPhrase">🔊 Hear phrase</button><button id="nextPhrase" class="secondary">Next phrase</button></div>
 <p class="small">This is guided phrase practice with built-in examples. Full multilingual AI teaching and translation quality need the secure AI connection and review by fluent speakers.</p></section>
@@ -83,12 +83,14 @@ ar:[["Hello! How are you?","مرحباً! كيف حالك؟"],["Thank you.","ش�
 ur:[["Hello! How are you?","السلام علیکم! آپ کیسے ہیں؟"],["Thank you.","شکریہ۔"],["I like learning.","مجھے سیکھنا پسند ہے۔"]],
 sw:[["Hello! How are you?","Habari! Hujambo?"],["Thank you.","Asante."],["I like learning.","Ninapenda kujifunza."]],
 fr:[["Hello! How are you?","Bonjour ! Comment ça va ?"],["Thank you.","Merci."],["I like learning.","J’aime apprendre."]],
+de:[["Hello! How are you?","Hallo! Wie geht es dir?"],["Thank you.","Danke."],["I like learning.","Ich lerne gern."]],
+"zh-CN":[["Hello! How are you?","你好！你好吗？"],["Thank you.","谢谢。"],["I like learning.","我喜欢学习。"]],
 en:[["Hello! How are you?","Hello! How are you?"],["Thank you.","Thank you."],["I like learning.","I like learning."]]
 };
-const langNames={ar:"Arabic",ur:"Urdu",sw:"Swahili",fr:"French",en:"English"};let phraseIndex=0;
+const langNames={ar:"Arabic",ur:"Urdu",sw:"Swahili",fr:"French",de:"German","zh-CN":"Chinese (Mandarin)",en:"English"};let phraseIndex=0;
 function showPhrase(){const lang=$("language").value,p=phrases[lang][phraseIndex%phrases[lang].length];$("phrase").textContent=p[0];$("translation").textContent=langNames[lang]+": "+p[1]}
 $("language").addEventListener("change",()=>{phraseIndex=0;showPhrase()});$("nextPhrase").addEventListener("click",()=>{phraseIndex++;showPhrase()});showPhrase();
-$("hearPhrase").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported here.";return}const u=new SpeechSynthesisUtterance($("translation").textContent.split(": ").slice(1).join(": "));u.lang={ar:"ar",ur:"ur",sw:"sw",fr:"fr",en:"en-US"}[$("language").value];speechSynthesis.cancel();speechSynthesis.speak(u)});
+$("hearPhrase").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported here.";return}const u=new SpeechSynthesisUtterance($("translation").textContent.split(": ").slice(1).join(": "));u.lang={ar:"ar",ur:"ur",sw:"sw",fr:"fr",de:"de-DE","zh-CN":"zh-CN",en:"en-US"}[$("language").value];speechSynthesis.cancel();speechSynthesis.speak(u)});
 let recognition=null;
 $("listenQuestion").addEventListener("click",()=>{const API=window.SpeechRecognition||window.webkitSpeechRecognition;if(!API){$("voiceStatus").textContent="Speech recognition is unavailable in this browser. You can type instead.";return}try{if(recognition)recognition.abort();recognition=new API();recognition.lang="en-US";recognition.interimResults=false;recognition.onresult=e=>{$("voiceText").value=e.results[0][0].transcript;$("voiceStatus").textContent="Speech converted to text. Review it before sharing with a teacher."};recognition.onerror=e=>$("voiceStatus").textContent="Microphone issue: "+e.error+". You can type instead.";recognition.onend=()=>{};recognition.start();$("voiceStatus").textContent="Listening. Speak clearly, then pause."}catch(e){$("voiceStatus").textContent="Could not start microphone. Check browser permission."}});
 $("readText").addEventListener("click",()=>{const text=$("voiceText").value.trim();if(!text){$("voiceStatus").textContent="Type or speak something first.";return}if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported.";return}const u=new SpeechSynthesisUtterance(text);u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u);$("voiceStatus").textContent="Reading your text aloud."});
