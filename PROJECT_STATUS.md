@@ -361,3 +361,9 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added Home Science to the Unified Learning & Classroom Hub. The module file and hub link were re-fetched after commits and confirmed present.
 - Module commit: `ff5b7fe037d08c2ac4e80e99a4127ff66a359a7e`; hub commit: `7b2bdc4d88420e33c6fd356eee40e2e46b0d7639`.
 - Still needs Android tap-through/audio/quiz testing and live Supabase integration verification.
+
+
+## Android confirmation — Home Science — 5 November 2026
+- The project owner reported that the Home Science page is good after opening/testing it on Android.
+- Record this as user-confirmed page/device acceptance. It does not independently verify every audio voice, quiz score edge case, Supabase write, or cross-device synchronization.
+- Home Science source, hub link and Master Guide updates remain committed; live cloud progress synchronization remains pending.
