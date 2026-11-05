@@ -466,3 +466,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Re-fetched all three updated pages and ran JavaScript syntax parsing. All three passed; each now uses `auth.getUser()` and no longer uses `auth.getSession()` for the startup check.
 - Re-ran Supabase advisors. Security warning remains: leaked-password protection is disabled and must be enabled in Auth settings before real family accounts. Performance notices remain for unused indexes (not removed because low usage during a demo is not evidence they are unnecessary) and multiple permissive SELECT policies (kept separate to preserve role-specific access rules).
 - This is a source and database-advisor verification, not a live account sign-in or cross-device test.
+
+
+## AI Teacher subject coverage expansion (5 November 2026)
+- Added Social Studies, History, Geography and Home Science to the AI Teacher's subject selector.
+- Added one age-appropriate prepared example question and answer for each new subject and mapped each to its existing full lesson page.
+- Re-fetched the updated AI Teacher page, verified all nine subject options have corresponding prepared-answer entries, checked its local links against the repository tree, and parsed its JavaScript without syntax errors.
+- AI Teacher remains an offline demonstration; the new examples do not imply the live AI backend is connected.
