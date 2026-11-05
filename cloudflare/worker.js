@@ -1,4 +1,4 @@
-const ORIGIN = "https://romanoosano-maker.github.io";
+const ORIGIN = "https://romanoosano60-maker.github.io";
 const SUBJECTS = ["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science"];
 const cors = origin => ({
   "Access-Control-Allow-Origin": origin,
