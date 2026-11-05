@@ -13,4 +13,28 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-</style></head><body><header><div class="fig">🔤</div><h1>Vocabulary</h1><p>Great Minds AI • Beginner lessons</p><a class="btn" href="index.html">🏠 Back to Home</a></header><main><h2>Learn and Practice</h2><section class="grid"><article class="tile" style="text-align:left"><h3>Animals</h3><p style="line-height:1.6">Lion, elephant, zebra and giraffe are animals.</p></article><article class="tile" style="text-align:left"><h3>Opposites</h3><p style="line-height:1.6">Hot — cold; big — small; fast — slow.</p></article><article class="tile" style="text-align:left"><h3>Practice</h3><p style="line-height:1.6">Say three new words aloud and use each in a sentence.</p></article></section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer></body></html>
+</style></head><body><header><div class="fig">🔤</div><h1>Vocabulary</h1><p>Great Minds AI • Beginner lessons</p><a class="btn" href="index.html">🏠 Back to Home</a></header><main><h2>Learn and Practice</h2><section class="grid"><article class="tile" style="text-align:left"><h3>Animals</h3><p style="line-height:1.6">Lion, elephant, zebra and giraffe are animals.</p></article><article class="tile" style="text-align:left"><h3>Opposites</h3><p style="line-height:1.6">Hot — cold; big — small; fast — slow.</p></article><article class="tile" style="text-align:left"><h3>Practice</h3><p style="line-height:1.6">Say three new words aloud and use each in a sentence.</p></article></section>
+<section class="tile" style="max-width:900px;margin:18px auto;text-align:left">
+<h2>Word Practice Challenge</h2>
+<p>Choose a word, then write a sentence that uses it.</p>
+<label for="practiceWord">Choose a word</label>
+<select id="practiceWord" style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit">
+<option value="animals">animals</option><option value="opposites">opposites</option><option value="gentle">gentle</option><option value="discover">discover</option><option value="curious">curious</option>
+</select>
+<label for="practiceSentence">Your sentence</label>
+<textarea id="practiceSentence" rows="3" maxlength="500" placeholder="Write your own sentence here..." style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit"></textarea>
+<button class="btn" id="checkSentence" type="button">Check my sentence</button>
+<p id="practiceFeedback" role="status" aria-live="polite"></p>
+<p class="muted">Your writing is checked on this page only; it is not sent to a teacher or stored online.</p>
+</section></main>
+<script>
+(function(){
+const word=document.getElementById("practiceWord"),sentence=document.getElementById("practiceSentence"),feedback=document.getElementById("practiceFeedback");
+document.getElementById("checkSentence").addEventListener("click",function(){
+const text=sentence.value.trim();
+if(text.length<8){feedback.textContent="Write a little more so we can practise your sentence.";return;}
+if(!/[.!?]$/.test(text)){feedback.textContent="Good start! Add a full stop, question mark or exclamation mark at the end.";return;}
+feedback.textContent="🌟 Well done! You wrote a complete sentence. Read it aloud and check that it uses your chosen word: "+word.value+".";
+});
+})();
+</script><footer>Great Minds AI — Every Child Can Shine ✨</footer></body></html>
