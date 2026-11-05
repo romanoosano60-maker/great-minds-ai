@@ -444,3 +444,5 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added a subject-aware “Continue learning” link to the AI Teacher prototype. The link routes Mathematics, English, Science, Computer Studies and General Knowledge to their corresponding full lesson pages.
 - Rechecked JavaScript syntax on the home screen, AI Teacher, Unified Hub and Group Learning pages. All inline scripts parsed without syntax errors. Checked all local href/src references on these four pages against the repository tree; no missing internal targets were found.
 - AI Teacher remains clearly labelled as an offline voice prototype in its safety notice and Unified Hub; the live AI endpoint is not yet connected. Group Learning remains a local demo, not a live multi-country classroom. Do not describe either as live online service.
+
+- Group Learning now also offers a subject-aware link to the matching full Mathematics, English or Science lesson. The page's JavaScript syntax and internal file references were rechecked after the change; no errors or missing targets were found.
