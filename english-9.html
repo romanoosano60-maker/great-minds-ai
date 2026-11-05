@@ -59,18 +59,18 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <h2>📖 Lesson 3: Reading</h2>
 <div class="card">
 <p>Sam has a little cat. The cat likes to play. Sam gives the cat some milk. The cat is happy.</p>
-<button onclick="speak('Sam has a little cat. The cat likes to play. Sam gives the cat some milk. The cat is happy.')">🔊 Read aloud</button>
+<button type="button" onclick="speak('Sam has a little cat. The cat likes to play. Sam gives the cat some milk. The cat is happy.')">🔊 Read aloud</button>
 </div>
 <p>What animal does Sam have?</p>
-<button onclick="readingAnswer('cat')">Cat</button>
-<button onclick="readingAnswer('dog')">Dog</button>
+<button type="button" onclick="readingAnswer('cat')">Cat</button>
+<button type="button" onclick="readingAnswer('dog')">Dog</button>
 <p id="readingResult" aria-live="polite"></p>
 </section>
 <section>
 <h2>✍️ Lesson 4: Writing</h2>
 <p>Complete this sentence: I like to _____ books.</p>
 <input id="writing" placeholder="Type the missing word">
-<button onclick="checkWriting()">Check answer</button>
+<button type="button" onclick="checkWriting()">Check answer</button>
 <p id="writingResult" aria-live="polite"></p>
 </section>
 <section>
@@ -78,23 +78,23 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>A noun names a person, place, animal or thing.</p>
 <div class="card">Examples: teacher, school, lion, pencil.</div>
 <p>Which word is a noun?</p>
-<button onclick="grammarAnswer('run')">Run</button>
-<button onclick="grammarAnswer('apple')">Apple</button>
+<button type="button" onclick="grammarAnswer('run')">Run</button>
+<button type="button" onclick="grammarAnswer('apple')">Apple</button>
 <p id="grammarResult" aria-live="polite"></p>
 </section>
 <section>
 <h2>🎤 Lesson 6: Speaking</h2>
 <p>Listen, then repeat this sentence aloud:</p>
 <div class="card">Hello! My name is Alex. I love learning English.</div>
-<button onclick="speak('Hello! My name is Alex. I love learning English.')">🔊 Listen</button>
+<button type="button" onclick="speak('Hello! My name is Alex. I love learning English.')">🔊 Listen</button>
 <p>Practice saying it yourself. Automatic pronunciation checking will be added later.</p>
 </section>
 <section>
 <h2>🏆 Lesson 7: English Quiz</h2>
 <p>Which letter comes after C?</p>
-<button onclick="quiz('D')">D</button>
-<button onclick="quiz('F')">F</button>
-<button onclick="quiz('A')">A</button>
+<button type="button" onclick="quiz('D')">D</button>
+<button type="button" onclick="quiz('F')">F</button>
+<button type="button" onclick="quiz('A')">A</button>
 <p id="result" aria-live="polite"></p>
 <p id="score">Score: 0</p>
 </section>
