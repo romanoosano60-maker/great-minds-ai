@@ -1,0 +1,104 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#eaf4ff"><title>Great Minds AI | Advanced Learning Studio</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px system-ui,Arial,sans-serif;color:#203454;background:linear-gradient(135deg,#eaf5ff,#fff5df)}header{text-align:center;padding:25px 15px;background:linear-gradient(120deg,#c5eaff,#e8ddff,#fff0c8)}main{max-width:850px;margin:auto;padding:14px}.card{background:#fff;border-radius:18px;padding:19px;margin:14px 0;box-shadow:0 4px 14px #1c355018}h1{margin:0 0 8px}h2{margin-top:0}.tag{display:inline-block;background:#eaf1ff;padding:5px 10px;border-radius:20px;font-size:13px;font-weight:700}.note{background:#fff5d9;padding:12px;border-radius:10px;line-height:1.5}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,select,input,textarea{font:inherit;padding:12px;border-radius:10px;border:1px solid #b8c7dc;max-width:100%}button{background:#315ed1;color:white;border:0;font-weight:700;cursor:pointer}button.secondary{background:#eaf0ff;color:#24427e}button:disabled{opacity:.5}select,input,textarea{width:100%;background:white}label{display:block;font-weight:650;margin:10px 0 5px}.status{padding:12px;background:#edf7f1;border-radius:10px;min-height:42px;line-height:1.5}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}.choices button{background:#eef3ff;color:#25447e;border:2px solid #dbe5ff}.choices button:focus,.choices button:hover{border-color:#315ed1}.question{font-size:19px;font-weight:700;line-height:1.4}.small{font-size:13px;color:#5b6980;line-height:1.5}a{color:#214da5}progress{width:100%;height:16px}
+</style></head>
+<body>
+<header><div style="font-size:42px">🧠🚀🌍</div><h1>Great Minds AI Advanced Learning Studio</h1><p>Learn at your pace • Build confidence • Discover the world</p><span class="tag">Five advanced learning tools — first prototype</span></header>
+<main>
+<section class="card"><h2>🧭 Your learning dashboard</h2><p id="summary" class="status" aria-live="polite">Your learning record starts on this device. Try a short check-in below.</p><p class="small">This first version stores practice results only in this browser on this device. It does not yet sync to your Supabase student profile.</p><button class="secondary" id="reset">Reset this device's demo record</button></section>
+
+<section class="card"><span class="tag">1 · Learning difficulty detector</span><h2>🔎 Find what needs more practice</h2>
+<label for="subject">Choose a subject</label><select id="subject"><option>Mathematics</option><option>English</option><option>Science</option></select>
+<div id="quizArea"><p class="question" id="question">Choose Start check-in to begin a five-question practice.</p><div class="choices" id="choices"></div><p id="quizStatus" class="status" aria-live="polite">The questions begin gently and become a little more challenging.</p></div>
+<div class="row"><button id="startQuiz">Start check-in</button><button id="nextQuestion" class="secondary" disabled>Next question</button></div>
+<p class="small">The detector uses answers from this short practice to suggest a next step. It is a learning aid, not a diagnosis or a judgement of ability.</p></section>
+
+<section class="card"><span class="tag">2 · Personal daily learning coach</span><h2>📅 Your suggested 15-minute plan</h2><p id="plan" class="status">Complete a check-in to receive a plan based on your practice.</p><button id="makePlan">Create my learning plan</button></section>
+
+<section class="card"><span class="tag">3 · Multilingual learning</span><h2>🌐 Learn useful words in another language</h2>
+<label for="language">Choose a practice language</label><select id="language"><option value="ar">Arabic</option><option value="ur">Urdu</option><option value="sw">Swahili</option><option value="fr">French</option><option value="en">English</option></select>
+<div class="status" style="margin:10px 0"><div class="small">Today's phrase</div><h3 id="phrase" style="margin:6px 0">Hello! How are you?</h3><div id="translation">Arabic: مرحباً! كيف حالك؟</div></div>
+<div class="row"><button id="hearPhrase">🔊 Hear phrase</button><button id="nextPhrase" class="secondary">Next phrase</button></div>
+<p class="small">This is guided phrase practice with built-in examples. Full multilingual AI teaching and translation quality need the secure AI connection and review by fluent speakers.</p></section>
+
+<section class="card"><span class="tag">4 · Voice-first learning</span><h2>🎙️ Speak, listen and practise</h2>
+<label for="voiceText">Say or type a question or explanation</label><textarea id="voiceText" rows="3" maxlength="400" placeholder="For example: Why do plants need sunlight?"></textarea>
+<div class="row"><button id="listenQuestion">🎤 Speak my words</button><button id="readText" class="secondary">🔊 Read text aloud</button><button id="stopVoice" class="secondary">Stop</button></div>
+<p id="voiceStatus" class="status" aria-live="polite">Voice features depend on your browser, device language and microphone permission.</p>
+<p class="small">The microphone converts speech to text in your browser. This prototype does not send recordings or audio to a server.</p></section>
+
+<section class="card"><span class="tag">5 · Real-world learning challenges</span><h2>🛠️ Learn by solving everyday problems</h2>
+<label for="challenge">Choose a challenge</label><select id="challenge"><option value="garden">Plan a small garden</option><option value="budget">Plan a simple shopping budget</option><option value="machine">Design a helpful simple machine</option></select>
+<p id="challengePrompt" class="status">A school garden has 3 rows. Put 4 seeds in each row. How many seeds will you need?</p>
+<label for="challengeAnswer">Your idea or answer</label><textarea id="challengeAnswer" rows="3" maxlength="500" placeholder="Show your thinking..."></textarea>
+<div class="row"><button id="checkChallenge">Check my thinking</button><button id="newChallenge" class="secondary">Show challenge</button></div>
+<p id="challengeFeedback" class="status" aria-live="polite">Try it, explain your thinking, and ask a trusted adult to help you test safe ideas.</p></section>
+
+<section class="card"><h2>🛡️ Safe learning promise</h2><p>Use a nickname in activities. Never enter your address, phone number, password, school location or private family details. Ask a parent or teacher before using a microphone or doing a practical experiment. Get adult help with tools, cooking, electricity, chemicals or outdoor activities.</p><p><a href="ai-teacher.html">Open AI Teacher</a> · <a href="connected-dashboards.html">Learning hub</a> · <a href="index.html">Great Minds home</a></p></section>
+</main>
+<script>
+"use strict";
+const $=id=>document.getElementById(id);
+const banks={
+"Mathematics":[
+{q:"What is 6 + 7?",a:["12","13","14"],c:1,why:"6 + 7 = 13."},
+{q:"What is 5 × 4?",a:["9","20","25"],c:1,why:"5 groups of 4 make 20."},
+{q:"What is half of 18?",a:["8","9","10"],c:1,why:"18 shared into 2 equal groups gives 9."},
+{q:"A book costs 7 coins. How much do 3 books cost?",a:["10 coins","21 coins","24 coins"],c:1,why:"7 × 3 = 21 coins."},
+{q:"A rectangle is 5 cm long and 3 cm wide. What is its area?",a:["8 cm²","15 cm²","16 cm²"],c:1,why:"Area = length × width = 5 × 3 = 15 cm²."}],
+"English":[
+{q:"Which word is a noun?",a:["Quickly","Garden","Jump"],c:1,why:"Garden names a place, so it is a noun."},
+{q:"Choose the correct sentence.",a:["She are happy.","She is happy.","She am happy."],c:1,why:"Use 'is' with she."},
+{q:"What is the opposite of 'ancient'?",a:["Modern","Old","Historic"],c:0,why:"Modern means belonging to the present or recent times."},
+{q:"Choose the past tense of 'teach'.",a:["Teached","Taught","Teaching"],c:1,why:"The past tense of teach is taught."},
+{q:"Which sentence uses a question mark correctly?",a:["Where are you going?","Where are you going.","Where are you going!"],c:0,why:"A direct question ends with a question mark."}],
+"Science":[
+{q:"Which part of a plant takes in water?",a:["Roots","Flower","Fruit"],c:0,why:"Roots absorb water and minerals from the soil."},
+{q:"Which state of matter has a fixed shape?",a:["Gas","Liquid","Solid"],c:2,why:"A solid keeps its own shape."},
+{q:"What do humans breathe in to stay alive?",a:["Oxygen","Smoke","Helium"],c:0,why:"Our bodies use oxygen from the air."},
+{q:"Which is a renewable energy source?",a:["Sunlight","Coal","Petrol"],c:0,why:"Sunlight is naturally replenished."},
+{q:"Why does a shadow form?",a:["Light is blocked","Sound is blocked","Air disappears"],c:0,why:"An object blocks light, creating a shadow."}]
+};
+const recordKey="gmAdvancedLearningV1";
+let record={scores:{},lastSubject:"Mathematics",lastScore:null};
+try{const saved=JSON.parse(localStorage.getItem(recordKey)||"null");if(saved&&saved.scores)record=saved}catch(e){}
+let active=[],index=0,score=0,answered=false;
+function persist(){try{localStorage.setItem(recordKey,JSON.stringify(record))}catch(e){}}
+function renderSummary(){const entries=Object.entries(record.scores);if(!entries.length){$("summary").textContent="No check-ins yet. Complete a five-question practice to discover what to practise next.";return}const recent=entries.map(([s,v])=>s+": "+v.score+"/5").join(" · ");$("summary").textContent="Your latest practice: "+recent+". These results stay on this device for now."}
+function renderQuestion(){const item=active[index];$("question").textContent="Question "+(index+1)+" of "+active.length+": "+item.q;$("choices").innerHTML="";item.a.forEach((answer,i)=>{const b=document.createElement("button");b.type="button";b.textContent=answer;b.addEventListener("click",()=>choose(i));$("choices").appendChild(b)});$("quizStatus").textContent="Choose the answer that you think is right.";answered=false;$("nextQuestion").disabled=true}
+function choose(i){if(answered)return;answered=true;const item=active[index];const correct=i===item.c;if(correct)score++;$("choices").querySelectorAll("button").forEach((b,n)=>{b.disabled=true;if(n===item.c)b.style.borderColor="#16824c";if(n===i&&!correct)b.style.borderColor="#bd4b4b"});$("quizStatus").textContent=(correct?"Correct! ":"Good try. ")+item.why;$("nextQuestion").disabled=false;$("nextQuestion").textContent=index===active.length-1?"See my result":"Next question"}
+function start(){const subject=$("subject").value;active=banks[subject].slice();index=0;score=0;$("startQuiz").disabled=true;$("nextQuestion").disabled=true;renderQuestion()}
+$("startQuiz").addEventListener("click",start);
+$("nextQuestion").addEventListener("click",()=>{if(!answered)return;if(index<active.length-1){index++;renderQuestion();return}const subject=$("subject").value;record.scores[subject]={score,at:new Date().toISOString()};record.lastSubject=subject;record.lastScore=score;persist();const level=score>=4?"strong understanding":score>=3?"developing understanding":"a topic that needs more gentle practice";$("quizStatus").textContent="You scored "+score+" out of 5. This suggests "+level+". "+(score<3?"Try a shorter explanation and practise similar examples.":"Try a slightly harder challenge next time.");$("question").textContent="Check-in complete: "+subject+" — "+score+"/5";$("choices").innerHTML="";$("nextQuestion").disabled=true;$("startQuiz").disabled=false;$("nextQuestion").textContent="Next question";renderSummary();makePlan()});
+function makePlan(){const subject=record.lastSubject||$("subject").value;const result=record.scores[subject];let first="Review one short lesson in "+subject+" (5 minutes).",second="Practise three questions with a parent or teacher (5 minutes).",third="Explain one thing you learned in your own words (5 minutes).";if(result&&result.score<3){first="Ask for a simpler explanation of one "+subject+" idea (5 minutes).";second="Try two easier examples slowly, with help if needed (5 minutes).";third="Teach the idea back using a drawing or example (5 minutes)."}else if(result&&result.score>=4){first="Review the key idea in "+subject+" (3 minutes).";second="Try one more challenging problem (7 minutes).";third="Explain your method or create your own example (5 minutes)."}$("plan").textContent="Your 15-minute plan: "+first+" "+second+" "+third+" Take a break when you need one."}
+$("makePlan").addEventListener("click",makePlan);
+$("reset").addEventListener("click",()=>{if(!confirm("Clear this device's Great Minds demo learning record?"))return;record={scores:{},lastSubject:"Mathematics",lastScore:null};persist();renderSummary();$("plan").textContent="Complete a check-in to receive a plan based on your practice."});
+renderSummary();
+const phrases={
+ar:[["Hello! How are you?","مرحباً! كيف حالك؟"],["Thank you.","شكراً لك."],["I like learning.","أحب التعلم."]],
+ur:[["Hello! How are you?","السلام علیکم! آپ کیسے ہیں؟"],["Thank you.","شکریہ۔"],["I like learning.","مجھے سیکھنا پسند ہے۔"]],
+sw:[["Hello! How are you?","Habari! Hujambo?"],["Thank you.","Asante."],["I like learning.","Ninapenda kujifunza."]],
+fr:[["Hello! How are you?","Bonjour ! Comment ça va ?"],["Thank you.","Merci."],["I like learning.","J’aime apprendre."]],
+en:[["Hello! How are you?","Hello! How are you?"],["Thank you.","Thank you."],["I like learning.","I like learning."]]
+};
+const langNames={ar:"Arabic",ur:"Urdu",sw:"Swahili",fr:"French",en:"English"};let phraseIndex=0;
+function showPhrase(){const lang=$("language").value,p=phrases[lang][phraseIndex%phrases[lang].length];$("phrase").textContent=p[0];$("translation").textContent=langNames[lang]+": "+p[1]}
+$("language").addEventListener("change",()=>{phraseIndex=0;showPhrase()});$("nextPhrase").addEventListener("click",()=>{phraseIndex++;showPhrase()});showPhrase();
+$("hearPhrase").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported here.";return}const u=new SpeechSynthesisUtterance($("translation").textContent.split(": ").slice(1).join(": "));u.lang={ar:"ar",ur:"ur",sw:"sw",fr:"fr",en:"en-US"}[$("language").value];speechSynthesis.cancel();speechSynthesis.speak(u)});
+let recognition=null;
+$("listenQuestion").addEventListener("click",()=>{const API=window.SpeechRecognition||window.webkitSpeechRecognition;if(!API){$("voiceStatus").textContent="Speech recognition is unavailable in this browser. You can type instead.";return}try{if(recognition)recognition.abort();recognition=new API();recognition.lang="en-US";recognition.interimResults=false;recognition.onresult=e=>{$("voiceText").value=e.results[0][0].transcript;$("voiceStatus").textContent="Speech converted to text. Review it before sharing with a teacher."};recognition.onerror=e=>$("voiceStatus").textContent="Microphone issue: "+e.error+". You can type instead.";recognition.onend=()=>{};recognition.start();$("voiceStatus").textContent="Listening. Speak clearly, then pause."}catch(e){$("voiceStatus").textContent="Could not start microphone. Check browser permission."}});
+$("readText").addEventListener("click",()=>{const text=$("voiceText").value.trim();if(!text){$("voiceStatus").textContent="Type or speak something first.";return}if(!("speechSynthesis"in window)){$("voiceStatus").textContent="Speech playback is not supported.";return}const u=new SpeechSynthesisUtterance(text);u.lang="en-US";speechSynthesis.cancel();speechSynthesis.speak(u);$("voiceStatus").textContent="Reading your text aloud."});
+$("stopVoice").addEventListener("click",()=>{if(recognition)recognition.abort();if("speechSynthesis"in window)speechSynthesis.cancel();$("voiceStatus").textContent="Voice stopped."});
+const challenges={
+garden:"A school garden has 3 rows. Put 4 seeds in each row. How many seeds will you need? What will the plants need to grow?",
+budget:"You have 20 coins. A notebook costs 6 coins and a pencil costs 2 coins. Can you buy 2 notebooks and 3 pencils? How much will remain?",
+machine:"Design a safe tool that helps move books from one desk to another. Draw or describe its parts. Which simple machine might help?"
+};
+function showChallenge(){$("challengePrompt").textContent=challenges[$("challenge").value];$("challengeAnswer").value="";$("challengeFeedback").textContent="Try it, explain your thinking, and ask a trusted adult to help you test safe ideas."}
+$("challenge").addEventListener("change",showChallenge);$("newChallenge").addEventListener("click",showChallenge);
+$("checkChallenge").addEventListener("click",()=>{const answer=$("challengeAnswer").value.trim();if(answer.length<8){$("challengeFeedback").textContent="Add a little more: explain your answer or describe your idea in a full sentence.";return}const key=$("challenge").value;if(key==="garden")$("challengeFeedback").textContent="Good thinking! 3 rows × 4 seeds = 12 seeds. Also think about sunlight, water and healthy soil.";else if(key==="budget")$("challengeFeedback").textContent="Let's calculate: 2 notebooks cost 12 coins and 3 pencils cost 6 coins. Total = 18 coins, so 2 coins remain. Compare this with your answer.";else $("challengeFeedback").textContent="Creative idea! Explain how your design works, what materials are safe, and ask an adult before building or testing it."});
+</script></body></html>
