@@ -20,6 +20,8 @@ document.getElementById('fbform').onsubmit=e=>{e.preventDefault();const d=read()
 document.getElementById('planform').onsubmit=e=>{e.preventDefault();const d=read();d.plans.push({topic:topic.value.trim(),instructions:instructions.value.trim()});save(d);e.target.reset();render()};
 render();
 (function(){
+ const $=id=>document.getElementById(id);let db=null,user=null,cloudChannel=null;
+ function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('teacher-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
  const $=id=>document.getElementById(id);let db=null,user=null;
  function say(s){$('teacherCloudStatus').textContent=s}
  async function init(){
@@ -27,7 +29,7 @@ render();
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
   const {data,error}=await db.auth.getSession();if(error){say('Session check failed.');return}
-  user=data.session?.user||null;if(user){say('Teacher session found.');load()}else say('Not signed in.');
+  user=data.session?.user||null;if(user){say('Teacher session found.');load();watchCloud()}else say('Not signed in.');
  }
  async function load(){
   if(!db||!user){say('Sign in with the approved teacher account first.');return}
@@ -47,8 +49,8 @@ render();
   s.data.forEach(x=>{const as=byId.get(x.assignment_id)||{};const d=document.createElement('div');d.className='item';d.textContent=(as.subject||'Homework')+' — '+(as.title||'Assignment')+' • student '+x.student_id.slice(0,8)+'… • '+(x.score===null?'Awaiting marking':x.score+'/'+as.max_points)+' • '+x.answer;hr.append(d)});
   say('Cloud overview loaded for the approved teacher account.');
  }
- $('teacherCloudLogin').addEventListener('click',async()=>{if(!db){say('Cloud service unavailable.');return}const email=$('teacherCloudEmail').value.trim(),password=$('teacherCloudPassword').value;if(!email||!password){say('Enter your teacher test account details.');return}say('Signing in…');const r=await db.auth.signInWithPassword({email,password});$('teacherCloudPassword').value='';if(r.error){say('Sign-in failed. Check account details.');return}user=r.data.user;await load()});
- $('teacherCloudLogout').addEventListener('click',async()=>{if(db)await db.auth.signOut();user=null;$('teacherCloudProgress').textContent='Sign in to load records.';$('teacherCloudHomework').textContent='Sign in to load submissions.';say('Signed out.')});
+ $('teacherCloudLogin').addEventListener('click',async()=>{if(!db){say('Cloud service unavailable.');return}const email=$('teacherCloudEmail').value.trim(),password=$('teacherCloudPassword').value;if(!email||!password){say('Enter your teacher test account details.');return}say('Signing in…');const r=await db.auth.signInWithPassword({email,password});$('teacherCloudPassword').value='';if(r.error){say('Sign-in failed. Check account details.');return}user=r.data.user;await load();watchCloud()});
+ $('teacherCloudLogout').addEventListener('click',async()=>{if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}if(db)await db.auth.signOut();user=null;$('teacherCloudProgress').textContent='Sign in to load records.';$('teacherCloudHomework').textContent='Sign in to load submissions.';say('Signed out.')});
  $('teacherCloudRefresh').addEventListener('click',load);init();
 })();
  // Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
