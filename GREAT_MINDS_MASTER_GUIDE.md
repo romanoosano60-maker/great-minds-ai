@@ -216,3 +216,10 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Additional cloud progress saving is installed for Mathematics Extra, Science Extra, Computer Studies Extra, English Extra, General Knowledge, Social Studies Extra and the English alphabet/reading quiz.
 - The Parent, Teacher and Student dashboard Realtime script declarations were corrected after a static syntax check found duplicate declarations. All inspected dashboard, classroom, homework and lesson scripts now pass JavaScript syntax parsing.
 - Static syntax validation does not prove that GitHub Pages, CDN loading, Supabase Auth, RLS, Realtime delivery or real cross-device workflows function in a live browser. Those tests remain required.
+
+
+## 17. Home-screen and AI Teacher navigation — 5 November 2026
+- Main rocket home screen now links directly to English Lessons, AI Teacher voice demo, Group Learning demo and the 3D Learning Graphics Gallery.
+- AI Teacher practice page now provides a “Continue learning” link that changes with the selected subject and opens its full lesson page.
+- Static checks confirm no missing internal links and no JavaScript syntax errors on the home screen, AI Teacher, Unified Hub and Group Learning pages.
+- AI Teacher is still an offline prepared-answer prototype with browser speech features; Group Learning is still local-only. The secure live AI backend and supervised international classroom must not be represented as active until tested.
