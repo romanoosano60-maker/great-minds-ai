@@ -229,3 +229,9 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - The Unified Learning Hub now links directly to Connected Practice, Progress Overview and Certificates & Achievements in the Student Learning section.
 - Static validation after the change found no broken local links or JavaScript syntax errors on the hub. Ten key app pages also passed static JavaScript syntax and duplicate-ID checks.
 - Live visual testing and real account workflows remain to be performed with the user.
+
+
+## 19. Cloud dashboard account verification (5 November 2026)
+- Student, Parent and Teacher cloud dashboards now verify the current user with Supabase Auth `getUser()` during initialisation before loading cloud records.
+- JavaScript syntax validation passed for all three pages after the update.
+- Supabase security advisor still flags leaked-password protection as disabled; enable it in Auth settings before real family accounts. Performance-only notices for unused indexes and separate role-based SELECT policies remain under review and have not been changed.
