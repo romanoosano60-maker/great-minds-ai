@@ -134,3 +134,10 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 - Missing cloud helper, sign-in lookup failures, assignment-list failures, submission-list failures and membership-check failures now produce safe status messages instead of leaving the user with an unhandled page error.
 - These are frontend safeguards only. Supabase authentication and Row Level Security remain the authority for who may publish, view, submit and mark work; no live classroom workflow is claimed until separate-account testing passes.
 - Latest homework.html inline JavaScript syntax check passed.
+
+
+## Additional GitHub-only improvement — AI Teacher language preference
+
+- The AI Teacher now remembers the selected teaching/greeting language in this browser and restores it on the next visit. The preference stays on the device; it does not create a cloud profile record.
+- Unsupported or invalid stored language values fall back to English. Live AI answers and voice quality still require the separate backend and Android/browser tests.
+- Latest AI Teacher inline JavaScript syntax check passed.
