@@ -58,8 +58,12 @@ export default {
     if (!rate || !rate.success) return json({ error: "Please take a short break before asking another question." }, 429, origin);
 
     let body;
-    try { body = await request.json(); }
-    catch { return json({ error: "The question could not be read." }, 400, origin); }
+    try {
+      const rawBody = await request.text();
+      if (rawBody.length > 8000) return json({ error: "This request is too long. Please shorten your question." }, 413, origin);
+      body = JSON.parse(rawBody);
+    } catch { return json({ error: "The question could not be read." }, 400, origin); }
+    if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Send a valid question object." }, 400, origin);
     const subject = typeof body.subject === "string" ? body.subject.trim() : "";
     const question = typeof body.question === "string" ? body.question.trim() : "";
     if (!SUBJECTS.includes(subject)) return json({ error: "Choose one of the available subjects." }, 400, origin);
