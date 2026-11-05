@@ -21,7 +21,7 @@ These are repository/source-code facts. A working page or a successful syntax ch
 
 The Student Profile and connected student/parent/teacher demo dashboards currently exchange a summary through the same browser's localStorage. This is a same-device demonstration only. It does not synchronize across phones or computers, authenticate a role, or protect data on a server.
 
-The international classroom and group-learning pages are also local demonstrations. Do not use real children's names, contact details, photos, school identifiers or private information in these demos.
+The older `safe-international-classroom-v3.html` and `group-learning.html` pages are local demonstrations. The newer `international-classrooms.html` page uses Supabase Auth and database functions for classroom creation, guardian-consent codes and membership requests; however, its complete teacher/student/guardian flow has not yet passed a separate-account, cross-device test. Do not use real children's names, contact details, photos, school identifiers or private information in local demonstrations.
 
 The browser may contain only the Supabase project URL and publishable key. Never place a service_role key, secret key, AI provider key, password or other privileged credential in HTML or JavaScript.
 
