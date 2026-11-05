@@ -209,3 +209,10 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - `student-cloud-homework.js` exposes authenticated methods for assignment creation, listing, submission, reading and marking. The Homework Manager has a separate secure Supabase section; its older local demo tabs are not cloud synced.
 - Parent dashboard now loads cloud progress and guardian-visible homework/submissions. Teacher dashboard now loads teacher-visible progress/submissions. RLS, not dashboard code, is the authority.
 - Source and policies are committed. Real authenticated end-to-end tests remain mandatory. Tables currently contain no assignments/submissions. Do not describe homework sync as verified until a test teacher publishes, a consented student submits, the teacher marks, and the linked parent sees the result on a separate device.
+
+
+## 16. Number 3 — expanded lesson progress coverage and code validation (5 November 2026)
+- Cloud quiz progress helper is loaded by Mathematics, Science, English, History, Social Studies, Computer Studies, Geography and Home Science.
+- Additional cloud progress saving is installed for Mathematics Extra, Science Extra, Computer Studies Extra, English Extra, General Knowledge, Social Studies Extra and the English alphabet/reading quiz.
+- The Parent, Teacher and Student dashboard Realtime script declarations were corrected after a static syntax check found duplicate declarations. All inspected dashboard, classroom, homework and lesson scripts now pass JavaScript syntax parsing.
+- Static syntax validation does not prove that GitHub Pages, CDN loading, Supabase Auth, RLS, Realtime delivery or real cross-device workflows function in a live browser. Those tests remain required.
