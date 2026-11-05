@@ -50,8 +50,8 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </main>
 <script>
 const storyText="Mia found a tiny seed beside the garden path. She placed it in soft soil and gave it a little water. Each morning, Mia checked the soil. After many sunny days, a small green shoot appeared. Mia smiled and kept caring for the plant. Soon, a bright yellow flower opened. A bee came to visit. Mia learned that patience and care can help small things grow.";
-function say(t){if(!('speechSynthesis'in window)){alert('Speech is not available in this browser.');return;}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(t);u.lang='en-US';u.rate=.88;speechSynthesis.speak(u)}
-function readStory(){say(storyText)}function stopReading(){if('speechSynthesis'in window)speechSynthesis.cancel()}
+function say(t){if(!('speechSynthesis'in window)){alert('Speech is not available in this browser.');return;}/* English vocabulary and spelling words are intentionally pronounced in English. */speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t));u.lang='en-US';u.rate=.88;const voices=speechSynthesis.getVoices()||[];const voice=voices.find(v=>v.lang.toLowerCase()==='en-us')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'));if(voice)u.voice=voice;speechSynthesis.speak(u)}
+function readStory(){if(typeof window.speak==='function'){window.speak(storyText);return;}say(storyText)}function stopReading(){if('speechSynthesis'in window)speechSynthesis.cancel()}
 let audio=null,osc=null,gain=null;
 function startMusic(){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();if(osc)return;osc=audio.createOscillator();gain=audio.createGain();osc.type='sine';osc.frequency.value=261.63;gain.gain.value=Number(document.getElementById('volume').value);osc.connect(gain);gain.connect(audio.destination);osc.start();}catch(e){alert('Soft music is not supported on this device.')}} 
 function stopMusic(){if(osc){osc.stop();osc.disconnect();osc=null;}if(gain){gain.disconnect();gain=null;}}
