@@ -31,7 +31,7 @@ This file lists only actions that still need the project owner or a real-device 
 - Current row counts: 1 classroom, 1 teacher profile, 1 active guardian relationship, 0 classroom memberships.
 - No real student progress, homework assignments or homework submissions exist yet.
 
-**Database correction prepared in GitHub (not yet applied)**
+**Database correction applied and rollback-tested**
 - Migration `20261105081455_fix_guardian_consent_revocation_result` has since been applied and rollback-tested, according to `DATABASE_SECURITY_VERIFICATION_2026-11-05.md`. The live function now reports success only when an active guardian link was actually revoked and blocks the linked student's classroom memberships. No further application of this migration is required.
 
 **Owner actions**
@@ -47,7 +47,7 @@ This file lists only actions that still need the project owner or a real-device 
 
 **Not complete until:** teacher, student and guardian flows pass with real authenticated sessions and the revoke path is tested.
 
-**Additional database migration prepared (not yet applied)**
+**Additional database migration applied and rollback-tested**
 - Migration `20261105081504_enforce_homework_submission_score_max` has since been applied and rollback-tested, according to `DATABASE_SECURITY_VERIFICATION_2026-11-05.md`. The database trigger rejects marks above an assignment's `max_points`; the browser helper also validates the maximum.
 
 ## 3. Student progress and homework — cross-device test
