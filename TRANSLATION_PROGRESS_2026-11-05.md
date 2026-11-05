@@ -50,3 +50,12 @@
 - The browser selects an installed matching voice where available and otherwise requests the selected language tag from the device's speech engine.
 - JavaScript syntax check passed after the change.
 - Important limitation: this uses the Android/browser text-to-speech voices; it does not install new voices or guarantee that every device has every language voice. Test voice playback on the user's Android phone.
+
+
+## Spoken language follow-up — 5 November 2026
+
+- Found the reason lesson audio could remain English: several lesson-level Listen buttons call page-specific `speak(...)` functions with hard-coded English sentences, bypassing the shared language reader.
+- Updated `gm-language.js` so those existing `speak(...)` calls use the selected language and read the translated text visible in the tapped lesson card, rather than the hard-coded English argument.
+- The shared reader selects a matching installed voice for Hindi, Bengali, Tamil, Telugu, Marathi, German, French, Spanish, Chinese, Arabic or English. If the selected voice is unavailable, it reports that rather than deliberately substituting English.
+- Added a cache-busting version to the Home Science page's shared script reference so the latest fix is requested.
+- GitHub source changes committed; Android playback remains unverified and must be tested on the device.
