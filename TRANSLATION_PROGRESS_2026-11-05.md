@@ -94,3 +94,14 @@ Device-level voice playback, installed Android voice availability, and visual/fu
 - Checked local page links across all 52 HTML pages in the repository. No missing internal page targets were found. The two links to `GREAT_MINDS_MASTER_GUIDE.md` are valid repository files.
 - Checked the 3D graphics gallery: its main entry page redirects to the consolidated gallery, and the consolidated gallery contains 15 embedded WebP data images with 15 non-empty alt descriptions. The artwork does not rely on separate relative image files.
 - These are source-level checks. They do not replace opening every page on an Android browser or testing each interactive control.
+
+
+## Further rectification and clarity checks — 5 November 2026
+
+- Ran additional source-level checks across the connected dashboards, student/parent/teacher pages, classroom pages, learning modules and subject pages. The inspected inline JavaScript blocks parsed successfully; no duplicate HTML IDs or missing literal `getElementById(...)` targets were found in the inspected pages.
+- Confirmed the inspected pages include mobile viewport metadata.
+- Rechecked the Supabase browser configuration: it contains the project URL and a publishable key only. No service-role key or AI provider secret was found in that configuration. The publishable key is public by design and is safe only when database RLS and policies are correctly enforced; this source check does not prove live database security.
+- Confirmed `ai-teacher-config.js` intentionally keeps the live AI endpoint empty until a secure Worker is deployed. The AI Teacher page therefore runs in offline demonstration mode with prepared examples. Updated the subject status message so this limitation is explained immediately when a learner selects a subject.
+- Confirmed the Advanced Learning page labels its current progress record as device-local and demo-only. Dictionary and Writing Studio pages also explain when practice is saved only on the current device.
+- No cloud credentials, live child records, or account data were created or changed during this GitHub-only audit.
+- Remaining: live Android/browser testing, actual voice playback, real authentication and RLS tests, classroom cross-device tests, and deployment of the secure AI endpoint. Do not treat source-level checks as proof of production readiness.
