@@ -18,6 +18,8 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script><script>
 (function(){
  const el=id=>document.getElementById(id);
+ const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');let cloudChannel=null;
+ function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('student-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>loadCloudHistory()).subscribe();}
  const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');
  let db=null,user=null;
  function setStatus(t){status.textContent=t}
@@ -38,7 +40,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
    if(error)throw error;
    user=data.session?.user||null;
    setStatus(user?'Student signed in. Your cloud lesson history is available.':'Not signed in to cloud progress.');
-   saveBtn.disabled=!user;if(user)loadCloudHistory();
+   saveBtn.disabled=!user;if(user){loadCloudHistory();watchCloud()}
   }).catch(e=>setStatus('Could not check session: '+e.message));
  }
  el('cloudLogin').addEventListener('click',async()=>{
@@ -49,11 +51,11 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   const {data,error}=await db.auth.signInWithPassword({email,password});
   el('cloudPassword').value='';
   if(error){setStatus('Sign-in failed: '+error.message);return}
-  user=data.user;saveBtn.disabled=!user;setStatus('Student signed in. Your cloud save is ready.');await loadCloudHistory();
+  user=data.user;saveBtn.disabled=!user;setStatus('Student signed in. Your cloud save is ready.');await loadCloudHistory();watchCloud();
  });
  el('refreshStudentCloud').addEventListener('click',loadCloudHistory);
  el('cloudLogout').addEventListener('click',async()=>{
-  if(!db)return;const {error}=await db.auth.signOut();user=null;saveBtn.disabled=true;
+  if(!db)return;if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}const {error}=await db.auth.signOut();user=null;saveBtn.disabled=true;
   el('studentCloudRecords').textContent='Sign in to view cloud history.';setStatus(error?'Sign-out issue: '+error.message:'Signed out of cloud progress.');
  });
  saveBtn.addEventListener('click',async()=>{
