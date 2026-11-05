@@ -59,3 +59,12 @@
 - The shared reader selects a matching installed voice for Hindi, Bengali, Tamil, Telugu, Marathi, German, French, Spanish, Chinese, Arabic or English. If the selected voice is unavailable, it reports that rather than deliberately substituting English.
 - Added a cache-busting version to the Home Science page's shared script reference so the latest fix is requested.
 - GitHub source changes committed; Android playback remains unverified and must be tested on the device.
+
+
+## Home page speech support — 5 November 2026
+
+- Added a 🔊 Listen control beside the home page language selector. It reads the visible home page content using the selected language's matching installed browser voice.
+- Home page voice selection supports the same locale set as the shared language reader: English, Hindi, Bengali, Tamil, Telugu, Marathi, Chinese, German, Spanish, French and Arabic.
+- The home page reader does not intentionally fall back to English when a matching voice is unavailable; it asks the user to install the selected language voice.
+- Previous shared-reader improvement also routes lesson-level `speak(...)` calls through the selected-language reader and reads the tapped lesson card's visible translated text.
+- GitHub source changes committed. Real-device audio tests are still pending.
