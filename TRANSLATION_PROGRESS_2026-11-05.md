@@ -76,3 +76,14 @@
 - Fixed escaped regular-expression syntax in the shared language reader and verified JavaScript parsing for the shared language file, home page, Home Science page and English Story Studio.
 - Refreshed the Home Science shared-script cache version.
 - GitHub source changes are committed. Actual Android/browser rendering, translated speech voice availability and every lesson translation still require device testing and broader page-by-page translation coverage.
+
+
+## Additional rectification pass — 5 November 2026
+
+- Updated the read-aloud buttons on `english-extra.html`, `math-extra.html`, `science-extra.html`, `social-extra.html`, and `computer-extra.html` to use the shared language reader when it is available. This prevents those extra lesson buttons from forcing English after a learner selects another supported language.
+- Updated `reading-writing.html` story narration to use the shared language reader, while retaining its English fallback only for cases where the shared reader is unavailable.
+- Corrected the AI Teacher greeting shown on first load: it now displays “Hello! How are you?” to match the English-first default instead of showing a German greeting while English is selected.
+- Re-fetched the seven changed pages and parsed every embedded JavaScript block successfully.
+- Audited the connected student, teacher, parent, dashboard, profile, homework, and games pages: each includes the shared language script. The International Classrooms page also includes it. AI Teacher retains its explicit teaching-language selector, with English first/default.
+
+Device-level voice playback, installed Android voice availability, and visual/functional testing in the live browser remain pending.
