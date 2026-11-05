@@ -87,3 +87,10 @@
 - Audited the connected student, teacher, parent, dashboard, profile, homework, and games pages: each includes the shared language script. The International Classrooms page also includes it. AI Teacher retains its explicit teaching-language selector, with English first/default.
 
 Device-level voice playback, installed Android voice availability, and visual/functional testing in the live browser remain pending.
+
+
+## Site navigation and graphics audit — 5 November 2026
+
+- Checked local page links across all 52 HTML pages in the repository. No missing internal page targets were found. The two links to `GREAT_MINDS_MASTER_GUIDE.md` are valid repository files.
+- Checked the 3D graphics gallery: its main entry page redirects to the consolidated gallery, and the consolidated gallery contains 15 embedded WebP data images with 15 non-empty alt descriptions. The artwork does not rely on separate relative image files.
+- These are source-level checks. They do not replace opening every page on an Android browser or testing each interactive control.
