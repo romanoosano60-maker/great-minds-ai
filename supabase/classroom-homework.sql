@@ -35,8 +35,10 @@ create table if not exists public.homework_submissions (
 );
 
 create index if not exists homework_assignments_classroom_due_idx on public.homework_assignments(classroom_id,due_at);
+create index if not exists homework_assignments_teacher_idx on public.homework_assignments(teacher_id);
 create index if not exists homework_submissions_student_idx on public.homework_submissions(student_id,submitted_at desc);
 create index if not exists homework_submissions_assignment_idx on public.homework_submissions(assignment_id);
+create index if not exists homework_submissions_marked_by_idx on public.homework_submissions(marked_by);
 
 alter table public.homework_assignments enable row level security;
 alter table public.homework_submissions enable row level security;
@@ -72,8 +74,10 @@ drop policy if exists "Students submit own homework with approved consent" on pu
 create policy "Students submit own homework with approved consent" on public.homework_submissions for insert to authenticated
 with check (student_id=(select auth.uid()) and exists (
  select 1 from public.homework_assignments ha join public.classroom_members cm on cm.classroom_id=ha.classroom_id
+ join public.guardian_relationships gr on gr.student_id=cm.user_id
  where ha.id=homework_submissions.assignment_id and cm.user_id=(select auth.uid())
  and cm.membership_status='approved' and cm.parent_consent_status='approved'
+ and gr.relationship_status='active'
 ));
 
 drop policy if exists "Students guardians and classroom teachers read submissions" on public.homework_submissions;
