@@ -156,6 +156,9 @@ document.addEventListener("DOMContentLoaded",()=>{
  let lang="en";try{lang=localStorage.getItem("gm_language")||"en"}catch(e){}
  select.value=lang;gmSetLanguage(lang);
  select.addEventListener("change",()=>gmSetLanguage(select.value));
+ const listen=document.createElement("button");listen.type="button";listen.id="gm-home-listen";listen.textContent="🔊 Listen";listen.style.cssText="padding:10px 12px;border:0;border-radius:10px;background:#6848ed;color:#fff;font-weight:700";
+ listen.addEventListener("click",()=>{if(!("speechSynthesis"in window)||!("SpeechSynthesisUtterance"in window)){alert("Speech is not supported in this browser.");return}const locales={en:"en-US",hi:"hi-IN",bn:"bn-BD",ta:"ta-IN",te:"te-IN",mr:"mr-IN",zh:"zh-CN",de:"de-DE",es:"es-ES",fr:"fr-FR",ar:"ar-SA"};const locale=locales[select.value]||"en-US";const base=select.value.toLowerCase();const text=document.body.innerText.replace(/Language \/ 语言 \/ Sprache:[\\s\\S]*?Listen/,"").replace(/\\s+/g," ").trim();const synth=window.speechSynthesis;synth.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.92;u.lang=locale;let done=false;const attempt=()=>{if(done)return true;const voices=synth.getVoices()||[];const voice=voices.find(v=>v.lang.toLowerCase()===locale.toLowerCase())||voices.find(v=>v.lang.toLowerCase().startsWith(base+"-"))||voices.find(v=>v.lang.toLowerCase()===base);if(!voice)return false;done=true;u.voice=voice;u.lang=voice.lang;synth.speak(u);return true};if(!attempt()){const previous=synth.onvoiceschanged;synth.onvoiceschanged=()=>{if(attempt())synth.onvoiceschanged=previous};setTimeout(()=>{if(!attempt()){synth.onvoiceschanged=previous;alert("No "+locale+" voice is available. Please install this language in Android Text-to-speech settings. English will not be used instead.")}},2500)}});
+ select.parentElement.appendChild(listen);
 });
 </script>
 </body>
