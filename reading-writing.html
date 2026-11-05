@@ -86,10 +86,12 @@ function speakReading(text,label){
   utterance.lang=voice?voice.lang:locale;
   utterance.rate=0.88;
   if(voice)utterance.voice=voice;
-  utterance.onstart=()=>{if(run===speechRun)voiceStatus.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 "+label+"…":"🔊 Speaking with the phone's available voice. Install the selected language voice for a closer match.";};
+  let started=false;
+  utterance.onstart=()=>{started=true;if(run===speechRun)voiceStatus.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 "+label+"…":"🔊 Speaking with the phone's available voice. Install the selected language voice for a closer match.";};
   utterance.onend=()=>{if(run!==speechRun)return;index++;setTimeout(speakNext,120);};
   utterance.onerror=(event)=>{if(run!==speechRun)return;voiceStatus.textContent="The phone's speech engine stopped ("+(event.error||"unknown error")+"). Check Android Text-to-speech settings and try Test voice again.";};
-  synth.speak(utterance);
+  try{synth.speak(utterance);}catch(error){voiceStatus.textContent="The browser could not start speech. Open this page in Chrome and check Android Text-to-speech settings.";return;}
+  setTimeout(()=>{if(run===speechRun&&!started&&index<chunks.length)voiceStatus.textContent="No sound started. Your phone may have its Text-to-speech engine disabled or no voice installed. Check Android Settings → General management → Text-to-speech output.";},6000);
  }
  const begin=()=>{if(run===speechRun)setTimeout(speakNext,180);};
  if(synth.getVoices().length){begin();}
