@@ -3,6 +3,16 @@
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script>
 <style>
 *{box-sizing:border-box}body{margin:0;background:linear-gradient(135deg,#e5f3ff,#fff6d9);color:#1b3152;font:16px Arial,sans-serif}header{text-align:center;padding:25px 14px;background:linear-gradient(120deg,#b9eaff,#e8dfff,#fff0bd)}main{max-width:900px;margin:auto;padding:14px}.card{background:#fff;border-radius:17px;padding:19px;margin:14px 0;box-shadow:0 3px 12px #20305018}h1{margin:0 0 8px}.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(210px,1fr));gap:12px}.tile{display:block;padding:17px;border-radius:14px;background:#edf3ff;text-decoration:none;color:#183b80;font-weight:bold}.tile span{display:block;font-size:28px;margin-bottom:8px}.note{padding:13px;border-radius:10px;background:#fff3d5;line-height:1.5}.status{padding:12px;border-radius:10px;background:#eef3f8;line-height:1.5}button{padding:12px 16px;border:0;border-radius:10px;background:#4c49ce;color:white;font-weight:bold;font-size:16px}a.home{color:#3147b2}footer{text-align:center;padding:20px;color:#52627a}
+
+.tile{min-height:94px;border:1px solid #dce6fa;display:flex;flex-direction:column;justify-content:center;transition:transform .16s ease,box-shadow .16s ease}
+.tile:focus-visible,button:focus-visible,input:focus-visible,a:focus-visible{outline:3px solid #e9a52e;outline-offset:3px}
+.tile:hover{transform:translateY(-2px);box-shadow:0 8px 18px #1d39701b}
+button{min-height:46px;cursor:pointer}
+input{min-height:46px;max-width:100%;box-sizing:border-box}
+.card h2{color:#304ca5}
+@media(max-width:430px){main{padding:10px}.card{padding:15px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}.tile{font-size:14px;padding:13px}.tile span{font-size:25px}}
+@media(prefers-reduced-motion:reduce){.tile{transition:none}}
+
 </style></head><body>
 <header><h1>🚀 Great Minds AI</h1><h2>One Learning & Classroom Hub</h2><p>One home for students, parents, teachers and international learning</p></header>
 <main>
