@@ -99,3 +99,15 @@ Do not enable child-to-child messaging or open international chat until account 
 - Rechecked lesson-page cloud progress integration. The main subject quiz pages and extra subject quiz pages use the shared cloud progress helper. Reading/Writing, Vocabulary, Advanced Learning, Games and certificate/reward records still include device-local demonstrations and should not be described as fully cloud-synchronised.
 - Confirmed `ai-teacher-config.js` is deliberately blank until a real Worker URL is deployed. No secrets were added to frontend files.
 - Remaining live tests are unchanged: real separate-account classroom/consent journey, cross-device progress/homework, Android microphone/audio, Worker deployment and safe AI test, full device navigation, privacy/legal approval, and native store packaging.
+
+
+## Owner test additions — cloud progress pages
+
+After the approved student and guardian test accounts are ready, test the new save paths:
+1. Complete one Advanced Learning five-question check-in while signed in as the consented student. Confirm the page says the cloud score was saved.
+2. Complete one Math, Word Wizard, Science and Memory game. Confirm each completed score reports a successful cloud save. Local stars/wins remain local-only.
+3. Complete both Reading and Writing story questions. Confirm the quiz score syncs, while the writing text remains on the device.
+4. Open Connected Progress using the same student account and confirm the new rows appear. Then check permitted guardian visibility from a separate browser/device.
+5. Repeat once while signed out or without guardian approval and confirm the page clearly reports that the score stayed local.
+
+These new integrations passed source-level JavaScript syntax checks but are not considered complete until the authenticated live tests above pass.
