@@ -353,3 +353,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added the four existing learning modules to the existing Unified Learning & Classroom Hub, preserving the permanent rocket home screen and current navigation.
 - Commit: `4dd1b709b676b0eccf4bd6567f97a6cb107fe6ab`. The updated hub was re-fetched and all four new links were confirmed present.
 - Still not verified: GitHub Pages deployment/rendering, Android tap-through tests, home-science module availability, and live Supabase cross-device classroom data. The local demo storage is not cloud sync.
+
+
+## Home Science module — 2026-11-05
+- Created `home-science.html` with six child-friendly topics: food and nutrition, personal hygiene, home safety, clothing care, home environment, and family teamwork.
+- Added browser speech read-aloud controls, a five-question quiz, and a same-browser demo progress record using the existing shared demo key. This is not a Supabase cloud write or cross-device sync.
+- Added Home Science to the Unified Learning & Classroom Hub. The module file and hub link were re-fetched after commits and confirmed present.
+- Module commit: `ff5b7fe037d08c2ac4e80e99a4127ff66a359a7e`; hub commit: `7b2bdc4d88420e33c6fd356eee40e2e46b0d7639`.
+- Still needs Android tap-through/audio/quiz testing and live Supabase integration verification.
