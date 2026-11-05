@@ -21,10 +21,11 @@ function historyItems(items) {
 export default {
   async fetch(request, env) {
     const origin = request.headers.get("Origin") || "";
-    if (origin !== ORIGIN) return new Response("Forbidden origin", { status: 403 });
-    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
     const url = new URL(request.url);
-    if (url.pathname === "/health" && request.method === "GET") return json({ ok: true, service: "Great Minds AI Teacher" }, 200, origin);
+    const healthCheck = url.pathname === "/health" && request.method === "GET";
+    if (origin !== ORIGIN && !(healthCheck && !origin)) return new Response("Forbidden origin", { status: 403 });
+    if (request.method === "OPTIONS") return new Response(null, { status: 204, headers: cors(origin) });
+    if (healthCheck) return json({ ok: true, service: "Great Minds AI Teacher" }, 200, origin || ORIGIN);
     if (url.pathname !== "/ask") return json({ error: "Not found" }, 404, origin);
     if (request.method !== "POST") return json({ error: "Use POST." }, 405, origin);
     if (!request.headers.get("content-type")?.toLowerCase().includes("application/json")) return json({ error: "Send JSON." }, 415, origin);
