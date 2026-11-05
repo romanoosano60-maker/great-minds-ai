@@ -57,5 +57,28 @@
       return { saved: false, reason: "Cloud save could not be completed. Your quiz result remains on this device." };
     }
   }
+  async function loadMyProgress() {
+    const db = window.greatMindsDB;
+    if (!db || !db.auth || !db.from) {
+      return { loaded: false, reason: "Supabase is not available on this page.", rows: [] };
+    }
+    try {
+      const { data: userData, error: userError } = await db.auth.getUser();
+      if (userError) throw userError;
+      if (!userData || !userData.user) {
+        return { loaded: false, reason: "Sign in with the student account first.", rows: [] };
+      }
+      const { data, error } = await db.from("student_learning_progress")
+        .select("subject,activity_key,score,max_score,correct_count,question_count,source,completed_at")
+        .order("completed_at", { ascending: false })
+        .limit(100);
+      if (error) throw error;
+      return { loaded: true, rows: Array.isArray(data) ? data : [] };
+    } catch (error) {
+      console.warn("Great Minds AI cloud progress could not be loaded:", error);
+      return { loaded: false, reason: "Cloud progress could not be loaded for this account.", rows: [] };
+    }
+  }
   window.gmSaveStudentProgress = saveProgress;
+  window.gmLoadMyStudentProgress = loadMyProgress;
 })();
