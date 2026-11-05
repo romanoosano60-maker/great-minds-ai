@@ -7,7 +7,7 @@ This is the single working reference for the app's integration, verification and
 ## 1. What is already built in the repository
 
 - Permanent home screen and subject navigation.
-- English, Mathematics, Science, Social Studies, History and Geography learning pages.
+- English, Mathematics, Science, Home Science, Social Studies, History, Geography, General Knowledge, Computer Studies, Reading & Writing and Vocabulary learning pages.
 - Student Profile V2 with nickname, homework and quiz history, points, stars and practice badges.
 - Games, homework, certificates and progress prototypes.
 - Parent, teacher and student dashboard demonstrations.
@@ -184,3 +184,10 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Added a return path to the Unified Learning & Classroom Hub across Homework, Games, English, Mathematics, Science, Social Studies, History, World Atlas, Dictionary, Encyclopedia, Guided Research, AI Teacher, Group Learning and the International Classroom demo.
 - Re-fetched all 14 pages after updates. Each page contains the hub link and its inline JavaScript passed syntax parsing.
 - These navigation checks verify source structure only. Android layout, button behavior, browser runtime and the underlying live services still require device testing.
+
+
+## 13. Home Science and expanded hub modules — 5 November 2026
+- Added Home Science with six age-appropriate topic cards, browser speech read-aloud, a five-question quiz, and a same-browser demo quiz record.
+- Added Home Science, General Knowledge, Computer Studies, Reading & Writing and Vocabulary Practice to the Unified Learning & Classroom Hub.
+- Source changes are committed and re-fetched from GitHub. The Home Science quiz record remains local demo storage; it is not yet a Supabase write or cross-device progress sync.
+- Android testing is still required for responsive layout, speech playback, quiz scoring and hub navigation.
