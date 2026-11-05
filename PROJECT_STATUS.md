@@ -409,3 +409,15 @@ Report separate statuses for frontend development, backend integration, testing 
 - Connected Teacher Dashboard to show cloud progress and submissions permitted for an approved teacher account, and linked to the secure Homework Manager.
 - Verified source files were committed and re-fetched. Live browser execution and real teacher/student/guardian tests remain pending; the new homework tables currently contain 0 assignments and 0 submissions. No child records were fabricated.
 - Leaked-password protection remains disabled and must be enabled before real family accounts. Cross-device testing and actual parent/teacher account linking remain pending.
+
+
+## Number 3 continuation — lesson cloud progress and live dashboard refresh (5 November 2026)
+- Connected English and History quizzes to the authenticated `student_learning_progress` insert helper.
+- Connected Social Studies and Computer Studies quiz completion to the same helper.
+- Math, Science, Geography and Home Science already call the helper. Each lesson attempts to save only when a signed-in account is present; the database still enforces active guardian relationship checks. A blocked cloud save is reported honestly in the lesson feedback while local quiz results remain local.
+- Student dashboard now displays the signed-in student's own cloud progress history and refreshes it on demand; the previous dashboard snapshot button remains a separate summary mechanism.
+- Parent and Teacher dashboards now subscribe to Supabase Realtime changes on student progress and homework submissions and refresh their RLS-filtered records. Student dashboard subscribes to its own progress changes.
+- Added `homework_assignments`, `homework_submissions`, and `student_learning_progress` to the Supabase Realtime publication. Verified publication membership alongside existing classroom tables.
+- Current live DB still has no homework assignments or submissions and no classroom membership rows; existing one classroom and one active guardian relationship remain as previously audited. No fabricated student/parent data was added.
+- Supabase security advisor still reports leaked-password protection disabled. This is an outstanding dashboard setting and must be enabled before real child/family accounts are used. Performance advisor reports multiple permissive SELECT policies (performance warning only) and unused indexes on empty new tables; no unsafe policy relaxation was made.
+- Real teacher/student/guardian sign-in, membership/consent, lesson insert, homework publish/submit/mark, parent visibility, and cross-device Realtime checks are still not verified. These require user-controlled test accounts and manual browser testing; do not describe Number 3 as finished until all pass.
