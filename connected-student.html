@@ -36,9 +36,9 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){setStatus('Cloud service unavailable. The local dashboard still works.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
-  db.auth.getSession().then(({data,error})=>{
+  db.auth.getUser().then(({data,error})=>{
    if(error)throw error;
-   user=data.session?.user||null;
+   user=data.user||null;
    setStatus(user?'Student signed in. Your cloud lesson history is available.':'Not signed in to cloud progress.');
    saveBtn.disabled=!user;if(user){loadCloudHistory();watchCloud()}
   }).catch(e=>setStatus('Could not check session: '+e.message));
