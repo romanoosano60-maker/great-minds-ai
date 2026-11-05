@@ -68,3 +68,11 @@
 - The home page reader does not intentionally fall back to English when a matching voice is unavailable; it asks the user to install the selected language voice.
 - Previous shared-reader improvement also routes lesson-level `speak(...)` calls through the selected-language reader and reads the tapped lesson card's visible translated text.
 - GitHub source changes committed. Real-device audio tests are still pending.
+
+## Follow-up: English-first learning with optional language support
+- Confirmed product rule: English is the default language and the main learning curriculum. Learners may opt into a supported language for translated lesson text and explanations; changing language does not change the subject.
+- Updated English Story Studio narration to use the shared selected-language reader. Individual vocabulary and spelling-word buttons continue to pronounce the English target words in English.
+- Added opt-in Hindi, German, French and Arabic translations for the Little Seed story, vocabulary definitions, reading-comprehension questions and key page instructions. English remains the default.
+- Fixed escaped regular-expression syntax in the shared language reader and verified JavaScript parsing for the shared language file, home page, Home Science page and English Story Studio.
+- Refreshed the Home Science shared-script cache version.
+- GitHub source changes are committed. Actual Android/browser rendering, translated speech voice availability and every lesson translation still require device testing and broader page-by-page translation coverage.
