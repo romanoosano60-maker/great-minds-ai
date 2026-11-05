@@ -1,5 +1,6 @@
 const ORIGIN = "https://romanoosano60-maker.github.io";
 const SUBJECTS = ["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science"];
+const LANGUAGES = ["English","Arabic","Urdu","Swahili","French","German","Chinese (Mandarin)"];
 const cors = origin => ({
   "Access-Control-Allow-Origin": origin,
   "Access-Control-Allow-Methods": "GET, POST, OPTIONS",
@@ -66,13 +67,16 @@ export default {
     if (!body || typeof body !== "object" || Array.isArray(body)) return json({ error: "Send a valid question object." }, 400, origin);
     const subject = typeof body.subject === "string" ? body.subject.trim() : "";
     const question = typeof body.question === "string" ? body.question.trim() : "";
+    const language = typeof body.language === "string" ? body.language.trim() : "English";
     if (!SUBJECTS.includes(subject)) return json({ error: "Choose one of the available subjects." }, 400, origin);
+    if (!LANGUAGES.includes(language)) return json({ error: "Choose one of the supported teaching languages." }, 400, origin);
     if (!question || question.length > 500) return json({ error: "Enter a question of 1 to 500 characters." }, 400, origin);
 
     const input = historyItems(body.history);
-    input.push({ role: "user", content: "Selected subject: " + subject + ". Student question: " + question });
+    input.push({ role: "user", content: "Selected subject: " + subject + ". Reply in this teaching language: " + language + ". Student question: " + question });
     const instructions = [
       "You are Great Minds AI, a kind and patient school tutor for children aged 9 to 12.",
+      "Answer in the selected teaching language. Use simple, age-appropriate wording and preserve important subject vocabulary; if the requested language is not available to you, say so clearly.",
       "Teach the selected subject in clear, accurate, age-appropriate language and short steps.",
       "If unsure, say so and suggest asking a teacher. Do not invent facts.",
       "Help learners understand rather than simply doing all their homework.",
