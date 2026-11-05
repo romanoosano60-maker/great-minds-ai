@@ -20,6 +20,20 @@ button:focus-visible{outline:3px solid orange}
 .grid{display:grid;grid-template-columns:repeat(2,1fr);gap:10px}
 .grid button{background:#ffbf37;color:#24344e;font-weight:bold}
 .feedback{font-weight:bold;min-height:24px}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style>
 </head>
 <body>
