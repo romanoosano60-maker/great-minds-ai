@@ -453,3 +453,9 @@ Report separate statuses for frontend development, backend integration, testing 
 - Rechecked the unified hub after the change: its JavaScript parses without syntax errors, all checked local href/src references resolve to files in the repository, and all three new tiles point to existing pages.
 - Re-ran static JavaScript syntax and duplicate HTML-ID checks on the home screen, unified hub, student/parent/teacher dashboards, international classroom page, homework page, AI Teacher page, Group Learning page and student profile. No syntax errors or duplicate IDs were found in those inspected pages.
 - These are source-level checks, not live Android/browser, account, cross-device or end-to-end classroom tests.
+
+
+## Practice and certificate page robustness (5 November 2026)
+- Improved the Connected Practice and Certificates pages to use explicit DOM element lookups rather than relying on browser-created global variables from element IDs.
+- Re-fetched both updated pages and the Progress page; all inline scripts passed JavaScript syntax parsing. The practice page no longer uses an implicit global `result` reference, and the certificate page explicitly resolves its display and selector elements.
+- These pages remain local-browser demonstration tools, as their on-page privacy notices state. They do not represent verified cloud-synchronised academic records or accredited certificates.
