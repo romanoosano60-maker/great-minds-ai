@@ -42,3 +42,11 @@
 - Added Hindi, Bengali, Tamil, Telugu and Marathi translations for the seven Computer Studies lesson headings, computer basics, typing instructions, internet-safety reminder, coding activity, AI and robotics explanations, and quiz controls.
 - The shared language script passed a JavaScript syntax check after the additions.
 - English typing-practice content remains intentionally distinct where it is part of the activity. The page still needs an Android check for translated layout and dynamic robot/quiz messages.
+
+## Additional update — selected-language spoken reading
+- Added a shared **🔊 Listen** control beside the language selector on pages that load `gm-language.js`.
+- The control reads the page's visible main content using the currently selected language, rather than always requesting English.
+- Configured speech language tags for English (en-US), Hindi (hi-IN), Bengali (bn-BD), Tamil (ta-IN), Telugu (te-IN), Marathi (mr-IN), German (de-DE), French (fr-FR), Spanish (es-ES), Chinese (zh-CN) and Arabic (ar-SA).
+- The browser selects an installed matching voice where available and otherwise requests the selected language tag from the device's speech engine.
+- JavaScript syntax check passed after the change.
+- Important limitation: this uses the Android/browser text-to-speech voices; it does not install new voices or guarantee that every device has every language voice. Test voice playback on the user's Android phone.
