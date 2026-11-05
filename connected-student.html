@@ -18,7 +18,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 </script><script>
 (function(){
  const el=id=>document.getElementById(id);
- const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');let cloudChannel=null;
+ let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('student-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>loadCloudHistory()).subscribe();}
  const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');
  let db=null,user=null;
