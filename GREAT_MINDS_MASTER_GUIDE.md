@@ -223,3 +223,9 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - AI Teacher practice page now provides a “Continue learning” link that changes with the selected subject and opens its full lesson page.
 - Static checks confirm no missing internal links and no JavaScript syntax errors on the home screen, AI Teacher, Unified Hub and Group Learning pages.
 - AI Teacher is still an offline prepared-answer prototype with browser speech features; Group Learning is still local-only. The secure live AI backend and supervised international classroom must not be represented as active until tested.
+
+
+## 18. Unified hub — practice, progress and certificates (5 November 2026)
+- The Unified Learning Hub now links directly to Connected Practice, Progress Overview and Certificates & Achievements in the Student Learning section.
+- Static validation after the change found no broken local links or JavaScript syntax errors on the hub. Ten key app pages also passed static JavaScript syntax and duplicate-ID checks.
+- Live visual testing and real account workflows remain to be performed with the user.
