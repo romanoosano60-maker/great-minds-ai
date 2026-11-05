@@ -52,3 +52,10 @@ This document separates source-code work from live-service and device verificati
 The learning pages and several local dashboard/classroom demonstrations are built. The repository's Supabase configuration and connection-test page exist. However, live authentication, trusted role approval, parent consent, RLS behaviour under real accounts, cross-device classrooms, realtime messaging and the AI backend have not been independently verified in production. Do not describe these features as live until the tests above pass.
 
 A successful GitHub Pages deployment confirms that the site was deployed; it does not prove that Supabase, AI services, or every page works at runtime.
+
+
+## 2026-11-05 implementation update
+
+The AI Teacher now has a configurable frontend connection and a Cloudflare Worker source template in cloudflare/worker.js. This does not mean the AI service is deployed. Before live use, configure the Worker secret and variables, the per-user rate-limit binding, set the deployed /ask URL in ai-teacher-config.js, and test with an adult-controlled student account that has a valid active guardian link. The Worker is not a replacement for a full child-safety programme.
+
+The Mathematics, English, Science, Social Studies, History, Geography, Home Science, Computer Studies and General Knowledge lesson quizzes use the cloud progress helper. connected-progress.html now displays RLS-filtered cloud progress records separately from local demo points and stars. connected-practice.html also offers its results to secure cloud progress. Real-account and cross-device tests are still required.
