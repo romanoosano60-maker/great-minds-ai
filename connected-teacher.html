@@ -28,8 +28,8 @@ render();
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
-  const {data,error}=await db.auth.getSession();if(error){say('Session check failed.');return}
-  user=data.session?.user||null;if(user){say('Teacher session found.');load();watchCloud()}else say('Not signed in.');
+  const {data,error}=await db.auth.getUser();if(error){say('Account verification failed.');return}
+  user=data.user||null;if(user){say('Teacher account verified.');load();watchCloud()}else say('Not signed in.');
  }
  async function load(){
   if(!db||!user){say('Sign in with the approved teacher account first.');return}
