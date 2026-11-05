@@ -20,7 +20,7 @@ document.getElementById('fbform').onsubmit=e=>{e.preventDefault();const d=read()
 document.getElementById('planform').onsubmit=e=>{e.preventDefault();const d=read();d.plans.push({topic:topic.value.trim(),instructions:instructions.value.trim()});save(d);e.target.reset();render()};
 render();
 (function(){
- const $=id=>document.getElementById(id);let db=null,user=null,cloudChannel=null;
+ let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('teacher-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
  const $=id=>document.getElementById(id);let db=null,user=null;
  function say(s){$('teacherCloudStatus').textContent=s}
