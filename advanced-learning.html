@@ -5,6 +5,20 @@
 <meta name="theme-color" content="#eaf4ff"><title>Great Minds AI | Advanced Learning Studio</title>
 <style>
 *{box-sizing:border-box}body{margin:0;font:16px system-ui,Arial,sans-serif;color:#203454;background:linear-gradient(135deg,#eaf5ff,#fff5df)}header{text-align:center;padding:25px 15px;background:linear-gradient(120deg,#c5eaff,#e8ddff,#fff0c8)}main{max-width:850px;margin:auto;padding:14px}.card{background:#fff;border-radius:18px;padding:19px;margin:14px 0;box-shadow:0 4px 14px #1c355018}h1{margin:0 0 8px}h2{margin-top:0}.tag{display:inline-block;background:#eaf1ff;padding:5px 10px;border-radius:20px;font-size:13px;font-weight:700}.note{background:#fff5d9;padding:12px;border-radius:10px;line-height:1.5}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 150px}button,select,input,textarea{font:inherit;padding:12px;border-radius:10px;border:1px solid #b8c7dc;max-width:100%}button{background:#315ed1;color:white;border:0;font-weight:700;cursor:pointer}button.secondary{background:#eaf0ff;color:#24427e}button:disabled{opacity:.5}select,input,textarea{width:100%;background:white}label{display:block;font-weight:650;margin:10px 0 5px}.status{padding:12px;background:#edf7f1;border-radius:10px;min-height:42px;line-height:1.5}.choices{display:grid;grid-template-columns:repeat(auto-fit,minmax(135px,1fr));gap:8px;margin:12px 0}.choices button{background:#eef3ff;color:#25447e;border:2px solid #dbe5ff}.choices button:focus,.choices button:hover{border-color:#315ed1}.question{font-size:19px;font-weight:700;line-height:1.4}.small{font-size:13px;color:#5b6980;line-height:1.5}a{color:#214da5}progress{width:100%;height:16px}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main,.wrap{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button,.link{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main,.wrap{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style></head>
 <body>
 <header><div style="font-size:42px">🧠🚀🌍</div><h1>Great Minds AI Advanced Learning Studio</h1><p>Learn at your pace • Build confidence • Discover the world</p><span class="tag">Five advanced learning tools — first prototype</span></header>
