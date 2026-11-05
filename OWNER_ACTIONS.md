@@ -8,13 +8,13 @@ This file lists only actions that still need the project owner or a real-device 
 
 **Prepared in GitHub**
 - `cloudflare/worker.js` contains the POST `/ask` endpoint and GET `/health`.
-- The Worker verifies the Supabase access token, checks an active guardian relationship, limits requests per user, accepts only the nine approved subjects, and calls the OpenAI Responses API with `store:false`.
+- The Worker verifies the Supabase access token, checks an active guardian relationship, limits requests per user, accepts nine approved subjects and twelve teaching languages (including Hindi, Bengali, Tamil, Telugu and Marathi), and calls the OpenAI Responses API with `store:false`.
 - `ai-teacher.html` can call the endpoint when configured.
 - `ai-teacher-config.js` is intentionally blank until the real Worker URL is known.
 
 **Owner actions**
 1. Open the existing Cloudflare Worker `great-minds-ai-backend`.
-2. Deploy the current source from `cloudflare/worker.js`.
+2. Deploy the current source from `cloudflare/worker.js` (latest GitHub source includes the five added Indian teaching languages).
 3. Add the secret `OPENAI_API_KEY` in Cloudflare Secrets. Never put it in GitHub or browser code.
 4. Add variables `SUPABASE_URL=https://ryuchmmnyjyldwouidy.supabase.co`, `SUPABASE_PUBLISHABLE_KEY` (public publishable key only), and `OPENAI_MODEL=gpt-5.4-mini`.
 5. Add the `AI_RATE_LIMITER` binding required by the Worker source.
@@ -32,8 +32,7 @@ This file lists only actions that still need the project owner or a real-device 
 - No real student progress, homework assignments or homework submissions exist yet.
 
 **Database correction prepared in GitHub (not yet applied)**
-- Review `supabase/migrations/20261105_fix_guardian_consent_revocation.sql`. It corrects the revocation function so it reports success only when an active guardian link was actually revoked, and blocks the linked student's pending/approved classroom memberships.
-- The connected database migration tool blocked the automatic DDL change, so the live function remains unchanged until this migration is applied through the Supabase SQL Editor or migration workflow.
+- Migration `20261105081455_fix_guardian_consent_revocation_result` has since been applied and rollback-tested, according to `DATABASE_SECURITY_VERIFICATION_2026-11-05.md`. The live function now reports success only when an active guardian link was actually revoked and blocks the linked student's classroom memberships. No further application of this migration is required.
 
 **Owner actions**
 1. In Supabase Auth, create/use adult-controlled test accounts for one approved teacher, one student, and one parent/guardian. Do not use a real child's personal details during testing.
@@ -49,8 +48,7 @@ This file lists only actions that still need the project owner or a real-device 
 **Not complete until:** teacher, student and guardian flows pass with real authenticated sessions and the revoke path is tested.
 
 **Additional database migration prepared (not yet applied)**
-- Review `supabase/migrations/20261105_enforce_homework_score_max.sql`. It adds a database trigger that rejects marks above an assignment's `max_points`. The browser helper also checks the assignment maximum before sending a mark.
-- The browser helper change is committed; the database trigger remains pending until the migration is applied and verified in Supabase.
+- Migration `20261105081504_enforce_homework_submission_score_max` has since been applied and rollback-tested, according to `DATABASE_SECURITY_VERIFICATION_2026-11-05.md`. The database trigger rejects marks above an assignment's `max_points`; the browser helper also validates the maximum.
 
 ## 3. Student progress and homework — cross-device test
 
