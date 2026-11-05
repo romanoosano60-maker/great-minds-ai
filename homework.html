@@ -14,6 +14,16 @@ nav{display:flex;flex-wrap:wrap;gap:5px}nav button{flex:1;min-width:100px}nav bu
 small,.muted{color:#475569}.pill{display:inline-block;background:#dbeafe;border-radius:30px;padding:4px 9px}
 label{font-weight:bold;display:block;margin-top:8px}.warning{background:#fff7ed;border-left:4px solid #f97316;padding:12px;border-radius:8px}
 .answer{background:#eff6ff;padding:10px;border-radius:10px;margin-top:10px}a{color:#1d4ed8}
+
+button{min-height:46px;cursor:pointer}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #e8a52a;outline-offset:3px}
+input:focus,select:focus,textarea:focus{border-color:#2563eb;box-shadow:0 0 0 3px #2563eb20}
+.task{background:#fff}
+.task button{max-width:100%}
+nav button{min-height:46px}
+@media(max-width:420px){main{padding:10px}header{padding:18px 12px}.card{padding:14px}.task{padding:10px}nav button{min-width:calc(50% - 8px)}}
+@media(prefers-reduced-motion:reduce){*{scroll-behavior:auto!important;transition:none!important}}
+
 </style></head><body>
 <header><h1>🎓 Great Minds AI</h1><p>Homework Manager</p><a href="connected-dashboards.html">🌐 Unified Learning Hub</a></header>
 <main>
