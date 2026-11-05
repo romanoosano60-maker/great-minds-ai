@@ -377,3 +377,12 @@ Report separate statuses for frontend development, backend integration, testing 
 - Security advisor still reports one warning: leaked-password protection is disabled. This setting was not changed.
 - SQL reference committed at `supabase/student-learning-progress.sql`, commit `e5569dadb3d99ef62ddc323648451f8f6ecb67aa`; re-fetched and verified.
 - Not yet done: authenticated student account/session flow, active guardian-link test account, actual progress INSERT/SELECT under user JWTs, dashboard reading from this table, and cross-device verification. Existing lesson quiz pages still save to same-browser demo storage; they do not yet write to this cloud table. Do not describe cloud progress sync as live until those tests pass.
+
+
+## Business & Publishing preparation — 5 November 2026
+- Added `PUBLISHING_READINESS.md` with the release sequence, Google Play and Apple App Store requirements, child-safety/privacy gates, owner decisions and technical blockers.
+- Added `STORE_LISTING_DRAFT.md` with draft listing copy and the required store assets/owner inputs.
+- Added `PRIVACY_POLICY_WORKING_DRAFT.md` as an internal starting point only. It is explicitly NOT a final or published privacy policy; actual data flows, publisher identity, processors, retention/deletion and legal review must be confirmed first.
+- Reviewed current official Google Play and Apple developer guidance on app review, Families/Kids requirements, privacy disclosures, age ratings, store metadata and submission.
+- This repository is currently a GitHub Pages web app. No signed Android App Bundle or iOS archive has been produced, no store submission has been made, and no legal/business details or subscription price have been invented.
+- Business & Publishing preparation documents are committed. Store readiness remains blocked on real account/data-flow testing, child-safety gates, native packaging, owner decisions, app assets, privacy/legal review and release testing.
