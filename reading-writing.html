@@ -51,7 +51,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p class="small"><span id="count">0</span>/1200 characters. Use a nickname only. Do not write private information.</p>
 <button type="button" id="save">💾 Save on this device</button> <button type="button" class="alt" id="clear">Clear writing</button><p class="feedback" id="saveStatus" aria-live="polite"></p>
 </section></main><footer>Great Minds AI — Every Child Can Shine ✨</footer>
-<script>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script><script>
 const story=document.getElementById("story");
 document.getElementById("listen").addEventListener("click",function(){
  if(typeof window.speak==="function"){window.speak(story.textContent);return;}
@@ -59,14 +59,14 @@ document.getElementById("listen").addEventListener("click",function(){
  window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance(story.textContent);voice.lang="en-US";voice.rate=0.88;window.speechSynthesis.speak(voice);
 });
 document.getElementById("stop").addEventListener("click",function(){if("speechSynthesis" in window)window.speechSynthesis.cancel();});
-let answers={};function score(){document.getElementById("score").textContent="Score: "+Object.values(answers).filter(Boolean).length+"/2";}
+let answers={},cloudSaveAttempted=false;function score(){const total=Object.values(answers).filter(Boolean).length;document.getElementById("score").textContent="Score: "+total+"/2";if(Object.keys(answers).length===2&&!cloudSaveAttempted){cloudSaveAttempted=true;saveReadingScore(total);}}async function saveReadingScore(total){const status=document.getElementById("cloudProgressStatus");if(typeof window.gmSaveStudentProgress!=="function"){status.textContent="Cloud save helper unavailable. Your quiz result is shown here; writing stays on this device.";return;}status.textContent="Saving reading quiz score…";const result=await window.gmSaveStudentProgress({subject:"English",activity_key:"reading-writing-story-quiz",score:total,max_score:2,correct_count:total,question_count:2,source:"reading-writing"});status.textContent=result.saved?"Reading quiz score saved to your secure learning profile. Your writing stays on this device.":result.reason+" Your writing stays on this device."; }
 document.querySelectorAll(".choices").forEach(function(group){group.querySelectorAll("button").forEach(function(button){button.addEventListener("click",function(){
  if(Object.prototype.hasOwnProperty.call(answers,group.id))return;
  const correct=button.dataset.correct==="true";answers[group.id]=correct;
  group.querySelectorAll("button").forEach(function(item){item.disabled=true;});
  document.getElementById(group.id==="q1"?"f1":"f2").textContent=correct?"✅ Correct! Well done.":"Not quite. Read the story again and try the next question.";score();
 });});});
-document.getElementById("retry").addEventListener("click",function(){answers={};document.querySelectorAll(".choices button").forEach(function(b){b.disabled=false;});document.getElementById("f1").textContent="";document.getElementById("f2").textContent="";score();});
+document.getElementById("retry").addEventListener("click",function(){answers={};cloudSaveAttempted=false;document.getElementById("cloudProgressStatus").textContent="Complete both questions to save a new quiz score. Your writing stays on this device.";document.querySelectorAll(".choices button").forEach(function(b){b.disabled=false;});document.getElementById("f1").textContent="";document.getElementById("f2").textContent="";score();});
 const writing=document.getElementById("writing"),key="gm_reading_writing_v1";
 function count(){document.getElementById("count").textContent=writing.value.length;}
 try{writing.value=localStorage.getItem(key)||"";}catch(e){}
