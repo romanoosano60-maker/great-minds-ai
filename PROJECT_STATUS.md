@@ -459,3 +459,10 @@ Report separate statuses for frontend development, backend integration, testing 
 - Improved the Connected Practice and Certificates pages to use explicit DOM element lookups rather than relying on browser-created global variables from element IDs.
 - Re-fetched both updated pages and the Progress page; all inline scripts passed JavaScript syntax parsing. The practice page no longer uses an implicit global `result` reference, and the certificate page explicitly resolves its display and selector elements.
 - These pages remain local-browser demonstration tools, as their on-page privacy notices state. They do not represent verified cloud-synchronised academic records or accredited certificates.
+
+
+## Cloud dashboard authentication verification improvement (5 November 2026)
+- Updated Student, Parent and Teacher cloud dashboard startup checks to call Supabase Auth `getUser()` rather than relying on the locally stored session returned by `getSession()` as the initial account identity check.
+- Re-fetched all three updated pages and ran JavaScript syntax parsing. All three passed; each now uses `auth.getUser()` and no longer uses `auth.getSession()` for the startup check.
+- Re-ran Supabase advisors. Security warning remains: leaked-password protection is disabled and must be enabled in Auth settings before real family accounts. Performance notices remain for unused indexes (not removed because low usage during a demo is not evidence they are unnecessary) and multiple permissive SELECT policies (kept separate to preserve role-specific access rules).
+- This is a source and database-advisor verification, not a live account sign-in or cross-device test.
