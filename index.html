@@ -35,35 +35,41 @@ footer{margin-top:20px}
 @media(max-width:360px){.subjects{grid-template-columns:1fr 1fr;gap:9px;padding:10px}.subject{padding:15px 7px}.subject span{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.subject,.subject button,.subject-link{transition:none}}
 </style>
+<style>
+.language-bar{display:flex;justify-content:center;align-items:center;gap:9px;padding:10px;background:#fff}
+.language-bar label{font-weight:700}
+.language-bar select{max-width:220px;padding:10px 12px;border:2px solid #6848ed;border-radius:10px;background:white;color:#19305a;font-size:16px}
+</style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 </head>
 <body>
+<div class="language-bar"><label for="gm-language">Language / 语言 / Sprache:</label><select id="gm-language" aria-label="Choose app language"><option value="en">English</option><option value="zh">中文（简体）</option><option value="de">Deutsch</option></select></div>
 <header>
 <h1>🌟 Great Minds AI</h1>
-<p>Learn • Explore • Imagine • Create</p>
+<p data-gm="tagline">Learn • Explore • Imagine • Create</p>
 </header>
 <section class="hero">
 <div class="rocket">🚀🌎</div>
-<h2>Launch Your Learning Adventure!</h2>
-<p>Explore science, English, mathematics and more.</p>
+<h2 data-gm="hero">Launch Your Learning Adventure!</h2>
+<p data-gm="intro">Explore science, English, mathematics and more.</p>
 <div class="people">👩‍🏫 👧🏽 👦🏾 👧🏻</div>
-<p>Teachers and parents supporting every child ❤️</p>
-<button type="button" onclick="document.getElementById('subjects').scrollIntoView({behavior:'smooth'})">Start Learning 🚀</button>
+<p data-gm="support">Teachers and parents supporting every child ❤️</p>
+<button type="button" onclick="document.getElementById('subjects').scrollIntoView({behavior:'smooth'})" data-gm="start">Start Learning 🚀</button>
 </section>
 <section id="subjects" class="subjects">
-<div class="subject"><span>🔬</span><button type="button" onclick="window.location.href='science.html'">Science</button></div>
-<div class="subject"><span>🔢</span><button type="button" onclick="window.location.href='math.html'">Mathematics</button></div>
-<div class="subject"><span>📚</span><button type="button" onclick="lesson('English')">English</button></div>
-<div class="subject"><span>🎮</span><button type="button" onclick="lesson('Learning Games')">Learning Games</button></div>
-<div class="subject"><span>🤖</span><button type="button" onclick="lesson('AI Teacher')">AI Teacher</button></div>
-<div class="subject"><span>🌍</span><button type="button" onclick="lesson('Group Learning')">Group Learning</button></div>
+<div class="subject"><span>🔬</span><button type="button" onclick="window.location.href='science.html'" data-gm="science">Science</button></div>
+<div class="subject"><span>🔢</span><button type="button" onclick="window.location.href='math.html'" data-gm="math">Mathematics</button></div>
+<div class="subject"><span>📚</span><button type="button" onclick="lesson('English')" data-gm="english">English</button></div>
+<div class="subject"><span>🎮</span><button type="button" onclick="lesson('Learning Games')" data-gm="games">Learning Games</button></div>
+<div class="subject"><span>🤖</span><button type="button" onclick="lesson('AI Teacher')" data-gm="ai">AI Teacher</button></div>
+<div class="subject"><span>🌍</span><button type="button" onclick="lesson('Group Learning')" data-gm="group">Group Learning</button></div>
   <div class="subject">
 <span>🌐</span>
-<button type="button" onclick="window.location.href='international-classrooms.html'">International Classroom</button>
+<button type="button" onclick="window.location.href='international-classrooms.html'" data-gm="classroom">International Classroom</button>
   </div>
 </section>
-<footer>Great Minds AI — Every Child Can Shine ✨</footer>
+<footer data-gm="footer">Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 function lesson(subject) {
   const pages = {
@@ -94,35 +100,54 @@ function lesson(subject) {
 }
 </script>
 <section id="more-subjects" style="padding:20px;background:#eaf5ff;text-align:center">
-  <h2>📚 Complete Educational Subjects</h2>
+  <h2 data-gm="complete">📚 Complete Educational Subjects</h2>
   <div class="subjects">
-    <div class="subject"><span>🏡</span><a class="subject-link" href="home-science.html">Home Science</a></div>
-    <div class="subject"><span>➕</span><a class="subject-link" href="math-extra.html">Extra Mathematics Practice</a></div>
-    <div class="subject"><span>🧪</span><a class="subject-link" href="science-extra.html">Extra Science Practice</a></div>
-    <div class="subject"><span>🌍</span><a class="subject-link" href="social-extra.html">Extra Social Studies Practice</a></div>
-    <div class="subject"><span>🔤</span><a class="subject-link" href="vocabulary.html">Vocabulary</a></div>
-    <div class="subject"><span>📚</span><a class="subject-link" href="dictionary.html">Little Learners Dictionary</a></div>
-    <div class="subject"><span>📖</span><a class="subject-link" href="english-story-studio.html">English Story Studio</a></div>
-    <div class="subject"><span>✍️</span><a class="subject-link" href="reading-writing.html">Reading & Writing</a></div>
-    <div class="subject"><span>🌍</span><a class="subject-link" href="social-studies.html">Social Studies</a></div>
-    <div class="subject"><span>🏛️</span><a class="subject-link" href="history.html">History</a></div>
-    <div class="subject"><span>🗺️</span><a class="subject-link" href="geography.html">Geography</a></div>
-    <div class="subject"><span>💻</span><a class="subject-link" href="computer.html">Computer Studies</a></div>
-    <div class="subject"><span>🧠</span><a class="subject-link" href="general-knowledge.html">General Knowledge</a></div>
-    <div class="subject"><span>📚</span><a class="subject-link" href="encyclopedia.html">Little Learners Encyclopedia</a></div>
-    <div class="subject"><span>🔎</span><a class="subject-link" href="guided-research.html">Guided Research Centre</a></div>
+    <div class="subject"><span>🏡</span><a class="subject-link" href="home-science.html" data-gm="homeScience">Home Science</a></div>
+    <div class="subject"><span>➕</span><a class="subject-link" href="math-extra.html" data-gm="extraMath">Extra Mathematics Practice</a></div>
+    <div class="subject"><span>🧪</span><a class="subject-link" href="science-extra.html" data-gm="extraScience">Extra Science Practice</a></div>
+    <div class="subject"><span>🌍</span><a class="subject-link" href="social-extra.html" data-gm="extraSocial">Extra Social Studies Practice</a></div>
+    <div class="subject"><span>🔤</span><a class="subject-link" href="vocabulary.html" data-gm="vocabulary">Vocabulary</a></div>
+    <div class="subject"><span>📚</span><a class="subject-link" href="dictionary.html" data-gm="dictionary">Little Learners Dictionary</a></div>
+    <div class="subject"><span>📖</span><a class="subject-link" href="english-story-studio.html" data-gm="story">English Story Studio</a></div>
+    <div class="subject"><span>✍️</span><a class="subject-link" href="reading-writing.html" data-gm="reading">Reading & Writing</a></div>
+    <div class="subject"><span>🌍</span><a class="subject-link" href="social-studies.html" data-gm="social">Social Studies</a></div>
+    <div class="subject"><span>🏛️</span><a class="subject-link" href="history.html" data-gm="history">History</a></div>
+    <div class="subject"><span>🗺️</span><a class="subject-link" href="geography.html" data-gm="geography">Geography</a></div>
+    <div class="subject"><span>💻</span><a class="subject-link" href="computer.html" data-gm="computer">Computer Studies</a></div>
+    <div class="subject"><span>🧠</span><a class="subject-link" href="general-knowledge.html" data-gm="knowledge">General Knowledge</a></div>
+    <div class="subject"><span>📚</span><a class="subject-link" href="encyclopedia.html" data-gm="encyclopedia">Little Learners Encyclopedia</a></div>
+    <div class="subject"><span>🔎</span><a class="subject-link" href="guided-research.html" data-gm="research">Guided Research Centre</a></div>
   </div>
-  <h2>👨‍👩‍👧 Student, Teacher & Parent</h2>
+  <h2 data-gm="people">👨‍👩‍👧 Student, Teacher & Parent</h2>
   <div class="subjects">
-    <div class="subject"><span>🎒</span><a class="subject-link" href="student-profile.html">Student Profile</a></div>
-    <div class="subject"><span>👨‍👩‍👧</span><a class="subject-link" href="parents-teachers.html">Parents & Teachers Center</a></div>
-    <div class="subject"><span>🌐</span><a class="subject-link" href="connected-dashboards.html">Unified Learning & Classroom Hub</a></div>
-    <div class="subject"><span>📝</span><a class="subject-link" href="homework.html">Homework Manager</a></div>
-    <div class="subject"><span>🎨</span><a class="subject-link" href="gm-3d-graphics-gallery-1.html">3D Learning Graphics Gallery</a></div>
-    <div class="subject"><span>📘</span><a class="subject-link" href="english.html">English Lessons</a></div>
-    <div class="subject"><span>🤖</span><a class="subject-link" href="ai-teacher.html">AI Teacher — Voice Demo</a></div>
-    <div class="subject"><span>🌍</span><a class="subject-link" href="group-learning.html">Group Learning Demo</a></div>
+    <div class="subject"><span>🎒</span><a class="subject-link" href="student-profile.html" data-gm="profile">Student Profile</a></div>
+    <div class="subject"><span>👨‍👩‍👧</span><a class="subject-link" href="parents-teachers.html" data-gm="parent">Parents & Teachers Center</a></div>
+    <div class="subject"><span>🌐</span><a class="subject-link" href="connected-dashboards.html" data-gm="hub">Unified Learning & Classroom Hub</a></div>
+    <div class="subject"><span>📝</span><a class="subject-link" href="homework.html" data-gm="homework">Homework Manager</a></div>
+    <div class="subject"><span>🎨</span><a class="subject-link" href="gm-3d-graphics-gallery-1.html" data-gm="gallery">3D Learning Graphics Gallery</a></div>
+    <div class="subject"><span>📘</span><a class="subject-link" href="english.html" data-gm="lessons">English Lessons</a></div>
+    <div class="subject"><span>🤖</span><a class="subject-link" href="ai-teacher.html" data-gm="voice">AI Teacher — Voice Demo</a></div>
+    <div class="subject"><span>🌍</span><a class="subject-link" href="group-learning.html" data-gm="groupDemo">Group Learning Demo</a></div>
   </div>
 </section>
+<script>
+const gmTranslations={
+en:{tagline:"Learn • Explore • Imagine • Create",hero:"Launch Your Learning Adventure!",intro:"Explore science, English, mathematics and more.",support:"Teachers and parents supporting every child ❤️",start:"Start Learning 🚀",science:"Science",math:"Mathematics",english:"English",games:"Learning Games",ai:"AI Teacher",group:"Group Learning",classroom:"International Classroom",complete:"📚 Complete Educational Subjects",homeScience:"Home Science",extraMath:"Extra Mathematics Practice",extraScience:"Extra Science Practice",extraSocial:"Extra Social Studies Practice",vocabulary:"Vocabulary",dictionary:"Little Learners Dictionary",story:"English Story Studio",reading:"Reading & Writing",social:"Social Studies",history:"History",geography:"Geography",computer:"Computer Studies",knowledge:"General Knowledge",encyclopedia:"Little Learners Encyclopedia",research:"Guided Research Centre",people:"👨‍👩‍👧 Student, Teacher & Parent",profile:"Student Profile",parent:"Parents & Teachers Center",hub:"Unified Learning & Classroom Hub",homework:"Homework Manager",gallery:"3D Learning Graphics Gallery",lessons:"English Lessons",voice:"AI Teacher — Voice Demo",groupDemo:"Group Learning Demo",footer:"Great Minds AI — Every Child Can Shine ✨"},
+zh:{tagline:"学习 • 探索 • 想象 • 创造",hero:"开启你的学习冒险！",intro:"探索科学、英语、数学等更多知识。",support:"老师和家长陪伴每一位孩子 ❤️",start:"开始学习 🚀",science:"科学",math:"数学",english:"英语",games:"学习游戏",ai:"人工智能老师",group:"小组学习",classroom:"国际课堂",complete:"📚 完整学习科目",homeScience:"家庭科学",extraMath:"数学强化练习",extraScience:"科学强化练习",extraSocial:"社会学科强化练习",vocabulary:"词汇",dictionary:"儿童词典",story:"英语故事工作室",reading:"阅读与写作",social:"社会研究",history:"历史",geography:"地理",computer:"计算机",knowledge:"常识",encyclopedia:"儿童百科全书",research:"指导研究中心",people:"👨‍👩‍👧 学生、教师与家长",profile:"学生档案",parent:"家长与教师中心",hub:"学习与课堂中心",homework:"作业管理",gallery:"3D 学习图片馆",lessons:"英语课程",voice:"人工智能老师 — 语音演示",groupDemo:"小组学习演示",footer:"Great Minds AI — 每个孩子都能闪耀 ✨"},
+de:{tagline:"Lernen • Entdecken • Vorstellen • Gestalten",hero:"Starte dein Lernabenteuer!",intro:"Entdecke Naturwissenschaften, Englisch, Mathematik und mehr.",support:"Lehrkräfte und Eltern unterstützen jedes Kind ❤️",start:"Jetzt lernen 🚀",science:"Naturwissenschaften",math:"Mathematik",english:"Englisch",games:"Lernspiele",ai:"KI-Lehrkraft",group:"Gemeinsames Lernen",classroom:"Internationales Klassenzimmer",complete:"📚 Alle Lernfächer",homeScience:"Hauswirtschaft",extraMath:"Zusätzliche Matheübungen",extraScience:"Zusätzliche Naturwissenschaftsübungen",extraSocial:"Zusätzliche Übungen in Sozialkunde",vocabulary:"Wortschatz",dictionary:"Wörterbuch für Kinder",story:"Englisches Geschichtenstudio",reading:"Lesen & Schreiben",social:"Sozialkunde",history:"Geschichte",geography:"Geografie",computer:"Informatik",knowledge:"Allgemeinwissen",encyclopedia:"Kinderlexikon",research:"Angeleitetes Forschungszentrum",people:"👨‍👩‍👧 Schüler, Lehrkräfte & Eltern",profile:"Schülerprofil",parent:"Eltern- und Lehrkräftezentrum",hub:"Lern- und Klassenzimmer-Zentrale",homework:"Hausaufgabenverwaltung",gallery:"3D-Lerngalerie",lessons:"Englischunterricht",voice:"KI-Lehrkraft — Sprachdemo",groupDemo:"Demo zum gemeinsamen Lernen",footer:"Great Minds AI — Jedes Kind kann glänzen ✨"}
+};
+function gmSetLanguage(lang){
+ const t=gmTranslations[lang]||gmTranslations.en;
+ document.documentElement.lang=lang==="zh"?"zh-CN":lang;
+ document.querySelectorAll("[data-gm]").forEach(el=>{const key=el.dataset.gm;if(t[key])el.textContent=t[key]});
+ try{localStorage.setItem("gm_language",lang)}catch(e){}
+}
+document.addEventListener("DOMContentLoaded",()=>{
+ const select=document.getElementById("gm-language");
+ let lang="en";try{lang=localStorage.getItem("gm_language")||"en"}catch(e){}
+ select.value=lang;gmSetLanguage(lang);
+ select.addEventListener("change",()=>gmSetLanguage(select.value));
+});
+</script>
 </body>
 </html>
