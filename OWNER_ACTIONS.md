@@ -48,6 +48,10 @@ This file lists only actions that still need the project owner or a real-device 
 
 **Not complete until:** teacher, student and guardian flows pass with real authenticated sessions and the revoke path is tested.
 
+**Additional database migration prepared (not yet applied)**
+- Review `supabase/migrations/20261105_enforce_homework_score_max.sql`. It adds a database trigger that rejects marks above an assignment's `max_points`. The browser helper also checks the assignment maximum before sending a mark.
+- The browser helper change is committed; the database trigger remains pending until the migration is applied and verified in Supabase.
+
 ## 3. Student progress and homework — cross-device test
 
 **Prepared in GitHub and Supabase**
