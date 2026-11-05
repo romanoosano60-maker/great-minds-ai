@@ -235,3 +235,9 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Student, Parent and Teacher cloud dashboards now verify the current user with Supabase Auth `getUser()` during initialisation before loading cloud records.
 - JavaScript syntax validation passed for all three pages after the update.
 - Supabase security advisor still flags leaked-password protection as disabled; enable it in Auth settings before real family accounts. Performance-only notices for unused indexes and separate role-based SELECT policies remain under review and have not been changed.
+
+
+## 20. AI Teacher additional subjects (5 November 2026)
+- AI Teacher now includes Social Studies, History, Geography and Home Science alongside Mathematics, English, Science, Computer Studies and General Knowledge.
+- Each new subject has a prepared example Q&A and a link to its corresponding full lesson page. Static syntax and local-link checks passed.
+- Live AI backend connection remains pending.
