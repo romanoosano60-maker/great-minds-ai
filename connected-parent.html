@@ -42,10 +42,10 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable. The local demo remains available.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
-  const {data,error}=await db.auth.getSession();
-  if(error){say('Session check failed: '+error.message);return}
-  user=data.session?.user||null;
-  if(user){say('Parent session found.');await load();watchCloud()}else say('Not signed in to cloud progress.');
+  const {data,error}=await db.auth.getUser();
+  if(error){say('Account verification failed: '+error.message);return}
+  user=data.user||null;
+  if(user){say('Parent account verified.');await load();watchCloud()}else say('Not signed in to cloud progress.');
  }
  el('parentLogin').addEventListener('click',async()=>{
   if(!db){say('Cloud service unavailable.');return}
