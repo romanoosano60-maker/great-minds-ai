@@ -54,9 +54,33 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script><script>
 const story=document.getElementById("story");
 document.getElementById("listen").addEventListener("click",function(){
- if(typeof window.speak==="function"){window.speak(story.textContent);return;}
- if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){document.getElementById("readStatus").textContent="Read-aloud is not supported in this browser. You can still read the story on screen.";return;}
- window.speechSynthesis.cancel();const voice=new SpeechSynthesisUtterance(story.textContent);voice.lang=(document.documentElement.lang||"en").toLowerCase();voice.rate=0.88;voice.onstart=()=>document.getElementById("readStatus").textContent="Reading the story aloud…";voice.onend=()=>document.getElementById("readStatus").textContent="Story finished. Well done!";voice.onerror=()=>document.getElementById("readStatus").textContent="The phone could not play this voice. Check Android text-to-speech settings.";window.speechSynthesis.speak(voice);
+ const status=document.getElementById("readStatus");
+ if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){status.textContent="This browser does not provide text-to-speech. Open this page in Chrome and check Android text-to-speech settings.";return;}
+ const synth=window.speechSynthesis;
+ synth.cancel();
+ const selected=(document.documentElement.lang||"en").toLowerCase();
+ const locales={en:"en-US",hi:"hi-IN",bn:"bn-BD",ta:"ta-IN",te:"te-IN",mr:"mr-IN",de:"de-DE",fr:"fr-FR",es:"es-ES",zh:"zh-CN",ar:"ar-SA"};
+ const wanted=locales[selected]||selected;
+ const text=story.textContent.trim();
+ const speakNow=()=>{
+   const voices=synth.getVoices()||[];
+   const voice=voices.find(v=>v.lang.toLowerCase()===wanted.toLowerCase())||voices.find(v=>v.lang.toLowerCase().startsWith(selected+"-"))||voices.find(v=>v.default)||voices[0]||null;
+   const utterance=new SpeechSynthesisUtterance(text);
+   utterance.lang=voice?voice.lang:wanted;
+   utterance.rate=0.88;
+   if(voice)utterance.voice=voice;
+   utterance.onstart=()=>{status.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 Reading aloud…":"🔊 Reading aloud using the phone's available voice. Install the selected language voice in Android settings for a closer match.";};
+   utterance.onend=()=>{status.textContent="Story finished. Well done!";};
+   utterance.onerror=()=>{status.textContent="The phone could not play speech. In Android Settings, search for Text-to-speech output and install or select a speech voice.";};
+   synth.speak(utterance);
+ };
+ if(synth.getVoices().length){speakNow();}else{
+   status.textContent="Loading the phone's speech voice…";
+   let done=false;
+   const ready=()=>{if(done)return;done=true;synth.removeEventListener("voiceschanged",ready);speakNow();};
+   synth.addEventListener("voiceschanged",ready);
+   setTimeout(()=>{if(!done){synth.removeEventListener("voiceschanged",ready);done=true;speakNow();}},1200);
+ }
 });
 document.getElementById("stop").addEventListener("click",function(){if("speechSynthesis" in window)window.speechSynthesis.cancel();document.getElementById("readStatus").textContent="Reading stopped.";});
 let answers={},cloudSaveAttempted=false;function score(){const total=Object.values(answers).filter(Boolean).length;document.getElementById("score").textContent="Score: "+total+"/2";if(Object.keys(answers).length===2&&!cloudSaveAttempted){cloudSaveAttempted=true;saveReadingScore(total);}}async function saveReadingScore(total){const status=document.getElementById("cloudProgressStatus");if(typeof window.gmSaveStudentProgress!=="function"){status.textContent="Cloud save is not configured here. Your quiz score is shown on this page; your writing stays on this device.";return;}status.textContent="Checking your account and saving the reading quiz score…";try{const result=await window.gmSaveStudentProgress({subject:"English",activity_key:"reading-writing-story-quiz",score:total,max_score:2,correct_count:total,question_count:2,source:"reading-writing"});status.textContent=result&&result.saved?"Reading quiz score saved to your secure learning profile. Your writing stays on this device.":(result&&result.reason?result.reason:"Cloud save could not be confirmed.")+" Your writing stays on this device.";}catch(error){console.warn("Reading and Writing quiz cloud save failed:",error);status.textContent="Cloud save could not be confirmed. Your quiz score remains visible here, and your writing stays on this device.";}}
