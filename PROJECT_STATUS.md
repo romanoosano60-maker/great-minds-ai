@@ -367,3 +367,13 @@ Report separate statuses for frontend development, backend integration, testing 
 - The project owner reported that the Home Science page is good after opening/testing it on Android.
 - Record this as user-confirmed page/device acceptance. It does not independently verify every audio voice, quiz score edge case, Supabase write, or cross-device synchronization.
 - Home Science source, hub link and Master Guide updates remain committed; live cloud progress synchronization remains pending.
+
+
+## Supabase student progress foundation — 5 November 2026
+- Connected to the active Supabase project `ryuchmmnyjyldwouidyy` using the Supabase integration; database reports healthy status.
+- Independently inspected the live public schema, migration history, RLS policies, function grants and security advisors. Confirmed RLS is enabled on classrooms, teacher_profiles, classroom_members and guardian_relationships. Existing classroom policies require approved teachers; classroom membership approval requires parent consent; guardian consent codes have no direct client access. No Edge Functions are currently deployed.
+- Added `public.student_learning_progress` directly to the live database. It stores student-owned quiz/activity results with score constraints and timestamps. RLS enabled; authenticated users receive SELECT and INSERT only (no UPDATE/DELETE). Student inserts require the signed-in student's own ID and an active guardian link. Reads are limited to the student, active linked guardian, or approved teacher where classroom membership and parent consent are both approved.
+- Verified the live table columns, all four policies, RLS enabled, and grants: anon has no SELECT/INSERT; authenticated has SELECT/INSERT and no UPDATE/DELETE.
+- Security advisor still reports one warning: leaked-password protection is disabled. This setting was not changed.
+- SQL reference committed at `supabase/student-learning-progress.sql`, commit `e5569dadb3d99ef62ddc323648451f8f6ecb67aa`; re-fetched and verified.
+- Not yet done: authenticated student account/session flow, active guardian-link test account, actual progress INSERT/SELECT under user JWTs, dashboard reading from this table, and cross-device verification. Existing lesson quiz pages still save to same-browser demo storage; they do not yet write to this cloud table. Do not describe cloud progress sync as live until those tests pass.
