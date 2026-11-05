@@ -473,3 +473,16 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added one age-appropriate prepared example question and answer for each new subject and mapped each to its existing full lesson page.
 - Re-fetched the updated AI Teacher page, verified all nine subject options have corresponding prepared-answer entries, checked its local links against the repository tree, and parsed its JavaScript without syntax errors.
 - AI Teacher remains an offline demonstration; the new examples do not imply the live AI backend is connected.
+
+
+## Completion work — AI Teacher, international classrooms, student progress and homework — 2026-11-05
+
+- AI Teacher subject selection now requires an explicit choice before Ask Teacher or practice is enabled. The selected subject is retained for the current browser tab session, and the lesson link updates to the chosen subject.
+- The AI Teacher still uses prepared offline examples. No live AI request is made because the Cloudflare Worker endpoint and its secret configuration are not available through the connected GitHub/Supabase tools. Do not describe AI Teacher as live until the secured endpoint is deployed and tested.
+- Re-audited Supabase: all seven classroom/guardian/progress/homework tables have RLS enabled. The active Realtime publication includes classrooms, classroom_members, homework_assignments, homework_submissions and student_learning_progress.
+- Re-audited classroom policies: only approved teachers create/manage their classrooms; students join through a server-side code function as pending members; teachers can approve only after guardian consent; active guardians can read linked student memberships. Parent-consent code redemption requires a verified guardian email and explicit confirmation.
+- Student quiz pages load the cloud progress helper for Mathematics, English, Science, Social Studies, History, Geography, Home Science, Computer Studies and General Knowledge. Cloud inserts require a signed-in student with an active guardian relationship. A new secure cloud section in connected-progress.html displays only rows allowed by Supabase RLS.
+- The homework page has a separate Supabase-backed workflow for approved teachers to publish, students with approved membership and guardian consent to submit, teachers to mark, and linked guardians to read permitted submissions. Older role tabs remain local-device demonstrations.
+- Current database counts: 1 classroom; 0 classroom memberships; 1 active guardian relationship; 0 student progress rows; 0 homework assignments; 0 homework submissions. This means live student/parent/teacher workflows are not yet end-to-end verified.
+- Security advisor still reports leaked-password protection disabled. This Auth setting requires dashboard access; it has not been changed. Performance advisor reports two multiple-permissive-policy warnings (homework assignment SELECT and student progress SELECT) and five unused-index notices; no policy was weakened to silence these warnings.
+- Real account signup/sign-in, guardian consent, student join, teacher approval, homework submission/marking, cross-device progress visibility, Android UI tests and the live AI backend remain for supervised verification.
