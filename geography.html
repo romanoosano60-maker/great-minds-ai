@@ -2,6 +2,20 @@
 <html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><meta name="theme-color" content="#eaf5ff"><title>World Atlas | Great Minds AI</title>
 <style>
 :root{--ink:#20345c;--blue:#315fba;--paper:#f2f8ff;--gold:#ffd66b}*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:system-ui,Arial,sans-serif}header{padding:28px 16px;text-align:center;background:linear-gradient(145deg,#b9f1f2,#fff0b8)}header .globe{font-size:56px}h1{margin:4px;font-size:clamp(30px,6vw,44px)}header p{font-size:17px}.btn,button{border:0;border-radius:14px;padding:12px 16px;background:var(--blue);color:white;font-weight:700;font-size:15px;cursor:pointer;text-decoration:none;display:inline-block}.btn.secondary,button.secondary{background:#e5edff;color:#24447f}.wrap{max-width:1000px;margin:auto;padding:18px}.panel{background:white;border-radius:20px;padding:18px;margin:16px 0;box-shadow:0 4px 16px #233b6310}.tabs{display:flex;gap:8px;flex-wrap:wrap;justify-content:center;margin:18px 0}.tabs button[aria-pressed=true]{background:#efad32;color:#283b60}.continent-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:12px}.continent{border:2px solid #e1ebfa;border-radius:17px;padding:16px 10px;text-align:center;background:#fbfdff}.continent .emoji{font-size:38px}.continent h3{margin:6px 0}.continent p{margin:4px 0;font-size:13px}.fact{background:#f2f7ff;border-radius:14px;padding:14px;margin-top:14px;line-height:1.55}.country-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(180px,1fr));gap:10px}.country{padding:13px;border-radius:14px;background:#f7f9ff;border:1px solid #e3eafa}.country strong{display:block;font-size:17px}.country span{font-size:14px}.quiz{line-height:1.6}.answers{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:9px;margin:14px 0}.answers button{background:#e8efff;color:#213c73;text-align:left}.answers button:disabled{opacity:.75;cursor:default}.feedback{font-weight:700;min-height:28px}.small{font-size:13px;color:#536987}.toolbar{display:flex;gap:10px;flex-wrap:wrap;justify-content:center}footer{text-align:center;padding:25px;background:#273e7b;color:white;margin-top:20px}button:focus-visible,a:focus-visible{outline:3px solid #e8a528;outline-offset:3px}@media(prefers-reduced-motion:no-preference){.panel{animation:rise .25s ease-out}@keyframes rise{from{opacity:.7;transform:translateY(5px)}to{opacity:1;transform:none}}}
+
+/* Great Minds mobile polish */
+*{box-sizing:border-box}
+main{width:min(100% - 20px,1000px);margin-inline:auto}
+button,a,input,select,textarea{touch-action:manipulation}
+button{min-height:46px;cursor:pointer}
+a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+input,select,textarea{max-width:100%;font:inherit}
+img,svg,video,canvas{max-width:100%;height:auto}
+.card,section,article{overflow-wrap:anywhere}
+@media(max-width:480px){main{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
+@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+@media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
 </style></head><body>
 <header><div class="globe" aria-hidden="true">🌍</div><h1>World Atlas</h1><p>Explore our amazing planet, one discovery at a time!</p><a class="btn secondary" href="index.html">🏠 Back to Great Minds Home</a><a href="connected-dashboards.html">🌐 Unified Hub</a></header>
 <main class="wrap">
