@@ -54,7 +54,7 @@ This file lists only actions that still need the project owner or a real-device 
 
 **Prepared in GitHub and Supabase**
 - Subject quiz pages use the shared authenticated progress helper where integrated.
-- The Student Profile has a cloud progress viewer.
+- The Student Profile has a cloud progress viewer and now offers a consent-gated cloud save when a quiz score is manually recorded there. The local profile history remains available if cloud saving is not authorised; manual homework completion is not uploaded as verified homework.
 - Secure homework tables, client helper and separate cloud workflow are present.
 - Older local-demo tabs remain local-device demonstrations and must not be mistaken for cloud records.
 
@@ -118,3 +118,10 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 - `vocabulary.html` now loads the existing authenticated progress helper and offers a cloud record for a completed word-practice activity.
 - The selected word's completion is recorded at most once per browser profile; the child's sentence text is never included in the cloud request or stored by this feature.
 - This is a selected activity sync path, not full vocabulary or writing synchronisation. It still requires the approved student/guardian live test listed above.
+
+
+## Additional GitHub-only improvement — Student Profile quiz progress
+
+- `student-profile.html` now attempts a secure progress insert when a quiz result is recorded, using the shared authenticated helper and a 0–100 score validation.
+- The page clearly reports whether the result was saved locally only or also confirmed in cloud progress. Manual self-marked homework remains local and is not represented as teacher-verified cloud homework.
+- Live verification still requires the approved student sign-in and guardian consent test; no cloud success is assumed from the source change alone.
