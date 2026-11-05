@@ -35,6 +35,7 @@ a.btn,button{border:0;border-radius:13px;padding:11px 15px;background:var(--blue
 <button type="submit">Check my answers</button></form><div id="result" aria-live="polite"></div><p class="muted">Quiz results are saved only in this browser's local demo progress. They are not sent to Supabase or another device.</p></section>
 <section class="notice" style="margin-top:16px"><b>Safety first:</b> Never taste unknown substances, mix cleaning products, handle sharp tools, use appliances, or attempt cooking or experiments without an adult's permission and supervision.</section>
 </main><footer>Great Minds AI • Learn something helpful every day 🌟</footer>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
 function speak(text){if(!('speechSynthesis'in window)){alert('Audio reading is not supported in this browser.');return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.9;window.speechSynthesis.speak(u);}
 document.getElementById('quiz').addEventListener('submit',function(e){e.preventDefault();const answers={q1:'b',q2:'a',q3:'c',q4:'b',q5:'c'};let correct=0;for(const [q,a] of Object.entries(answers)){const selected=this.querySelector('input[name="'+q+'"]:checked');if(selected&&selected.value===a)correct++;}
