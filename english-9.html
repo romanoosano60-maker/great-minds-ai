@@ -85,6 +85,7 @@ a{color:#fff}
 <p id="score">Score: 0</p>
 </section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
 const examples=[
 "Apple","Ball","Cat","Dog","Elephant","Fish",
@@ -147,6 +148,7 @@ result.textContent="🎉 Correct! Well done!";
 result.textContent="Not quite. The correct answer is D.";
 }
 document.getElementById("score").textContent="Score: "+score;
+if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"English",activity_key:"english-alphabet-reading-quiz",score:score,max_score:1,correct_count:score,question_count:1,source:"english-9"}).then(r=>{result.textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+r.reason)})}
 }
 </script>
 </body>
