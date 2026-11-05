@@ -64,11 +64,11 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <div class="card">
 <p>History helps us understand how people lived in the past and how societies changed.</p>
 <p>Ancient Egyptians built pyramids. Many early civilizations developed farming, writing and trade.</p>
-<button onclick="speak('History is the study of the past. People learn about history using objects, documents and stories.')">🔊 Listen</button>
+<button type="button" onclick="speak('History is the study of the past. People learn about history using objects, documents and stories.')">🔊 Listen</button>
 </div>
 <p>What does history study?</p>
-<button onclick="answer('history',true,'Correct! History studies the past.')">The past</button>
-<button onclick="answer('history',false,'Try again!')">Only the future</button>
+<button type="button" onclick="answer('history',true,'Correct! History studies the past.')">The past</button>
+<button type="button" onclick="answer('history',false,'Try again!')">Only the future</button>
 <p class="feedback" id="history"></p>
 </section>
 <section>
@@ -76,7 +76,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Culture includes languages, food, music, clothing, art and traditions.</p>
 <div class="card">
 <p>People around the world have different traditions. We should respect each other's cultures.</p>
-<button onclick="speak('We should respect people from different cultures and backgrounds.')">🔊 Listen</button>
+<button type="button" onclick="speak('We should respect people from different cultures and backgrounds.')">🔊 Listen</button>
 </div>
 </section>
 <section>
@@ -86,8 +86,8 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Examples: Follow fair rules, care for public places, help people and respect their rights.</p>
 </div>
 <p>Which action shows good citizenship?</p>
-<button onclick="answer('citizen',true,'Excellent! Helping others is good citizenship.')">Helping a neighbor</button>
-<button onclick="answer('citizen',false,'Try again!')">Throwing rubbish on the road</button>
+<button type="button" onclick="answer('citizen',true,'Excellent! Helping others is good citizenship.')">Helping a neighbor</button>
+<button type="button" onclick="answer('citizen',false,'Try again!')">Throwing rubbish on the road</button>
 <p class="feedback" id="citizen"></p>
 </section>
 <section>
@@ -95,11 +95,11 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <p>Our environment includes air, water, land, plants and animals.</p>
 <div class="card">
 <p>Protect Earth by saving water, reducing waste and caring for nature.</p>
-<button onclick="speak('Protect our planet. Save water, reduce waste and plant trees where appropriate.')">🔊 Listen</button>
+<button type="button" onclick="speak('Protect our planet. Save water, reduce waste and plant trees where appropriate.')">🔊 Listen</button>
 </div>
 <p>Which action helps the environment?</p>
-<button onclick="answer('environment',true,'Correct! Saving water helps.')">Saving water</button>
-<button onclick="answer('environment',false,'Try again!')">Wasting water</button>
+<button type="button" onclick="answer('environment',true,'Correct! Saving water helps.')">Saving water</button>
+<button type="button" onclick="answer('environment',false,'Try again!')">Wasting water</button>
 <p class="feedback" id="environment"></p>
 </section>
 <section>
@@ -108,7 +108,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <div id="choices"></div>
 <p class="feedback" id="quizFeedback" aria-live="polite"></p>
 <p id="score">Score: 0</p>
-<button onclick="nextQuestion()">Next Question ➜</button>
+<button type="button" onclick="nextQuestion()">Next Question ➜</button>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
