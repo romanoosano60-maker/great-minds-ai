@@ -44,7 +44,7 @@ footer{margin-top:20px}
 <script src="supabase-config.js"></script>
 </head>
 <body>
-<div class="language-bar"><label for="gm-language">Language / 语言 / Sprache:</label><select id="gm-language" aria-label="Choose app language"><option value="en">English</option><option value="zh">中文（简体）</option><option value="de">Deutsch</option></select></div>
+<div class="language-bar"><label for="gm-language">Language / 语言 / Sprache:</label><select id="gm-language" aria-label="Choose app language"><option value="en">English</option><option value="zh">中文（简体）</option><option value="de">Deutsch</option><option value="es">Español</option><option value="fr">Français</option><option value="ar">العربية</option></select></div>
 <header>
 <h1>🌟 Great Minds AI</h1>
 <p data-gm="tagline">Learn • Explore • Imagine • Create</p>
@@ -138,7 +138,7 @@ de:{tagline:"Lernen • Entdecken • Vorstellen • Gestalten",hero:"Starte dei
 };
 function gmSetLanguage(lang){
  const t=gmTranslations[lang]||gmTranslations.en;
- document.documentElement.lang=lang==="zh"?"zh-CN":lang;
+ document.documentElement.lang=lang==="zh"?"zh-CN":lang;document.document.documentElement.dir=lang==="ar"?"rtl":"ltr";
  document.querySelectorAll("[data-gm]").forEach(el=>{const key=el.dataset.gm;if(t[key])el.textContent=t[key]});
  try{localStorage.setItem("gm_language",lang)}catch(e){}
 }
