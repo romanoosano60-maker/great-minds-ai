@@ -23,3 +23,10 @@
 - Added the same five languages for Social Studies community topics, explanations, quiz prompt and discussion activity.
 - The shared language script passed a JavaScript syntax check after this update.
 - These new translations are committed to GitHub. Their on-device display and the translated quiz feedback still need user testing.
+
+## Additional update — History Explorer and World Atlas
+- Added Hindi, Bengali, Tamil, Telugu and Marathi translations for the History Explorer timeline, evidence-source explanations, quiz controls and reflection prompt.
+- Added the same five languages for World Atlas headings, continent descriptions, country-capital labels, oceans and landmarks, quiz prompt and learning reminder.
+- Proper names of continents, countries and major places remain unchanged where appropriate.
+- The shared language script passed a JavaScript syntax check after the additions.
+- Android rendering and translated quiz interaction still require a device check.
