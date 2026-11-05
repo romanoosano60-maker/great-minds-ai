@@ -89,3 +89,13 @@ This file lists only actions that still need the project owner or a real-device 
 ## Current safety boundary
 
 Do not enable child-to-child messaging or open international chat until account verification, guardian consent, membership approval, moderation/reporting, adult escalation, retention and deletion processes have been reviewed and tested.
+
+
+## 6. Additional source audit — 5 November 2026
+
+- Rechecked the international classroom account, guardian-consent, join-request, teacher-approval and realtime-refresh handlers. A duplicate fallback in consent-code response handling was removed from `international-classrooms.html`.
+- Rechecked `homework.html` and `student-cloud-homework.js`: cloud homework is separate from the local role-play tabs; user-entered answers and feedback are inserted into the page with text nodes/textContent rather than interpreted as HTML. Database RLS remains the access-control boundary.
+- Rechecked the AI Teacher Worker source: it restricts requests to the GitHub Pages origin, verifies the Supabase bearer token, requires an active guardian relationship, applies per-user rate limiting, bounds question/history input, and keeps the OpenAI key server-side. It remains a source template until deployed and tested.
+- Rechecked lesson-page cloud progress integration. The main subject quiz pages and extra subject quiz pages use the shared cloud progress helper. Reading/Writing, Vocabulary, Advanced Learning, Games and certificate/reward records still include device-local demonstrations and should not be described as fully cloud-synchronised.
+- Confirmed `ai-teacher-config.js` is deliberately blank until a real Worker URL is deployed. No secrets were added to frontend files.
+- Remaining live tests are unchanged: real separate-account classroom/consent journey, cross-device progress/homework, Android microphone/audio, Worker deployment and safe AI test, full device navigation, privacy/legal approval, and native store packaging.
