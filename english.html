@@ -52,7 +52,7 @@ function play(id,from=0){if(paused&&current===id&&resumeCurrent){paused=false;ct
 function tick(){if(current!==id)return;if(index>=s.notes.length){status.textContent="Song finished! Great singing!";$(id+"Lyrics").textContent=s.lyrics;stop();return}
 const freq=s.notes[index];const osc=ctx.createOscillator(),gain=ctx.createGain();osc.type="sine";osc.frequency.value=freq;gain.gain.setValueAtTime(0.0001,ctx.currentTime);gain.gain.exponentialRampToValueAtTime(0.12,ctx.currentTime+0.025);gain.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.24/speed());osc.connect(gain);gain.connect(ctx.destination);osc.start();osc.stop(ctx.currentTime+0.26/speed());
 const line=words[Math.min(words.length-1,Math.floor(index/Math.max(1,Math.ceil(s.notes.length/words.length))))];$(id+"Lyrics").textContent=line;index++;timer=setTimeout(tick,300/speed());}
-tick();}
+resumeCurrent=tick;tick();}
 document.querySelectorAll("#learningSongs [data-song]").forEach(b=>b.addEventListener("click",()=>play(b.dataset.song)));
 document.querySelectorAll("#learningSongs [data-replay]").forEach(b=>b.addEventListener("click",()=>play(b.dataset.replay,0)));
 document.querySelectorAll("#learningSongs [data-stop]").forEach(b=>b.addEventListener("click",()=>{if(current&&!paused){if(timer){clearTimeout(timer);timer=null}paused=true;$(current+"Status").textContent="Paused. Press Play to continue.";}}));
