@@ -620,3 +620,12 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Preserved the existing local-device learning record, consent/RLS-gated `gmSaveStudentProgress` call, language selector, AI Teacher link, Learning Hub link and main home link.
 - Commit: `a8da25983d9834fad856c931697503c621947002`. Re-fetched the page and verified the single challenge handler, safe microphone stop, speech recognition, cloud helper, quiz/plan controls, language selector and navigation links.
 - This is source verification only. Live Android layout, microphone permission, speech playback, language voice availability, quiz/challenge interaction and real authenticated cloud saving still require device/account testing.
+
+
+## Guided Research Centre upgrade — 6 November 2026
+- Expanded the child-friendly topic library from four to six guides by adding food journeys/community roles and electricity generation/safety.
+- Added a structured source-evaluation checklist covering creator, publication/update date, evidence and confirmation from a second trusted source. It gives cautious feedback when information is incomplete and explicitly advises children to pause and ask an adult when sources disagree.
+- The checklist is a thinking aid, not a guarantee that a source is true. It does not browse the internet or certify sources.
+- Preserved the existing locally saved research notes, question-to-plan builder, optional read-aloud, language script, and home/Unified Hub navigation. Checklist answers and free-text notes are not uploaded.
+- Commit: `87cd77e5114ac76c8f3088bdffdea6f9ef3513ca`. Re-fetched the page and verified the new topic entries, source-check fields/feedback, local-only notes, read-aloud and navigation.
+- This remains source verification only. Android layout, voice playback, topic interactions, local storage behaviour and real authenticated student workflows still need device testing.
