@@ -518,3 +518,12 @@ Report separate statuses for frontend development, backend integration, testing 
 - Added optional saved-word collection on the current device. Sentence text and voice are not uploaded; the page attempts to save only the quiz score through the existing authenticated `student_learning_progress` helper, subject to Supabase RLS and guardian consent.
 - Commit: `6dc3f315592e56034a8a7e1bc7756ee585c8adcb`. Re-fetched the committed page and verified the expected sections, speech code, quiz, cloud-progress helper and home link are present.
 - GitHub Pages live rendering, Android touch/audio behaviour, quiz interaction and authenticated cloud-save flow remain untested. Do not mark the module device-tested or cloud-synced until those tests pass.
+
+
+## English Story Studio reliability and progress increment — 6 November 2026
+- Updated `english-story-studio.html` to load the existing Supabase client configuration and authenticated student-progress helper.
+- The four-question comprehension quiz now attempts one secure English progress save when completed, using the existing RLS/guardian-consent-gated helper. Writing remains device-only and is not uploaded.
+- Fixed a quiz restart race: restarting increments a run token so a delayed answer timer from the previous attempt cannot overwrite the new quiz.
+- Clarified the optional audio feature: it is a soft steady focus tone generated on-device, not instrumental music or a recorded track.
+- Commit: `054099aef2cfe588a8e353f0a33efcb8f21db55c`. Re-fetched the committed page and verified the Supabase scripts, quiz completion save call, English progress fields, device-only writing, restart guard and honest audio description are present.
+- Not yet verified: live browser JavaScript execution, Android voice/audio, quiz interaction, signed-in student progress INSERT under real RLS/guardian consent, or cross-device dashboard visibility. These remain pending; no cloud sync or device test is claimed as complete.
