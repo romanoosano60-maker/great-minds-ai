@@ -34,8 +34,20 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @keyframes gmSubjectFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(-1deg)}}
 }
 @media(prefers-reduced-motion:reduce){.gm-subject-art img{animation:none!important}}
+
+/* Consistent, thumb-friendly navigation across learning pages */
+.gm-quick-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px max(12px,calc((100% - 1000px)/2));background:#ffffffed;border-bottom:1px solid #dce6f5;position:relative;z-index:5}
+.gm-quick-nav a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border-radius:999px;background:#edf3ff;color:#24477f;text-decoration:none;font:700 14px/1.2 system-ui,Arial,sans-serif;white-space:nowrap}
+.gm-quick-nav a:focus-visible{outline:3px solid #f2ad35;outline-offset:2px}
+.gm-quick-nav a:hover{background:#dce8ff}
+@media(max-width:480px){.gm-quick-nav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:9px 10px;scrollbar-width:thin}.gm-quick-nav a{flex:0 0 auto}}
+@media(prefers-reduced-motion:reduce){.gm-quick-nav a{transition:none!important;scroll-behavior:auto!important}}
 </style><script src="gm-language.js?v=20261105c" defer></script></head>
 <body>
+<nav class="gm-quick-nav" aria-label="Great Minds learning navigation">
+<a href="index.html">🏠 Home</a><a href="vocabulary.html">🔤 Vocabulary</a><a href="math.html">🔢 Maths</a><a href="science.html">🔬 Science</a><a href="geography.html">🌍 Geography</a><a href="history.html">📜 History</a><a href="social-studies.html">🤝 Social Studies</a><a href="computer.html">💻 Computer</a><a href="home-science.html">🏡 Home Science</a>
+</nav>
+
 <header><div class="emoji">🏡 🥗 🧼 🌱</div><h1>Home Science</h1><p>Learn useful everyday skills for a healthy, safe and caring home.</p><div class="toplinks"><a class="btn alt" href="index.html">🏠 Main Home</a><a class="btn alt" href="connected-dashboards.html">Learning Hub</a></div></header>
 <main>
 <section class="card"><span class="tag">Great Minds AI • Learn & practise</span><h2>Welcome, young home scientist!</h2><div class="gm-subject-art" role="group" aria-label="Illustrations for this lesson" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px 0 18px"><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/home-food.svg" alt="Healthy food illustration" width="240" height="180" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;border-radius:15px;filter:drop-shadow(0 5px 5px #233b6525)"><figcaption style="font-size:13px;font-weight:700;color:inherit;margin-top:4px">Healthy food</figcaption></figure><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/home-hygiene.svg" alt="Handwashing illustration" width="240" height="180" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;border-radius:15px;filter:drop-shadow(0 5px 5px #233b6525)"><figcaption style="font-size:13px;font-weight:700;color:inherit;margin-top:4px">Handwashing</figcaption></figure><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/home-safety.svg" alt="Home safety illustration" width="240" height="180" loading="lazy" decoding="async" style="display:block;width:100%;height:auto;aspect-ratio:4/3;object-fit:contain;border-radius:15px;filter:drop-shadow(0 5px 5px #233b6525)"><figcaption style="font-size:13px;font-weight:700;color:inherit;margin-top:4px">Home safety</figcaption></figure></div><p>Explore food and nutrition, hygiene, home safety, caring for clothes, saving resources and helping your family. Ask a trusted adult before trying an activity.</p><p class="muted">This page is a learning activity, not a substitute for adult supervision.</p></section>
