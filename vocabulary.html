@@ -41,6 +41,14 @@ progress{width:100%;height:14px}.alphabet-grid{display:grid;grid-template-column
 <div class="row"><button type="button" class="secondary" id="previousWord">← Previous</button><button type="button" id="nextWord">Next word →</button><button type="button" class="secondary" id="saveWord">☆ Save word</button></div>
 <p class="status" id="wordStatus" role="status" aria-live="polite">Tip: say the word aloud, then make your own sentence.</p>
 </section>
+<section class="card" id="alphabetExplorer">
+<h2>🔤 A–Z Alphabet & Object Explorer</h2>
+<p>Learn every letter with real words and familiar objects. Choose a letter, say its sound, and explore three things that begin with it.</p>
+<div class="alphabet-grid" id="alphabetLetters" aria-label="Choose an alphabet letter"></div>
+<div class="word-card" aria-live="polite"><div class="word" id="abcLetter">A a</div><div class="meaning" id="abcSound">A says /a/ as in apple.</div><p class="example" id="abcSentence">A is for apple.</p><div class="abc-controls"><button type="button" id="abcHear">🔊 Hear this letter and words</button><button type="button" class="secondary" id="abcStop">⏹ Stop voice</button></div></div>
+<div class="abc-objects" id="abcObjects" aria-live="polite"></div>
+<p class="abc-tip" id="abcTip" role="status">Look at each object, say its name, and listen to the first sound.</p>
+</section>
 <section class="card">
 <h2>🧠 Five-word challenge</h2>
 <p>Choose the meaning that matches each word. You will get friendly feedback after every answer.</p>
