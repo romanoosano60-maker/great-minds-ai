@@ -1,57 +1,144 @@
-<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Vocabulary — Great Minds AI</title><style>
-*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#20345c;background:#eaf5ff}header{text-align:center;background:linear-gradient(155deg,#c9f7fa,#fff1b8);padding:42px 18px}h1{font-size:clamp(30px,6vw,44px);margin:12px 0}h2{text-align:center;margin:28px 10px 12px}header p{font-size:19px;line-height:1.5}.fig{font-size:54px}.support{font-size:26px}.btn{display:inline-block;background:#6747e9;color:white;text-decoration:none;border-radius:18px;padding:16px 20px;font-size:18px;font-weight:bold;text-align:center}.hero-btn{margin:15px auto}.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:15px;padding:18px;max-width:950px;margin:auto}.tile{background:white;border-radius:24px;padding:22px 12px;text-align:center;box-shadow:0 4px 12px #24436c13;min-width:0}.emoji{font-size:48px;margin-bottom:18px}.tile .btn{display:block;font-size:16px;padding:15px 6px}.note{max-width:900px;margin:15px auto;padding:16px;border-left:5px solid #e8a528;background:#fff9e8;border-radius:12px;line-height:1.5}footer{background:#273e7b;color:white;text-align:center;padding:25px;margin-top:20px}@media(min-width:760px){.grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
-/* Great Minds mobile polish */
-*{box-sizing:border-box}
-main{width:min(100% - 20px,1000px);margin-inline:auto}
-button,a,input,select,textarea{touch-action:manipulation}
-button{min-height:46px;cursor:pointer}
-a:focus-visible,button:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
-input,select,textarea{max-width:100%;font:inherit}
-img,svg,video,canvas{max-width:100%;height:auto}
-.card,section,article{overflow-wrap:anywhere}
-@media(max-width:480px){main{padding:10px}.grid,.lesson-grid,.activity-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.card,section{padding:14px}button{max-width:100%}}
-@media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#eaf5ff">
+<title>Vocabulary Adventure | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.55 system-ui,Arial,sans-serif;color:#20345c;background:linear-gradient(135deg,#eaf5ff,#fff7df)}
+header{text-align:center;padding:26px 16px;background:linear-gradient(120deg,#c9f7fa,#e8ddff,#fff1b8)}
+header .icon{font-size:48px}h1{margin:4px 0;font-size:clamp(28px,6vw,42px)}header p{margin:6px auto;max-width:650px}
+main{width:min(100% - 20px,920px);margin:16px auto 30px}.card{background:#fff;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 4px 16px #1c355014}
+h2{margin:0 0 10px}.muted,.small{color:#64738a;font-size:13px}.row{display:flex;gap:9px;flex-wrap:wrap}.row>*{flex:1 1 145px}
+button,select,input,textarea{font:inherit;border-radius:11px;padding:12px;border:1px solid #bdcbe0;max-width:100%}
+button{background:#315ed1;color:white;border:0;font-weight:700;min-height:46px;cursor:pointer;touch-action:manipulation}
+button.secondary{background:#edf2ff;color:#28457f;border:1px solid #d5e0fb}
+button:disabled{opacity:.55;cursor:not-allowed}select,input,textarea{width:100%;background:#fff;color:#20345c}
+button:focus-visible,a:focus-visible,select:focus-visible,input:focus-visible,textarea:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+a{color:#214da5}.word-card{text-align:center;background:linear-gradient(145deg,#f0f8ff,#fff8e8);border:2px solid #e2eafa;border-radius:16px;padding:20px;margin:12px 0}
+.word{font-size:clamp(30px,7vw,46px);font-weight:800;color:#274da1}.meaning{font-size:18px;font-weight:650}.example{font-style:italic;color:#53647d}
+.pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pills button{background:#edf2ff;color:#28457f;border:1px solid #d5e0fb}.pills button[aria-pressed=true]{background:#315ed1;color:white}
+.status{background:#eef7f1;border-radius:10px;padding:11px;min-height:42px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}.choices button{background:#f0f4ff;color:#29457d;border:2px solid #dbe5ff}.choices button:focus,.choices button:hover{border-color:#315ed1}
+progress{width:100%;height:14px}footer{text-align:center;padding:22px;color:#fff;background:#273e7b}
+@media(max-width:380px){.card{padding:14px}.choices{grid-template-columns:1fr}.row>*{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
-
-</style></head><body><header><div class="fig">🔤</div><h1>Vocabulary</h1><p>Great Minds AI • Beginner lessons</p><a class="btn" href="index.html">🏠 Back to Home</a></header><main><h2>Learn and Practice</h2><section class="grid"><article class="tile" style="text-align:left"><h3>Animals</h3><p style="line-height:1.6">Lion, elephant, zebra and giraffe are animals.</p></article><article class="tile" style="text-align:left"><h3>Opposites</h3><p style="line-height:1.6">Hot — cold; big — small; fast — slow.</p></article><article class="tile" style="text-align:left"><h3>Practice</h3><p style="line-height:1.6">Say three new words aloud and use each in a sentence.</p></article></section>
-<section class="tile" style="max-width:900px;margin:18px auto;text-align:left">
-<h2>Word Practice Challenge</h2>
-<p>Choose a word, then write a sentence that uses it.</p>
-<label for="practiceWord">Choose a word</label>
-<select id="practiceWord" style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit">
-<option value="animals">animals</option><option value="opposites">opposites</option><option value="gentle">gentle</option><option value="discover">discover</option><option value="curious">curious</option>
-</select>
-<label for="practiceSentence">Your sentence</label>
-<textarea id="practiceSentence" rows="3" maxlength="500" placeholder="Write your own sentence here..." style="width:100%;padding:12px;border:2px solid #c5d5ed;border-radius:11px;font:inherit"></textarea>
-<button class="btn" id="checkSentence" type="button">Check my sentence</button>
-<p id="practiceFeedback" role="status" aria-live="polite"></p>
-<p id="cloudFeedback" role="status" aria-live="polite" class="muted">Only a word-practice completion may be sent to your signed-in student progress record. Your sentence text stays on this device.</p>
-<p class="muted">Your writing is checked on this page only; the sentence is not sent to a teacher or stored online.</p>
-</section></main>
+</style>
+<script src="gm-language.js" defer></script>
+</head>
+<body>
+<header><div class="icon" aria-hidden="true">🔤🌟</div><h1>Vocabulary Adventure</h1><p>Discover new words, hear how they sound, understand their meaning and use them in your own sentences.</p><a href="index.html">🏠 Back to Great Minds Home</a></header>
+<main>
+<section class="card">
+<h2>🧭 Choose a word world</h2>
+<p class="small">Choose a topic to explore useful words. You can listen, read and practise at your own pace.</p>
+<div class="pills" id="categories" aria-label="Vocabulary topics"></div>
+<div class="word-card" aria-live="polite">
+<div class="small" id="wordCount">Word 1</div><div class="word" id="word">curious</div>
+<div class="meaning" id="meaning">Wanting to learn or know more about something.</div>
+<p class="example" id="example">The curious child asked how the stars shine.</p>
+<div class="row"><button type="button" id="hearWord">🔊 Hear word</button><button type="button" class="secondary" id="hearExample">🗣️ Hear example</button></div>
+</div>
+<div class="row"><button type="button" class="secondary" id="previousWord">← Previous</button><button type="button" id="nextWord">Next word →</button><button type="button" class="secondary" id="saveWord">☆ Save word</button></div>
+<p class="status" id="wordStatus" role="status" aria-live="polite">Tip: say the word aloud, then make your own sentence.</p>
+</section>
+<section class="card">
+<h2>🧠 Five-word challenge</h2>
+<p>Choose the meaning that matches each word. You will get friendly feedback after every answer.</p>
+<div class="row"><div><strong id="quizProgress">Question 1 of 5</strong><progress id="quizBar" max="5" value="0"></progress></div><div><strong id="quizScore">Score: 0</strong></div></div>
+<p class="meaning" id="quizQuestion">What does “curious” mean?</p>
+<div class="choices" id="quizChoices"></div>
+<p class="status" id="quizFeedback" role="status" aria-live="polite">Choose an answer to begin.</p>
+<div class="row"><button type="button" id="nextQuiz" disabled>Next question</button><button type="button" class="secondary" id="restartQuiz">Restart challenge</button></div>
+<p class="small" id="cloudStatus">Quiz results are kept on this device. If you are signed in with an approved student account and guardian permission, the score can also be sent to your protected learning record. No sentence or voice recording is uploaded.</p>
+</section>
+<section class="card">
+<h2>✍️ Make your own sentence</h2>
+<label for="sentenceWord">Choose a word to use</label><select id="sentenceWord"></select>
+<label for="sentenceText">Write one sentence using that word</label><textarea id="sentenceText" rows="3" maxlength="400" placeholder="Example: I am curious about the ocean."></textarea>
+<button type="button" id="checkSentence">Check my sentence</button>
+<p class="status" id="sentenceFeedback" role="status" aria-live="polite">Your sentence is checked on this device only. It is not sent to a teacher or saved online.</p>
+</section>
+<section class="card">
+<h2>⭐ My saved words</h2>
+<p class="small">Saved words stay on this device. You can remove them at any time.</p>
+<div id="savedWords" class="pills"><span class="small">No saved words yet.</span></div>
+<button type="button" class="secondary" id="clearSaved">Clear saved words</button>
+<p class="small">For privacy, use a nickname in learning activities. Do not enter your address, phone number, password or other private details.</p>
+</section>
+<section class="card"><h2>🌱 Keep learning</h2><p><a href="dictionary.html">📖 Open Little Learners Dictionary</a> · <a href="english-story-studio.html">📚 Open English Story Studio</a> · <a href="reading-writing.html">✏️ Reading & Writing</a> · <a href="index.html">🏠 Home</a></p></section>
+</main>
+<footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
 <script src="student-cloud-progress.js"></script>
 <script>
-(function(){
-const word=document.getElementById("practiceWord"),sentence=document.getElementById("practiceSentence"),feedback=document.getElementById("practiceFeedback"),cloud=document.getElementById("cloudFeedback"),button=document.getElementById("checkSentence");
-const key="gm_vocabulary_completed_words_v1";
-function savedWords(){try{const a=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(a)?a:[]}catch{return []}}
-button.addEventListener("click",async function(){
-const text=sentence.value.trim(),chosen=word.value;
-if(text.length<8){feedback.textContent="Write a little more so we can practise your sentence.";return;}
-if(!/[.!?]$/.test(text)){feedback.textContent="Good start! Add a full stop, question mark or exclamation mark at the end.";return;}
-if(!new RegExp("\\b"+chosen+"\\b","i").test(text)){feedback.textContent="Your sentence looks complete. Try including the chosen word (“"+chosen+"”) so you can practise it.";return;}
-feedback.textContent="🌟 Excellent! Your sentence is complete and uses the chosen word.";
-if(savedWords().includes(chosen)){cloud.textContent="This word-practice completion is already recorded on this device.";return;}
-if(!window.gmSaveStudentProgress){cloud.textContent="Cloud progress helper is unavailable. Your sentence remains on this device.";return;}
-button.disabled=true;cloud.textContent="Saving the word-practice completion (not your sentence)…";
-try{const result=await window.gmSaveStudentProgress({subject:"English",activity_key:"vocabulary-word-"+chosen,score:1,max_score:1,correct_count:1,question_count:1,source:"vocabulary"});
-if(result&&result.saved){const a=savedWords();if(!a.includes(chosen))a.push(chosen);localStorage.setItem(key,JSON.stringify(a));cloud.textContent="Word-practice completion saved to cloud progress. Your sentence was not uploaded."}
-else cloud.textContent="Cloud save not confirmed: "+((result&&result.reason)||"please sign in and try again");
-}catch(error){cloud.textContent="Cloud save failed. Your sentence remains on this device."}
-finally{button.disabled=false}
-});
+"use strict";
+(()=>{
+const $=id=>document.getElementById(id);
+const bank={
+"Everyday":[
+["curious","Wanting to learn or know more about something.","The curious child asked how the stars shine."],
+["gentle","Kind, calm and careful.","Please use a gentle voice with the baby."],
+["brave","Ready to face something difficult or frightening.","It was brave of Mia to try again."],
+["honest","Telling the truth and being fair.","An honest friend tells the truth."],
+["discover","To find or learn something for the first time.","We can discover new things in science."]
+],
+"Animals":[
+["habitat","The natural home of a plant or animal.","A forest is a habitat for many birds."],
+["nocturnal","Active mostly during the night.","An owl is a nocturnal animal."],
+["protect","To keep someone or something safe.","A shell can protect a tortoise."],
+["herd","A group of animals of the same kind.","A herd of elephants crossed the grassland."],
+["shelter","A safe place that gives cover.","The rabbit found shelter in a burrow."]
+],
+"Nature":[
+["recycle","To use materials again instead of wasting them.","We recycle paper to help reduce waste."],
+["evaporate","To change from a liquid into a gas.","Warm sunshine can make water evaporate."],
+["moisture","A small amount of water or dampness.","The soil needs moisture for the seed."],
+["conserve","To use carefully and avoid waste.","We conserve water by turning off the tap."],
+["environment","The natural world around us.","Trees and clean rivers are part of our environment."]
+],
+"Feelings":[
+["confident","Feeling sure that you can do something.","Practice helped Amir feel confident."],
+["patient","Able to wait calmly.","A patient learner takes time to improve."],
+["proud","Feeling pleased about something you have done.","She felt proud of finishing her book."],
+["nervous","A little worried or unsure.","He felt nervous before the first lesson."],
+["grateful","Feeling thankful for something.","I am grateful for my helpful teacher."]
+],
+"School":[
+["compare","To look at how things are alike or different.","Compare the two shapes."],
+["explain","To make an idea clear with details.","Please explain how you solved the sum."],
+["observe","To watch carefully and notice details.","We observe the plant as it grows."],
+["predict","To say what you think may happen.","I predict that the ice will melt."],
+["sequence","The order in which things happen.","Put the story events in the correct sequence."]
+]
+};
+const definitions={
+"curious":"Wanting to learn or know more about something.","gentle":"Kind, calm and careful.","brave":"Ready to face something difficult or frightening.","honest":"Telling the truth and being fair.","discover":"To find or learn something for the first time.",
+"habitat":"The natural home of a plant or animal.","nocturnal":"Active mostly during the night.","protect":"To keep someone or something safe.","herd":"A group of animals of the same kind.","shelter":"A safe place that gives cover.",
+"recycle":"To use materials again instead of wasting them.","evaporate":"To change from a liquid into a gas.","moisture":"A small amount of water or dampness.","conserve":"To use carefully and avoid waste.","environment":"The natural world around us.",
+"confident":"Feeling sure that you can do something.","patient":"Able to wait calmly.","proud":"Feeling pleased about something you have done.","nervous":"A little worried or unsure.","grateful":"Feeling thankful for something.",
+"compare":"To look at how things are alike or different.","explain":"To make an idea clear with details.","observe":"To watch carefully and notice details.","predict":"To say what you think may happen.","sequence":"The order in which things happen."
+};
+let category="Everyday",index=0,quiz=[],qIndex=0,score=0,answered=false;
+const storageKey="gm_vocab_saved_words_v2";
+function speak(text){if(!("speechSynthesis" in window)){ $("wordStatus").textContent="Speech is not available in this browser. You can still read and practise.";return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.88;window.speechSynthesis.speak(u);}
+function allWords(){return Object.values(bank).flat();}
+function renderCategories(){const root=$("categories");root.replaceChildren();Object.keys(bank).forEach(name=>{const b=document.createElement("button");b.type="button";b.textContent=name;b.setAttribute("aria-pressed",String(name===category));b.addEventListener("click",()=>{category=name;index=0;renderCategories();renderWord();});root.append(b);});}
+function renderWord(){const list=bank[category],item=list[index];$("wordCount").textContent=category+" · Word "+(index+1)+" of "+list.length;$("word").textContent=item[0];$("meaning").textContent=item[1];$("example").textContent=item[2];$("sentenceWord").value=item[0];}
+function saved(){try{const v=JSON.parse(localStorage.getItem(storageKey)||"[]");return Array.isArray(v)?v.filter(x=>typeof x==="string"):[];}catch{return [];}}
+function renderSaved(){const root=$("savedWords");root.replaceChildren();const words=saved();if(!words.length){const s=document.createElement("span");s.className="small";s.textContent="No saved words yet.";root.append(s);return;}words.forEach(word=>{const b=document.createElement("button");b.type="button";b.className="secondary";b.textContent="★ "+word+" ×";b.title="Remove "+word;b.addEventListener("click",()=>{localStorage.setItem(storageKey,JSON.stringify(saved().filter(x=>x!==word)));renderSaved();});root.append(b);});}
+function fillSentenceWords(){const select=$("sentenceWord");select.replaceChildren();allWords().forEach(item=>{const o=document.createElement("option");o.value=item[0];o.textContent=item[0];select.append(o);});}
+function newQuiz(){quiz=allWords().slice().sort(()=>Math.random()-.5).slice(0,5);qIndex=0;score=0;answered=false;$("cloudStatus").textContent="Quiz results are kept on this device. If you are signed in with an approved student account and guardian permission, the score can also be sent to your protected learning record. No sentence or voice recording is uploaded.";renderQuiz();}
+function renderQuiz(){const item=quiz[qIndex];$("quizProgress").textContent="Question "+(qIndex+1)+" of "+quiz.length;$("quizBar").value=qIndex;$("quizScore").textContent="Score: "+score;$("quizQuestion").textContent="What does “"+item[0]+"” mean?";$("quizFeedback").textContent="Choose the best meaning.";const correct=item[1];const wrong=allWords().filter(x=>x[0]!==item[0]).sort(()=>Math.random()-.5).slice(0,3).map(x=>x[1]);const options=[correct,...wrong].sort(()=>Math.random()-.5);const root=$("quizChoices");root.replaceChildren();options.forEach(option=>{const b=document.createElement("button");b.type="button";b.textContent=option;b.addEventListener("click",()=>answer(option,correct));root.append(b);});$("nextQuiz").disabled=true;$("nextQuiz").textContent=qIndex===quiz.length-1?"Finish challenge":"Next question";answered=false;}
+function answer(choice,correct){if(answered)return;answered=true;const ok=choice===correct;if(ok)score++;Array.from($("quizChoices").children).forEach(b=>{b.disabled=true;if(b.textContent===correct)b.textContent="✓ "+b.textContent;});$("quizFeedback").textContent=ok?"🌟 Correct! "+correct:"Good try. The correct meaning is: "+correct;$("quizScore").textContent="Score: "+score;$("quizBar").value=qIndex+1;$("nextQuiz").disabled=false;}
+async function finishQuiz(){const result={score,max_score:quiz.length,correct_count:score,question_count:quiz.length,subject:"English",activity_key:"vocabulary-challenge-"+Date.now(),source:"vocabulary"};localStorage.setItem("gm_vocab_last_result_v2",JSON.stringify({score,max:quiz.length,at:new Date().toISOString()}));$("quizFeedback").textContent="🏆 You scored "+score+" out of "+quiz.length+". "+(score>=4?"Excellent work!": "Keep practising — every new word helps you grow.");$("nextQuiz").disabled=true;$("nextQuiz").textContent="Challenge complete";if(window.gmSaveStudentProgress){$("cloudStatus").textContent="Checking whether your signed-in student account can save this score…";const savedResult=await window.gmSaveStudentProgress(result);$("cloudStatus").textContent=savedResult.saved?"Cloud progress saved securely for this student account.":savedResult.reason+" Your result is still saved on this device.";}else{$("cloudStatus").textContent="Cloud progress helper is unavailable. Your result is saved on this device.";} }
+$("hearWord").addEventListener("click",()=>speak($("word").textContent));$("hearExample").addEventListener("click",()=>speak($("example").textContent));
+$("previousWord").addEventListener("click",()=>{index=(index+bank[category].length-1)%bank[category].length;renderWord();});$("nextWord").addEventListener("click",()=>{index=(index+1)%bank[category].length;renderWord();});
+$("saveWord").addEventListener("click",()=>{const word=$("word").textContent,items=saved();if(!items.includes(word))items.push(word);localStorage.setItem(storageKey,JSON.stringify(items));renderSaved();$("wordStatus").textContent="⭐ "+word+" is saved on this device.";});
+$("nextQuiz").addEventListener("click",()=>{if(!answered)return;if(qIndex<quiz.length-1){qIndex++;renderQuiz();}else finishQuiz();});$("restartQuiz").addEventListener("click",newQuiz);
+$("checkSentence").addEventListener("click",()=>{const word=$("sentenceWord").value,text=$("sentenceText").value.trim();if(text.length<8){$("sentenceFeedback").textContent="Write a little more so your idea is clear.";return;}if(!new RegExp("\\b"+word+"\\b","i").test(text)){$("sentenceFeedback").textContent="Try again and include the word “"+word+"” in your sentence.";return;}if(!/[.!?]$/.test(text)){$("sentenceFeedback").textContent="Good sentence! Add a full stop, question mark or exclamation mark at the end.";return;}$("sentenceFeedback").textContent="🌟 Well done! Your sentence uses “"+word+"” and has an ending mark. Your writing stays on this device.";});
+$("clearSaved").addEventListener("click",()=>{localStorage.removeItem(storageKey);renderSaved();});
+renderCategories();renderWord();fillSentenceWords();renderSaved();newQuiz();
 })();
-</script><footer>Great Minds AI — Every Child Can Shine ✨</footer>
-<script src="gm-language.js"></script>
+</script>
 </body></html>
