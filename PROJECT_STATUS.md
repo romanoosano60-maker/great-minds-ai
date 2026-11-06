@@ -597,3 +597,17 @@ Added a five-question knowledge check based on existing Encyclopedia topics (Sol
 - Encyclopedia commit: `ab7127025870b4fb8511a9b67f2b04aeee473186`
 
 Verification: source was re-fetched and checked for the knowledge-check section, all five questions, feedback, scoring, retry, and preservation of the existing search/filter and read-aloud features. Android rendering, audio and hands-on quiz behaviour remain to be tested on device.
+
+
+## Companion practice pages consistency pass — 6 November 2026
+Reviewed the extra Mathematics, Science, Computer Studies, Social Studies and English practice pages, plus General Knowledge. Standardised answer handling on the six quiz pages: after a child answers a question, its choices are disabled to prevent accidental multiple changes; the existing Try Again control resets feedback and unlocks all choices. Cloud progress feedback now handles rejected save calls without silently losing the visible score.
+
+Commits:
+- Mathematics extra: `4fe26e2f811a391921a03b48212edde8b6918406`
+- Science extra: `21819b6ec7e94bc34406075e3101dc4d4bcf6467`
+- Computer Studies extra: `47cf3f9f0a421eb6d0df8bea92b3abf59fa3f0be`
+- Social Studies extra: `e3d6e7a5b06da7c7d8ffe789e63324cff54ef99c`
+- English extra: `b5431762d07926a25a1561c409b1ed4e6ea29300`
+- General Knowledge: `17ab63db4504aced7d00b22d7db62737495d4bf3`
+
+General Knowledge also gained optional browser read-aloud for each question and its answer choices, with a clear unsupported-browser message. The original home links, lessons, questions, local-only writing/data choices and consent/RLS-gated cloud progress helper use were preserved. Source checks are not a substitute for Android interaction/audio and real student-account Supabase tests.
