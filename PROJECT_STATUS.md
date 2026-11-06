@@ -650,3 +650,10 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Updated the Start Learning scroll action to respect the device's reduced-motion preference.
 - Home page update committed as `2a2e8e7e02a1cae94d3d11b23494d1cc37411763`; re-fetched and verified the new controls, intro-only speech target, reduced-motion condition and closing HTML structure.
 - Remaining source audit work: continue reviewing every linked page's quiz logic, response quality, cloud-save paths, language application, speech lifecycle, mobile layout and privacy. Real Android microphone/audio/language voice tests, live Supabase role/consent/RLS tests, and cross-device classroom tests remain unverified. Cloudflare/backend deployment remains outside this audit as requested.
+
+
+## Speech stop-control consistency repair — 2026-11-06
+- The source audit found several pages with read-aloud functions but no visible way for a child to stop speech. Added an accessible `⏹ Stop voice` control to `computer.html`, `general-knowledge.html`, `math-extra.html`, `science-extra.html`, `social-extra.html`, `english-extra.html`, `computer-extra.html`, `english.html`, `vocabulary.html`, `dictionary.html` and `home-science.html`.
+- Each control cancels browser speech synthesis and gives visible stopped-state feedback. Existing quiz answers, score handling, reset/retry functions and cloud-save helper calls were left unchanged.
+- All 11 updated pages were re-fetched after commit; the stop control and speech-cancel handler were confirmed in each. This remains source verification only; actual playback and cancellation must still be tested on Android.
+- The connected classroom, homework, profile, parent/teacher and student dashboard pages inspected had no missing `getElementById` targets in the static scan. No frontend service-role or obvious secret key was found in the inspected Supabase configuration/helper files. This does not replace a full secret scan, Supabase security review or live RLS testing.
