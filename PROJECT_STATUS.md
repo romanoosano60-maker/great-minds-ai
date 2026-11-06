@@ -705,3 +705,12 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Connected the nine assets to the A–Z explorer. Letters A through I now have all three example objects represented by custom SVG art (27 assets total across those nine letters).
 - Commits: `ff1b45fef6eeaed6cbaa728e50b177527210d1e5` (assets) and `b9a5091ef131e9b74e89e83ab6abb117d50114cd` (lesson integration).
 - Artwork remains static 2D SVG with dimensional shading, not animated 3D models. The remaining J–Z objects and the rest of the app's subjects still need art. Live page and Android tests remain pending.
+
+
+## J–Z illustration collection completed — 2026-11-06
+- Added 51 SVG learning-object illustrations for J through Z (three objects per letter), covering Jug, Jeep, Jellyfish; Kite, Key, Kangaroo; Lion, Leaf, Lamp; Moon, Monkey, Mango; Nest, Nose, Notebook; Octopus, Orange, Owl; Penguin, Pencil, Plane; Queen, Quilt, Quail; Rabbit, Rocket, Rainbow; Sun, Ship, Snake; Tiger, Train, Tree; Umbrella, Uniform, Unicorn; Van, Violin, Volcano; Whale, Watch, Watermelon; X-ray, Xylophone, Fox; Yak, Yo-yo, Yacht; Zebra, Zip and Zoo.
+- Connected all 51 new assets to the existing A–Z Object Explorer asset map. Together with A–I, all 26 letters now have three matching SVG illustration assets (78 total).
+- Artwork uses a consistent dimensional card, gradients, highlights and shadows with a clear object symbol and label. These are static 2D SVG illustrations with 3D-style presentation, not animated 3D models.
+- Asset commit: 1cd18aa44d79018a927970846f070bf9f8474dec. Vocabulary integration commit: 6afc380a0572cafe25c11ac6949b7055fdc8acb8.
+- GitHub source verification follows. GitHub Pages rendering, Android visual display, accessibility and speech behaviour still require hands-on device testing.
+- Overall prototype estimate remains 94%; no launch-readiness or device-testing claim is made.
