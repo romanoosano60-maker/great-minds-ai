@@ -130,3 +130,11 @@ The first A–Z explorer has been added to `vocabulary.html`:
 - The current object symbols are temporary visual placeholders in raised, shaded cards; they are not the final unique 3D artwork.
 
 Next visual task: replace each placeholder with a distinct, consistent 3D object illustration, and add gentle purposeful animation where useful. Do not call the current placeholder cards finished 3D assets.
+
+
+### A–Z explorer follow-up verification
+- Fixed object-card rendering so all three word/object examples display their matching symbols.
+- Corrected the X examples to teach X-ray for the /ks/ sound and explain that xylophone begins with a /z/ sound.
+- Re-fetched the updated vocabulary page and verified the three explicit word/art pairs, updated X-ray example, and removal of the faulty indexing loop.
+- Commit: `f069e4bae7ae06994ef64b798befcbfde12bcbb9`.
+- Still requires visual browser/Android testing. Current object art uses emoji placeholders, not final bespoke 3D artwork.
