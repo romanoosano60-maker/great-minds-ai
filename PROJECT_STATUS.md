@@ -567,3 +567,13 @@ Commits:
 - Geography: `1d18ab72e513574d026714f306d21a8816c95737`
 
 Verification: re-fetched all five committed pages and confirmed read/stop controls, speech synthesis, unsupported-browser fallback, quiz presence, progress helper reference, home and hub navigation, and accessible status region. These are source checks only; actual Android playback, page rendering and authenticated Supabase writes still require device/account testing.
+
+
+## More learning pages improved — 6 November 2026
+Added optional read-aloud and stop-voice controls to the Little Learners Encyclopedia and Guided Research Centre. The Encyclopedia reads the currently visible topic cards (so category/search filters are respected); the Research Centre reads the currently selected guide. Both include unsupported-browser handling and accessible status text. Existing search/filter, research topic selection, local-only notes and navigation were preserved.
+
+Commits:
+- Encyclopedia: `f06577b551b586810589ed62446898cdb35c0f0b`
+- Guided Research: `c9be63c32989d2d29217ce377d4d987c9efeecfc`
+
+Re-fetched both pages and checked that controls, speech code, dynamic content targets, navigation and core existing content remain present. Android playback and live account tests remain pending.
