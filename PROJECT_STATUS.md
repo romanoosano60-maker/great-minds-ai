@@ -577,3 +577,15 @@ Commits:
 - Guided Research: `c9be63c32989d2d29217ce377d4d987c9efeecfc`
 
 Re-fetched both pages and checked that controls, speech code, dynamic content targets, navigation and core existing content remain present. Android playback and live account tests remain pending.
+
+
+## Computer Studies and Home Science quiz reliability — 6 November 2026
+Improved the Computer Studies quiz with a clear finish state, disabled answer choices after a selection, a visible retry control, score reset on a fresh attempt, and a handled cloud-save failure message. The existing five questions, lesson activities, navigation and consent/RLS-gated progress helper arguments were retained.
+
+- Computer Studies commit: `5e7cf6b5faeb99edff1eba11d04719fc5cd28e37`
+
+Also made Home Science cloud-progress feedback resilient to a rejected save request, so a network or helper error no longer interrupts the displayed quiz result. Existing lesson audio, safety guidance, five-question quiz, local demo record and progress helper arguments were retained.
+
+- Home Science commit: `359fd6471267a5704673776c205d0dc94f3c5f1f`
+
+Verification: Computer Studies was re-fetched and checked for retry, finish-state protection, answer locking and cloud-save error handling. Home Science was re-fetched and checked for its existing read-aloud controls, five-question quiz, local progress record, cloud progress helper and rejection handling. These are source checks only. Actual Android interaction/audio and authenticated Supabase writes still need to be tested on the user's device/account.
