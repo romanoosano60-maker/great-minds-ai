@@ -666,3 +666,12 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - The shared script is used by the non-home learning pages; the home page has its own independent Stop control. This is source verification, not proof of Android voice availability or playback behaviour.
 
 - Follow-up responsive-layout repair: the homepage language/audio controls and shared language toolbar now wrap onto additional lines on narrow screens; the homepage audio status spans the full toolbar width. Both updated files were re-fetched and the responsive CSS changes were verified. Commits: homepage `ff791e0caeea1e33724cdddfad5981b294cfe81e`; shared toolbar `e1586dd13e874f9ca1c3e67772abf718e956014d`. This is CSS source verification, not Android screen testing.
+
+
+## A–Z lesson accuracy and narration refinement — 2026-11-06
+- Refined the A–Z explorer's displayed phonics cue so it is presented as a clear letter-sound label with a familiar example, rather than putting spoken approximations inside phoneme slashes.
+- Updated read-aloud narration to say the letter, its sound cue, and all three example words in a child-friendly sequence.
+- Added explicit vowel-sound distinctions for A (short/long A examples), I (short/long I), O (different vowel sounds in orange/owl), and U (short U versus the /yoo/ sound in uniform/unicorn).
+- Verified all 26 alphabet data entries remain present after the edits.
+- Commits: 3895a38e25d85a4f08972695f770478d5f5119f9 and c8fa5fd6255c2d02e8f04dc126a0f8c1bc440128.
+- This is source-level verification only. GitHub Pages live rendering, browser speech playback, Android screen-reader/accessibility, and child usability still need device testing. The emoji illustrations remain temporary symbols, not custom 3D artwork.
