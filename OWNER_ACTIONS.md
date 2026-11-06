@@ -1,6 +1,6 @@
 # Great Minds AI — Owner Actions and Final Test Checklist
 
-Last checked: 5 November 2026
+Last checked: 6 November 2026
 
 This file lists only actions that still need the project owner or a real-device test. Source code and database configuration can be prepared from the connected tools, but a static code review cannot sign in as a real family, deploy a Cloudflare Worker, hear Android audio, or submit an app to an app store.
 
@@ -141,3 +141,11 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 - The AI Teacher now remembers the selected teaching/greeting language in this browser and restores it on the next visit. The preference stays on the device; it does not create a cloud profile record.
 - Unsupported or invalid stored language values fall back to English. Live AI answers and voice quality still require the separate backend and Android/browser tests.
 - Latest AI Teacher inline JavaScript syntax check passed.
+
+
+## 2026-11-06 assistant-side source repairs (not owner tasks)
+
+- Added homepage narration limited to the introduction, a Stop Voice control, and reduced-motion-aware Start Learning navigation.
+- Added Stop Voice controls to English, Vocabulary, Dictionary, Home Science, Computer Studies, General Knowledge and all five extra practice pages.
+- Added a shared Stop Voice control to the language toolbar for pages without their own dedicated stop control.
+- Re-fetched the updated files and verified the controls and speech-cancellation handlers in source. These repairs do not replace the Android audio, voice, navigation, graphics or cross-device tests listed above.
