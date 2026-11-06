@@ -657,3 +657,10 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Each control cancels browser speech synthesis and gives visible stopped-state feedback. Existing quiz answers, score handling, reset/retry functions and cloud-save helper calls were left unchanged.
 - All 11 updated pages were re-fetched after commit; the stop control and speech-cancel handler were confirmed in each. This remains source verification only; actual playback and cancellation must still be tested on Android.
 - The connected classroom, homework, profile, parent/teacher and student dashboard pages inspected had no missing `getElementById` targets in the static scan. No frontend service-role or obvious secret key was found in the inspected Supabase configuration/helper files. This does not replace a full secret scan, Supabase security review or live RLS testing.
+
+
+## Shared language-toolbar speech control — 2026-11-06
+- Updated `gm-language.js` so the shared language toolbar also provides a visible `⏹ Stop voice` control for page narration. It cancels browser speech synthesis and reports that voice playback stopped.
+- The shared toolbar avoids adding its stop button when a page already exposes the dedicated `gm-stop-voice` control, preventing unnecessary duplicates on the recently repaired pages.
+- Commit: `7c8fc87717cf01bbcc9cca0c7aed85a47fd035bb`; re-fetched and verified the toolbar stop button, cancellation handler and duplicate guard.
+- The shared script is used by the non-home learning pages; the home page has its own independent Stop control. This is source verification, not proof of Android voice availability or playback behaviour.
