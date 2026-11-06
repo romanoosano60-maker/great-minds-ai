@@ -32,10 +32,22 @@ progress{width:100%;height:14px}.alphabet-grid{display:grid;grid-template-column
 footer{text-align:center;padding:22px;color:#fff;background:#273e7b}
 @media(max-width:380px){.card{padding:14px}.choices{grid-template-columns:1fr}.row>*{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
+
+/* Consistent, thumb-friendly navigation across learning pages */
+.gm-quick-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px max(12px,calc((100% - 1000px)/2));background:#ffffffed;border-bottom:1px solid #dce6f5;position:relative;z-index:5}
+.gm-quick-nav a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border-radius:999px;background:#edf3ff;color:#24477f;text-decoration:none;font:700 14px/1.2 system-ui,Arial,sans-serif;white-space:nowrap}
+.gm-quick-nav a:focus-visible{outline:3px solid #f2ad35;outline-offset:2px}
+.gm-quick-nav a:hover{background:#dce8ff}
+@media(max-width:480px){.gm-quick-nav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:9px 10px;scrollbar-width:thin}.gm-quick-nav a{flex:0 0 auto}}
+@media(prefers-reduced-motion:reduce){.gm-quick-nav a{transition:none!important;scroll-behavior:auto!important}}
 </style>
 <script src="gm-language.js" defer></script>
 </head>
 <body>
+<nav class="gm-quick-nav" aria-label="Great Minds learning navigation">
+<a href="index.html">🏠 Home</a><a href="vocabulary.html">🔤 Vocabulary</a><a href="math.html">🔢 Maths</a><a href="science.html">🔬 Science</a><a href="geography.html">🌍 Geography</a><a href="history.html">📜 History</a><a href="social-studies.html">🤝 Social Studies</a><a href="computer.html">💻 Computer</a><a href="home-science.html">🏡 Home Science</a>
+</nav>
+
 <header><div class="icon" aria-hidden="true">🔤🌟</div><h1>Vocabulary Adventure</h1><p>Discover new words, hear how they sound, understand their meaning and use them in your own sentences.</p><a href="index.html">🏠 Back to Great Minds Home</a></header>
 <main>
 <section class="card">
