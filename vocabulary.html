@@ -121,6 +121,7 @@ const definitions={
 };
 let category="Everyday",index=0,quiz=[],qIndex=0,score=0,answered=false;
 const storageKey="gm_vocab_saved_words_v2";
+function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
 function speak(text){if(!("speechSynthesis" in window)){ $("wordStatus").textContent="Speech is not available in this browser. You can still read and practise.";return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.88;window.speechSynthesis.speak(u);}
 function allWords(){return Object.values(bank).flat();}
 function renderCategories(){const root=$("categories");root.replaceChildren();Object.keys(bank).forEach(name=>{const b=document.createElement("button");b.type="button";b.textContent=name;b.setAttribute("aria-pressed",String(name===category));b.addEventListener("click",()=>{category=name;index=0;renderCategories();renderWord();});root.append(b);});}
