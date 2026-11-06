@@ -76,3 +76,43 @@ The visual references shown during the planning conversation were illustrative s
 ## Status
 
 Brand direction and promotional copy saved as a planning document. This does not yet change the live app appearance or mean Play Store assets have been created or published.
+
+
+## App-wide 3D visual standard — requested direction
+
+The owner wants the whole Great Minds AI learning experience to use a cohesive, sweet, polished, child-friendly 3D animated-film-inspired visual style, not flat clip-art or inconsistent simple drawings.
+
+### Apply this style throughout the app
+- **Mathematics:** friendly 3D numbers, counting objects, shapes, blocks, clocks, coins, measuring tools, and playful problem-solving scenes.
+- **English and reading:** expressive 3D letters, books, story characters, vocabulary objects, and scenes that help children understand words.
+- **Science:** accurate, age-appropriate 3D animals, plants, habitats, the human body, space, weather, water cycle, electricity, and experiments. An octopus should look like a recognisable, appealing 3D octopus, not a flat cartoon icon.
+- **Home Science:** 3D kitchen tools, food, household objects, gardens, and everyday-life demonstrations.
+- **History, geography and social studies:** 3D maps, globes, landmarks, historical objects, transport, communities, and environments.
+- **Computer Studies:** 3D computers, keyboards, devices, networks, and safe technology concepts.
+- **General knowledge and research:** use relevant 3D objects and scenes that match the question or topic.
+- **Vehicles and machines:** when a lesson asks about a ship, aircraft, train, car, engine, or machine, show a clear, recognisable 3D model or scene appropriate to the child's age.
+
+### Visual quality and consistency
+- Use rounded, friendly shapes, appealing materials, soft studio lighting, gentle shadows, rich but balanced colours, and clear silhouettes.
+- Keep educational objects recognisable and scientifically/technically accurate; visual sweetness must not make the lesson misleading.
+- Use diverse, welcoming characters and avoid frightening, violent, or needlessly realistic imagery.
+- Keep illustrations uncluttered so the object being taught is the visual focus.
+- Reuse a consistent art direction, lighting, scale, and palette across all subjects so the app feels like one product.
+- Provide suitable alt text and maintain readable text contrast and mobile performance.
+
+### Animation standard
+- Prefer subtle, purposeful motion where it improves understanding: a ship gently moving across water, a planet orbiting, an octopus swimming, a shape rotating, or a machine showing how its parts work.
+- Motion must be optional or controllable, not distracting; provide pause/stop behaviour where appropriate and respect reduced-motion preferences.
+- A static 3D-rendered illustration is not the same as an animated asset. Do not describe an image as animated unless it actually moves.
+- For complex interactive 3D models or simulations, use an appropriate web implementation and test Android performance; do not substitute a decorative image for an interactive lesson.
+
+### Rollout and asset workflow
+1. Inventory current images and identify flat, mismatched, missing, or broken assets across every subject and learning page.
+2. Create a small approved 3D style sample set first (rocket/home hero, maths object, English story object, science animal such as an octopus, and a ship/machine).
+3. Review the sample set for consistency and child suitability before expanding it.
+4. Replace existing images in manageable subject-by-subject batches, preserving page layout, accessibility, loading performance, and lesson meaning.
+5. Add animation only where it adds educational value; keep fallback still images for devices that cannot render motion.
+6. Verify every asset path and test loading on Android before marking a page complete.
+
+### Status and scope
+This is an approved visual direction and rollout requirement, not a claim that the images have already been generated or integrated. Existing app artwork has not yet been replaced by this standard. Image creation and Android visual/performance verification remain outstanding.
