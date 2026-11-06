@@ -31,10 +31,10 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <body>
 <header><h1>📖 English Story Studio</h1><p>Listen • Read • Learn Words • Spell • Understand • Write</p><a href="index.html">🏠 Back to Great Minds AI</a></header>
 <main>
-<section><h2>🎵 Quiet study music</h2><p>Optional gentle instrumental tones. Start only when you choose; stop or adjust the volume anytime.</p>
-<button type="button" id="musicStart" class="secondary">▶ Start soft music</button><button type="button" id="musicStop">■ Stop music</button>
+<section><h2>🎵 Gentle focus tone</h2><p>An optional soft steady tone for quiet practice. Start it only when you choose; stop or adjust the volume anytime.</p>
+<button type="button" id="musicStart" class="secondary">▶ Start focus tone</button><button type="button" id="musicStop">■ Stop tone</button>
 <label for="volume">Volume</label><input id="volume" type="range" min="0" max="0.12" step="0.01" value="0.035">
-<p class="small">Music is created in your browser; no audio file or internet connection is needed.</p></section>
+<p class="small">The tone is created on your device. It is not a song or a recording, and it does not require an internet connection.</p></section>
 <section><h2>🌱 Story: The Little Seed</h2>
 <div class="story" id="story"><p>Mia found a tiny seed beside the garden path. She placed it in soft soil and gave it a little water.</p><p>Each morning, Mia checked the soil. After many sunny days, a small green shoot appeared. Mia smiled and kept caring for the plant.</p><p>Soon, a bright yellow flower opened. A bee came to visit. Mia learned that patience and care can help small things grow.</p></div>
 <button type="button" onclick="readStory()">🔊 Read the story aloud</button><button type="button" class="secondary" onclick="stopReading()">Stop reading</button>
@@ -45,9 +45,12 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <div class="word"><b>patience</b><br>waiting calmly without giving up <button type="button" onclick="say('patience')">🔊</button></div>
 <p>Practice: say each word, read its meaning, then make your own sentence.</p></section>
 <section><h2>✏️ Spelling practice</h2><p>Listen to the word, then type its spelling.</p><button type="button" onclick="say(currentWord)">🔊 Hear the word</button><p id="spellPrompt">Word 1 of 4</p><input id="spelling" autocomplete="off" placeholder="Type the word here"><button type="button" onclick="checkSpelling()">Check spelling</button><button type="button" class="secondary" onclick="nextWord()">Next word</button><p class="feedback" id="spellFeedback" aria-live="polite"></p></section>
-<section><h2>🧠 Reading comprehension</h2><p id="question">1. Where did Mia find the seed?</p><div id="answers"><button type="button" onclick="answer(0)">Beside the garden path</button><button type="button" onclick="answer(1)">In her classroom</button><button type="button" onclick="answer(2)">Under her bed</button></div><p class="feedback" id="quizFeedback" aria-live="polite"></p><p id="quizScore">Score: 0 / 4</p><button type="button" class="secondary" onclick="restartQuiz()">Restart questions</button></section>
+<section><h2>🧠 Reading comprehension</h2><p id="question">1. Where did Mia find the seed?</p><div id="answers"><button type="button" onclick="answer(0)">Beside the garden path</button><button type="button" onclick="answer(1)">In her classroom</button><button type="button" onclick="answer(2)">Under her bed</button></div><p class="feedback" id="quizFeedback" aria-live="polite"></p><p id="quizScore">Score: 0 / 4</p><p id="quizCloudStatus" class="small" role="status" aria-live="polite">Your quiz score can be saved to your protected student progress if you sign in and guardian permission is active. Your writing is never uploaded.</p><button type="button" class="secondary" onclick="restartQuiz()">Restart questions</button></section>
 <section><h2>📝 Your writing corner</h2><p>Write two or three sentences: What would you grow in a garden, and how would you care for it?</p><textarea id="writing" placeholder="I would grow..."></textarea><button type="button" onclick="saveWriting()">Save on this device</button><p id="writingFeedback" class="feedback" aria-live="polite"></p><p class="small">Your writing is saved only in this browser on this device. It is not sent to a teacher or server.</p></section>
 </main>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script src="student-cloud-progress.js"></script>
 <script>
 const storyText="Mia found a tiny seed beside the garden path. She placed it in soft soil and gave it a little water. Each morning, Mia checked the soil. After many sunny days, a small green shoot appeared. Mia smiled and kept caring for the plant. Soon, a bright yellow flower opened. A bee came to visit. Mia learned that patience and care can help small things grow.";
 function say(t){if(!('speechSynthesis'in window)){alert('Speech is not available in this browser.');return;}/* English vocabulary and spelling words are intentionally pronounced in English. */speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(String(t));u.lang='en-US';u.rate=.88;const voices=speechSynthesis.getVoices()||[];const voice=voices.find(v=>v.lang.toLowerCase()==='en-us')||voices.find(v=>v.lang.toLowerCase().startsWith('en-'));if(voice)u.voice=voice;speechSynthesis.speak(u)}
@@ -60,10 +63,47 @@ const spellWords=['seed','soil','shoot','patience'];let wi=0;let currentWord=spe
 function updateWord(){currentWord=spellWords[wi];document.getElementById('spellPrompt').textContent='Word '+(wi+1)+' of '+spellWords.length;document.getElementById('spelling').value='';document.getElementById('spellFeedback').textContent='';}
 function checkSpelling(){let v=document.getElementById('spelling').value.trim().toLowerCase();document.getElementById('spellFeedback').textContent=v===currentWord?'✅ Correct spelling!':'Not yet. Listen again and try.';}
 function nextWord(){wi=(wi+1)%spellWords.length;updateWord();}
-const qs=[{q:'1. Where did Mia find the seed?',a:['Beside the garden path','In her classroom','Under her bed'],c:0},{q:'2. What did Mia give the seed?',a:['Juice','Water','Milk'],c:1},{q:'3. What appeared after many sunny days?',a:['A green shoot','A big tree','A red apple'],c:0},{q:'4. What did Mia learn?',a:['Plants grow without care','Patience and care help things grow','Bees plant every seed'],c:1}];let qi=0,score=0,done=false;
-function renderQ(){if(qi>=qs.length){document.getElementById('question').textContent='You finished the story questions!';document.getElementById('answers').innerHTML='';document.getElementById('quizFeedback').textContent='Well done!';return;}let q=qs[qi];document.getElementById('question').textContent=q.q;document.getElementById('answers').innerHTML=q.a.map((a,i)=>'<button type="button" data-answer="'+i+'">'+a+'</button>').join('');document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(Number(b.dataset.answer)));document.getElementById('quizScore').textContent='Score: '+score+' / 4';}
-function answer(n){if(qi>=qs.length)return;let correct=n===qs[qi].c;if(correct)score++;document.getElementById('quizFeedback').textContent=correct?'✅ Correct!':'Good try. '+qs[qi].a[qs[qi].c]+' is the answer.';qi++;document.getElementById('quizScore').textContent='Score: '+score+' / 4';setTimeout(renderQ,700);}
-function restartQuiz(){qi=0;score=0;document.getElementById('quizFeedback').textContent='';renderQ();}
+const qs=[{q:'1. Where did Mia find the seed?',a:['Beside the garden path','In her classroom','Under her bed'],c:0},{q:'2. What did Mia give the seed?',a:['Juice','Water','Milk'],c:1},{q:'3. What appeared after many sunny days?',a:['A green shoot','A big tree','A red apple'],c:0},{q:'4. What did Mia learn?',a:['Plants grow without care','Patience and care help things grow','Bees plant every seed'],c:1}];
+let qi=0,score=0,quizRun=0,scoreSaveStarted=false;
+function renderQ(){
+ if(qi>=qs.length){
+  document.getElementById('question').textContent='You finished the story questions!';
+  document.getElementById('answers').innerHTML='';
+  document.getElementById('quizFeedback').textContent='🏆 Well done! You scored '+score+' out of '+qs.length+'.';
+  saveStoryQuizScore();return;
+ }
+ const q=qs[qi];
+ document.getElementById('question').textContent=q.q;
+ document.getElementById('answers').innerHTML=q.a.map((a,i)=>'<button type="button" data-answer="'+i+'">'+a+'</button>').join('');
+ document.querySelectorAll('[data-answer]').forEach(b=>b.onclick=()=>answer(Number(b.dataset.answer)));
+ document.getElementById('quizScore').textContent='Score: '+score+' / '+qs.length;
+}
+function answer(n){
+ if(qi>=qs.length)return;
+ const run=quizRun,question=qs[qi],buttons=Array.from(document.querySelectorAll('[data-answer]'));
+ if(buttons.some(b=>b.disabled))return;
+ buttons.forEach(b=>b.disabled=true);
+ const correct=n===question.c;if(correct)score++;
+ document.getElementById('quizFeedback').textContent=correct?'✅ Correct!':'Good try. '+question.a[question.c]+' is the answer.';
+ qi++;document.getElementById('quizScore').textContent='Score: '+score+' / '+qs.length;
+ setTimeout(()=>{if(run===quizRun)renderQ();},700);
+}
+async function saveStoryQuizScore(){
+ if(scoreSaveStarted)return;scoreSaveStarted=true;
+ const status=document.getElementById('quizCloudStatus');
+ if(typeof window.gmSaveStudentProgress!=='function'){status.textContent='Cloud progress is not available on this page. Your score is shown here; your writing stays on this device.';return;}
+ status.textContent='Checking your signed-in student account and consent before saving…';
+ try{
+  const result=await window.gmSaveStudentProgress({subject:'English',activity_key:'english-story-studio-comprehension',score:score,max_score:qs.length,correct_count:score,question_count:qs.length,source:'english-story-studio'});
+  status.textContent=result&&result.saved?'✅ Story quiz score saved to your protected student progress. Your writing stays on this device.':(result&&result.reason?result.reason:'Cloud save could not be confirmed.')+' Your writing stays on this device.';
+ }catch(error){console.warn('Story quiz cloud progress was not saved:',error);status.textContent='Cloud save could not be confirmed. Your score remains visible here; your writing stays on this device.';}
+}
+function restartQuiz(){
+ quizRun++;qi=0;score=0;scoreSaveStarted=false;
+ document.getElementById('quizFeedback').textContent='';
+ document.getElementById('quizCloudStatus').textContent='Complete all four questions to attempt a new secure progress save. Your writing stays on this device.';
+ renderQ();
+}
 function saveWriting(){let v=document.getElementById('writing').value.trim();if(v.length<10){document.getElementById('writingFeedback').textContent='Write a little more before saving.';return;}try{localStorage.setItem('gm_english_story_writing',v);document.getElementById('writingFeedback').textContent='✅ Saved on this device.';}catch(e){document.getElementById('writingFeedback').textContent='This browser could not save your writing. Please copy it somewhere safe.';}}
 try{document.getElementById('writing').value=localStorage.getItem('gm_english_story_writing')||'';}catch(e){}renderQ();updateWord();
 </script></body></html>
