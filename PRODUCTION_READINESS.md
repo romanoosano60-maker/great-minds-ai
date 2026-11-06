@@ -1,6 +1,6 @@
 # Great Minds AI — Production Readiness Checklist
 
-Last reviewed: 4 November 2026
+Last reviewed: 6 November 2026
 
 This document separates source-code work from live-service and device verification. A page that works with browser storage is a prototype, not a connected account or international classroom.
 
@@ -59,3 +59,16 @@ A successful GitHub Pages deployment confirms that the site was deployed; it doe
 The AI Teacher now has a configurable frontend connection and a Cloudflare Worker source template in cloudflare/worker.js. The frontend and Worker allowlist now include Hindi, Bengali, Tamil, Telugu and Marathi alongside the previous teaching languages. This does not mean the AI service is deployed. Before live use, configure the Worker secret and variables, the per-user rate-limit binding, set the deployed /ask URL in ai-teacher-config.js, and test with an adult-controlled student account that has a valid active guardian link. The Worker is not a replacement for a full child-safety programme.
 
 The Mathematics, English, Science, Social Studies, History, Geography, Home Science, Computer Studies and General Knowledge lesson quizzes use the cloud progress helper. On 5 November, the guardian-consent revocation correction and homework maximum-score trigger were applied and rollback-tested, as recorded in DATABASE_SECURITY_VERIFICATION_2026-11-05.md. connected-progress.html now displays RLS-filtered cloud progress records separately from local demo points and stars. connected-practice.html also offers its results to secure cloud progress. Real-account and cross-device tests are still required.
+
+
+## 2026-11-06 source audit update
+
+- Rechecked the homepage routes and the linked learning, practice, student, parent/teacher, classroom, homework and connected-dashboard pages. The practice routes `english-extra.html` and `computer-extra.html` exist; the connected dashboard targets inspected exist. Static route checks do not replace Android click-through testing.
+- Added a homepage Stop Voice control, narrowed homepage narration to the introductory content, and made the Start Learning scroll respect reduced-motion preferences.
+- Added visible Stop Voice controls to Computer Studies, General Knowledge, English, Vocabulary, Dictionary, Home Science and the five extra subject practice pages. The controls cancel browser speech synthesis; source presence is verified, but Android playback/cancellation remains untested.
+- Static DOM-reference checks on the main subject pages, student profile, parent/teacher centre, classroom/homework pages and connected dashboards found no missing literal `getElementById` targets in the inspected files.
+- Language support remains partial: the shared language script itself states that lesson text is not fully translated. Menu/label translations do not prove complete lesson, quiz-feedback or AI-response translation. Urdu and Swahili are not complete app-wide translation packs.
+- AI Teacher still has no deployed live answer endpoint. Its prepared examples and browser speech tools are not equivalent to unrestricted multilingual AI tutoring.
+- The following remain launch blockers: real Android microphone/audio and language voice tests; real student/parent/teacher account and guardian-consent flows; server-enforced RLS and realtime authorization tests; cross-device/cross-country classroom tests; complete translation review; accessibility and device navigation; privacy/legal approval; native app packaging and store submission.
+
+Source-code repairs above are development progress only. Do not change the production-ready or launch-ready status until the listed device, backend, safety and publishing checks pass.
