@@ -108,7 +108,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <div id="answers"></div>
 <p id="quizFeedback" class="feedback" aria-live="polite"></p>
 <p id="score">Score: 0</p>
-<button type="button" onclick="nextQuestion()">Next Question ➜</button>
+<button type="button" id="nextQuestionButton" onclick="nextQuestion()">Next Question ➜</button><button type="button" id="retryQuizButton" onclick="restartQuiz()" hidden>Try Again</button>
 </section>
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
@@ -172,7 +172,7 @@ const questions=[
 {q:"What is coding?",a:["Cooking food","Writing computer instructions","Painting walls"],correct:1},
 {q:"Can robots use sensors?",a:["Yes","No"],correct:0}
 ];
-let current=0,score=0,answered=false;
+let current=0,score=0,answered=false,quizFinished=false;
 function showQuestion(){
 const q=questions[current];
 document.getElementById("question").textContent=q.q;
@@ -180,12 +180,17 @@ document.getElementById("quizFeedback").textContent="";
 const box=document.getElementById("answers");
 box.replaceChildren();
 answered=false;
+quizFinished=false;
+document.getElementById("nextQuestionButton").hidden=false;
+document.getElementById("nextQuestionButton").textContent=current===questions.length-1?"Finish Quiz":"Next Question ➜";
+document.getElementById("retryQuizButton").hidden=true;
 q.a.forEach((text,i)=>{
 const b=document.createElement("button");
 b.textContent=text;
 b.onclick=()=>{
 if(answered)return;
 answered=true;
+Array.from(box.querySelectorAll("button")).forEach(button=>button.disabled=true);
 if(i===q.correct){
 score++;
 document.getElementById("quizFeedback").textContent="🎉 Correct!";
@@ -198,6 +203,7 @@ box.appendChild(b);
 });
 }
 function nextQuestion(){
+if(quizFinished)return;
 if(!answered){
 document.getElementById("quizFeedback").textContent="Choose an answer first.";
 return;
@@ -206,12 +212,16 @@ current++;
 if(current>=questions.length){
 document.getElementById("question").textContent="🎉 Quiz complete!";
 document.getElementById("answers").replaceChildren();
-document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
-if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Computer Studies",activity_key:"computer-basics-quiz",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"computer-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+r.reason)})}
+quizFinished=true;
+document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length+". Try again whenever you are ready!";
+document.getElementById("nextQuestionButton").hidden=true;
+document.getElementById("retryQuizButton").hidden=false;
+if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Computer Studies",activity_key:"computer-basics-quiz",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"computer-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+(r.reason||"not confirmed"))}).catch(()=>{document.getElementById("quizFeedback").textContent+=" Cloud save could not be confirmed."})}
 return;
 }
 showQuestion();
 }
+function restartQuiz(){current=0;score=0;answered=false;quizFinished=false;document.getElementById("score").textContent="Score: 0";showQuestion();document.getElementById("quizFeedback").textContent="Fresh attempt started. Good luck!";}
 showQuestion();
 </script>
 </body>
