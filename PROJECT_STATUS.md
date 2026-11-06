@@ -527,3 +527,30 @@ Report separate statuses for frontend development, backend integration, testing 
 - Clarified the optional audio feature: it is a soft steady focus tone generated on-device, not instrumental music or a recorded track.
 - Commit: `054099aef2cfe588a8e353f0a33efcb8f21db55c`. Re-fetched the committed page and verified the Supabase scripts, quiz completion save call, English progress fields, device-only writing, restart guard and honest audio description are present.
 - Not yet verified: live browser JavaScript execution, Android voice/audio, quiz interaction, signed-in student progress INSERT under real RLS/guardian consent, or cross-device dashboard visibility. These remain pending; no cloud sync or device test is claimed as complete.
+
+
+## Whole-subject source audit — 6 November 2026
+Inspected the main subject pages and their companion pages in GitHub. This is a source-code review only; live Android interaction and real student-account cloud writes have not yet been independently tested.
+
+| Area | Present in source | Gaps / next improvements |
+|---|---|---|
+| Mathematics (`math.html`) | 10-question quiz, scoring, local demo record, call to protected student-progress helper | No lesson read-aloud control; verify restart/result UI and live cloud save |
+| Science (`science.html`) | 10-question quiz, scoring, local demo record, call to protected student-progress helper | No lesson read-aloud control; add safe, guided activity/explanation prompts; verify live cloud save |
+| Social Studies (`social-studies.html`) | 5-question quiz, explanations, local demo record, call to protected student-progress helper | No read-aloud control; expand topic coverage and examples from different regions |
+| History (`history.html`) | 5-question evidence/source quiz, local demo record, call to protected student-progress helper | No read-aloud control; add timeline/source exploration and age-appropriate regional coverage |
+| Geography (`geography.html`) | Continent fact cards, keyboard activation, 5-question quiz, local demo record, call to protected student-progress helper | No read-aloud control; add map-based exploration and more countries/capitals/physical geography |
+| Home Science (`home-science.html`) | Topic content, speech helper, 5-question quiz, local demo record, call to protected student-progress helper | Verify read-aloud controls are exposed and cloud-save outcome is visible; add safe practical activities with adult guidance |
+| Computer Studies (`computer.html`) | Speech helper, computer-part explanations, typing activity, simple robot-step activity, 5-question quiz, cloud progress call | Quiz currently has no clear restart/result summary flow; several actions use inline handlers; add accessible completion/retry and check progress display |
+| Little Learners Encyclopedia (`encyclopedia.html`) | Search, category filters, 16 topic cards, fact snippets | No speech, quiz or student progress tracking; improve child-friendly topic navigation and comprehension checks |
+| Guided Research Centre (`guided-research.html`) | 4 guided topics, research questions, locally saved notes, basic research-plan builder | No read-aloud or progress tracking; add source-checking and safe research guidance, and avoid presenting unverified AI-generated facts as sourced evidence |
+| Companion `*-extra.html` pages | Mathematics, Science, Social Studies and Computer companion pages include speech and quiz features | Need check which links are actually used; avoid duplicate/conflicting learning routes and standardise quiz/progress behaviour |
+| Advanced Learning Studio (`advanced-learning.html`) | Large integrated learning page with quiz, speech and progress references | Needs a separate deeper feature and navigation audit before changing it |
+
+### Review priorities
+1. Add consistent, optional read-aloud support to Mathematics, Science, Social Studies, History and Geography.
+2. Improve Encyclopedia with read-aloud and short knowledge checks; connect scores only through the existing consent- and RLS-gated student progress helper.
+3. Improve Guided Research with safe source evaluation and age-appropriate research steps.
+4. Fix Computer Studies quiz completion/retry consistency and review all companion-page links.
+5. Test every subject on Android and verify real authenticated Supabase writes before marking any feature fully complete.
+
+No subject page was declared fully device-tested or cloud-synced by this source audit.
