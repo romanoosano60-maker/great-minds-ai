@@ -554,3 +554,16 @@ Inspected the main subject pages and their companion pages in GitHub. This is a 
 5. Test every subject on Android and verify real authenticated Supabase writes before marking any feature fully complete.
 
 No subject page was declared fully device-tested or cloud-synced by this source audit.
+
+
+## Cross-subject improvement delivered — 6 November 2026
+Added optional lesson read-aloud and stop-voice controls to the main Mathematics, Science, Social Studies, History and Geography pages. Each control reads the lesson sections before the quiz, uses the browser's built-in speech synthesis, cancels existing speech before starting, reports status accessibly, and gives a clear fallback when speech synthesis is unavailable. Existing quizzes, student-progress helper calls, home-screen links and Unified Hub links were retained.
+
+Commits:
+- Mathematics: `e8a7701596f2f65d48d9e20d68c12c08550abc76`
+- Science: `c825d39806596ff0dd3d3bf1e9c63926d02ad6b9`
+- Social Studies: `8ff262e832f388350bb5c754170e87683842eb73`
+- History: `221f865ce2a852350ba47abacea8aa0498aa13dc`
+- Geography: `1d18ab72e513574d026714f306d21a8816c95737`
+
+Verification: re-fetched all five committed pages and confirmed read/stop controls, speech synthesis, unsupported-browser fallback, quiz presence, progress helper reference, home and hub navigation, and accessible status region. These are source checks only; actual Android playback, page rendering and authenticated Supabase writes still require device/account testing.
