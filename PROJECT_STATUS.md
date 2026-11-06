@@ -683,3 +683,11 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Gallery preview subjects include Home Banner, English, Math, Science, Geography, Games, Homework, AI Teacher, Groups, School, Library, Space, Navigation Icons, Rewards & Badges, and Points & Progress.
 - The gallery already includes load/error counting and a tap-to-enlarge dialog. Source inspection confirms those checks exist; actual browser image decoding and Android display have not been tested in this session.
 - These are gallery previews only. Their presence does not prove that lesson pages use custom 3D objects, nor that the requested app-wide 3D object collection has been integrated.
+
+
+## First A–Z 3D-style object assets integrated — 2026-11-06
+- Added nine original SVG learning-object illustrations under `assets/3d-style/`: apple, ant, airplane, ball, bird, bus, cat, car, and cup. The artwork uses dimensional shading, highlights, gradients and ground shadows to give a consistent polished 3D-style appearance while remaining lightweight and scalable on mobile.
+- Connected these nine assets to the A–Z Object Explorer in `vocabulary.html`. Matching words now display the SVG illustration with descriptive alt text and lazy loading; other vocabulary words retain their existing emoji fallback until their own art is ready.
+- Source changes committed as `9c5fa7fc7c2951f898743c418d934846f620a848` (asset files) and `a809d065b4a7df81fb2dd7538939b7961114c5c3` (A–Z integration).
+- Verified that all nine asset files can be fetched from the repository and that the A–Z renderer references the new asset map. Live GitHub Pages rendering and Android visual testing are still required.
+- These are original 2D SVG illustrations with dimensional/3D-style shading, not animated 3D models. No animation is claimed. The remaining 17 letters' objects and app-wide subject imagery still need equivalent artwork.
