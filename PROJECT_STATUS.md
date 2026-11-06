@@ -510,3 +510,11 @@ Report separate statuses for frontend development, backend integration, testing 
 - Updated OWNER_ACTIONS.md and PRODUCTION_READINESS.md to reflect the database verification report: guardian-consent revocation and homework maximum-score migrations were applied and rollback-tested. The remaining real-account and cross-device workflows are still pending.
 - The AI Teacher Worker remains a source template and is not deployed. Its endpoint URL is intentionally blank until Cloudflare deployment and configuration are completed.
 - Fixed shared language matching so emoji-prefixed page labels can match either their complete translation key or the text-only fallback; this prevents some icon-prefixed headings and buttons from being skipped.
+
+
+## Vocabulary Adventure upgrade — 6 November 2026
+- Expanded the existing `vocabulary.html` in place, preserving its home-screen destination and links to Dictionary, Story Studio and Reading & Writing.
+- Added five topic sets (Everyday, Animals, Nature, Feelings and School), 25 child-friendly words with meanings and example sentences, browser read-aloud controls, a five-question scored meaning quiz, and sentence-building practice.
+- Added optional saved-word collection on the current device. Sentence text and voice are not uploaded; the page attempts to save only the quiz score through the existing authenticated `student_learning_progress` helper, subject to Supabase RLS and guardian consent.
+- Commit: `6dc3f315592e56034a8a7e1bc7756ee585c8adcb`. Re-fetched the committed page and verified the expected sections, speech code, quiz, cloud-progress helper and home link are present.
+- GitHub Pages live rendering, Android touch/audio behaviour, quiz interaction and authenticated cloud-save flow remain untested. Do not mark the module device-tested or cloud-synced until those tests pass.
