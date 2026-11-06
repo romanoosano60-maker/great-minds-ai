@@ -698,3 +698,10 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Connected all nine to the existing A–Z Object Explorer asset map. The A–F lesson cards now use 18 original 3D-style shaded SVG assets across their three examples per letter; the other letters continue to use their emoji fallback.
 - Commits: `0db20a34025065a19b429fed63ea27f55ba271c2` (new assets) and `890597db8d26f897855cb1c532098f020765b492` (A–Z asset map update).
 - The SVG files are lightweight vector illustrations with gradients, highlights and shadows, not animated 3D models. Live GitHub Pages and Android image rendering remain untested.
+
+
+## G–I illustration collection added — 2026-11-06
+- Added nine original SVG illustrations: goat, grapes, globe, horse, house, hat, insect, igloo and ice cream.
+- Connected the nine assets to the A–Z explorer. Letters A through I now have all three example objects represented by custom SVG art (27 assets total across those nine letters).
+- Commits: `ff1b45fef6eeaed6cbaa728e50b177527210d1e5` (assets) and `b9a5091ef131e9b74e89e83ab6abb117d50114cd` (lesson integration).
+- Artwork remains static 2D SVG with dimensional shading, not animated 3D models. The remaining J–Z objects and the rest of the app's subjects still need art. Live page and Android tests remain pending.
