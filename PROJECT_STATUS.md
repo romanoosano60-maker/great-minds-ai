@@ -611,3 +611,12 @@ Commits:
 - General Knowledge: `17ab63db4504aced7d00b22d7db62737495d4bf3`
 
 General Knowledge also gained optional browser read-aloud for each question and its answer choices, with a clear unsupported-browser message. The original home links, lessons, questions, local-only writing/data choices and consent/RLS-gated cloud progress helper use were preserved. Source checks are not a substitute for Android interaction/audio and real student-account Supabase tests.
+
+
+## Advanced Learning Studio reliability pass — 6 November 2026
+- Reviewed `advanced-learning.html`: five-question subject check-in for Mathematics, English and Science; adaptive daily plan; multilingual phrase practice (English, French, Bangla and Hindi); browser speech recognition/read-aloud; and real-world problem challenges.
+- Removed a duplicate challenge-check click handler so each submission produces one feedback result using the selected interface language.
+- Improved Stop Voice so microphone recognition callbacks are cleared before aborting; an abort event can no longer replace the user's stopped confirmation with a microphone error.
+- Preserved the existing local-device learning record, consent/RLS-gated `gmSaveStudentProgress` call, language selector, AI Teacher link, Learning Hub link and main home link.
+- Commit: `a8da25983d9834fad856c931697503c621947002`. Re-fetched the page and verified the single challenge handler, safe microphone stop, speech recognition, cloud helper, quiz/plan controls, language selector and navigation links.
+- This is source verification only. Live Android layout, microphone permission, speech playback, language voice availability, quiz/challenge interaction and real authenticated cloud saving still require device/account testing.
