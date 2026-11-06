@@ -113,6 +113,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
+function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.className="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("section.intro")||document.querySelector("header");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
 function speak(text){
 if(!("speechSynthesis" in window)){
 alert("Speech is not supported in this browser.");
