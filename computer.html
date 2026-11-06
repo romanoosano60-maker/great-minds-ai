@@ -35,6 +35,15 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+
+/* Gentle subject-art motion: slow, staggered floating on supported devices */
+@media(prefers-reduced-motion:no-preference){
+.gm-subject-art figure:nth-child(3n+1) img{animation:gmSubjectFloat 5s ease-in-out infinite}
+.gm-subject-art figure:nth-child(3n+2) img{animation:gmSubjectFloat 5.6s ease-in-out -1.8s infinite}
+.gm-subject-art figure:nth-child(3n) img{animation:gmSubjectFloat 6.2s ease-in-out -3.2s infinite}
+@keyframes gmSubjectFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(-1deg)}}
+}
+@media(prefers-reduced-motion:reduce){.gm-subject-art img{animation:none!important}}
 </style>
 <script src="gm-language.js" defer></script></head>
 <body>
