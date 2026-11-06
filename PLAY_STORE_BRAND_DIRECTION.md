@@ -116,3 +116,17 @@ The owner wants the whole Great Minds AI learning experience to use a cohesive, 
 
 ### Status and scope
 This is an approved visual direction and rollout requirement, not a claim that the images have already been generated or integrated. Existing app artwork has not yet been replaced by this standard. Image creation and Android visual/performance verification remain outstanding.
+
+
+## English foundation — A–Z letter and object learning
+
+The English learning path should include a dedicated alphabet-and-object section after the existing vocabulary activities. Children must learn more than the isolated letters A, B, C, and D: every letter should connect to spoken sounds, familiar words, clear object pictures, and short example sentences.
+
+The first A–Z explorer has been added to `vocabulary.html`:
+- All 26 letters can be selected.
+- Each letter presents three example words/objects, a simple sound cue, and speech playback with a Stop Voice control.
+- Examples include A: apple, ant, airplane; B: ball, bird, bus; C: cat, car, cup; O: octopus, orange, owl; S: sun, ship, snake; Z: zebra, zip, zoo.
+- X includes xylophone and X-ray, with a child-friendly note that X often makes the /ks/ sound and an example of x at the end of fox.
+- The current object symbols are temporary visual placeholders in raised, shaded cards; they are not the final unique 3D artwork.
+
+Next visual task: replace each placeholder with a distinct, consistent 3D object illustration, and add gentle purposeful animation where useful. Do not call the current placeholder cards finished 3D assets.
