@@ -714,3 +714,12 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Asset commit: 1cd18aa44d79018a927970846f070bf9f8474dec. Vocabulary integration commit: 6afc380a0572cafe25c11ac6949b7055fdc8acb8.
 - GitHub source verification follows. GitHub Pages rendering, Android visual display, accessibility and speech behaviour still require hands-on device testing.
 - Overall prototype estimate remains 94%; no launch-readiness or device-testing claim is made.
+
+
+## Subject learning illustration rollout — 2026-11-06
+- Added 21 matching subject illustration SVGs under `assets/3d-style/`: Mathematics (abacus, shapes, measurement); Science (plant life, water cycle, solar system); Geography (globe, mountains, compass); History (ancient vase, pyramid, historic ship); Social Studies (community, community helper, teamwork); Computer Studies (computer, robot, code); Home Science (healthy food, handwashing, home safety).
+- Integrated a responsive three-image strip near the top of each corresponding lesson page: `math.html`, `science.html`, `geography.html`, `history.html`, `social-studies.html`, `computer.html` and `home-science.html`. Images include descriptive alt text, lazy loading and fixed aspect ratio. Existing lesson and quiz content was not replaced.
+- Re-fetched all seven pages and confirmed one illustration strip, three image references and three descriptive alt texts on each page. This is source verification; live GitHub Pages image loading and Android layout still require device testing.
+- Artwork is static 2D SVG with dimensional/3D-style gradients and shading, not animated 3D models.
+- New subject-art commit: 98a547835bad9967b3e19f45f218a3130e8bc5d6. Page integration commits: Mathematics 41b2184e452b08711945119a9850a1ca406d430b; Science d20520a70ae578dc895608be2c202d38173b9d6d; Geography f1430bf2dd033ce0c31a8eb9031aca697bc4017a; History e108f2e71cfe80a9f35f25b785cb8e5855712477; Social Studies a1a01b2eae9d65c31d7aaab349b94bb5ca85ad14; Computer Studies 6a1bc65b8ac56a960fbbcf3c4a176493858e4673; Home Science a600adb49ea2363bb878718f50f49ca3a973d410.
+- Overall prototype estimate remains 94%; no live/device test or launch-readiness claim is made.
