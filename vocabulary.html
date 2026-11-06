@@ -19,7 +19,7 @@ a{color:#214da5}.word-card{text-align:center;background:linear-gradient(145deg,#
 .word{font-size:clamp(30px,7vw,46px);font-weight:800;color:#274da1}.meaning{font-size:18px;font-weight:650}.example{font-style:italic;color:#53647d}
 .pills{display:flex;flex-wrap:wrap;gap:8px;margin:10px 0}.pills button{background:#edf2ff;color:#28457f;border:1px solid #d5e0fb}.pills button[aria-pressed=true]{background:#315ed1;color:white}
 .status{background:#eef7f1;border-radius:10px;padding:11px;min-height:42px}.choices{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:9px;margin:12px 0}.choices button{background:#f0f4ff;color:#29457d;border:2px solid #dbe5ff}.choices button:focus,.choices button:hover{border-color:#315ed1}
-progress{width:100%;height:14px}footer{text-align:center;padding:22px;color:#fff;background:#273e7b}
+progress{width:100%;height:14px}.alphabet-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(68px,1fr));gap:9px;margin:14px 0}.alphabet-grid button{min-height:64px;font-size:24px;background:linear-gradient(145deg,#fff,#dceaff);color:#24498f;border:1px solid #cbdaf5;box-shadow:0 5px 0 #b9c9e6,0 8px 14px #1c35501a;transform:translateY(0);transition:transform .15s,box-shadow .15s}.alphabet-grid button[aria-pressed=true]{background:linear-gradient(145deg,#ffeaa8,#ffbf65);color:#633c0c;box-shadow:0 3px 0 #d89c43,0 5px 12px #1c355022;transform:translateY(2px)}.abc-objects{display:grid;grid-template-columns:repeat(auto-fit,minmax(130px,1fr));gap:12px;margin-top:14px}.abc-object{background:linear-gradient(145deg,#f5fbff,#e5eaff 55%,#fff0d7);border:1px solid #d6e1f5;border-radius:17px;padding:14px;text-align:center;box-shadow:0 7px 16px #263c6318;perspective:500px}.abc-object .object-art{font-size:58px;line-height:1.3;display:block;filter:drop-shadow(0 8px 5px #233b6540);transform:rotateY(-9deg) rotateX(5deg)}.abc-object strong{display:block;font-size:19px;color:#24498f}.abc-object small{display:block;color:#586983}.abc-tip{background:#fff7df;border-radius:12px;padding:11px;color:#674c1a}.abc-controls{display:flex;gap:8px;flex-wrap:wrap}.abc-controls button{flex:1 1 150px}@media(prefers-reduced-motion:reduce){.alphabet-grid button{transition:none;transform:none!important}}footer{text-align:center;padding:22px;color:#fff;background:#273e7b}
 @media(max-width:380px){.card{padding:14px}.choices{grid-template-columns:1fr}.row>*{flex-basis:100%}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 </style>
@@ -119,7 +119,41 @@ const definitions={
 "confident":"Feeling sure that you can do something.","patient":"Able to wait calmly.","proud":"Feeling pleased about something you have done.","nervous":"A little worried or unsure.","grateful":"Feeling thankful for something.",
 "compare":"To look at how things are alike or different.","explain":"To make an idea clear with details.","observe":"To watch carefully and notice details.","predict":"To say what you think may happen.","sequence":"The order in which things happen."
 };
-let category="Everyday",index=0,quiz=[],qIndex=0,score=0,answered=false;
+let category="Everyday",index=0,quiz=[],qIndex=0,score=0,answered=false;\nconst alphabet=[
+["A","short a","Apple","🍎","A is for apple.","Ant","🐜","Airplane","✈️"],
+["B","buh","Ball","⚽","B is for ball.","Bird","🐦","Bus","🚌"],
+["C","kuh","Cat","🐱","C is for cat.","Car","🚗","Cup","🥤"],
+["D","duh","Dog","🐶","D is for dog.","Duck","🦆","Drum","🥁"],
+["E","eh","Elephant","🐘","E is for elephant.","Egg","🥚","Engine","🚂"],
+["F","fff","Fish","🐟","F is for fish.","Flower","🌼","Fan","🪭"],
+["G","guh","Goat","🐐","G is for goat.","Grapes","🍇","Globe","🌍"],
+["H","huh","Horse","🐴","H is for horse.","House","🏠","Hat","🎩"],
+["I","ih","Insect","🐞","I is for insect.","Igloo","🧊","Ice cream","🍦"],
+["J","juh","Jug","🏺","J is for jug.","Jeep","🚙","Jellyfish","🪼"],
+["K","kuh","Kite","🪁","K is for kite.","Key","🔑","Kangaroo","🦘"],
+["L","lll","Lion","🦁","L is for lion.","Leaf","🍃","Lamp","💡"],
+["M","mmm","Moon","🌙","M is for moon.","Monkey","🐒","Mango","🥭"],
+["N","nnn","Nest","🪺","N is for nest.","Nose","👃","Notebook","📓"],
+["O","short o","Octopus","🐙","O is for octopus.","Orange","🍊","Owl","🦉"],
+["P","puh","Penguin","🐧","P is for penguin.","Pencil","✏️","Plane","🛩️"],
+["Q","kwuh","Queen","👑","Q is for queen.","Quilt","🛏️","Quail","🐦"],
+["R","rrr","Rabbit","🐰","R is for rabbit.","Rocket","🚀","Rainbow","🌈"],
+["S","sss","Sun","☀️","S is for sun.","Ship","🚢","Snake","🐍"],
+["T","tuh","Tiger","🐯","T is for tiger.","Train","🚆","Tree","🌳"],
+["U","uh","Umbrella","☂️","U is for umbrella.","Uniform","🥋","Unicorn","🦄"],
+["V","vvv","Van","🚐","V is for van.","Violin","🎻","Volcano","🌋"],
+["W","wuh","Whale","🐳","W is for whale.","Watch","⌚","Watermelon","🍉"],
+["X","ks","Xylophone","🎼","X is for xylophone. X often makes the /ks/ sound.","X-ray","🩻","Fox (ends with x)","🦊"],
+["Y","yuh","Yak","🐂","Y is for yak.","Yo-yo","🪀","Yacht","🛥️"],
+["Z","zzz","Zebra","🦓","Z is for zebra.","Zip","🤐","Zoo","🦒"]
+];
+let abcIndex=0;
+function speakABC(text){if(!("speechSynthesis"in window)){$("abcTip").textContent="Speech is not available here. You can still read the words.";return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.82;window.speechSynthesis.speak(u);}
+function renderABC(){const item=alphabet[abcIndex];$("abcLetter").textContent=item[0]+" "+item[0].toLowerCase();$("abcSound").textContent=item[0]+" says /"+item[1]+"/."; $("abcSentence").textContent=item[4];const root=$("abcObjects");root.replaceChildren();for(let i=2;i<9;i+=3){const card=document.createElement("div");card.className="abc-object";const art=document.createElement("span");art.className="object-art";art.setAttribute("aria-hidden","true");art.textContent=item[i+1];const name=document.createElement("strong");name.textContent=item[i];const desc=document.createElement("small");desc.textContent=item[0]+" is for "+item[i].toLowerCase();card.append(art,name,desc);root.append(card);}Array.from($("alphabetLetters").children).forEach((b,i)=>b.setAttribute("aria-pressed",String(i===abcIndex)));$("abcTip").textContent="Letter "+item[0]+": "+item[2]+", "+item[5]+", and "+item[7]+". Can you say all three words?";}
+function buildABC(){const root=$("alphabetLetters");alphabet.forEach((item,i)=>{const b=document.createElement("button");b.type="button";b.textContent=item[0];b.setAttribute("aria-label","Letter "+item[0]);b.setAttribute("aria-pressed",String(i===0));b.addEventListener("click",()=>{abcIndex=i;renderABC();});root.append(b);});renderABC();}
+$("abcHear").addEventListener("click",()=>{const a=alphabet[abcIndex];speakABC("The letter "+a[0]+". "+a[0]+" says "+a[1]+". "+a[2]+". "+a[5]+". "+a[7]+".");});
+$("abcStop").addEventListener("click",()=>{if("speechSynthesis"in window)window.speechSynthesis.cancel();$("abcTip").textContent="Voice stopped. You can keep exploring the letters.";});
+
 const storageKey="gm_vocab_saved_words_v2";
 function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
 function speak(text){if(!("speechSynthesis" in window)){ $("wordStatus").textContent="Speech is not available in this browser. You can still read and practise.";return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.88;window.speechSynthesis.speak(u);}
@@ -139,7 +173,7 @@ $("saveWord").addEventListener("click",()=>{const word=$("word").textContent,ite
 $("nextQuiz").addEventListener("click",()=>{if(!answered)return;if(qIndex<quiz.length-1){qIndex++;renderQuiz();}else finishQuiz();});$("restartQuiz").addEventListener("click",newQuiz);
 $("checkSentence").addEventListener("click",()=>{const word=$("sentenceWord").value,text=$("sentenceText").value.trim();if(text.length<8){$("sentenceFeedback").textContent="Write a little more so your idea is clear.";return;}if(!new RegExp("\\b"+word+"\\b","i").test(text)){$("sentenceFeedback").textContent="Try again and include the word “"+word+"” in your sentence.";return;}if(!/[.!?]$/.test(text)){$("sentenceFeedback").textContent="Good sentence! Add a full stop, question mark or exclamation mark at the end.";return;}$("sentenceFeedback").textContent="🌟 Well done! Your sentence uses “"+word+"” and has an ending mark. Your writing stays on this device.";});
 $("clearSaved").addEventListener("click",()=>{localStorage.removeItem(storageKey);renderSaved();});
-renderCategories();renderWord();fillSentenceWords();renderSaved();newQuiz();
+renderCategories();renderWord();fillSentenceWords();renderSaved();newQuiz();buildABC();
 })();
 </script>
 </body></html>
