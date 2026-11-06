@@ -37,7 +37,7 @@ footer{margin-top:20px}
 html[dir=rtl] body{direction:rtl;text-align:right}html[dir=rtl] .subjects{direction:rtl}html[dir=rtl] button{direction:rtl}
 </style>
 <style>
-.language-bar{display:flex;justify-content:center;align-items:center;gap:9px;padding:10px;background:#fff}
+.language-bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:9px;padding:10px;background:#fff}
 .language-bar label{font-weight:700}
 .language-bar select{max-width:220px;padding:10px 12px;border:2px solid #6848ed;border-radius:10px;background:white;color:#19305a;font-size:16px}
 </style>
@@ -164,7 +164,7 @@ document.addEventListener("DOMContentLoaded",()=>{
  stop.style.cssText="padding:10px 12px;border:0;border-radius:10px;background:#53647b;color:#fff;font-weight:700;margin-left:8px";
  const audioStatus=document.createElement("span");
  audioStatus.id="gm-home-audio-status";audioStatus.setAttribute("role","status");audioStatus.setAttribute("aria-live","polite");
- audioStatus.style.cssText="display:block;min-height:1.4em;margin-top:6px;font-size:14px";
+ audioStatus.style.cssText="display:block;flex:1 1 100%;min-height:1.4em;margin-top:6px;font-size:14px;text-align:center";
  listen.addEventListener("click",()=>{
   if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){audioStatus.textContent="Speech is not supported in this browser.";return}
   const locales={en:"en-US",hi:"hi-IN",bn:"bn-BD",ta:"ta-IN",te:"te-IN",mr:"mr-IN",zh:"zh-CN",de:"de-DE",es:"es-ES",fr:"fr-FR",ar:"ar-SA"};
