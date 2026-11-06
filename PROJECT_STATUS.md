@@ -664,3 +664,5 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - The shared toolbar avoids adding its stop button when a page already exposes the dedicated `gm-stop-voice` control, preventing unnecessary duplicates on the recently repaired pages.
 - Commit: `7c8fc87717cf01bbcc9cca0c7aed85a47fd035bb`; re-fetched and verified the toolbar stop button, cancellation handler and duplicate guard.
 - The shared script is used by the non-home learning pages; the home page has its own independent Stop control. This is source verification, not proof of Android voice availability or playback behaviour.
+
+- Follow-up responsive-layout repair: the homepage language/audio controls and shared language toolbar now wrap onto additional lines on narrow screens; the homepage audio status spans the full toolbar width. Both updated files were re-fetched and the responsive CSS changes were verified. Commits: homepage `ff791e0caeea1e33724cdddfad5981b294cfe81e`; shared toolbar `e1586dd13e874f9ca1c3e67772abf718e956014d`. This is CSS source verification, not Android screen testing.
