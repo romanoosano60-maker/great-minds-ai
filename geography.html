@@ -25,7 +25,19 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @keyframes gmSubjectFloat{0%,100%{transform:translateY(0) rotate(0deg)}50%{transform:translateY(-6px) rotate(-1deg)}}
 }
 @media(prefers-reduced-motion:reduce){.gm-subject-art img{animation:none!important}}
+
+/* Consistent, thumb-friendly navigation across learning pages */
+.gm-quick-nav{display:flex;flex-wrap:wrap;justify-content:center;gap:8px;padding:10px max(12px,calc((100% - 1000px)/2));background:#ffffffed;border-bottom:1px solid #dce6f5;position:relative;z-index:5}
+.gm-quick-nav a{display:inline-flex;align-items:center;justify-content:center;min-height:40px;padding:8px 12px;border-radius:999px;background:#edf3ff;color:#24477f;text-decoration:none;font:700 14px/1.2 system-ui,Arial,sans-serif;white-space:nowrap}
+.gm-quick-nav a:focus-visible{outline:3px solid #f2ad35;outline-offset:2px}
+.gm-quick-nav a:hover{background:#dce8ff}
+@media(max-width:480px){.gm-quick-nav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:9px 10px;scrollbar-width:thin}.gm-quick-nav a{flex:0 0 auto}}
+@media(prefers-reduced-motion:reduce){.gm-quick-nav a{transition:none!important;scroll-behavior:auto!important}}
 </style><script src="gm-language.js" defer></script></head><body>
+<nav class="gm-quick-nav" aria-label="Great Minds learning navigation">
+<a href="index.html">🏠 Home</a><a href="vocabulary.html">🔤 Vocabulary</a><a href="math.html">🔢 Maths</a><a href="science.html">🔬 Science</a><a href="geography.html">🌍 Geography</a><a href="history.html">📜 History</a><a href="social-studies.html">🤝 Social Studies</a><a href="computer.html">💻 Computer</a><a href="home-science.html">🏡 Home Science</a>
+</nav>
+
 <header><div class="globe" aria-hidden="true">🌍</div><h1>World Atlas</h1><p>Explore our amazing planet, one discovery at a time!</p><a class="btn secondary" href="index.html">🏠 Back to Great Minds Home</a><a href="connected-dashboards.html">🌐 Unified Hub</a></header>
 <main class="wrap">
 <section class="panel" aria-label="Lesson audio" style="margin:12px 0;padding:12px;display:flex;gap:10px;flex-wrap:wrap;align-items:center"><strong>🔊 Listen to the lesson</strong><button type="button" id="gmReadLesson">Read lesson aloud</button><button type="button" id="gmStopLesson" class="light">Stop voice</button><span id="gmVoiceStatus" role="status" aria-live="polite">Audio is optional. You can read the lesson instead.</span></section>
