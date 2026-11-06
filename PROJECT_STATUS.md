@@ -675,3 +675,11 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Verified all 26 alphabet data entries remain present after the edits.
 - Commits: 3895a38e25d85a4f08972695f770478d5f5119f9 and c8fa5fd6255c2d02e8f04dc126a0f8c1bc440128.
 - This is source-level verification only. GitHub Pages live rendering, browser speech playback, Android screen-reader/accessibility, and child usability still need device testing. The emoji illustrations remain temporary symbols, not custom 3D artwork.
+
+
+## 3D graphics gallery asset inventory — 2026-11-06
+- Inspected both gallery entry files. The short gallery entry redirects to gm-3d-graphics-gallery-1.html.
+- The consolidated gallery contains 15 artwork previews embedded as data:image/webp base64 data, rather than external image paths. The repository tree currently contains no separate PNG, JPEG, WebP, SVG or GIF asset files.
+- Gallery preview subjects include Home Banner, English, Math, Science, Geography, Games, Homework, AI Teacher, Groups, School, Library, Space, Navigation Icons, Rewards & Badges, and Points & Progress.
+- The gallery already includes load/error counting and a tap-to-enlarge dialog. Source inspection confirms those checks exist; actual browser image decoding and Android display have not been tested in this session.
+- These are gallery previews only. Their presence does not prove that lesson pages use custom 3D objects, nor that the requested app-wide 3D object collection has been integrated.
