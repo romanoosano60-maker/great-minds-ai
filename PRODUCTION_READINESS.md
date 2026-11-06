@@ -72,3 +72,5 @@ The Mathematics, English, Science, Social Studies, History, Geography, Home Scie
 - The following remain launch blockers: real Android microphone/audio and language voice tests; real student/parent/teacher account and guardian-consent flows; server-enforced RLS and realtime authorization tests; cross-device/cross-country classroom tests; complete translation review; accessibility and device navigation; privacy/legal approval; native app packaging and store submission.
 
 Source-code repairs above are development progress only. Do not change the production-ready or launch-ready status until the listed device, backend, safety and publishing checks pass.
+
+- Follow-up audio repair: the shared `gm-language.js` toolbar now includes a Stop Voice control for page narration and avoids adding a duplicate when a page already has its dedicated `gm-stop-voice` control. Commit `7c8fc87717cf01bbcc9cca0c7aed85a47fd035bb`; re-fetched and source-verified. Android behaviour remains untested.
