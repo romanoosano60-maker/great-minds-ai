@@ -589,3 +589,11 @@ Also made Home Science cloud-progress feedback resilient to a rejected save requ
 - Home Science commit: `359fd6471267a5704673776c205d0dc94f3c5f1f`
 
 Verification: Computer Studies was re-fetched and checked for retry, finish-state protection, answer locking and cloud-save error handling. Home Science was re-fetched and checked for its existing read-aloud controls, five-question quiz, local progress record, cloud progress helper and rejection handling. These are source checks only. Actual Android interaction/audio and authenticated Supabase writes still need to be tested on the user's device/account.
+
+
+## Encyclopedia knowledge check — 6 November 2026
+Added a five-question knowledge check based on existing Encyclopedia topics (Solar System, plants, dolphins, water cycle and algorithms). It gives immediate explanations, score feedback, requires an answer before advancing, and supports a fresh retry. The score stays in the page and is not sent to a server; no child personal information is collected. Existing topic search, category filters, read-aloud, home navigation and Unified Hub navigation were preserved.
+
+- Encyclopedia commit: `ab7127025870b4fb8511a9b67f2b04aeee473186`
+
+Verification: source was re-fetched and checked for the knowledge-check section, all five questions, feedback, scoring, retry, and preservation of the existing search/filter and read-aloud features. Android rendering, audio and hands-on quiz behaviour remain to be tested on device.
