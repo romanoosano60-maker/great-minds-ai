@@ -1,7 +1,7 @@
 // Great Minds AI - Shared Supabase Configuration
 // Only the public project URL and publishable key belong in browser code.
 const SUPABASE_URL =
-  "https://ryuchmmnyjyldwouidy.supabase.co";
+  "https://ryuchmmnyjyldwouidyy.supabase.co";
 
 const SUPABASE_PUBLISHABLE_KEY =
   "sb_publishable_M5TjIGaSv2LQ8vO4oAs13Q_BXK5l9jE";
