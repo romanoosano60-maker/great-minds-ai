@@ -9,7 +9,7 @@ This folder contains the server-side source for the Great Minds AI Teacher endpo
 - Verifies the signed-in account with Supabase Auth.
 - Requires the signed-in student to have an active guardian relationship before using live AI.
 - Applies a per-user Cloudflare rate limit before calling OpenAI.
-- Allows only the nine Great Minds subjects and twelve approved teaching languages, including Hindi, Bengali, Tamil, Telugu and Marathi, and limits each question to 500 characters.
+- Allows eleven Great Minds modes/subjects, including IQ & Logical Reasoning and Ask Anything, plus twelve approved teaching languages, including Hindi, Bengali, Tamil, Telugu and Marathi, and limits each question to 500 characters. Ask Anything handles general knowledge within the same child-safety limits; IQ & Logical Reasoning asks the tutor to explain patterns and reasoning step by step.
 - Calls the OpenAI Responses API from the server. The OpenAI API key is never placed in browser code.
 - Uses store=false and does not send the child's email, account ID or profile fields to OpenAI.
 - Accepts up to six recent text turns from the browser so a later frontend connection can support conversational context.
