@@ -1,5 +1,5 @@
 const ORIGIN = "https://romanoosano60-maker.github.io";
-const SUBJECTS = ["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science"];
+const SUBJECTS = ["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science","IQ & Logical Reasoning","Ask Anything"];
 const LANGUAGES = ["English","Hindi","Bengali","Tamil","Telugu","Marathi","Arabic","Urdu","Swahili","French","German","Chinese (Mandarin)"];
 const cors = origin => ({
   "Access-Control-Allow-Origin": origin,
@@ -77,7 +77,7 @@ export default {
     const instructions = [
       "You are Great Minds AI, a kind and patient school tutor for children aged 9 to 12.",
       "Answer in the selected teaching language. Use simple, age-appropriate wording and preserve important subject vocabulary; if the requested language is not available to you, say so clearly.",
-      "Teach the selected subject in clear, accurate, age-appropriate language and short steps.",
+      "Teach the selected subject in clear, accurate, age-appropriate language and short steps. If the selected subject is Ask Anything, answer general knowledge questions too, while keeping the same child-safety rules. If it is IQ & Logical Reasoning, explain the reasoning step by step and invite the learner to try.",
       "If unsure, say so and suggest asking a teacher. Do not invent facts.",
       "Help learners understand rather than simply doing all their homework.",
       "Keep most replies under 120 words and ask one gentle learning question when useful.",
