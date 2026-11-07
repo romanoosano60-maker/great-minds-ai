@@ -35,6 +35,24 @@ footer{margin-top:20px}
 @media(max-width:360px){.subjects{grid-template-columns:1fr 1fr;gap:9px;padding:10px}.subject{padding:15px 7px}.subject span{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.subject,.subject button,.subject-link{transition:none}}
 html[dir=rtl] body{direction:rtl;text-align:right}html[dir=rtl] .subjects{direction:rtl}html[dir=rtl] button{direction:rtl}
+
+/* Great Minds home-screen refinement: clearer sections, softer cards and mobile spacing */
+body{background:linear-gradient(180deg,#eef7ff 0%,#f8fbff 55%,#fff8e9 100%)}
+header{position:relative;isolation:isolate;box-shadow:0 5px 20px #19305a18}
+header h1{letter-spacing:.2px;text-shadow:0 2px 8px #18305a35}
+.hero{border-bottom:1px solid #dceaf6}
+.hero h2{font-size:clamp(22px,4vw,30px);color:#243d78}
+.hero p{line-height:1.55}
+.subjects{align-items:stretch;gap:16px}
+.subject{display:flex;flex-direction:column;justify-content:space-between;min-height:150px;border:1px solid #dce8f6;box-shadow:0 5px 16px #1d397012;transition:transform .18s ease,box-shadow .18s ease}
+.subject:hover{transform:translateY(-4px);box-shadow:0 12px 25px #1d397020}
+.subject span{filter:drop-shadow(0 3px 3px #19305a20)}
+#more-subjects>h2{margin:12px auto 4px;max-width:1100px;padding:12px 16px;color:#28438a}
+#more-subjects>.subjects{max-width:1100px}
+.subject button,.subject-link{box-shadow:0 3px 8px #392d9918}
+button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
+@media(max-width:520px){.subjects{gap:10px;padding:12px}.subject{min-height:136px;padding:16px 8px}.hero .people{font-size:34px}}
+
 </style>
 <style>
 .language-bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:9px;padding:10px;background:#fff}
