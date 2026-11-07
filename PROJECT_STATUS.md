@@ -723,3 +723,11 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Artwork is static 2D SVG with dimensional/3D-style gradients and shading, not animated 3D models.
 - New subject-art commit: 98a547835bad9967b3e19f45f218a3130e8bc5d6. Page integration commits: Mathematics 41b2184e452b08711945119a9850a1ca406d430b; Science d20520a70ae578dc895608be2c202d38173b9d6d; Geography f1430bf2dd033ce0c31a8eb9031aca697bc4017a; History e108f2e71cfe80a9f35f25b785cb8e5855712477; Social Studies a1a01b2eae9d65c31d7aaab349b94bb5ca85ad14; Computer Studies 6a1bc65b8ac56a960fbbcf3c4a176493858e4673; Home Science a600adb49ea2363bb878718f50f49ca3a973d410.
 - Overall prototype estimate remains 94%; no live/device test or launch-readiness claim is made.
+
+
+## Supabase frontend configuration correction — 7 November 2026
+- Verified the active Supabase project ID and API URL directly against the connected Supabase project.
+- Found that the shared frontend configuration used a mistyped project URL (one missing final `y`). Corrected `supabase-config.js` and verified the updated file from GitHub.
+- Confirmed the configured `sb_publishable_...` key matches the active project's enabled publishable key; no service-role or secret key is present in the frontend config.
+- Rechecked the live public schema: all seven core tables have RLS enabled; Realtime includes classrooms, classroom_members, homework_assignments, homework_submissions and student_learning_progress.
+- The existing security advisor still reports Leaked Password Protection Disabled. Real teacher/student/guardian sessions and GitHub Pages end-to-end behaviour remain unverified; do not call international classrooms or launch readiness complete.
