@@ -30,7 +30,7 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <header><div>📚🌟</div><h1>Children's Picture Library</h1><p>Look, discover and learn about our world!</p></header>
 <main>
 <a class="home" href="index.html">← Back to Great Minds AI</a>
-<section class="intro"><strong>Choose a picture collection</strong><p>Explore real pictures of animals, birds, machines, vehicles, trains and ships. Tap a picture to see its source and creator information.</p></section>
+<section class="intro"><strong>Choose a picture collection</strong><p>Explore small and large birds, aeroplanes, animals, machines, vehicles, trains and ships. Tap a picture to see its source and creator information.</p></section>
 <nav class="categories" aria-label="Picture categories">
 <button type="button" data-category="animals" aria-pressed="true">🐘 Animals</button>
 <button type="button" data-category="birds" aria-pressed="false">🦜 Birds</button>
@@ -38,6 +38,7 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <button type="button" data-category="vehicles" aria-pressed="false">🚗 Vehicles</button>
 <button type="button" data-category="trains" aria-pressed="false">🚆 Trains</button>
 <button type="button" data-category="ships" aria-pressed="false">🚢 Ships & Boats</button>
+<button type="button" data-category="aeroplanes" aria-pressed="false">✈️ Aeroplanes</button>
 </nav>
 <div id="status" role="status" aria-live="polite">Loading animal pictures…</div>
 <section id="pictures" class="grid" aria-label="Pictures"></section>
@@ -47,11 +48,12 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <script>
 const collections={
  animals:{label:"Animals",query:"animals"},
- birds:{label:"Birds",query:"birds"},
+ birds:{label:"Birds — small and large",query:"eagle OR ostrich OR emu OR albatross OR condor OR crane OR heron OR owl"},
  machines:{label:"Machines",query:"machines"},
  vehicles:{label:"Vehicles",query:"cars"},
  trains:{label:"Trains",query:"trains"},
- ships:{label:"Ships & Boats",query:"ships"}
+ ships:{label:"Ships & Boats",query:"ships"},
+ aeroplanes:{label:"Aeroplanes",query:"aircraft OR aeroplane OR airplane"}
 };
 const statusEl=document.getElementById("status"),grid=document.getElementById("pictures");
 let active="animals",loadRequest=0;
