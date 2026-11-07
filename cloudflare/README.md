@@ -22,7 +22,7 @@ Secret:
 - OPENAI_API_KEY — use the existing OpenAI project key as a Cloudflare Worker secret. Never paste it into GitHub or a chat.
 
 Environment variables:
-- SUPABASE_URL = https://ryuchmmnyjyldwouidy.supabase.co
+- SUPABASE_URL = https://ryuchmmnyjyldwouidyy.supabase.co
 - SUPABASE_PUBLISHABLE_KEY = the project's public publishable key, not a service-role or secret key.
 - OPENAI_MODEL = gpt-5.4-mini (optional; the Worker uses this default if omitted).
 
