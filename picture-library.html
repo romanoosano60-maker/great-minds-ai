@@ -1,0 +1,86 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI — Children's Picture Library</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font:16px/1.5 Arial,sans-serif;background:#eef7ff;color:#19305a}
+header{padding:24px 16px;text-align:center;color:white;background:linear-gradient(120deg,#6545e8,#00bcd4)}
+h1{margin:4px 0;font-size:clamp(25px,6vw,36px)}header p{margin:6px 0}
+main{max-width:1100px;margin:auto;padding:16px}
+.home{display:inline-block;margin:4px 0 16px;padding:10px 14px;border-radius:12px;background:white;color:#193b8b;text-decoration:none;font-weight:bold;border:1px solid #cbd8ef}
+.intro,.notice{background:white;border:1px solid #d5e1f3;border-radius:16px;padding:14px;margin:10px 0 16px}
+.categories{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:10px;margin:16px 0}
+.categories button{border:0;border-radius:14px;padding:14px 8px;background:#6848ed;color:white;font-weight:bold;font-size:15px;min-height:60px}
+.categories button[aria-pressed=true]{background:#087f8c;outline:3px solid #9ce9e5}
+#status{min-height:26px;color:#425779;margin:10px 2px}
+.grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+figure{margin:0;background:white;border:1px solid #d5e1f3;border-radius:16px;overflow:hidden;box-shadow:0 4px 12px #18305a12}
+figure img{display:block;width:100%;height:190px;object-fit:cover;background:#e8eff8}
+figcaption{padding:10px 12px;font-size:14px;overflow-wrap:anywhere}
+figcaption a{color:#2451a5}
+small{color:#536783}
+footer{text-align:center;padding:22px;color:#536783;font-size:13px}
+@media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:420px){.categories{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}figure img{height:220px}}
+</style>
+</head>
+<body>
+<header><div>📚🌟</div><h1>Children's Picture Library</h1><p>Look, discover and learn about our world!</p></header>
+<main>
+<a class="home" href="index.html">← Back to Great Minds AI</a>
+<section class="intro"><strong>Choose a picture collection</strong><p>Explore real pictures of animals, birds, machines, vehicles, trains and ships. Tap a picture to see its source and creator information.</p></section>
+<nav class="categories" aria-label="Picture categories">
+<button type="button" data-category="animals" aria-pressed="true">🐘 Animals</button>
+<button type="button" data-category="birds" aria-pressed="false">🦜 Birds</button>
+<button type="button" data-category="machines" aria-pressed="false">⚙️ Machines</button>
+<button type="button" data-category="vehicles" aria-pressed="false">🚗 Vehicles</button>
+<button type="button" data-category="trains" aria-pressed="false">🚆 Trains</button>
+<button type="button" data-category="ships" aria-pressed="false">🚢 Ships & Boats</button>
+</nav>
+<div id="status" role="status" aria-live="polite">Loading animal pictures…</div>
+<section id="pictures" class="grid" aria-label="Pictures"></section>
+<section class="notice"><strong>About these pictures</strong><p>Pictures are retrieved from Wikimedia Commons. Each picture links to its original file page, where its creator and reuse licence can be checked. An internet connection is required.</p></section>
+</main>
+<footer>Great Minds AI — Every Child Can Shine ✨</footer>
+<script>
+const collections={
+ animals:{label:"Animals",query:"wild animals mammals lion elephant giraffe"},
+ birds:{label:"Birds",query:"birds parrot owl eagle flamingo"},
+ machines:{label:"Machines",query:"machines excavator tractor crane factory machinery"},
+ vehicles:{label:"Vehicles",query:"cars buses bicycles motorcycles trucks"},
+ trains:{label:"Trains",query:"trains railway locomotive passenger train"},
+ ships:{label:"Ships & Boats",query:"ships boats sailboats ferry cargo ship"}
+};
+const statusEl=document.getElementById("status"),grid=document.getElementById("pictures");
+let active="animals";
+function cleanTitle(s){return (s||"Picture").replace(/^File:/,"").replace(/\.[a-z0-9]{2,5}$/i,"").replaceAll("_"," ")}
+async function loadCollection(key){
+ active=key;grid.replaceChildren();statusEl.textContent="Loading "+collections[key].label.toLowerCase()+" pictures…";
+ document.querySelectorAll("[data-category]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.category===key)));
+ const params=new URLSearchParams({action:"query",generator:"search",gsrsearch:"filetype:bitmap "+collections[key].query,gsrnamespace:"6",gsrlimit:"12",prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"640",format:"json",origin:"*"});
+ try{
+  const response=await fetch("https://commons.wikimedia.org/w/api.php?"+params.toString());
+  if(!response.ok)throw new Error("Picture service unavailable");
+  const data=await response.json();
+  const pages=Object.values(data.query?.pages||{}).filter(p=>p.imageinfo?.[0]?.thumburl||p.imageinfo?.[0]?.url);
+  if(!pages.length){statusEl.textContent="No pictures were found. Please try again.";return}
+  pages.forEach(page=>{
+   const info=page.imageinfo[0],meta=info.extmetadata||{},figure=document.createElement("figure"),img=document.createElement("img"),caption=document.createElement("figcaption"),title=cleanTitle(page.title);
+   img.src=info.thumburl||info.url;img.alt=title;img.loading="lazy";img.decoding="async";
+   const name=document.createElement("strong");name.textContent=title;
+   const source=document.createElement("a");source.href=info.descriptionurl||("https://commons.wikimedia.org/wiki/"+encodeURIComponent(page.title.replaceAll(" ","_")));source.target="_blank";source.rel="noopener noreferrer";source.textContent="View source & licence";
+   caption.append(name,document.createElement("br"),source);
+   const artist=meta.Artist?.value?document.createElement("small"):null;
+   if(artist){artist.innerHTML="";artist.textContent="Creator: "+meta.Artist.value.replace(/<[^>]*>/g," ").replace(/\s+/g," ").trim().slice(0,150);caption.append(document.createElement("br"),artist)}
+   figure.append(img,caption);grid.append(figure);
+  });
+  statusEl.textContent=pages.length+" "+collections[key].label.toLowerCase()+" pictures loaded.";
+ }catch(error){statusEl.textContent="Pictures could not load right now. Please check the internet connection and try again."}
+}
+document.querySelectorAll("[data-category]").forEach(button=>button.addEventListener("click",()=>loadCollection(button.dataset.category)));
+loadCollection(active);
+</script>
+</body>
+</html>
