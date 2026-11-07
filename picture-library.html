@@ -46,12 +46,12 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 const collections={
- animals:{label:"Animals",query:"wild animals mammals lion elephant giraffe"},
- birds:{label:"Birds",query:"birds parrot owl eagle flamingo"},
- machines:{label:"Machines",query:"machines excavator tractor crane factory machinery"},
- vehicles:{label:"Vehicles",query:"cars buses bicycles motorcycles trucks"},
- trains:{label:"Trains",query:"trains railway locomotive passenger train"},
- ships:{label:"Ships & Boats",query:"ships boats sailboats ferry cargo ship"}
+ animals:{label:"Animals",query:"animals"},
+ birds:{label:"Birds",query:"birds"},
+ machines:{label:"Machines",query:"machines"},
+ vehicles:{label:"Vehicles",query:"cars"},
+ trains:{label:"Trains",query:"trains"},
+ ships:{label:"Ships & Boats",query:"ships"}
 };
 const statusEl=document.getElementById("status"),grid=document.getElementById("pictures");
 let active="animals";
@@ -59,7 +59,7 @@ function cleanTitle(s){return (s||"Picture").replace(/^File:/,"").replace(/\.[a-
 async function loadCollection(key){
  active=key;grid.replaceChildren();statusEl.textContent="Loading "+collections[key].label.toLowerCase()+" pictures…";
  document.querySelectorAll("[data-category]").forEach(b=>b.setAttribute("aria-pressed",String(b.dataset.category===key)));
- const params=new URLSearchParams({action:"query",generator:"search",gsrsearch:"filetype:bitmap "+collections[key].query,gsrnamespace:"6",gsrlimit:"12",prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"640",format:"json",origin:"*"});
+ const params=new URLSearchParams({action:"query",generator:"search",gsrsearch:collections[key].query,gsrnamespace:"6",gsrlimit:"12",prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"640",format:"json",origin:"*"});
  try{
   const response=await fetch("https://commons.wikimedia.org/w/api.php?"+params.toString());
   if(!response.ok)throw new Error("Picture service unavailable");
