@@ -86,3 +86,12 @@ Source-code repairs above are development progress only. Do not change the produ
 - Security Advisor reports `private.ai_teacher_daily_usage` with RLS disabled. The table currently has zero rows; this audit found no direct table grants to `anon` or `authenticated`, but the RLS finding still requires owner review. Suggested statement: `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`. The table and its quota `SECURITY DEFINER` function are owned by `postgres`; do not apply this change until the owner approves it and the quota function can be re-tested.
 - Leaked Password Protection remains disabled in Supabase Auth. Enable it if the current project plan supports it.
 - The existing Cloudflare Worker source is an alternative template, not the endpoint currently configured in the website.
+
+
+## 2026-11-09 AI quota-table RLS hardening — owner approved and tested
+
+- Owner approved enabling RLS on `private.ai_teacher_daily_usage`; the statement was applied successfully.
+- Verified `relrowsecurity=true`, zero policies, and no direct SELECT or INSERT privileges for either `anon` or `authenticated`.
+- This is deliberate: the private table is accessed only through the `SECURITY DEFINER` quota function owned by `postgres`; direct browser access remains blocked.
+- Ran `public.consume_ai_teacher_quota()` under the `authenticated` database role with a simulated JWT subject inside a transaction, then rolled back the transaction. Result: `allowed=true`, `user_remaining=9`, `service_remaining=99`. This verifies the database function path with RLS enabled but is not a real signed-in end-user request or a live AI answer test.
+- Security Advisor no longer flags RLS as disabled. It now emits an informational `RLS Enabled No Policy` notice for the private usage table, which is intentional. The separate `Leaked Password Protection Disabled` warning remains open.
