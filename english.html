@@ -49,16 +49,8 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </style><section class="gm-extra-panel" id="gmMorePractice"><h2>🌟 More English Practice — 20 Questions</h2><p>Work through all 20 questions. Practise letters, phonics, vocabulary, grammar, spelling, punctuation and sentences.</p><div class="gm-question-area"><div class="gm-q-meta" id="gmQMeta">Question 1 of 20</div><h3 id="gmQText"></h3><div id="gmQChoices"></div><p class="gm-q-feedback" id="gmQFeedback" aria-live="polite"></p><button type="button" id="gmQNext" hidden>Next question →</button><p id="gmQScore">Score: 0</p><button type="button" id="gmQRestart">↻ Start again</button></div></section><script>
 (function(){const bank=[["Which letter comes after C?",["D","F","A"],0],["Which word begins with A?",["Apple","Ball","Cat"],0],["Which is the correct small letter for B?",["d","b","p"],1],["Which word rhymes with cat?",["Sun","Hat","Dog"],1],["Which word is a naming word (noun)?",["Run","Apple","Quickly"],1],["Which word is an action word (verb)?",["Jump","Blue","Pencil"],0],["Which word describes a flower?",["Beautiful","Flower","Grow"],0],["Choose the correct spelling.",["Frend","Friend","Freind"],1],["What punctuation ends a question?",["?","!","."],0],["Which is a complete sentence?",["The big dog","Birds can fly.","Under the table"],1],["What is the opposite of happy?",["Sad","Kind","Tall"],0],["Which word means the same as little?",["Small","Huge","Loud"],0],["Choose the correct plural of box.",["Boxs","Boxes","Boxies"],1],["Which word has a long A sound?",["Cake","Cat","Map"],0],["Which is a vowel?",["T","E","R"],1],["What is the first sound in zebra?",["/z/","/b/","/s/"],0],["Which word is spelled correctly?",["School","Skool","Scool"],0],["Choose the correct sentence.",["she is kind.","She is kind.","she Is kind"],1],["What is the past tense of walk?",["Walked","Walking","Walks"],0],["Which sentence uses a full stop correctly?",["I like books.","I like books?","I like books,"],0]];let at=0,score=0,answered=false;const $=id=>document.getElementById(id);function show(){answered=false;$("gmQMeta").textContent="Question "+(at+1)+" of "+bank.length;$("gmQText").textContent=bank[at][0];$("gmQFeedback").textContent="";$("gmQNext").hidden=true;$("gmQChoices").innerHTML="";bank[at][1].forEach((v,i)=>{const b=document.createElement("button");b.type="button";b.textContent=v;b.addEventListener("click",()=>{if(answered)return;answered=true;Array.from($("gmQChoices").children).forEach(x=>x.disabled=true);if(i===bank[at][2]){score++;$("gmQFeedback").textContent="🎉 Correct! Great work."}else{$("gmQFeedback").textContent="Good try! Correct answer: "+bank[at][1][bank[at][2]]} $("gmQScore").textContent="Score: "+score+" / "+bank.length;$("gmQNext").hidden=false});$("gmQChoices").appendChild(b)})} $("gmQNext").addEventListener("click",()=>{if(!answered)return;at++;if(at<bank.length){show()}else{$("gmQMeta").textContent="Challenge complete";$("gmQText").textContent="You completed all "+bank.length+" questions!";$("gmQChoices").innerHTML="";$("gmQFeedback").textContent="Final score: "+score+" out of "+bank.length+". Keep learning!";$("gmQNext").hidden=true}});$("gmQRestart").addEventListener("click",()=>{at=0;score=0;$("gmQScore").textContent="Score: 0 / "+bank.length;show()});show()})();
 </script>
-<section id="gmAlphabetPictures" class="gm-extra-panel">
-<h2>🖼️ Alphabet Picture Words A–Z</h2>
-<p>Tap any card to hear the letter and word. Learn the capital letter, small letter, word and picture together.</p>
-<div class="gm-letter-grid" id="gmLetterGrid"></div>
-</section>
-<section id="gmVowels" class="gm-extra-panel">
-<h2>🔤 The Five Vowels: A, E, I, O, U</h2>
-<p>Vowels are special letters. Tap each card to hear its sound and example word.</p>
-<div class="gm-vowel-grid" id="gmVowelGrid"></div>
-</section>
+
+
 <section id="gmAbcdSong" class="gm-extra-panel">
 <h2>🎵 ABCD Song and Letter Practice</h2>
 <p>Sing along, then practise saying each letter slowly.</p>
@@ -66,6 +58,14 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <button type="button" id="gmPlayAbcd">▶ Play ABCD Song</button>
 <button type="button" id="gmSpeakAbcd">🔊 Say A to Z slowly</button>
 <p id="gmAbcdStatus" aria-live="polite">Ready to sing!</p>
+</section><section id="gmAlphabetPictures" class="gm-extra-panel">
+<h2>🖼️ Alphabet Picture Words A–Z</h2>
+<p>Tap any card to hear the letter and word. Learn the capital letter, small letter, word and picture together.</p>
+<div class="gm-letter-grid" id="gmLetterGrid"></div>
+</section><section id="gmVowels" class="gm-extra-panel">
+<h2>🔤 The Five Vowels: A, E, I, O, U</h2>
+<p>Vowels are special letters. Tap each card to hear its sound and example word.</p>
+<div class="gm-vowel-grid" id="gmVowelGrid"></div>
 </section></main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
