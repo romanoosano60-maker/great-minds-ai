@@ -741,3 +741,11 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - No database policies or schema were loosened or changed in this audit. The shared home screen and navigation were not changed.
 - Remaining work: enable leaked-password protection in Supabase Auth settings; test real student, guardian and approved-teacher accounts; verify join, consent, teacher approval, homework, progress and Realtime across separate devices; distinguish every local demo record from cloud-saved records in the UI; and keep the AI Teacher live endpoint pending until its secure Worker is deployed and tested.
 - This is source/database configuration review, not live user-session verification. International classroom connection, AI Teacher conversation and launch readiness remain incomplete.
+
+
+## 3D graphics gallery visual enhancement — 9 November 2026
+- Preserved the existing single-file gallery and all 15 embedded WebP artworks; no external image dependencies were added.
+- Improved gallery cards with layered CSS perspective, depth transforms, dimensional shadows and hover motion on pointer devices. Added reduced-motion support and updated the user-facing description.
+- Source update commit: cb5f899693550ab7a430698e9fd6ec957edf7386.
+- Verified the updated GitHub source contains all 15 embedded artworks, the perspective styling and reduced-motion fallback. This is source verification only; Android visual rendering still needs the user's confirmation.
+- No paid assets, subscriptions, or external 3D model dependencies were introduced. The artwork remains static images with 3D-style presentation; this update does not add animated 3D models.
