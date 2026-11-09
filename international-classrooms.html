@@ -21,7 +21,7 @@ header .classroom-illustration{display:block;width:min(100%,760px);height:auto;m
 <div id="guardianStatus" class="status" role="status">Sign in to use the consent process. Never share a consent code publicly.</div></section>
 <section class="card"><h2>🎒 Student: request to join</h2><label for="joinCode">Classroom code</label><input id="joinCode" maxlength="32" autocapitalize="characters" placeholder="Enter teacher's code"><button type="button" id="join">Request to join</button><p class="note">New requests are pending. Students are not admitted to classroom activities until teacher approval and verified parent/guardian consent are recorded.</p></section>
 <section class="card"><h2>📚 My classrooms and requests</h2><button type="button" id="refresh" class="secondary">Refresh my classrooms</button><div id="classrooms" class="status" role="status">Sign in to load classroom information.</div></section>
-<section class="card"><h2>🛡️ Safety and setup status</h2><p class="note">This is the first synchronization stage. Membership requests and teacher-owned classrooms use Supabase. Teacher approval is enforced by database policy. Guardian consent requires a separate email-verified account and an explicit declaration; this does not independently prove legal guardianship. Student profile linking, moderated chat, assignment synchronization and live classroom activities are not enabled yet. Do not enter children's real names or sensitive information during testing.</p></section>
+<section class="card"><h2>🛡️ Adult account deletion request</h2><p class="note">For verified adult guardians and approved teachers only. Submitting a request does not delete your account or a child's learning records. Requests are reviewed manually. A teacher who owns classrooms must arrange a transfer or formal closure first.</p><label style="display:flex;align-items:center;gap:9px;font-weight:500"><input id="deleteRequestConfirm" type="checkbox" style="width:auto"> I am the adult account holder and I want Great Minds AI to review my account-deletion request.</label><button type="button" id="submitDeleteRequest" class="secondary">Submit account-deletion request</button><div id="deleteRequestStatus" class="status" role="status">Sign in with a verified adult guardian or approved teacher account.</div></section>\n<section class="card"><h2>🛡️ Safety and setup status</h2><p class="note">This is the first synchronization stage. Membership requests and teacher-owned classrooms use Supabase. Teacher approval is enforced by database policy. Guardian consent requires a separate email-verified account and an explicit declaration; this does not independently prove legal guardianship. Student profile linking, moderated chat, assignment synchronization and live classroom activities are not enabled yet. Do not enter children's real names or sensitive information during testing.</p></section>
 </main>
 <script>
 const $=id=>document.getElementById(id);let client=null,user=null,liveChannel=null;
@@ -47,7 +47,27 @@ async function refresh(){try{await session();if(!user){msg('classrooms','Sign in
 $('makeGuardianCode').onclick=async()=>{try{await session();if(!user)throw Error('Sign in to the student account first.');const {data,error}=await setup().rpc('create_guardian_consent_code');if(error)throw error;const code=Array.isArray(data)?data[0]:data;const value=typeof code==='string'?code:code?.create_guardian_consent_code;if(!value)throw Error('No consent code was returned.');msg('guardianStatus','One-time code (valid for 24 hours):\n'+value+'\nSend this privately to the parent or guardian. Sign out before the guardian signs in.');}catch(e){msg('guardianStatus','Could not create consent code: '+e.message)}};
 $('redeemGuardian').onclick=async()=>{try{await session();if(!user)throw Error('Sign in to the parent or guardian account first.');if(!$('guardianAffirms').checked)throw Error('Tick the confirmation only if you are the parent or legal guardian.');const code=$('guardianCode').value.trim();const {data,error}=await setup().rpc('redeem_guardian_consent_code',{p_code:code,p_guardian_affirms:true});if(error)throw error;msg('guardianStatus',typeof data==='string'?data:'Guardian consent recorded.');$('guardianCode').value='';$('guardianAffirms').checked=false;await refresh()}catch(e){msg('guardianStatus','Consent could not be recorded: '+e.message)}};
 
-$('refresh').onclick=refresh;
+
+$('submitDeleteRequest').onclick=async()=>{
+ try{
+  await session();
+  if(!user)throw Error('Sign in first.');
+  if(!$('deleteRequestConfirm').checked)throw Error('Confirm the request checkbox first.');
+  const {data:{session:activeSession},error:sessionError}=await setup().auth.getSession();
+  if(sessionError||!activeSession?.access_token)throw Error('Your session could not be verified. Sign in again.');
+  msg('deleteRequestStatus','Submitting your request securely…');
+  const response=await fetch(SUPABASE_URL+'/functions/v1/account-deletion-request',{
+   method:'POST',
+   headers:{'Content-Type':'application/json','Authorization':'Bearer '+activeSession.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},
+   body:JSON.stringify({confirm:true})
+  });
+  const result=await response.json();
+  if(!response.ok)throw Error(result.error||'Request could not be submitted.');
+  msg('deleteRequestStatus',result.message+' Request status: '+result.status+'. Reference: '+result.request_id);
+  $('deleteRequestConfirm').checked=false;
+ }catch(e){msg('deleteRequestStatus','Request not submitted: '+e.message)}
+};
+\n$('refresh').onclick=refresh;
 const {data:authListener}=setup().auth.onAuthStateChange((_event,session)=>{user=session?.user||null;if(user){msg('authStatus','Signed in: '+(user.email||'account')+'.');setTimeout(()=>refresh(),0)}else{msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.')}});
 session().then(current=>{if(current){msg('authStatus','Signed in: '+(current.email||'account')+'.');refresh()}}).catch(e=>msg('authStatus','Session check failed: '+e.message));
 window.addEventListener('pagehide',()=>{if(liveChannel&&client)client.removeChannel(liveChannel);authListener?.subscription?.unsubscribe()});
