@@ -40,8 +40,15 @@ const venus=sphere(.27,0xd9a56a,2.05,0,0);
 const earth=sphere(.39,0x2789e8,3.15,0,0);
 const moon=sphere(.13,0xd9e2f2,3.72,.15,0);
 const mars=sphere(.31,0xd85b43,4.25,0,0);
+const phobos=sphere(.075,0xb8a99a,4.73,0,0);
+const deimos=sphere(.055,0xd6c9b8,4.95,0,0);
 const jupiter=sphere(.68,0xd99b65,5.45,0,0);
+const io=sphere(.10,0xf2d36c,6.30,0,0);
+const europa=sphere(.085,0xe8e2d0,6.50,0,0);
+const ganymede=sphere(.13,0xb7a58e,6.75,0,0);
+const callisto=sphere(.11,0x777b86,7.00,0,0);
 const saturn=sphere(.57,0xe6ce91,6.75,0,0);
+const titan=sphere(.12,0xe5ad62,7.70,0,0);
 const saturnRing=new THREE.Mesh(new THREE.TorusGeometry(.78,.105,10,72),new THREE.MeshStandardMaterial({color:0xc8ad79,roughness:.9}));
 saturnRing.scale.y=.48;root.add(saturnRing);
 [2.05,3.15,4.25,5.45,6.75].forEach(r=>orbit(r));
@@ -50,13 +57,20 @@ objects.push(
 {type:'planet',mesh:earth,orbit:3.15,speed:.48,angle:0},
 {type:'moon',mesh:moon,orbit:.62,speed:1.35,angle:0,parent:earth},
 {type:'planet',mesh:mars,orbit:4.25,speed:.36,angle:Math.PI},
+{type:'moon',mesh:phobos,orbit:.48,speed:1.8,angle:.4,parent:mars},
+{type:'moon',mesh:deimos,orbit:.70,speed:1.05,angle:2.2,parent:mars},
 {type:'planet',mesh:jupiter,orbit:5.45,speed:.22,angle:Math.PI},
+{type:'moon',mesh:io,orbit:.88,speed:1.5,angle:.2,parent:jupiter},
+{type:'moon',mesh:europa,orbit:1.12,speed:1.15,angle:1.5,parent:jupiter},
+{type:'moon',mesh:ganymede,orbit:1.40,speed:.82,angle:2.8,parent:jupiter},
+{type:'moon',mesh:callisto,orbit:1.72,speed:.58,angle:4.1,parent:jupiter},
 {type:'planet',mesh:saturn,orbit:6.75,speed:.16,angle:Math.PI},
+{type:'moon',mesh:titan,orbit:1.05,speed:.72,angle:0,parent:saturn},
 {type:'ring',mesh:saturnRing,parent:saturn}
 );
 for(let i=0;i<110;i++){const a=Math.random()*Math.PI*2,r=8+Math.random()*18,y=(Math.random()-.5)*12;const star=new THREE.Mesh(new THREE.SphereGeometry(.022+Math.random()*.025,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));star.position.set(Math.cos(a)*r,y,Math.sin(a)*r);root.add(star);}
 document.getElementById('scene-title').textContent='Our Solar System';
-document.getElementById('scene-text').textContent='Explore Venus, Earth and its Moon, Mars, Jupiter and Saturn. The Moon follows Earth, while each planet travels around the Sun. Distances and sizes are simplified, not to scale.';
+document.getElementById('scene-text').textContent='Explore Earth's Moon, Mars's Phobos and Deimos, Jupiter's four large moons—Io, Europa, Ganymede and Callisto—and Saturn's Titan. Their moons travel around their own planets as the planets orbit the Sun. This is a simplified model, not to scale.';
 }else if(which==='rocket'){
 camera.position.set(0,0,9.5);camera.lookAt(0,0,0);
 const body=cylinder(.48,.62,2.7,0xf2f6ff,0,0,0);body.position.y=.15;
