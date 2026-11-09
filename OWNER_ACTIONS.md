@@ -26,8 +26,10 @@ This file lists only actions that still need the project owner or a real-device 
 
 **Security review item requiring owner approval**
 - Supabase Security Advisor flags `private.ai_teacher_daily_usage` because Row Level Security is disabled. The table currently has zero rows, and this audit found no direct table grants to `anon` or `authenticated`; however, the finding should be resolved deliberately.
-- Suggested hardening statement: `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`
-- The quota function is a `SECURITY DEFINER` function owned by `postgres`, and the table is also owned by `postgres`; it is designed to access this private table without client-facing policies. Do not run the statement until the owner approves the change and the quota function is re-tested.
+- **Completed 9 November 2026 with owner approval:** `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`
+- Re-tested `public.consume_ai_teacher_quota()` as the `authenticated` database role with a simulated JWT subject inside a transaction that was rolled back. It returned `allowed: true`, `user_remaining: 9`, `service_remaining: 99`.
+- Verified RLS is enabled, no client-facing policies exist, and `anon` and `authenticated` have no direct SELECT or INSERT privileges on the private usage table. This is intentional: quota access is through the `SECURITY DEFINER` function owned by `postgres`.
+- Security Advisor no longer reports RLS disabled. It now reports an informational `RLS Enabled No Policy` notice for this private table; that is expected because clients must not access it directly. Leaked Password Protection remains a separate warning.
 - A separate Supabase Auth warning remains: Leaked Password Protection is disabled. Enable it in Auth password/security settings if the current plan supports it.
 
 ## 2. International classrooms — real account and consent test
