@@ -49,6 +49,10 @@ $('redeemGuardian').onclick=async()=>{try{await session();if(!user)throw Error('
 
 
 $('submitDeleteRequest').onclick=async()=>{
+ const button=$('submitDeleteRequest');
+ if(button.disabled)return;
+ button.disabled=true;
+ button.textContent='Submitting securely…';
  try{
   await session();
   if(!user)throw Error('Sign in first.');
@@ -61,11 +65,14 @@ $('submitDeleteRequest').onclick=async()=>{
    headers:{'Content-Type':'application/json','Authorization':'Bearer '+activeSession.access_token,'apikey':SUPABASE_PUBLISHABLE_KEY},
    body:JSON.stringify({confirm:true})
   });
-  const result=await response.json();
-  if(!response.ok)throw Error(result.error||'Request could not be submitted.');
-  msg('deleteRequestStatus',result.message+' Request status: '+result.status+'. Reference: '+result.request_id);
+  let result={};
+  try{result=await response.json()}catch(_parseError){}
+  if(!response.ok)throw Error(result.error||'Request could not be submitted. Please try again.');
+  if(!result.request_id||!result.status)throw Error('The server response was incomplete. Check your request status before trying again.');
+  msg('deleteRequestStatus',result.message+' Request status: '+result.status+'. Reference: '+result.request_id+'. Your account and learning records have NOT been deleted.');
   $('deleteRequestConfirm').checked=false;
- }catch(e){msg('deleteRequestStatus','Request not submitted: '+e.message)}
+ }catch(e){msg('deleteRequestStatus','Request not submitted or confirmed: '+e.message)}
+ finally{button.disabled=false;button.textContent='Submit account-deletion request'}
 };
 \n$('refresh').onclick=refresh;
 const {data:authListener}=setup().auth.onAuthStateChange((_event,session)=>{user=session?.user||null;if(user){msg('authStatus','Signed in: '+(user.email||'account')+'.');setTimeout(()=>refresh(),0)}else{msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.')}});
