@@ -13,7 +13,7 @@ The adult request form is now included on the International Classrooms page. It 
 
 ## Live components
 - `public.account_deletion_requests`: live, RLS enabled; no anon/authenticated table privileges; service_role can insert.
-- `account-deletion-request`: deployed version 2, JWT verification on, request-only.
+- `account-deletion-request`: deployed version 3, JWT verification on, request-only.
 - Adult request form: `international-classrooms.html`.
 - Source: `supabase/functions/account-deletion-request/index.ts`.
 - SQL source: `supabase/account-deletion-requests.sql`.
@@ -25,7 +25,7 @@ The adult request form is now included on the International Classrooms page. It 
 - No automatic purge of expired/revoked records.
 - No fixed retention period: approve a territory-specific retention schedule after legal/privacy review.
 - No claim of legal guardian verification from email verification alone.
-- No authenticated end-to-end function test yet; deployment is confirmed, and the request table security/grants are verified. The live form still needs an Android test with disposable accounts.
+- Database transaction simulation passed: a request row was created inside a transaction, duplicate open request was rejected by the unique index, and the transaction was rolled back; persistent request rows remain zero. This does not replace a live authenticated Edge Function test. The live form still needs an Android test with disposable adult/student test accounts.
 
 ## Required pre-launch tests
 Use disposable test accounts and synthetic data only:
