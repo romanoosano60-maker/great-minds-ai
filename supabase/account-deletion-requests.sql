@@ -1,5 +1,5 @@
--- Great Minds AI: non-destructive account deletion request intake.
--- Review and apply only after confirming the project schema and deployment plan.
+-- Great Minds AI: live, non-destructive account deletion request intake.
+-- Applied to the connected Supabase project as migration account_deletion_request_intake.
 create table if not exists public.account_deletion_requests (
   id uuid primary key default gen_random_uuid(),
   requester_id uuid references auth.users(id) on delete set null,
