@@ -64,7 +64,23 @@ const nose=new THREE.Mesh(new THREE.ConeGeometry(.48,.95,32),mat(0xff5a4e));nose
 const window=sphere(.22,0x38bde8,0,.55,.46);window.scale.set(1,1, .35);
 for(let i=0;i<3;i++){const shape=new THREE.Shape();shape.moveTo(0,-.48);shape.lineTo(.72,-1.25);shape.lineTo(0,-1.08);shape.closePath();const fin=new THREE.Mesh(new THREE.ShapeGeometry(shape),mat(i===0?0xffc342:0x3559c9));fin.position.set(0,0,0);fin.rotation.y=i*Math.PI*2/3;fin.castShadow=true;root.add(fin);}
 const flame=new THREE.Mesh(new THREE.ConeGeometry(.34,1.1,24),new THREE.MeshBasicMaterial({color:0xff8a24}));flame.position.y=-1.75;flame.rotation.x=Math.PI;root.add(flame);objects.push({type:'flame',mesh:flame});
-document.getElementById('scene-title').textContent='A 3D Rocket';document.getElementById('scene-text').textContent='A rocket uses powerful engines to push hot gases downward. The rocket moves upward. Rotate the view to inspect its nose, body, window and fins.';
+// Soft 3D cloud banks drift downward to make the rocket feel like it is flying upward.
+for(let i=0;i<6;i++){
+ const cloud=new THREE.Group();cloud.position.set((i%2===0?-1:1)*(2.15+(i%3)*.25),-5+i*2.15,-1.35);
+ const puffColor=0xe8f4ff;
+ [[-.42,0,.0,.48],[0,.18,.02,.62],[.43,.02,0,.46],[.12,-.16,.04,.52]].forEach(p=>{
+  const puff=new THREE.Mesh(new THREE.SphereGeometry(p[3],16,12),new THREE.MeshBasicMaterial({color:puffColor,transparent:true,opacity:.72,depthWrite:false}));
+  puff.position.set(p[0],p[1],p[2]);cloud.add(puff);
+ });
+ root.add(cloud);objects.push({type:'cloud',mesh:cloud,speed:.022+(i%3)*.006});
+}
+// Tiny distant stars slide past the window as the rocket travels through space.
+for(let i=0;i<54;i++){
+ const star=new THREE.Mesh(new THREE.SphereGeometry(.025+(i%3)*.012,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));
+ star.position.set((Math.random()-.5)*9,(Math.random()-.5)*14,-2.4-Math.random()*1.5);
+ root.add(star);objects.push({type:'streak',mesh:star,speed:.035+(i%4)*.012});
+}
+document.getElementById('scene-title').textContent='A 3D Rocket';document.getElementById('scene-text').textContent='A rocket uses powerful engines to push hot gases downward. The rocket moves upward. Watch the clouds drift past and stars slide by as the rocket flies upward. Rotate the view to inspect its nose, body, window and fins.';
 }else{
 camera.position.set(0,0,8.5);camera.lookAt(0,0,0);
 sphere(.55,0xffc342,0,0,0);
@@ -73,7 +89,7 @@ document.getElementById('scene-title').textContent='A Simple Atom Model';documen
 }}
 function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const fit=mode==='space'?Math.max(20,17.5/Math.min(1,camera.aspect)):mode==='rocket'?Math.max(9.5,6.8/camera.aspect):Math.max(8.5,5.8/camera.aspect);camera.position.set(0,0,fit);camera.lookAt(0,0,0);camera.updateProjectionMatrix();}
 function animate(t){requestAnimationFrame(animate);const time=t*.001;root.rotation.y=ry;root.rotation.x=rx;root.scale.setScalar(zoom);
-if(!paused)objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012*o.speed;o.mesh.position.x=o.parent.position.x+Math.cos(o.angle)*o.orbit;o.mesh.position.y=o.parent.position.y+Math.sin(o.angle)*o.orbit;}else if(o.type==='ring'){o.mesh.position.copy(o.parent.position);}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
+if(!paused)objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012*o.speed;o.mesh.position.x=o.parent.position.x+Math.cos(o.angle)*o.orbit;o.mesh.position.y=o.parent.position.y+Math.sin(o.angle)*o.orbit;}else if(o.type==='ring'){o.mesh.position.copy(o.parent.position);}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}else if(o.type==='cloud'){o.mesh.position.y-=o.speed;if(o.mesh.position.y< -7)o.mesh.position.y=7.5;}else if(o.type==='streak'){o.mesh.position.y-=o.speed;if(o.mesh.position.y< -7){o.mesh.position.y=7.5;o.mesh.position.x=(Math.random()-.5)*9;}}});
 renderer.render(scene,camera);}
 canvas.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!drag)return;ry+=(e.clientX-px)*.008;rx+=(e.clientY-py)*.008;rx=Math.max(-1.1,Math.min(1.1,rx));px=e.clientX;py=e.clientY;});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
 canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.65,Math.min(1.7,zoom+(e.deltaY>0?-.08:.08)));},{passive:false});
