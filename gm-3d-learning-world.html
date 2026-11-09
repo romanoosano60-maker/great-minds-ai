@@ -34,10 +34,29 @@ const orbit=(r,color=0x7ea9e8)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(
 let mode='space',objects=[],drag=false,px=0,py=0,rx=0,ry=0,zoom=1;
 function clear(){while(root.children.length){const o=root.children.pop();if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}}objects=[];}
 function build(which){clear();mode=which;rx=0;ry=0;zoom=1;
-if(which==='space'){camera.position.set(0,0,20);camera.lookAt(0,0,0);
-const sun=sphere(1.05,0xffb52e,0,0,0);sun.material.emissive=new THREE.Color(0x9c4c00);sun.material.emissiveIntensity=.55;
-orbit(3.05);orbit(4.6);const earth=sphere(.43,0x2789e8,3.05,0,0);const moon=sphere(.15,0xd9e2f2,3.75,.15,0);const jupiter=sphere(.72,0xd99b65,-4.6,0,0);objects.push({type:'planet',mesh:earth,orbit:3.05,speed:.45,angle:0},{type:'moon',mesh:moon,orbit:3.75,speed:1.1,angle:0},{type:'planet',mesh:jupiter,orbit:4.6,speed:-.22,angle:Math.PI});for(let i=0;i<90;i++){const a=Math.random()*Math.PI*2,r=7+Math.random()*18,y=(Math.random()-.5)*10;const star=new THREE.Mesh(new THREE.SphereGeometry(.025+Math.random()*.025,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));star.position.set(Math.cos(a)*r,y,Math.sin(a)*r);root.add(star);}
-document.getElementById('scene-title').textContent='Our Solar System';document.getElementById('scene-text').textContent='Earth travels around the Sun. The Moon travels around Earth. Jupiter is a giant planet. This simplified model is not to scale.';
+if(which==='space'){camera.position.set(0,0,22);camera.lookAt(0,0,0);
+const sun=sphere(1.0,0xffb52e,0,0,0);sun.material.emissive=new THREE.Color(0x9c4c00);sun.material.emissiveIntensity=.55;
+const venus=sphere(.27,0xd9a56a,2.05,0,0);
+const earth=sphere(.39,0x2789e8,3.15,0,0);
+const moon=sphere(.13,0xd9e2f2,3.72,.15,0);
+const mars=sphere(.31,0xd85b43,4.25,0,0);
+const jupiter=sphere(.68,0xd99b65,5.45,0,0);
+const saturn=sphere(.57,0xe6ce91,6.75,0,0);
+const saturnRing=new THREE.Mesh(new THREE.TorusGeometry(.78,.105,10,72),new THREE.MeshStandardMaterial({color:0xc8ad79,roughness:.9}));
+saturnRing.scale.y=.48;root.add(saturnRing);
+[2.05,3.15,4.25,5.45,6.75].forEach(r=>orbit(r));
+objects.push(
+{type:'planet',mesh:venus,orbit:2.05,speed:.72,angle:0},
+{type:'planet',mesh:earth,orbit:3.15,speed:.48,angle:0},
+{type:'moon',mesh:moon,orbit:.62,speed:1.35,angle:0,parent:earth},
+{type:'planet',mesh:mars,orbit:4.25,speed:.36,angle:Math.PI},
+{type:'planet',mesh:jupiter,orbit:5.45,speed:.22,angle:Math.PI},
+{type:'planet',mesh:saturn,orbit:6.75,speed:.16,angle:Math.PI},
+{type:'ring',mesh:saturnRing,parent:saturn}
+);
+for(let i=0;i<110;i++){const a=Math.random()*Math.PI*2,r=8+Math.random()*18,y=(Math.random()-.5)*12;const star=new THREE.Mesh(new THREE.SphereGeometry(.022+Math.random()*.025,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));star.position.set(Math.cos(a)*r,y,Math.sin(a)*r);root.add(star);}
+document.getElementById('scene-title').textContent='Our Solar System';
+document.getElementById('scene-text').textContent='Explore Venus, Earth and its Moon, Mars, Jupiter and Saturn. The Moon follows Earth, while each planet travels around the Sun. Distances and sizes are simplified, not to scale.';
 }else if(which==='rocket'){
 camera.position.set(0,0,9.5);camera.lookAt(0,0,0);
 const body=cylinder(.48,.62,2.7,0xf2f6ff,0,0,0);body.position.y=.15;
@@ -52,9 +71,9 @@ sphere(.55,0xffc342,0,0,0);
 for(let i=0;i<3;i++){const orbitLine=new THREE.Mesh(new THREE.TorusGeometry(2,.025,8,100),new THREE.MeshBasicMaterial({color:[0x42d6ff,0xff6da8,0x7cf0a5][i]}));orbitLine.rotation.set(Math.PI/2+i*.85,i*.7,i*.5);root.add(orbitLine);const e=sphere(.17,[0x42d6ff,0xff6da8,0x7cf0a5][i],2,0,0);objects.push({type:'electron',mesh:e,orbit:2,angle:i*2.1,speed:.8+i*.2,tilt:orbitLine.rotation.clone()});}
 document.getElementById('scene-title').textContent='A Simple Atom Model';document.getElementById('scene-text').textContent='The centre is the nucleus. Electrons are shown moving around it. This is a learning illustration, not an exact scientific scale model.';
 }}
-function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const fit=mode==='space'?Math.max(20,14.2/camera.aspect):mode==='rocket'?Math.max(9.5,6.8/camera.aspect):Math.max(8.5,5.8/camera.aspect);camera.position.set(0,0,fit);camera.lookAt(0,0,0);camera.updateProjectionMatrix();}
+function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const fit=mode==='space'?Math.max(20,17.5/Math.min(1,camera.aspect)):mode==='rocket'?Math.max(9.5,6.8/camera.aspect):Math.max(8.5,5.8/camera.aspect);camera.position.set(0,0,fit);camera.lookAt(0,0,0);camera.updateProjectionMatrix();}
 function animate(t){requestAnimationFrame(animate);const time=t*.001;root.rotation.y=ry;root.rotation.x=rx;root.scale.setScalar(zoom);
-objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012;o.mesh.position.x=3.05+Math.cos(o.angle)*.7;o.mesh.position.y=Math.sin(o.angle)*.7;}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
+objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012*o.speed;o.mesh.position.x=o.parent.position.x+Math.cos(o.angle)*o.orbit;o.mesh.position.y=o.parent.position.y+Math.sin(o.angle)*o.orbit;}else if(o.type==='ring'){o.mesh.position.copy(o.parent.position);}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
 renderer.render(scene,camera);}
 canvas.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!drag)return;ry+=(e.clientX-px)*.008;rx+=(e.clientY-py)*.008;rx=Math.max(-1.1,Math.min(1.1,rx));px=e.clientX;py=e.clientY;});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
 canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.65,Math.min(1.7,zoom+(e.deltaY>0?-.08:.08)));},{passive:false});
