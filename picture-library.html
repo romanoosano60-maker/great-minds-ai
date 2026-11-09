@@ -31,9 +31,14 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <header><div>📚🌟</div><h1>Children's Picture Library</h1><p>Look, discover and learn about our world!</p></header>
 <main>
 <a class="home" href="index.html">← Back to Great Minds AI</a>
-<section class="intro"><strong>Choose a picture collection</strong><p>Explore many kinds of animals, including insects and amphibians, and learn about carnivores, herbivores and omnivores. Also discover small and large birds, machines, cars and other vehicles, trains, small and large ships and boats, and small and large aeroplanes. Tap “View source & licence” to see where each picture came from and its reuse information.</p></section>
+<section class="intro"><strong>Choose a picture collection</strong><p>Explore animals from every major group: mammals, birds, fish, reptiles, amphibians, insects, arachnids, crustaceans, centipedes and millipedes. Learn about carnivores, herbivores and omnivores. Also discover machines, vehicles, trains, ships and aeroplanes. Tap “View source & licence” to check each picture’s creator and reuse information.</p></section>
 <nav class="categories" aria-label="Picture collections">
-<button type="button" data-category="animals" aria-pressed="true">🐘 Animals</button>
+<button type="button" data-category="animals" aria-pressed="true">🐘 Animals — all</button>
+<button type="button" data-category="insects" aria-pressed="false">🦋 Insects</button>
+<button type="button" data-category="arachnids" aria-pressed="false">🕷️ Arachnids</button>
+<button type="button" data-category="crustaceans" aria-pressed="false">🦀 Crustaceans</button>
+<button type="button" data-category="myriapods" aria-pressed="false">🐛 Centipedes & Millipedes</button>
+<button type="button" data-category="otherArthropods" aria-pressed="false">🦐 Other Arthropods</button>
 <button type="button" data-category="birds" aria-pressed="false">🦜 Birds — small & large</button>
 <button type="button" data-category="machines" aria-pressed="false">⚙️ Machines</button>
 <button type="button" data-category="cars" aria-pressed="false">🚗 Cars & Vehicles</button>
@@ -49,7 +54,12 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 const collections={
- animals:{label:"Animals — all kinds",categories:[],searches:["carnivores lions tigers leopards wolves foxes crocodiles sharks","herbivores elephants giraffes zebras deer rabbits cows horses","omnivores bears pigs raccoons chimpanzees chickens humans","insects butterflies bees ants beetles dragonflies grasshoppers","amphibians frogs toads salamanders newts","reptiles snakes lizards turtles crocodiles","fish sharks rays seahorses tropical fish","sea animals whales dolphins seals octopus crabs","wild mammals lions elephants giraffes zebras bears","farm animals cows horses sheep goats pigs chickens ducks","pets dogs cats rabbits hamsters guinea pigs","birds eagles owls parrots penguins ostriches"]},
+ animals:{label:"Animals — all kinds",categories:[],searches:["carnivores lions tigers leopards wolves foxes crocodiles sharks","herbivores elephants giraffes zebras deer rabbits cows horses","omnivores bears pigs raccoons chimpanzees chickens humans","insects butterflies bees ants beetles dragonflies grasshoppers","arachnids spiders scorpions ticks mites harvestmen","crustaceans crabs lobsters prawns shrimp crayfish barnacles","myriapods centipedes millipedes","other arthropods horseshoe crabs sea spiders","amphibians frogs toads salamanders newts","reptiles snakes lizards turtles crocodiles","fish sharks rays seahorses tropical fish","sea animals whales dolphins seals octopus","wild mammals lions elephants giraffes zebras bears","farm animals cows horses sheep goats pigs chickens ducks","pets dogs cats rabbits hamsters guinea pigs","birds eagles owls parrots penguins ostriches"]},
+ insects:{label:"Insects",categories:[],searches:["butterflies moths caterpillars","bees wasps hornets bumblebees","ants termites","beetles ladybirds fireflies weevils","dragonflies damselflies","grasshoppers crickets locusts stick insects","flies mosquitoes bees"],},
+ arachnids:{label:"Arachnids — eight-legged relatives",categories:[],searches:["spiders tarantulas jumping spiders orb weaver spiders","scorpions","ticks mites","harvestmen daddy longlegs pseudoscorpions"]},
+ crustaceans:{label:"Crustaceans",categories:[],searches:["crabs hermit crabs","lobsters crayfish","prawns shrimp","barnacles woodlice pill bugs","krill copepods amphipods"]},
+ myriapods:{label:"Centipedes and Millipedes",categories:[],searches:["centipedes","millipedes","giant centipedes soil centipedes"]},
+ otherArthropods:{label:"Other Arthropods",categories:[],searches:["horseshoe crabs","sea spiders pycnogonids","velvet worms onychophora","tardigrades water bears"]},
  birds:{label:"Birds — small and large",categories:[],searches:["small birds hummingbirds finches sparrows wrens","parrots budgerigars canaries lovebirds","large birds ostriches emus cassowaries","eagles vultures condors storks cranes swans","owls penguins flamingos pelicans"]},
  machines:{label:"Machines",categories:["Machines","Industrial machinery"],searches:["excavator tractor robot machinery","machines"]},
  cars:{label:"Cars & Vehicles",categories:["Cars","Road vehicles"],searches:["cars buses bicycles trucks motorcycles","vehicles"]},
