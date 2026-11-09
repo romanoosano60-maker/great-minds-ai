@@ -1,7 +1,7 @@
 # Great Minds AI — Account deletion workflow
 
 ## Current status
-A **request-only** Edge Function is deployed as `account-deletion-request` (version 2, JWT verification enabled). It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
+A **request-only** Edge Function is deployed as `account-deletion-request` (version 3, JWT verification enabled). It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
 
 The adult request form is now included on the International Classrooms page. It requires sign-in and an explicit confirmation. The request table is live with RLS enabled, no direct anon/authenticated access, and service-role-only access. It currently contains zero requests.
 
