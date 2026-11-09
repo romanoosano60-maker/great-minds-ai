@@ -1,0 +1,63 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI — 3D Learning World</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(160deg,#071b4a,#142d70 55%,#315c9b);color:#fff;font:16px/1.5 system-ui,sans-serif;min-height:100vh}header,main,footer{max-width:1050px;margin:auto;padding:18px}header{padding-top:26px}h1{margin:0;font-size:clamp(26px,5vw,38px)}header p{color:#d9e8ff;margin:8px 0}.nav{display:inline-block;padding:10px 14px;background:#fff;color:#17356e;text-decoration:none;border-radius:12px;font-weight:700;margin:8px 0 14px}.stage{position:relative;background:radial-gradient(circle at 50% 45%,#244e9b,#081a45 70%);border:1px solid #6d9be8;border-radius:22px;overflow:hidden;box-shadow:0 18px 50px #0005}canvas{display:block;width:100%;height:min(58vh,520px);min-height:300px}.hint{position:absolute;left:12px;right:12px;bottom:10px;text-align:center;color:#dceaff;font-size:13px;pointer-events:none;text-shadow:0 1px 3px #000}.controls{display:flex;gap:10px;flex-wrap:wrap;margin:15px 0}.controls button{border:0;border-radius:12px;padding:12px 16px;background:#fff;color:#17356e;font-weight:750;font-size:15px;cursor:pointer}.controls button[aria-pressed=true]{background:#ffd66b;color:#352300}.info{background:#fff;color:#1a3261;border-radius:16px;padding:16px;margin:14px 0}.info h2{margin:0 0 5px}.info p{margin:0}.small{font-size:13px;color:#d8e5ff}button:focus-visible,a:focus-visible{outline:3px solid #ffd66b;outline-offset:3px}@media(prefers-reduced-motion:reduce){.hint{display:none}}
+</style>
+</head>
+<body>
+<header><div style="color:#91eaff;font-weight:800;letter-spacing:2px;font-size:12px">EXPLORE · DISCOVER · LEARN</div><h1>🚀 Great Minds 3D Learning World</h1><p>Explore real-time 3D scenes made from shapes—rotate the view and discover how objects fit together.</p><a class="nav" href="gm-3d-graphics-gallery-1.html">← Back to Graphics Gallery</a></header>
+<main>
+<div class="stage"><canvas id="world" aria-label="Interactive 3D learning scene"></canvas><div class="hint">Drag to look around · Pinch or scroll to zoom</div></div>
+<div class="controls" aria-label="Choose a 3D learning scene"><button data-scene="space" aria-pressed="true">🌞 Solar System</button><button data-scene="rocket" aria-pressed="false">🚀 Rocket</button><button data-scene="atom" aria-pressed="false">⚛️ Atom</button></div>
+<section class="info"><h2 id="scene-title">Our Solar System</h2><p id="scene-text">Earth travels around the Sun. The Moon travels around Earth. The model is simplified and not to scale.</p></section>
+<p class="small" id="status" role="status">Loading 3D world…</p>
+</main>
+<footer class="small">Great Minds AI · Free procedural 3D learning demo. No paid model packs are used.</footer>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/three.js/r128/three.min.js"></script>
+<script>
+(()=>{
+const canvas=document.getElementById('world'),status=document.getElementById('status');
+if(!window.THREE){status.textContent='The 3D library could not load. Please check your internet connection and refresh.';return;}
+const THREE=window.THREE,scene=new THREE.Scene();scene.background=new THREE.Color(0x071a43);
+const camera=new THREE.PerspectiveCamera(45,1,.1,100);camera.position.set(0,4.5,11);
+const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false});renderer.setPixelRatio(Math.min(devicePixelRatio||1,2));renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+scene.add(new THREE.AmbientLight(0xffffff,.7));const key=new THREE.DirectionalLight(0xffffff,1.5);key.position.set(5,8,6);key.castShadow=true;scene.add(key);
+const root=new THREE.Group();scene.add(root);
+const mat=(color,roughness=.72)=>new THREE.MeshStandardMaterial({color,roughness});
+const sphere=(r,color,x,y,z)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),mat(color));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;root.add(m);return m;};
+const cylinder=(rt,rb,h,color,x,y,z)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,32),mat(color));m.position.set(x,y,z);m.castShadow=true;root.add(m);return m;};
+const orbit=(r,color=0x7ea9e8)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(r,.012,8,100),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.6}));m.rotation.x=Math.PI/2;root.add(m);return m;};
+let mode='space',objects=[],drag=false,px=0,py=0,rx=0,ry=0,zoom=1;
+function clear(){while(root.children.length){const o=root.children.pop();if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}}objects=[];}
+function build(which){clear();mode=which;
+if(which==='space'){
+const sun=sphere(1.05,0xffb52e,0,0,0);sun.material.emissive=new THREE.Color(0x9c4c00);sun.material.emissiveIntensity=.55;
+orbit(3.05);orbit(4.6);const earth=sphere(.43,0x2789e8,3.05,0,0);const moon=sphere(.15,0xd9e2f2,3.75,.15,0);const jupiter=sphere(.72,0xd99b65,-4.6,0,0);objects.push({type:'planet',mesh:earth,orbit:3.05,speed:.45,angle:0},{type:'moon',mesh:moon,orbit:3.75,speed:1.1,angle:0},{type:'planet',mesh:jupiter,orbit:4.6,speed:-.22,angle:Math.PI});for(let i=0;i<90;i++){const a=Math.random()*Math.PI*2,r=7+Math.random()*18,y=(Math.random()-.5)*10;const star=new THREE.Mesh(new THREE.SphereGeometry(.025+Math.random()*.025,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));star.position.set(Math.cos(a)*r,y,Math.sin(a)*r);root.add(star);}
+document.getElementById('scene-title').textContent='Our Solar System';document.getElementById('scene-text').textContent='Earth travels around the Sun. The Moon travels around Earth. Jupiter is a giant planet. This simplified model is not to scale.';
+}else if(which==='rocket'){
+const body=cylinder(.48,.62,2.7,0xf2f6ff,0,0,0);body.position.y=.15;
+const nose=new THREE.Mesh(new THREE.ConeGeometry(.48,.95,32),mat(0xff5a4e));nose.position.y=1.98;nose.castShadow=true;root.add(nose);
+const window=sphere(.22,0x38bde8,0,.55,.46);window.scale.set(1,1, .35);
+for(let i=0;i<3;i++){const fin=new THREE.Mesh(new THREE.ConeGeometry(.48,.9,3),mat(i===0?0xffc342:0x3559c9));fin.position.set((i-1)*.48,-.9,.15);fin.rotation.z=(i-1)*-.35;fin.castShadow=true;root.add(fin);}
+const flame=new THREE.Mesh(new THREE.ConeGeometry(.34,1.1,24),new THREE.MeshBasicMaterial({color:0xff8a24}));flame.position.y=-1.75;flame.rotation.x=Math.PI;root.add(flame);objects.push({type:'flame',mesh:flame});
+document.getElementById('scene-title').textContent='A 3D Rocket';document.getElementById('scene-text').textContent='A rocket uses powerful engines to push hot gases downward. The rocket moves upward. Rotate the view to inspect its nose, body, window and fins.';
+}else{
+sphere(.55,0xffc342,0,0,0);
+for(let i=0;i<3;i++){const orbitLine=new THREE.Mesh(new THREE.TorusGeometry(2,.025,8,100),new THREE.MeshBasicMaterial({color:[0x42d6ff,0xff6da8,0x7cf0a5][i]}));orbitLine.rotation.set(Math.PI/2+i*.85,i*.7,i*.5);root.add(orbitLine);const e=sphere(.17,[0x42d6ff,0xff6da8,0x7cf0a5][i],2,0,0);objects.push({type:'electron',mesh:e,orbit:2,angle:i*2.1,speed:.8+i*.2,tilt:orbitLine.rotation.clone()});}
+document.getElementById('scene-title').textContent='A Simple Atom Model';document.getElementById('scene-text').textContent='The centre is the nucleus. Electrons are shown moving around it. This is a learning illustration, not an exact scientific scale model.';
+}}
+function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;camera.updateProjectionMatrix();}
+function animate(t){requestAnimationFrame(animate);const time=t*.001;root.rotation.y=ry;root.rotation.x=rx;root.scale.setScalar(zoom);
+objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.z=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012;o.mesh.position.x=3.05+Math.cos(o.angle)*.7;o.mesh.position.z=Math.sin(o.angle)*.7;}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
+renderer.render(scene,camera);}
+canvas.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!drag)return;ry+=(e.clientX-px)*.008;rx+=(e.clientY-py)*.008;rx=Math.max(-1.1,Math.min(1.1,rx));px=e.clientX;py=e.clientY;});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
+canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.65,Math.min(1.7,zoom+(e.deltaY>0?-.08:.08)));},{passive:false});
+document.querySelectorAll('[data-scene]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));build(b.dataset.scene);}));
+window.addEventListener('resize',resize);build('space');resize();animate(0);status.textContent='3D world ready. Choose a scene and drag the picture to explore.';
+})();
+</script>
+</body></html>
