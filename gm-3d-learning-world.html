@@ -12,7 +12,7 @@
 <header><div style="color:#91eaff;font-weight:800;letter-spacing:2px;font-size:12px">EXPLORE · DISCOVER · LEARN</div><h1>🚀 Great Minds 3D Learning World</h1><p>Explore real-time 3D scenes made from shapes—rotate the view and discover how objects fit together.</p><a class="nav" href="gm-3d-graphics-gallery-1.html">← Back to Graphics Gallery</a></header>
 <main>
 <div class="stage"><canvas id="world" aria-label="Interactive 3D learning scene"></canvas><div class="hint">Drag to look around · Pinch or scroll to zoom</div></div>
-<div class="controls" aria-label="Choose a 3D learning scene"><button data-scene="space" aria-pressed="true">🌞 Solar System</button><button data-scene="rocket" aria-pressed="false">🚀 Rocket</button><button data-scene="atom" aria-pressed="false">⚛️ Atom</button></div>
+<div class="controls" aria-label="Choose a 3D learning scene"><button data-scene="space" aria-pressed="true">🌞 Solar System</button><button data-scene="rocket" aria-pressed="false">🚀 Rocket</button><button data-scene="atom" aria-pressed="false">⚛️ Atom</button><button id="pause-world" type="button" aria-pressed="false">⏸ Pause</button><button id="reset-view" type="button">↺ Reset View</button></div>
 <section class="info"><h2 id="scene-title">Our Solar System</h2><p id="scene-text">Earth travels around the Sun. The Moon travels around Earth. The model is simplified and not to scale.</p></section>
 <p class="small" id="status" role="status">Loading 3D world…</p>
 </main>
@@ -31,7 +31,7 @@ const mat=(color,roughness=.72)=>new THREE.MeshStandardMaterial({color,roughness
 const sphere=(r,color,x,y,z)=>{const m=new THREE.Mesh(new THREE.SphereGeometry(r,32,24),mat(color));m.position.set(x,y,z);m.castShadow=true;m.receiveShadow=true;root.add(m);return m;};
 const cylinder=(rt,rb,h,color,x,y,z)=>{const m=new THREE.Mesh(new THREE.CylinderGeometry(rt,rb,h,32),mat(color));m.position.set(x,y,z);m.castShadow=true;root.add(m);return m;};
 const orbit=(r,color=0x7ea9e8)=>{const m=new THREE.Mesh(new THREE.TorusGeometry(r,.012,8,100),new THREE.MeshBasicMaterial({color,transparent:true,opacity:.6}));root.add(m);return m;};
-let mode='space',objects=[],drag=false,px=0,py=0,rx=0,ry=0,zoom=1;
+let mode='space',objects=[],drag=false,px=0,py=0,rx=0,ry=0,zoom=1,paused=false;
 function clear(){while(root.children.length){const o=root.children.pop();if(o.geometry)o.geometry.dispose();if(o.material){if(Array.isArray(o.material))o.material.forEach(m=>m.dispose());else o.material.dispose();}}objects=[];}
 function build(which){clear();mode=which;rx=0;ry=0;zoom=1;
 if(which==='space'){camera.position.set(0,0,22);camera.lookAt(0,0,0);
@@ -73,11 +73,14 @@ document.getElementById('scene-title').textContent='A Simple Atom Model';documen
 }}
 function resize(){const w=canvas.clientWidth,h=canvas.clientHeight;renderer.setSize(w,h,false);camera.aspect=w/h;const fit=mode==='space'?Math.max(20,17.5/Math.min(1,camera.aspect)):mode==='rocket'?Math.max(9.5,6.8/camera.aspect):Math.max(8.5,5.8/camera.aspect);camera.position.set(0,0,fit);camera.lookAt(0,0,0);camera.updateProjectionMatrix();}
 function animate(t){requestAnimationFrame(animate);const time=t*.001;root.rotation.y=ry;root.rotation.x=rx;root.scale.setScalar(zoom);
-objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012*o.speed;o.mesh.position.x=o.parent.position.x+Math.cos(o.angle)*o.orbit;o.mesh.position.y=o.parent.position.y+Math.sin(o.angle)*o.orbit;}else if(o.type==='ring'){o.mesh.position.copy(o.parent.position);}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
+if(!paused)objects.forEach(o=>{if(o.type==='planet'){o.angle+=.003*o.speed;o.mesh.position.x=Math.cos(o.angle)*o.orbit;o.mesh.position.y=Math.sin(o.angle)*o.orbit;o.mesh.rotation.y+=.012;}else if(o.type==='moon'){o.angle+=.012*o.speed;o.mesh.position.x=o.parent.position.x+Math.cos(o.angle)*o.orbit;o.mesh.position.y=o.parent.position.y+Math.sin(o.angle)*o.orbit;}else if(o.type==='ring'){o.mesh.position.copy(o.parent.position);}else if(o.type==='electron'){o.angle+=.012*o.speed;const v=new THREE.Vector3(Math.cos(o.angle)*o.orbit,0,Math.sin(o.angle)*o.orbit).applyEuler(o.tilt);o.mesh.position.copy(v);}else if(o.type==='flame'){o.mesh.scale.y=.8+Math.sin(time*18)*.22;}});
 renderer.render(scene,camera);}
 canvas.addEventListener('pointerdown',e=>{drag=true;px=e.clientX;py=e.clientY;canvas.setPointerCapture(e.pointerId);});canvas.addEventListener('pointermove',e=>{if(!drag)return;ry+=(e.clientX-px)*.008;rx+=(e.clientY-py)*.008;rx=Math.max(-1.1,Math.min(1.1,rx));px=e.clientX;py=e.clientY;});canvas.addEventListener('pointerup',()=>drag=false);canvas.addEventListener('pointercancel',()=>drag=false);
 canvas.addEventListener('wheel',e=>{e.preventDefault();zoom=Math.max(.65,Math.min(1.7,zoom+(e.deltaY>0?-.08:.08)));},{passive:false});
-document.querySelectorAll('[data-scene]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));build(b.dataset.scene);}));
+document.querySelectorAll('[data-scene]').forEach(b=>b.addEventListener('click',()=>{document.querySelectorAll('[data-scene]').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));build(b.dataset.scene);paused=false;pauseButton.setAttribute('aria-pressed','false');pauseButton.textContent='⏸ Pause';}));
+const pauseButton=document.getElementById('pause-world');
+pauseButton.addEventListener('click',()=>{paused=!paused;pauseButton.setAttribute('aria-pressed',String(paused));pauseButton.textContent=paused?'▶ Resume':'⏸ Pause';status.textContent=paused?'Animation paused. Select Resume to continue.':'Animation resumed.';});
+document.getElementById('reset-view').addEventListener('click',()=>{rx=0;ry=0;zoom=1;resize();status.textContent='View reset to the balanced starting position.';});
 window.addEventListener('resize',resize);build('space');resize();animate(0);status.textContent='3D world ready. Choose a scene and drag the picture to explore.';
 })();
 </script>
