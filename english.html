@@ -66,7 +66,28 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <h2>🔤 The Five Vowels: A, E, I, O, U</h2>
 <p>Vowels are special letters. Tap each card to hear its sound and example word.</p>
 <div class="gm-vowel-grid" id="gmVowelGrid"></div>
-</section></main>
+</section>
+<section class="gm-extra-panel" id="gmSightWords">
+<h2>👀 Lesson 9: First Reading Words</h2>
+<p>Practise useful words children often see when reading. Tap a word to hear it.</p>
+<div class="gm-letter-grid" id="gmSightWordGrid"></div>
+</section>
+<section class="gm-extra-panel" id="gmPhonics">
+<h2>🔊 Lesson 10: Phonics and Beginning Sounds</h2>
+<p>Listen to the first sound, then choose the word that begins with it.</p>
+<div class="gm-question-area"><p class="gm-q-meta" id="gmPhonicsPrompt">Sound: /m/</p><div id="gmPhonicsChoices" class="answers"></div><p id="gmPhonicsFeedback" class="gm-q-feedback" aria-live="polite"></p><button type="button" id="gmPhonicsNext">Next sound →</button></div>
+</section>
+<section class="gm-extra-panel" id="gmSentenceBuilder">
+<h2>🧩 Lesson 11: Build a Sentence</h2>
+<p>Put the words in the correct order to make a sentence.</p>
+<div class="card"><p><strong>Words:</strong> <span id="gmSentenceWords">the / sun / is / bright</span></p><label for="gmSentenceAnswer">Write the sentence in the correct order</label><input id="gmSentenceAnswer" placeholder="The sun is bright."><button type="button" id="gmSentenceCheck">Check sentence</button><p id="gmSentenceFeedback" aria-live="polite"></p><button type="button" id="gmSentenceNew">Try another sentence</button></div>
+</section>
+<section class="gm-extra-panel" id="gmExtraChallenge">
+<h2>🏅 Lesson 12: English Explorer — 20 More Questions</h2>
+<p>Try another set of questions on vowels, word sounds, grammar, punctuation, reading and sentence skills.</p>
+<div class="gm-question-area"><div class="gm-q-meta" id="gmExtraMeta">Question 1 of 20</div><h3 id="gmExtraQuestion"></h3><div id="gmExtraChoices" class="answers"></div><p id="gmExtraFeedback" class="gm-q-feedback" aria-live="polite"></p><button type="button" id="gmExtraNext" hidden>Next question →</button><p id="gmExtraScore">Score: 0 / 20</p><button type="button" id="gmExtraRestart">↻ Restart challenge</button></div>
+</section>
+</main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
 (function(){const $=id=>document.getElementById(id);function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
@@ -120,4 +141,49 @@ const vg=document.getElementById("gmVowelGrid");vowels.forEach(x=>vg.appendChild
 document.getElementById("gmPlayAbcd").addEventListener("click",()=>speak("A, B, C, D, come and sing with me! E, F, G, H, happy as can be! I, J, K, L, M, N, O, P. Letters help us read and speak! Q, R, S, T, U, V. W, X, Y and Z! Now we know our A to Z!"));
 document.getElementById("gmSpeakAbcd").addEventListener("click",()=>speak("A. B. C. D. E. F. G. H. I. J. K. L. M. N. O. P. Q. R. S. T. U. V. W. X. Y. Z."));
 })();
-</script></body></html>
+</script>
+<script>
+(function(){
+const $=id=>document.getElementById(id);
+function say(t){if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.84;u.pitch=1.06;window.speechSynthesis.speak(u)}
+const sight=["I","a","the","is","to","and","you","we","see","my","like","can","go","come","here","said"];
+const grid=$("gmSightWordGrid");
+sight.forEach(w=>{const card=document.createElement("div");card.className="gm-letter-card";const word=document.createElement("div");word.className="big";word.textContent=w;const b=document.createElement("button");b.type="button";b.textContent="🔊 Hear word";b.addEventListener("click",()=>say(w));card.append(word,b);grid.append(card)});
+const sounds=[["/m/",["moon","sun","fish"],0],["/s/",["dog","sun","hat"],1],["/b/",["ball","cat","egg"],0],["/f/",["van","fish","tree"],1],["/p/",["pen","lion","goat"],0],["/t/",["apple","tiger","moon"],1],["/k/",["cat","zebra","rabbit"],0],["/r/",["rabbit","orange","kite"],0]];
+let si=0,sd=false;
+function showSound(){sd=false;const q=sounds[si];$("gmPhonicsPrompt").textContent="Which word begins with "+q[0]+"?";$("gmPhonicsFeedback").textContent="";$("gmPhonicsChoices").innerHTML="";q[1].forEach((w,i)=>{const b=document.createElement("button");b.type="button";b.textContent=w;b.addEventListener("click",()=>{if(sd)return;sd=true;Array.from($("gmPhonicsChoices").children).forEach(x=>x.disabled=true);$("gmPhonicsFeedback").textContent=i===q[2]?"🌟 Correct sound!":"Good try. The answer is "+q[1][q[2]]+".";});$("gmPhonicsChoices").append(b)})}
+$("gmPhonicsNext").addEventListener("click",()=>{si=(si+1)%sounds.length;showSound()});showSound();
+const sentences=[["the sun is bright","The sun is bright."],["I like to read","I like to read."],["the cat is sleeping","The cat is sleeping."],["we play together","We play together."],["birds can fly","Birds can fly."]];
+let st=0;
+function setSentence(){$("gmSentenceWords").textContent=sentences[st][0].split(" ").join(" / ");$("gmSentenceAnswer").value="";$("gmSentenceFeedback").textContent=""}
+$("gmSentenceCheck").addEventListener("click",()=>{$("gmSentenceFeedback").textContent=$("gmSentenceAnswer").value.trim().replace(/[.!?]+$/,"").toLowerCase()===sentences[st][1].replace(/[.!?]+$/,"").toLowerCase()?"🎉 Excellent sentence!":"Try again. Start with a capital letter and finish with a full stop."});
+$("gmSentenceNew").addEventListener("click",()=>{st=(st+1)%sentences.length;setSentence()});setSentence();
+const bank=[
+["Which five letters are vowels?",["A, E, I, O, U","B, C, D, F, G","A, B, C, D, E"],0],
+["Which word begins with the /sh/ sound?",["ship","sip","tip"],0],
+["Which word rhymes with cake?",["bike","lake","book"],1],
+["Choose the correct plural of baby.",["babys","babies","babyes"],1],
+["Which word is a pronoun?",["She","Table","Green"],0],
+["Which punctuation shows excitement?",[".","!","?"],1],
+["Choose the opposite of noisy.",["Loud","Quiet","Busy"],1],
+["Which word describes the rabbit?",["Soft","Rabbit","Hop"],0],
+["Choose the correct past tense of play.",["Plays","Playing","Played"],2],
+["Which sentence is a question?",["Where are you going?","I am happy.","Close the door."],0],
+["Which word has a short vowel sound?",["Cake","Bike","Cat"],2],
+["What is the plural of child?",["Childs","Children","Childes"],1],
+["Choose the correct article: ___ orange.",["A","An","The a"],1],
+["Which word is a verb?",["Dance","Yellow","Pillow"],0],
+["Which word means the same as happy?",["Glad","Angry","Tired"],0],
+["Complete: The book is ___ the table.",["under","quickly","blue"],0],
+["Which is a complete sentence?",["Because it rained","My little brother","We went to school."],2],
+["Choose the correctly written name.",["maria","Maria","MARia"],1],
+["Which word starts with the same sound as fish?",["fan","van","thin"],0],
+["What should a sentence begin with?",["A capital letter","A comma","A question mark"],0]
+];
+let qi=0,score=0,answered=false;
+function render(){answered=false;const q=bank[qi];$("gmExtraMeta").textContent="Question "+(qi+1)+" of "+bank.length;$("gmExtraQuestion").textContent=q[0];$("gmExtraFeedback").textContent="";$("gmExtraNext").hidden=true;$("gmExtraChoices").innerHTML="";q[1].forEach((v,i)=>{const b=document.createElement("button");b.type="button";b.textContent=v;b.addEventListener("click",()=>{if(answered)return;answered=true;Array.from($("gmExtraChoices").children).forEach(x=>x.disabled=true);if(i===q[2]){score++;$("gmExtraFeedback").textContent="🎉 Correct! Well done."}else{$("gmExtraFeedback").textContent="Good try! Correct answer: "+q[1][q[2]]} $("gmExtraScore").textContent="Score: "+score+" / "+bank.length;$("gmExtraNext").hidden=false});$("gmExtraChoices").append(b)})}
+$("gmExtraNext").addEventListener("click",()=>{if(!answered)return;qi++;if(qi<bank.length){render()}else{$("gmExtraMeta").textContent="Challenge complete";$("gmExtraQuestion").textContent="You finished English Explorer!";$("gmExtraChoices").innerHTML="";$("gmExtraFeedback").textContent="Your score: "+score+" out of "+bank.length+". Keep practising!";$("gmExtraNext").hidden=true}});
+$("gmExtraRestart").addEventListener("click",()=>{qi=0;score=0;$("gmExtraScore").textContent="Score: 0 / "+bank.length;render()});render();
+})();
+</script>
+</body></html>
