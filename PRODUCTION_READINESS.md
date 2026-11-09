@@ -1,6 +1,6 @@
 # Great Minds AI — Production Readiness Checklist
 
-Last reviewed: 6 November 2026
+Last reviewed: 9 November 2026
 
 This document separates source-code work from live-service and device verification. A page that works with browser storage is a prototype, not a connected account or international classroom.
 
@@ -74,3 +74,15 @@ The Mathematics, English, Science, Social Studies, History, Geography, Home Scie
 Source-code repairs above are development progress only. Do not change the production-ready or launch-ready status until the listed device, backend, safety and publishing checks pass.
 
 - Follow-up audio repair: the shared `gm-language.js` toolbar now includes a Stop Voice control for page narration and avoids adding a duplicate when a page already has its dedicated `gm-stop-voice` control. Commit `7c8fc87717cf01bbcc9cca0c7aed85a47fd035bb`; re-fetched and source-verified. Android behaviour remains untested.
+
+
+## 2026-11-09 AI Teacher deployment audit
+
+- Supabase project `ryuchmmnyjyldwouidyy` lists the `ai-teacher` Edge Function as ACTIVE, version 4, with JWT verification enabled.
+- `ai-teacher-config.js` currently points to the Supabase Edge Function URL; the frontend obtains the signed-in access token and sends subject, teaching language, question and recent text turns.
+- The deployed function verifies the Supabase user and checks for an approved teacher profile or active guardian relationship before allowing a request. It consumes a database-enforced quota of 10 requests per account and 100 requests service-wide per UTC day before making a paid AI call.
+- The function calls the OpenAI Responses API with `store:false`, applies child-focused safety instructions, and does not send the student's email, account ID or profile fields in the prompt.
+- A real authenticated question-and-answer test, unauthorised-account rejection test, secret-presence check and Android microphone/text-to-speech test remain outstanding. Function deployment and source inspection do not prove successful live AI responses.
+- Security Advisor reports `private.ai_teacher_daily_usage` with RLS disabled. The table currently has zero rows; this audit found no direct table grants to `anon` or `authenticated`, but the RLS finding still requires owner review. Suggested statement: `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`. The table and its quota `SECURITY DEFINER` function are owned by `postgres`; do not apply this change until the owner approves it and the quota function can be re-tested.
+- Leaked Password Protection remains disabled in Supabase Auth. Enable it if the current project plan supports it.
+- The existing Cloudflare Worker source is an alternative template, not the endpoint currently configured in the website.
