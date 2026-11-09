@@ -31,7 +31,7 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <header><div>📚🌟</div><h1>Children's Picture Library</h1><p>Look, discover and learn about our world!</p></header>
 <main>
 <a class="home" href="index.html">← Back to Great Minds AI</a>
-<section class="intro"><strong>Choose a picture collection</strong><p>Explore many kinds of animals, small and large birds, machines, cars and other vehicles, trains, small and large ships and boats, and small and large aeroplanes. Tap “View source & licence” to see where each picture came from and its reuse information.</p></section>
+<section class="intro"><strong>Choose a picture collection</strong><p>Explore many kinds of animals, including insects and amphibians, and learn about carnivores, herbivores and omnivores. Also discover small and large birds, machines, cars and other vehicles, trains, small and large ships and boats, and small and large aeroplanes. Tap “View source & licence” to see where each picture came from and its reuse information.</p></section>
 <nav class="categories" aria-label="Picture collections">
 <button type="button" data-category="animals" aria-pressed="true">🐘 Animals</button>
 <button type="button" data-category="birds" aria-pressed="false">🦜 Birds — small & large</button>
@@ -49,7 +49,7 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 const collections={
- animals:{label:"Animals — all kinds",categories:[],searches:["wild mammals lion elephant giraffe zebra bear wolf fox","farm animals cow horse sheep goat pig chicken duck","pets dogs cats rabbits hamsters guinea pigs","reptiles snakes lizards turtles crocodiles","amphibians frogs toads salamanders","fish sharks rays seahorses tropical fish","sea animals whales dolphins seals octopus crabs","insects butterflies bees ants beetles dragonflies"]},
+ animals:{label:"Animals — all kinds",categories:[],searches:["carnivores lions tigers leopards wolves foxes crocodiles sharks","herbivores elephants giraffes zebras deer rabbits cows horses","omnivores bears pigs raccoons chimpanzees chickens humans","insects butterflies bees ants beetles dragonflies grasshoppers","amphibians frogs toads salamanders newts","reptiles snakes lizards turtles crocodiles","fish sharks rays seahorses tropical fish","sea animals whales dolphins seals octopus crabs","wild mammals lions elephants giraffes zebras bears","farm animals cows horses sheep goats pigs chickens ducks","pets dogs cats rabbits hamsters guinea pigs","birds eagles owls parrots penguins ostriches"]},
  birds:{label:"Birds — small and large",categories:[],searches:["small birds hummingbirds finches sparrows wrens","parrots budgerigars canaries lovebirds","large birds ostriches emus cassowaries","eagles vultures condors storks cranes swans","owls penguins flamingos pelicans"]},
  machines:{label:"Machines",categories:["Machines","Industrial machinery"],searches:["excavator tractor robot machinery","machines"]},
  cars:{label:"Cars & Vehicles",categories:["Cars","Road vehicles"],searches:["cars buses bicycles trucks motorcycles","vehicles"]},
@@ -69,7 +69,7 @@ async function commonsRequest(params){
  return data;
 }
 async function commonsSearch(query){
- const found=await commonsRequest({action:"query",list:"search",srsearch:"filetype:bitmap "+query,srnamespace:"6",srlimit:"18"});
+ const found=await commonsRequest({action:"query",list:"search",srsearch:"filetype:bitmap "+query,srnamespace:"6",srlimit:"6"});
  const ids=(found.query?.search||[]).map(item=>item.pageid).filter(Boolean);
  if(!ids.length)return [];
  const details=await commonsRequest({action:"query",pageids:ids.join("|"),prop:"imageinfo",iiprop:"url|extmetadata",iiurlwidth:"640"});
@@ -84,7 +84,7 @@ function renderPictures(pages){
   const info=page.imageinfo?.[0],id=page.pageid||page.title;
   if(!info||(!info.thumburl&&!info.url)||seen.has(id))return false;
   seen.add(id);return true;
- }).slice(0,36);
+ }).slice(0,72);
  usable.forEach(page=>{
   const info=page.imageinfo[0],meta=info.extmetadata||{},figure=document.createElement("figure");
   const img=document.createElement("img"),caption=document.createElement("figcaption"),title=cleanTitle(page.title);
