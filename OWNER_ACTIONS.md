@@ -1,27 +1,34 @@
 # Great Minds AI — Owner Actions and Final Test Checklist
 
-Last checked: 6 November 2026
+Last checked: 9 November 2026
 
-This file lists only actions that still need the project owner or a real-device test. Source code and database configuration can be prepared from the connected tools, but a static code review cannot sign in as a real family, deploy a Cloudflare Worker, hear Android audio, or submit an app to an app store.
+This file lists only actions that still need the project owner or a real-device test. Source code and database configuration can be prepared from the connected tools, but a static code review cannot sign in as a real family, hear Android audio, or submit an app to an app store.
 
-## 1. AI Teacher — deploy and verify the secure endpoint
+## 1. AI Teacher — live endpoint verification
 
-**Prepared in GitHub**
-- `cloudflare/worker.js` contains the POST `/ask` endpoint and GET `/health`.
-- The Worker verifies the Supabase access token, checks an active guardian relationship, limits requests per user, accepts nine approved subjects and twelve teaching languages (including Hindi, Bengali, Tamil, Telugu and Marathi), and calls the OpenAI Responses API with `store:false`.
-- `ai-teacher.html` can call the endpoint when configured.
-- `ai-teacher-config.js` is intentionally blank until the real Worker URL is known.
+**Prepared and deployed**
+- Supabase Edge Function `ai-teacher` is ACTIVE at version 4, with JWT verification enabled.
+- `ai-teacher-config.js` points the website to the project's Supabase Edge Function URL.
+- `ai-teacher.html` obtains the signed-in Supabase access token and sends the selected subject, teaching language, question and recent text turns.
+- The deployed function verifies the account, permits approved teachers or accounts with an active guardian relationship, applies database-enforced daily usage limits (10 requests per account and 100 requests service-wide, UTC day), and calls the OpenAI Responses API with `store:false`.
+- The function's instructions include child-safety boundaries and avoid sending profile identifiers or contact details to OpenAI.
+- `cloudflare/worker.js` remains an alternative source template; it is not the endpoint currently configured by the website.
 
 **Owner actions**
-1. Open the existing Cloudflare Worker `great-minds-ai-backend`.
-2. Deploy the current source from `cloudflare/worker.js` (latest GitHub source includes the five added Indian teaching languages).
-3. Add the secret `OPENAI_API_KEY` in Cloudflare Secrets. Never put it in GitHub or browser code.
-4. Add variables `SUPABASE_URL=https://ryuchmmnyjyldwouidyy.supabase.co`, `SUPABASE_PUBLISHABLE_KEY` (public publishable key only), and `OPENAI_MODEL=gpt-5.4-mini`.
-5. Add the `AI_RATE_LIMITER` binding required by the Worker source.
-6. Test `GET /health`, then configure the actual deployed Worker URL ending in `/ask` in `ai-teacher-config.js`.
-7. Test with an adult-controlled student test account that has an active guardian relationship. Confirm the chosen subject is included in the answer, unauthorised accounts are rejected, and rate limiting works.
+1. Open the AI Teacher page: `https://romanoosano60-maker.github.io/great-minds-ai/ai-teacher.html`.
+2. Sign in using an approved teacher test account, or a student test account with an active guardian relationship. Use adult-controlled test accounts only.
+3. Select Mathematics and ask: “What is 8 + 7? Please show the steps.” Confirm the answer is generated live, follows the selected subject and appears in the reply area.
+4. Tap Listen and test the microphone separately on Android. Check that the selected language voice is available; browser speech quality depends on installed device voices.
+5. If available, repeat with an account that is not an approved teacher and has no active guardian relationship. Confirm access is rejected.
+6. Do not share an OpenAI secret or a child's personal information in chat. The OpenAI secret must remain in Supabase Function Secrets.
 
-**Not complete until:** Worker deployment, health check, configured frontend URL, and a successful consented test request are all verified.
+**Not complete until:** a real authenticated test receives a live AI answer, an unauthorised test is rejected, and Android microphone/playback are checked. The function's secret values are not readable through this audit, so their presence is not independently confirmed.
+
+**Security review item requiring owner approval**
+- Supabase Security Advisor flags `private.ai_teacher_daily_usage` because Row Level Security is disabled. The table currently has zero rows, and this audit found no direct table grants to `anon` or `authenticated`; however, the finding should be resolved deliberately.
+- Suggested hardening statement: `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`
+- The quota function is a `SECURITY DEFINER` function owned by `postgres`, and the table is also owned by `postgres`; it is designed to access this private table without client-facing policies. Do not run the statement until the owner approves the change and the quota function is re-tested.
+- A separate Supabase Auth warning remains: Leaked Password Protection is disabled. Enable it in Auth password/security settings if the current plan supports it.
 
 ## 2. International classrooms — real account and consent test
 
