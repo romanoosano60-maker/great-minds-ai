@@ -31,7 +31,7 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <header><div>📚🌟</div><h1>Children's Picture Library</h1><p>Look, discover and learn about our world!</p></header>
 <main>
 <a class="home" href="index.html">← Back to Great Minds AI</a>
-<section class="intro"><strong>Choose a picture collection</strong><p>Explore animals, small and large birds, machines, cars and other vehicles, trains, ships and boats, and aeroplanes. Tap “View source & licence” to see where each picture came from and its reuse information.</p></section>
+<section class="intro"><strong>Choose a picture collection</strong><p>Explore many kinds of animals, small and large birds, machines, cars and other vehicles, trains, small and large ships and boats, and small and large aeroplanes. Tap “View source & licence” to see where each picture came from and its reuse information.</p></section>
 <nav class="categories" aria-label="Picture collections">
 <button type="button" data-category="animals" aria-pressed="true">🐘 Animals</button>
 <button type="button" data-category="birds" aria-pressed="false">🦜 Birds — small & large</button>
@@ -49,13 +49,13 @@ footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 <footer>Great Minds AI — Every Child Can Shine ✨</footer>
 <script>
 const collections={
- animals:{label:"Animals",categories:["Animals","Mammals"],searches:["elephant lion giraffe zebra","wild animals"]},
- birds:{label:"Birds — small and large",categories:["Birds"],searches:["parrot hummingbird eagle owl ostrich","birds"]},
+ animals:{label:"Animals — all kinds",categories:[],searches:["wild mammals lion elephant giraffe zebra bear wolf fox","farm animals cow horse sheep goat pig chicken duck","pets dogs cats rabbits hamsters guinea pigs","reptiles snakes lizards turtles crocodiles","amphibians frogs toads salamanders","fish sharks rays seahorses tropical fish","sea animals whales dolphins seals octopus crabs","insects butterflies bees ants beetles dragonflies"]},
+ birds:{label:"Birds — small and large",categories:[],searches:["small birds hummingbirds finches sparrows wrens","parrots budgerigars canaries lovebirds","large birds ostriches emus cassowaries","eagles vultures condors storks cranes swans","owls penguins flamingos pelicans"]},
  machines:{label:"Machines",categories:["Machines","Industrial machinery"],searches:["excavator tractor robot machinery","machines"]},
  cars:{label:"Cars & Vehicles",categories:["Cars","Road vehicles"],searches:["cars buses bicycles trucks motorcycles","vehicles"]},
  trains:{label:"Trains",categories:["Trains","Rail transport"],searches:["steam locomotive passenger train","trains"]},
- ships:{label:"Ships & Boats",categories:["Ships","Boats"],searches:["sailboats ferry cargo ship","ships boats"]},
- aircraft:{label:"Aeroplanes",categories:["Aircraft"],searches:["passenger airplane helicopter","airplanes"]}
+ ships:{label:"Ships & Boats — small and large",categories:[],searches:["small boats kayaks canoes dinghies rowboats","sailboats yachts fishing boats","large ships cargo ships container ships oil tankers","cruise ships ferries passenger ships","naval ships aircraft carriers research vessels"]},
+ aircraft:{label:"Aeroplanes — small and large",categories:[],searches:["small airplanes light aircraft propeller planes","gliders ultralight aircraft seaplanes","large passenger airliners jumbo jets","cargo aircraft transport planes","helicopters rescue aircraft"]}
 };
 const statusEl=document.getElementById("status"),grid=document.getElementById("pictures"),retry=document.getElementById("retry");
 let active="animals",loadRequest=0;
@@ -84,7 +84,7 @@ function renderPictures(pages){
   const info=page.imageinfo?.[0],id=page.pageid||page.title;
   if(!info||(!info.thumburl&&!info.url)||seen.has(id))return false;
   seen.add(id);return true;
- }).slice(0,18);
+ }).slice(0,36);
  usable.forEach(page=>{
   const info=page.imageinfo[0],meta=info.extmetadata||{},figure=document.createElement("figure");
   const img=document.createElement("img"),caption=document.createElement("figcaption"),title=cleanTitle(page.title);
@@ -111,19 +111,12 @@ async function loadCollection(key){
  try{
   const collection=collections[key];
   let pages=[];
-  for(const category of collection.categories){
-   try{pages.push(...await commonsCategory(category))}catch(error){}
+  for(const query of collection.searches){
+   try{pages.push(...await commonsSearch(query))}catch(error){}
    if(request!==loadRequest)return;
-   if(renderPictures(pages)>0)break;
-  }
-  if(!grid.children.length){
-   for(const query of collection.searches){
-    try{pages.push(...await commonsSearch(query))}catch(error){}
-    if(request!==loadRequest)return;
-    if(renderPictures(pages)>0)break;
-   }
   }
   if(request!==loadRequest)return;
+  renderPictures(pages);
   const count=grid.children.length;
   if(count){
    statusEl.textContent=count+" "+collection.label.toLowerCase()+" pictures found. Open each source to check its creator and licence.";
