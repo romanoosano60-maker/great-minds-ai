@@ -89,6 +89,18 @@ create schema if not exists private;
 revoke all on schema private from public, anon;
 grant usage on schema private to authenticated;
 
+-- Private daily attempt counter: clients have no direct table privileges.
+create table if not exists private.classroom_join_attempts (
+  user_id uuid not null references auth.users(id) on delete cascade,
+  attempt_date date not null default current_date,
+  attempts integer not null default 0 check (attempts >= 0),
+  primary key (user_id, attempt_date)
+);
+alter table private.classroom_join_attempts enable row level security;
+revoke all on table private.classroom_join_attempts from public, anon, authenticated;
+
+-- Limit each authenticated account to 20 join-code attempts per database day.
+-- The counter update and code lookup run in one SECURITY DEFINER function.
 create or replace function private.join_classroom_by_code(p_code text)
 returns table (classroom_id bigint, classroom_name text, request_status text)
 language plpgsql
@@ -99,35 +111,45 @@ declare
   v_user uuid := auth.uid();
   v_class_id bigint;
   v_name text;
-  v_matches integer;
+  v_attempts integer;
+  v_consent text := 'pending';
 begin
-  if v_user is null then
-    raise exception 'Please sign in before joining a classroom';
-  end if;
-  if p_code is null or length(trim(p_code)) < 6 or length(trim(p_code)) > 32 then
-    raise exception 'Enter a valid classroom code';
-  end if;
+  if v_user is null then return; end if;
 
-  select count(*) into v_matches
-  from public.classrooms c
-  where lower(trim(c.classroom_code)) = lower(trim(p_code));
+  insert into private.classroom_join_attempts(user_id, attempt_date, attempts)
+  values (v_user, current_date, 1)
+  on conflict (user_id, attempt_date)
+  do update set attempts = private.classroom_join_attempts.attempts + 1
+  returning attempts into v_attempts;
 
-  if v_matches <> 1 then
-    raise exception 'Classroom code not found or unavailable';
+  if v_attempts > 20 then return; end if;
+
+  if p_code is null or length(btrim(p_code)) < 6
+     or length(btrim(p_code)) > 32
+     or btrim(p_code) !~ '^[A-Za-z0-9-]+$' then
+    return;
   end if;
 
   select c.id, c.classroom_name into v_class_id, v_name
   from public.classrooms c
-  where lower(trim(c.classroom_code)) = lower(trim(p_code))
+  where lower(btrim(c.classroom_code)) = lower(btrim(p_code))
   limit 1;
+  if v_class_id is null then return; end if;
+
+  if exists (
+    select 1 from public.guardian_relationships gr
+    where gr.student_id = v_user and gr.relationship_status = 'active'
+  ) then
+    v_consent := 'approved';
+  end if;
 
   insert into public.classroom_members
     (classroom_id, user_id, membership_status, parent_consent_status)
-  values (v_class_id, v_user, 'pending', 'pending')
-  on conflict (classroom_id, user_id) do nothing;
+  values (v_class_id, v_user, 'pending', v_consent)
+  on conflict on constraint classroom_members_classroom_id_user_id_key do nothing;
 
   return query
-  select v_class_id, v_name, m.membership_status
+  select m.classroom_id, v_name, m.membership_status
   from public.classroom_members m
   where m.classroom_id = v_class_id and m.user_id = v_user;
 end;
