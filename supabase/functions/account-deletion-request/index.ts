@@ -39,8 +39,8 @@ Deno.serve(async (req: Request) => {
   if (teacher.error || guardian.error) return reply({ error: "Could not verify adult account permissions. Contact support." }, 500);
   const isApprovedTeacher = !!teacher.data;
   const hasActiveGuardianLink = !!guardian.data?.length;
-  if (!isApprovedTeacher && !hasActiveGuardianLink && user.user_metadata?.account_purpose !== "guardian") {
-    return reply({ error: "This account has not been verified as an adult guardian or approved teacher. Please contact support for a manual review." }, 403);
+  if (!isApprovedTeacher && !hasActiveGuardianLink) {
+    return reply({ error: "This account has no active guardian relationship or approved teacher profile. Please contact support for a manual review." }, 403);
   }
 
   const { data: classrooms, error: classroomError } = await admin.from("classrooms").select("id").eq("teacher_id", user.id).limit(1);
