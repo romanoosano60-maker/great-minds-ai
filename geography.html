@@ -69,8 +69,33 @@ const read=document.getElementById('gmReadLesson');
 const stop=document.getElementById('gmStopLesson');
 const status=document.getElementById('gmVoiceStatus');
 function lessonText(){const main=document.querySelector('main');if(!main)return '';const parts=[];for(const section of main.querySelectorAll(':scope > section')){if(section.querySelector('#question'))break;if(section.getAttribute('aria-label')==='Lesson audio')continue;const copy=section.cloneNode(true);copy.querySelectorAll('button,a,input,textarea,select').forEach(el=>el.remove());const value=(copy.innerText||copy.textContent||'').replace(/\\s+/g,' ').trim();if(value)parts.push(value)}return parts.join('. ')}
-read.addEventListener('click',()=>{if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window)){status.textContent='Read-aloud is not supported in this browser. You can still read the lesson on screen.';return}const text=lessonText();if(!text){status.textContent='There is no lesson text to read yet.';return}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.rate=0.9;utterance.onstart=()=>status.textContent='Reading the lesson aloud…';utterance.onend=()=>status.textContent='Lesson reading finished.';utterance.onerror=()=>status.textContent='Audio could not play. Please use the on-screen lesson.';window.speechSynthesis.speak(utterance)});
-stop.addEventListener('click',()=>{if('speechSynthesis'in window)window.speechSynthesis.cancel();status.textContent='Voice stopped.'});
+let readWatchdog=null,readRequest=0;
+read.addEventListener('click',()=>{
+ if(!('speechSynthesis'in window)||!('SpeechSynthesisUtterance'in window)){status.textContent='Read-aloud is not supported in this browser. You can still read the lesson on screen.';return}
+ const text=lessonText();if(!text){status.textContent='There is no lesson text to read yet.';return}
+ const synth=window.speechSynthesis;clearTimeout(readWatchdog);synth.cancel();const request=++readRequest;
+ status.textContent='Preparing the lesson voice…';
+ const start=()=>{
+  if(request!==readRequest)return;
+  const voices=synth.getVoices?synth.getVoices():[];
+  if(!voices.length)return false;
+  const locale=(document.documentElement.lang||'en-US').toLowerCase();
+  const base=locale.split('-')[0];
+  const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale)||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(base+'-'))||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('en-'))||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));
+  const utterance=new SpeechSynthesisUtterance(text);utterance.rate=0.88;
+  if(voice){utterance.voice=voice;utterance.lang=voice.lang}else{utterance.lang=locale}
+  utterance.onstart=()=>{if(request===readRequest)status.textContent='🔊 Reading the lesson aloud…'};
+  utterance.onend=()=>{if(request===readRequest){clearTimeout(readWatchdog);status.textContent='Lesson reading finished.'}};
+  utterance.onerror=e=>{if(request===readRequest){clearTimeout(readWatchdog);status.textContent='Audio could not play ('+(e.error||'speech error')+'). Check Android Text-to-speech output and install a voice.'}};
+  synth.resume();synth.speak(utterance);return true;
+ };
+ if(!start()){
+  const previous=synth.onvoiceschanged;
+  synth.onvoiceschanged=()=>{if(start())synth.onvoiceschanged=previous};
+  readWatchdog=setTimeout(()=>{if(request!==readRequest)return;synth.onvoiceschanged=previous;status.textContent='No voice became available. Open Android Settings → General management → Text-to-speech output, select Google Speech Services and install English voice data.'},6000);
+ }
+});
+stop.addEventListener('click',()=>{readRequest++;clearTimeout(readWatchdog);if('speechSynthesis'in window){window.speechSynthesis.onvoiceschanged=null;window.speechSynthesis.cancel()}status.textContent='Voice stopped.'});
 })();
 </script>
 <script>
