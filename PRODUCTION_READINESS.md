@@ -106,8 +106,8 @@ Older statements in this document saying that no Supabase AI Teacher endpoint is
 - Status: deployed and configured in source, but not accepted as live until an authenticated answer, an unauthorised-account rejection and Android speech tests pass. Natural low-latency voice-to-voice streaming is not implemented.
 
 ### Additional child-consent hardening
-- The classroom membership UPDATE policy now requires an active guardian relationship for any row marked with approved guardian consent.
-- The classroom-call token endpoint independently verifies the student's active guardian relationship before issuing a token.
+- The teacher UPDATE policy requires `parent_consent_status='approved'` before membership can be approved. Authenticated clients cannot update that consent column; the guardian-consent server-side RPC sets it only after validating the one-time code and active relationship.
+- The classroom-call token endpoint independently verifies the student's active guardian relationship before issuing a student token.
 - `classroom-call-token` is ACTIVE version 6 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
 - Supabase confirms RLS is enabled on all 11 inspected application tables and no direct anon table privileges are present. Three intentionally closed tables continue to produce informational no-policy notices.
 
