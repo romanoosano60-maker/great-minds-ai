@@ -1037,3 +1037,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Found the checked-in `supabase/ai-teacher-daily-usage-limits.sql` did not fully match this live arrangement. Corrected it to preserve the eligibility gate and prevent direct client execution of the low-level counter. No live database migration was needed; the live database was already correct.
 - Updated `ACCOUNT_DELETION_WORKFLOW.md` from deployed function v4 to v5 and documented the 3 KB request-body validation. The endpoint remains request-only.
 - Re-fetched both files and verified the expected eligibility and version markers. Pages deployment is checked separately; SQL/docs updates do not themselves alter the live database.
+
+
+## Guardian consent bootstrap SQL alignment — 10 November 2026
+
+- Compared the live guardian consent/revocation functions with the checked-in classroom bootstrap SQL.
+- Found the bootstrap SQL still contained an old account-wide guardian revocation function and granted authenticated users permission to execute it. The live database had already disabled both private and public legacy account-wide RPCs and exposed the safer per-child revocation path.
+- Replaced the stale bootstrap block with the per-child `revoke_guardian_consent_for_student(student_id)` function and public invoker wrapper; explicitly revoke all client execution rights from the legacy account-wide function.
+- Also aligned the bootstrap consent-redemption function with the live SHA-256 token hashing, explicit guardian affirmation, verified-email check, one-time row lock, expiry check and legacy MD5 compatibility window. No live database migration was applied because the live functions were already hardened.
+- Re-fetched and verified the updated bootstrap SQL. The saved setup source no longer re-enables account-wide revocation or downgrades new consent tokens to MD5.
