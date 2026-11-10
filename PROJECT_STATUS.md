@@ -1188,3 +1188,10 @@ A broader pass found the same asynchronous sign-out/display issue could affect o
 - International Classrooms: clears classroom/request details, consent code and consent checkbox.
 
 All four pages now clear visible private data and the local signed-in page state immediately, attempt Supabase Auth sign-out independently, and attempt Realtime channel removal separately so a channel-cleanup failure does not prevent the sign-out request. Password fields are cleared as part of sign-out. All four updated files were re-fetched and the relevant handlers source-verified. Actual session invalidation under offline/network-failure conditions still needs owner testing.
+
+
+## Automated static checks added — 10 November 2026
+
+- Added scripts/static-audit.mjs to check local href/src references across HTML pages and parse standalone JavaScript files with Node.js.
+- Added .github/workflows/static-audit.yml to run these checks on pushes and pull requests to main.
+- The workflow and script were re-fetched from GitHub after commit. GitHub currently reports no workflow run or status result for the latest commits, so the automated check is installed in source but has not yet produced a passing CI result. Do not report it as a successful build until a run completes.
