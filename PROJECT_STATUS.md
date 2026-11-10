@@ -995,3 +995,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Added one inactive-page cleanup that stops the oscillator, stops narration, and cancels speech synthesis on `visibilitychange` (hidden) and `pagehide`. Commit: `4d5818b3d8b5aa9ed6a1d499c7ce681f51406ac7`.
 - Advanced Learning now cancels active speech synthesis as well as microphone recognition when hidden or navigated away. Commit: `09342c6819408f0ae70b65d7be34fb797249b863`.
 - Source re-fetch confirms both lifecycle changes. Browser/device behavior remains to be confirmed on Android after deployment.
+
+
+## English voice matching consistency audit — 10 November 2026
+
+- Rechecked the 12 primary learning pages for selected-language matching, cancellation, stop controls, and page lifecycle cleanup.
+- Found two further broad fallback paths: the Science lesson reader could fall back to any English voice even when the page language was different; Home Science could select any English locale, including an unrelated regional voice.
+- Tightened Science to exact or same-base selected-language voice matching only. Tightened Home Science to the supported English US/UK voices and removed the broad English fallback.
+- Source changes saved in `science.html` and `home-science.html`; latest source was re-fetched and checked. These changes still require Pages deployment and Android voice testing.
