@@ -927,3 +927,8 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - GitHub Pages deployment for commit `fe4ba941a478bd46b6eebe03d24bccf40f1b3ae1` was still `in_progress` at the time of this check. Do not assume the new audio repairs are live until that run succeeds.
 
 - Further repaired `english.html`: its alphabet, ABCD/vowel and sight-word/phonics readers now require an installed English voice instead of allowing a different device-default language. The Stop Voice control now invalidates all three independent speech request queues so a delayed voice-load callback cannot restart playback after Stop. Commit: `65494abca09bc8becf29375f09391a5589c14716`.
+
+## Supervised classroom call source review — 10 November 2026
+
+- Reviewed `classroom-call.html` and the deployed `classroom-call-token` v6 implementation. The browser joins with microphone and camera OFF; explicit user controls are required to publish media. Audio mode disables camera controls. Guardian-observer tokens cannot publish; the UI disables guardian mic/camera controls. Only the approved classroom owner can start/end a call. Student/guardian joins require approved membership, approved consent status, an active guardian relationship and the teacher's live presence. Unexpected teacher disconnect triggers participant disconnect on the client. Recording is disabled in the issued token response.
+- These controls pass source review only. Real LiveKit credentials, cross-device call setup, Android permission prompts, teacher disconnect handling and guardian observer behaviour remain owner/device tests. Do not mark live calling complete until those tests pass.
