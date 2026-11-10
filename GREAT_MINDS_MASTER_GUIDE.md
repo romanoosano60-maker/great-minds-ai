@@ -258,3 +258,36 @@ Do not mark the app complete or launch-ready until real-account role/consent tes
 
 ### Teacher dashboard data-access correction — 10 November 2026
 Teacher-side homework submission and student-progress policies use approved teacher ownership, approved classroom membership and the protected guardian-consent status. They do not expose guardian-link records to teachers. Only the guardian-consent server-side RPC can set or revoke the consent-status column; student and guardian read/submit paths retain their own active-link checks. Verify with a separate approved teacher account during owner-led acceptance testing.
+
+
+## 17. Live backend reconciliation — 10 November 2026
+
+This section supersedes older statements in Sections 7 and 9 that described the AI Teacher backend as not yet implemented.
+
+### Confirmed live deployment and source match
+The connected Supabase project was inspected directly. These Edge Functions are ACTIVE, require JWT verification, and their deployed `index.ts` contents match the corresponding GitHub files byte-for-byte:
+
+- `ai-teacher`: ACTIVE version 6; JWT verification enabled.
+- `classroom-call-token`: ACTIVE version 7; JWT verification enabled.
+- `account-deletion-request`: ACTIVE version 5; JWT verification enabled.
+
+The AI Teacher is a secured text-answer endpoint. The browser page uses device/browser speech recognition for microphone transcription and browser speech synthesis for reading answers aloud. This is not continuous natural voice-to-voice AI conversation. Test an approved account and an unrelated account before marking live AI access complete.
+
+The classroom call token service is deployed and its source requires a secure `wss://` LiveKit URL. It enforces approved teacher ownership, student membership plus active guardian relationship, and linked-guardian observer access. The call page starts microphone and camera OFF. A successful deployment does not prove LiveKit secrets are present or that audio/video works on a device; the supervised call test remains open.
+
+The account-deletion endpoint is request-only. It records an eligible adult's request for manual review and does not automatically delete the Auth account or learning records. The actual deletion, retention and classroom-transfer process remains unfinished and must be tested/documented before launch.
+
+### Current Supabase advisor snapshot
+- Health advisor: no findings.
+- Security: three RLS-enabled/no-policy notices apply to private quota/attempt tables and the service-role-only account-deletion request table. These are intentionally not directly client-accessible; do not add broad policies to silence the notices.
+- Security: leaked-password protection remains disabled and is plan-gated in this project. This is an outstanding security improvement; no upgrade was made.
+- Performance: five unused-index notices and two multiple-permissive-SELECT-policy notices remain. No indexes or policies were changed because current low row counts do not prove removal or consolidation is safe.
+
+### Verification still outstanding
+- Authenticated AI answer, denied unrelated account, quota/error handling and Android microphone/read-aloud checks.
+- LiveKit secret-presence check inside Supabase (never expose or send secret values), teacher start, student join, guardian observer, teacher end and disconnect handling on separate test accounts/devices.
+- Actual account-deletion request review and completion/retention procedure.
+- GitHub Pages deployment and Android runtime verification. Source and deployed Edge Function matches do not verify the public Pages build.
+- Reconcile the user's previously reported cross-device tests with fresh end-to-end records for classroom membership, cloud learning progress and homework submission/marking. Existing test rows alone do not prove the complete workflow.
+
+Do not mark these flows complete until the live acceptance tests pass. Do not enter real child information during unfinished tests.
