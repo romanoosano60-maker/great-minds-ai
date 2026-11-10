@@ -1054,3 +1054,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Found the checked-in homework-assignment SELECT policy did not explicitly require an active guardian relationship for the classroom student, although the live policy did. The live database was already enforcing the stronger rule.
 - Updated the saved SQL source to join an active guardian relationship before a student or linked guardian can read assignments, while preserving approved classroom membership and parent-consent checks.
 - Re-fetched the SQL and verified the active-guardian join, teacher-side consent checks for submissions and score maximum validation remain present. No live database policy change was required.
+
+
+## Homework student-marking privilege verification — 10 November 2026
+
+- Queried live PostgreSQL column privileges on `public.homework_submissions`.
+- Confirmed authenticated users can insert only `assignment_id`, `student_id`, and `answer`; they cannot insert `score`, `feedback`, `marked_by`, or `marked_at`. Marking columns are updateable, with RLS restricting that update to the approved classroom teacher. This is a live privilege check; no live grant change was needed.
+- Found the checked-in `supabase/classroom-homework.sql` still used a broader table-level INSERT grant that did not match the live least-privilege configuration. Corrected the source to grant SELECT separately and INSERT only on the three student submission columns. Marking columns remain separate UPDATE privileges.
+- Re-fetched and verified the saved SQL source. This prevents a future reapplication from widening student insert privileges.
