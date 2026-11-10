@@ -131,10 +131,10 @@ Do not enable child-to-child messaging or open international chat until account 
 
 - Rechecked the international classroom account, guardian-consent, join-request, teacher-approval and realtime-refresh handlers. A duplicate fallback in consent-code response handling was removed from `international-classrooms.html`.
 - Rechecked `homework.html` and `student-cloud-homework.js`: cloud homework is separate from the local role-play tabs; user-entered answers and feedback are inserted into the page with text nodes/textContent rather than interpreted as HTML. Database RLS remains the access-control boundary.
-- Rechecked the AI Teacher Worker source: it restricts requests to the GitHub Pages origin, verifies the Supabase bearer token, requires an active guardian relationship, applies per-user rate limiting, bounds question/history input, and keeps the OpenAI key server-side. It remains a source template until deployed and tested.
+- Historical Cloudflare Worker source was reviewed as an alternative template only. It is not the active website route; the current frontend uses the deployed Supabase `ai-teacher` Edge Function v6. Live approved/unauthorised account tests and Android speech tests remain open.
 - Rechecked lesson-page cloud progress integration. The main subject quiz pages and extra subject quiz pages use the shared cloud progress helper. Advanced Learning, selected Games, Reading/Writing story quizzes, and Vocabulary word-practice completion now have selected cloud-save paths. Writing text, local stars/wins, and certificate/reward summaries remain device-local; these modules are not fully cloud-synchronised.
-- Confirmed `ai-teacher-config.js` is deliberately blank until a real Worker URL is deployed. No secrets were added to frontend files.
-- Remaining live tests are unchanged: real separate-account classroom/consent journey, cross-device progress/homework, Android microphone/audio, Worker deployment and safe AI test, full device navigation, privacy/legal approval, and native store packaging.
+- Current `ai-teacher-config.js` points to the Supabase Edge Function. No AI provider secret is embedded in the browser source; actual server-side secret presence cannot be independently read during this audit.
+- Remaining live tests: real separate-account classroom/consent journey, cross-device progress/homework, approved and rejected AI Teacher account requests, Android microphone/audio, full device navigation, privacy/legal approval, and native store packaging. The Cloudflare Worker is not a required deployment path for the current website.
 
 
 ## Owner test additions — cloud progress pages
@@ -302,5 +302,5 @@ No production schema, RLS policy, secret, account or user data was modified in t
 - Confirmed `homework.html` and `student-cloud-homework.js` exist in the current main-branch tree. The secure cloud homework area is separate from local demo tabs.
 - Rechecked the current Supabase advisor snapshot: health has no findings; security has three restricted RLS/no-policy notices and leaked-password protection disabled; performance has five unused-index notices and two multiple-permissive-SELECT-policy notices. No broad policy changes or index removals were made.
 - Rechecked the deployed Edge Function inventory: AI Teacher v6, classroom-call-token v7 and account-deletion-request v5 are ACTIVE with JWT verification enabled.
-- Rechecked the repository tree: 199 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
+- Rechecked the repository tree: 200 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
 - Source changes are not a substitute for Android/runtime tests. Keep deployment, live backend, owner acceptance, and launch readiness as separate completion measures.
