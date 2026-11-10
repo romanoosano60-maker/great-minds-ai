@@ -253,3 +253,29 @@ No database policies, indexes, student records, classroom records, or account da
 - Confirm it explains that browser/device speech recognition may be processed by that provider and that Great Minds receives recognised text only after Ask Teacher is tapped.
 - On Android, review the browser/device speech-recognition privacy settings. Do not speak passwords, names, addresses, school details, phone numbers or other private information.
 - Confirm the wording is visible on the deployed page; the source update alone does not verify Pages deployment.
+
+
+## Additional verified backend/security checks — 10 November 2026
+
+Engineering has now completed a read-only review of live Edge Function source, database policies and security-definer RPC definitions.
+
+### Verified from live source/database
+- AI Teacher v6, classroom-call-token v7 and account-deletion-request v5 are ACTIVE; deployed function source exactly matches the current GitHub source and JWT verification is enabled.
+- Classroom call access is limited to the approved owning teacher, an approved student with an active guardian relationship and approved membership, or a linked guardian observer with approved membership. Only the teacher can start/end. Student/guardian join is blocked unless the teacher is present. Guardian tokens cannot publish.
+- Camera and microphone start OFF in the browser call page. Leaving the page disconnects the local room. Teacher departure disconnects supervised participants.
+- Guardian consent requires a verified signed-in account, explicit confirmation and a one-time code; this is an account declaration, not independent legal identity verification.
+- AI Teacher quotas are enforced in the database: 10 requests per account per day and 100 total per day.
+- Account deletion is request-only/manual review; it does not delete Auth accounts or student learning data.
+- Live RLS policy definitions were inspected. No broad policies were added to private tables.
+- At this database snapshot there are 0 classroom membership rows and 0 homework submission rows. Repeat cross-device tests with controlled test accounts; do not interpret this snapshot as disproving the user's earlier test report.
+
+### Owner/device acceptance still required
+1. Verify LiveKit secret configuration is present in Supabase (do not copy or share secret values).
+2. Test teacher start, student join, guardian observer, unauthorized account denial, teacher end and disconnect on separate devices.
+3. Test parent consent approval and revocation, then verify the student's classroom access is blocked after revocation.
+4. Test homework assignment → student submission → teacher marking → parent visibility across accounts.
+5. Test adult account-deletion request and document the manual completion/retention procedure.
+6. Check leaked-password protection in Supabase Auth; currently disabled in the security advisor snapshot.
+7. Verify the public GitHub Pages deployment and then complete Android device testing.
+
+No production schema, RLS policy, secret, account or user data was modified in this audit.
