@@ -17,9 +17,30 @@ img,svg,video,canvas{max-width:100%;height:auto}
 <script>const lessons=[{"answer": 1, "explanation": "South is opposite north."}, {"answer": 0, "explanation": "Firefighters respond to fires."}, {"answer": 0, "explanation": "Helping others supports communities."}, {"answer": 0, "explanation": "Closing taps saves water."}, {"answer": 0, "explanation": "Learning encourages understanding."}];let results={},cloudSaved=false;function answer(i,j){const ok=lessons[i].answer===j;results[i]=ok;document.querySelectorAll('section.lesson')[i].querySelectorAll('.choices button').forEach(button=>button.disabled=true);document.getElementById('f'+i).textContent=(ok?'✅ Correct! ':'❌ Try again. ')+lessons[i].explanation;update()}const progressKey="gm_extra_quiz_social_v1";
 function update(){let done=Object.keys(results).length,score=Object.values(results).filter(Boolean).length;if(done===lessons.length&&!cloudSaved){cloudSaved=true;if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Social Studies",activity_key:"social-extra-practice",score:score,max_score:lessons.length,correct_count:score,question_count:lessons.length,source:"social-extra.html"}).then(r=>{const el=document.getElementById('score');el.textContent+=(r.saved?' • Cloud progress saved.':' • Cloud save pending: '+(r.reason||'not confirmed'))}).catch(()=>{document.getElementById('score').textContent+=' • Cloud save could not be confirmed.'})}}document.getElementById('score').textContent=`Score: ${score}/${lessons.length} correct • ${done}/${lessons.length} answered`;try{localStorage.setItem(progressKey,JSON.stringify(results));}catch(e){console.warn("Quiz progress could not be saved",e)}}function resetQuiz(){results={};cloudSaved=false;for(let i=0;i<lessons.length;i++){document.getElementById('f'+i).textContent='';document.querySelectorAll('section.lesson')[i].querySelectorAll('.choices button').forEach(button=>button.disabled=false);}update()}
 function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.className="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("section.intro")||document.querySelector("header");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
-function gmSpeakText(text){if(typeof window.speak==="function"){window.speak(text);return;}if(!("speechSynthesis" in window)||!("SpeechSynthesisUtterance" in window)){alert("Read-aloud is not supported in this browser.");return;}window.speechSynthesis.cancel();const utterance=new SpeechSynthesisUtterance(text);utterance.lang="en-US";utterance.rate=0.88;window.speechSynthesis.speak(utterance);}
+function gmSpeakText(text){gmSpeakSafe(text)}
 document.querySelectorAll("section.lesson").forEach((section)=>{const prompt=section.querySelector("p");if(!prompt)return;const button=document.createElement("button");button.type="button";button.className="gm-read-aloud";button.textContent="🔊 Hear this question";button.setAttribute("aria-label","Read this lesson question aloud");button.addEventListener("click",()=>gmSpeakText(prompt.textContent));prompt.insertAdjacentElement("afterend",button);});
 
 try{const saved=JSON.parse(localStorage.getItem(progressKey)||"{}");if(saved&&typeof saved==="object"&&!Array.isArray(saved)){Object.keys(saved).forEach(k=>{const i=Number(k);if(Number.isInteger(i)&&i>=0&&i<lessons.length&&typeof saved[k]==="boolean"){results[i]=saved[k];const feedback=document.getElementById("f"+i);feedback.textContent=(saved[k]?"✅ Correct! ":"❌ Try again. ")+lessons[i].explanation;}});}}catch(e){console.warn("Saved quiz progress could not be loaded",e)}
 update();
-</script></body></html>
+</script><script>function gmSpeakSafe(text){
+ const synth=window.speechSynthesis;
+ const status=document.getElementById("voiceStatus")||document.getElementById("gmVoiceStatus")||document.getElementById("letterInfo")||document.getElementById("readStatus");
+ if(!synth||typeof SpeechSynthesisUtterance==="undefined"){if(status)status.textContent="Speech is unavailable in this browser. Open Chrome and check Android Text-to-speech output.";return;}
+ if(!synth.__gmCancelWrapped){const nativeCancel=synth.cancel.bind(synth);synth.cancel=function(){window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1;return nativeCancel();};synth.__gmCancelWrapped=true;}
+ const clean=String(text||"").trim();if(!clean){if(status)status.textContent="There is no text to read.";return;}
+ synth.cancel();const request=(window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1);
+ if(status)status.textContent="Preparing voice…";
+ const start=()=>{if(request!==window.__gmSpeechRequest)return;try{
+  const voices=synth.getVoices?synth.getVoices():[];
+  const voice=voices.find(v=>/^en-US$/i.test(v.lang))||voices.find(v=>/^en-GB$/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const u=new SpeechSynthesisUtterance(clean);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.88;
+  u.onstart=()=>{if(status)status.textContent="🔊 Speaking…";};
+  u.onend=()=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Audio finished.";};
+  u.onerror=e=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Audio could not play ("+(e.error||"error")+"). Check your phone's English voice.";};
+  synth.resume();synth.speak(u);
+  setTimeout(()=>{if(status&&request===window.__gmSpeechRequest&&!synth.speaking&&!synth.pending)status.textContent="No sound started. Check Android Text-to-speech output.";},5000);
+ }catch(e){if(status)status.textContent="Audio could not start. Check Android Text-to-speech output.";}}
+ if(synth.getVoices&&synth.getVoices().length){setTimeout(start,60);return;}
+ let finished=false;const ready=()=>{if(finished||request!==window.__gmSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();};
+ synth.addEventListener("voiceschanged",ready);setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
+}</script></body></html>
