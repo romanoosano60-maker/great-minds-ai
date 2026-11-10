@@ -117,3 +117,9 @@ Older statements in this document saying that no Supabase AI Teacher endpoint is
 - Latest application-code Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
 
 The application remains not launch-ready until all owner/device tests, actual secret configuration checks, child-privacy/legal review, retention/deletion decisions, backups/monitoring and native packaging requirements are completed.
+
+
+### Database duplicate-index cleanup — 10 November 2026
+- Removed redundant `classrooms_classroom_code_normalized_uidx`; retained `classrooms_classroom_code_unique` with equivalent normalized uniqueness enforcement.
+- Updated the repository SQL setup script so it no longer recreates the duplicate.
+- Rechecked valid public index definitions: no exact structural duplicates remain. No classroom data changed.
