@@ -53,21 +53,21 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  const el=id=>document.getElementById(id);const status=el('parentCloudStatus'),records=el('cloudRecords');
  let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('parent-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
- let db=null,user=null;
+ let db=null,user=null,cloudLoadRequest=0;
  function say(t){status.textContent=t}
  function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  async function load(){
   if(!db||!user){say('Please sign in with the Parent test account first.');return}
-  say('Loading records permitted for this Parent account…');records.textContent='Loading…';el('cloudHomeworkRecords').textContent='Loading homework…';
-  const {data:progress,error:progressError}=await db.from('student_learning_progress').select('subject,activity_key,score,max_score,source,completed_at').order('completed_at',{ascending:false}).limit(50);
+  say('Loading records permitted for this Parent account…');records.textContent='Loading…';const requestId=++cloudLoadRequest,requestedUserId=user.id;el('cloudHomeworkRecords').textContent='Loading homework…';
+  const {data:progress,error:progressError}=await db.from('student_learning_progress').select('subject,activity_key,score,max_score,source,completed_at').order('completed_at',{ascending:false}).limit(50);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   if(progressError){say('Cloud progress read failed: '+progressError.message);records.textContent='Progress could not be loaded.'}
   else if(!progress.length){records.textContent='No cloud progress records visible yet.'}
   else{records.innerHTML=progress.map(r=>'<div class="item"><b>'+escCloud(r.subject)+'</b><p>Score: '+escCloud(r.score)+' / '+escCloud(r.max_score)+'</p><small>'+escCloud(r.source)+' • '+escCloud(new Date(r.completed_at).toLocaleString())+'</small></div>').join('')}
-  const {data:subs,error:subError}=await db.from('homework_submissions').select('id,assignment_id,answer,score,feedback,submitted_at').order('submitted_at',{ascending:false}).limit(100);
+  const {data:subs,error:subError}=await db.from('homework_submissions').select('id,assignment_id,answer,score,feedback,submitted_at').order('submitted_at',{ascending:false}).limit(100);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   if(subError){el('cloudHomeworkRecords').textContent='Homework records could not be loaded for this account.';say('Signed in. Homework read was blocked or unavailable.');return}
   if(!subs||!subs.length){el('cloudHomeworkRecords').textContent='No cloud homework submissions are visible for linked children yet.';say('Signed in. Cloud records are filtered by parent-consent and database rules.');return}
   const ids=[...new Set(subs.map(x=>x.assignment_id))];
-  const {data:assignments,error:assignmentError}=await db.from('homework_assignments').select('id,title,subject,max_points,due_at').in('id',ids);
+  const {data:assignments,error:assignmentError}=await db.from('homework_assignments').select('id,title,subject,max_points,due_at').in('id',ids);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   if(assignmentError){el('cloudHomeworkRecords').textContent='Submissions loaded, but assignment details could not be loaded.';say('Signed in. Homework details were not available.');return}
   const byId=new Map((assignments||[]).map(a=>[a.id,a]));
   el('cloudHomeworkRecords').innerHTML=subs.map(s=>{const a=byId.get(s.assignment_id)||{};return '<div class="item"><b>'+escCloud(a.subject||'Homework')+' — '+escCloud(a.title||'Assignment')+'</b><p>Answer: '+escCloud(s.answer)+'</p><p>'+(s.score===null?'Awaiting teacher marking':'Score: '+escCloud(s.score)+' / '+escCloud(a.max_points??''))+'</p><small>'+escCloud(s.feedback||'No teacher feedback yet')+' • '+escCloud(new Date(s.submitted_at).toLocaleString())+'</small></div>'}).join('');
@@ -93,7 +93,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  });
  el('parentLogout').addEventListener('click',async()=>{
   el('parentPassword').value='';
-  user=null;
+  user=null;cloudLoadRequest++;
   records.textContent='Sign in to load cloud progress.';
   el('cloudHomeworkRecords').textContent='Sign in to load homework records.';
   if(!db){say('Cloud service unavailable. Local cloud display cleared.');return}
