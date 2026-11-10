@@ -61,7 +61,11 @@ with check (teacher_id=(select auth.uid()) and exists (
 drop policy if exists "Consented classroom students and guardians read assignments" on public.homework_assignments;
 create policy "Consented classroom students and guardians read assignments" on public.homework_assignments for select to authenticated
 using (exists (
- select 1 from public.classroom_members cm
+ select 1
+ from public.classroom_members cm
+ join public.guardian_relationships active_guardian
+   on active_guardian.student_id=cm.user_id
+  and active_guardian.relationship_status='active'
  where cm.classroom_id=homework_assignments.classroom_id
  and cm.membership_status='approved' and cm.parent_consent_status='approved'
  and (cm.user_id=(select auth.uid()) or exists (
