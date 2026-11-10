@@ -100,3 +100,72 @@ with check (marked_by=(select auth.uid()) and exists (
  select 1 from public.homework_assignments ha join public.teacher_profiles tp on tp.user_id=ha.teacher_id
  where ha.id=homework_submissions.assignment_id and ha.teacher_id=(select auth.uid()) and tp.approved=true
 ));
+
+
+-- Final teacher-side RLS rules (10 November 2026).
+-- Do not query guardian_relationships in teacher policy branches: that table
+-- intentionally exposes link rows only to the linked student/guardian.
+-- parent_consent_status is protected by column-level grants and can only be
+-- set/revoked by the guardian-consent SECURITY DEFINER RPC.
+ALTER POLICY "Students guardians and classroom teachers read submissions"
+ON public.homework_submissions
+USING (
+  student_id = (SELECT auth.uid())
+  OR EXISTS (
+    SELECT 1 FROM public.guardian_relationships gr
+    WHERE gr.student_id = homework_submissions.student_id
+      AND gr.guardian_id = (SELECT auth.uid())
+      AND gr.relationship_status = 'active'
+  )
+  OR EXISTS (
+    SELECT 1
+    FROM public.homework_assignments ha
+    JOIN public.teacher_profiles tp ON tp.user_id = ha.teacher_id
+    JOIN public.classroom_members cm ON cm.classroom_id = ha.classroom_id
+    WHERE ha.id = homework_submissions.assignment_id
+      AND cm.user_id = homework_submissions.student_id
+      AND cm.membership_status = 'approved'
+      AND cm.parent_consent_status = 'approved'
+      AND ha.teacher_id = (SELECT auth.uid())
+      AND tp.approved = true
+  )
+);
+
+ALTER POLICY "Approved classroom teachers mark submissions"
+ON public.homework_submissions
+USING (
+  EXISTS (
+    SELECT 1
+    FROM public.homework_assignments ha
+    JOIN public.teacher_profiles tp ON tp.user_id = ha.teacher_id
+    JOIN public.classroom_members cm ON cm.classroom_id = ha.classroom_id
+    WHERE ha.id = homework_submissions.assignment_id
+      AND cm.user_id = homework_submissions.student_id
+      AND cm.membership_status = 'approved'
+      AND cm.parent_consent_status = 'approved'
+      AND ha.teacher_id = (SELECT auth.uid())
+      AND tp.approved = true
+  )
+)
+WITH CHECK (
+  marked_by = (SELECT auth.uid())
+  AND (
+    score IS NULL
+    OR score <= (
+      SELECT ha.max_points FROM public.homework_assignments ha
+      WHERE ha.id = homework_submissions.assignment_id
+    )
+  )
+  AND EXISTS (
+    SELECT 1
+    FROM public.homework_assignments ha
+    JOIN public.teacher_profiles tp ON tp.user_id = ha.teacher_id
+    JOIN public.classroom_members cm ON cm.classroom_id = ha.classroom_id
+    WHERE ha.id = homework_submissions.assignment_id
+      AND cm.user_id = homework_submissions.student_id
+      AND cm.membership_status = 'approved'
+      AND cm.parent_consent_status = 'approved'
+      AND ha.teacher_id = (SELECT auth.uid())
+      AND tp.approved = true
+  )
+);
