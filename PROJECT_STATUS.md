@@ -1194,7 +1194,7 @@ All four pages now clear visible private data and the local signed-in page state
 
 - Added scripts/static-audit.mjs to check local href/src references across HTML pages and parse standalone JavaScript files with Node.js.
 - Added .github/workflows/static-audit.yml to run these checks on pushes and pull requests to main.
-- The workflow and script were re-fetched from GitHub after commit. GitHub currently reports no workflow run or status result for the latest commits, so the automated check is installed in source but has not yet produced a passing CI result. Do not report it as a successful build until a run completes.
+- The workflow and script were re-fetched from GitHub after commit. No commit status result is visible through the available status interface, and the available workflow-run lookup only reports pull-request-triggered runs; push-triggered execution has therefore not been independently confirmed. The automated check is installed in source, but no passing CI result is verified. Do not report it as a successful build until a run completes.
 
 
 ## Secure Homework Manager sign-out — 10 November 2026
