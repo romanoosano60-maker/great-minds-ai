@@ -1011,3 +1011,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Connected student, parent and teacher dashboard renderers escape dynamic text before placing it in HTML. The safe classroom demo escapes participant aliases and message text. Guided Research escapes the learner's own question before HTML rendering; its topic guide content is static trusted in-file content.
 - Dictionary results and daily-word cards are rendered from the page's fixed in-file vocabulary dataset, not raw learner input. Story Studio answer options come from its fixed in-file quiz data.
 - No unescaped learner-supplied text injection was identified in this targeted pass. This is a source review, not a full penetration test or browser test.
+
+
+## Edge Function source synchronization and request hardening — 10 November 2026
+
+- Compared the deployed Supabase Edge Function entrypoints with the repository copies. The deployed `ai-teacher` v5 and `classroom-call-token` v7 already enforced actual UTF-8 request-body byte limits and rejected malformed/non-object JSON, but the repository copies were stale and did not show those protections.
+- Synchronized both repository entrypoints to the exact deployed source, so future reviews and deployments have the real active implementation.
+- Hardened `account-deletion-request` to enforce a 3 KB actual UTF-8 request-body limit and reject malformed JSON, null, arrays and non-object payloads before checking explicit confirmation. Deployed as v5 with JWT verification still enabled.
+- Verified active deployed versions after deployment: AI Teacher v5, classroom call token v7, account deletion request v5; all require JWT verification.
+- This does not make account deletion automatic. The endpoint remains request-only and does not delete accounts or learning data.
