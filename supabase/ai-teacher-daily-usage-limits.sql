@@ -67,9 +67,46 @@ begin
 end;
 $function$;
 
+-- The low-level counter function is never callable by client roles.
 revoke all on function private.consume_ai_teacher_quota() from public, anon, authenticated;
 grant usage on schema private to authenticated;
-grant execute on function private.consume_ai_teacher_quota() to authenticated;
+
+-- Only approved teachers and accounts with an active guardian relationship
+-- may consume quota. The role check runs inside this SECURITY DEFINER wrapper
+-- so a caller cannot skip the eligibility gate by invoking the counter.
+create or replace function private.consume_ai_teacher_quota_for_eligible_user()
+returns jsonb
+language plpgsql
+security definer
+set search_path = ''
+as $function$
+declare
+  v_user uuid := auth.uid();
+begin
+  if v_user is null then
+    return jsonb_build_object('allowed', false, 'reason', 'not_authenticated');
+  end if;
+
+  if not exists (
+    select 1 from public.teacher_profiles t
+    where t.user_id = v_user and t.approved = true
+  )
+  and not exists (
+    select 1 from public.guardian_relationships gr
+    where (gr.student_id = v_user or gr.guardian_id = v_user)
+      and gr.relationship_status = 'active'
+  ) then
+    return jsonb_build_object('allowed', false, 'reason', 'not_eligible');
+  end if;
+
+  return private.consume_ai_teacher_quota();
+end;
+$function$;
+
+revoke all on function private.consume_ai_teacher_quota_for_eligible_user()
+  from public, anon, authenticated;
+grant execute on function private.consume_ai_teacher_quota_for_eligible_user()
+  to authenticated;
 
 create or replace function public.consume_ai_teacher_quota()
 returns jsonb
@@ -77,7 +114,7 @@ language sql
 security invoker
 set search_path = ''
 as $function$
-  select private.consume_ai_teacher_quota();
+  select private.consume_ai_teacher_quota_for_eligible_user();
 $function$;
 revoke all on function public.consume_ai_teacher_quota() from public, anon;
 grant execute on function public.consume_ai_teacher_quota() to authenticated;
