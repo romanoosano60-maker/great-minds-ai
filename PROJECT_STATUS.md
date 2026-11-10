@@ -951,3 +951,10 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Source-level change only. Android backgrounding/navigation tests remain required. `english-story-studio.html` was reviewed but not included in this batch.
 
 - Added the same page-inactive speech cancellation to `english-story-studio.html` (commit `7ae912554c39b72f52a30ffc78a31178a2b65be3`). The story studio is now included in this source-level safeguard batch.
+
+## Selected-language voice fallback correction — 10 November 2026
+
+- Re-reviewed the primary lesson narration in `math.html`, `history.html`, `geography.html`, and `social-studies.html`. Found a fallback that could select an English voice even when the page's selected language was different.
+- Removed cross-language fallback. Narration now requires an exact or same-base-language voice; when unavailable, it displays an instruction to install the selected language rather than substituting English. The no-voice message is retained without repeatedly registering a voice-ready retry.
+- Source commits: `535402fc7cb12c4afbdc86cf870bb9eb8859ce85`, `9c0de5990263426f6d1bd96cd83636534bd3a656`, `9267e27efcc257a921fb24e3710d0c73056de990`, `6d9df558af9bf94aedd30335903e8b0750acf7ae`, `595105f42fcd03ecd05d2705e304f98a96ba8ead`, `98a390fa412b5a004eed02894616fc35d23f26ab`, `1053826be4b87907ef729068fe1704086ccd08b6`, `2b9fdbe6634efbad777b09c366e71512a87fc475`.
+- This is source-level verification only. Actual voice availability and playback still require Android tests for each selected language.
