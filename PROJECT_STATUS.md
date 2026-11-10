@@ -1214,3 +1214,10 @@ Additional follow-up: the same stale-response guard was added to `international-
 - The four updated pages were fetched again from GitHub and the listener/request guards were verified in source. This is a source-level repair; separate-device/browser behavior and the deployed Pages build still require owner testing.
 - Latest relevant repair commit: `9137ad969847859b7903e8f6ca21e970c41f5dfd` (Homework Manager); dashboard commits: `0edd47b3937028ace1aebac1383d804ec1093486`, `d4a0b53b64b360a5799e569f33ab839b4f492cda`, `b7c3340db40d663c2bd1cfbfb7ad765be1067269`.
 - GitHub combined status and the available workflow-run lookup returned no results for the latest commit; do not count CI or deployment as passed.
+
+
+## 2026-11-10 follow-up — AI Teacher session privacy and account recovery
+- AI Teacher now listens for Supabase `SIGNED_OUT`. It clears the in-memory conversation and last answer, stops speech playback and microphone recognition, and invalidates any live answer request already in progress. A response started before sign-out is ignored and cannot be added to the conversation afterward.
+- The AI Teacher change was re-fetched from GitHub after commit `5165881e7a3e25ab417d81f4c3eabecad0a1e682`; source contains the sign-out listener and request-generation checks. Runtime behavior still requires a live owner test.
+- Repository search found no implemented `resetPasswordForEmail` or `updateUser({ password... })` flow in the reviewed authentication pages. Do not add a reset link until the production site origin and Supabase Auth redirect allowlist are confirmed; otherwise the recovery email may lead to an unapproved redirect.
+- Supabase project metadata confirms the project is active and hosted in `eu-west-2`; the project metadata endpoint does not expose the Auth URL allowlist or password policy. Those settings remain owner/dashboard verification items. No Auth settings were changed.
