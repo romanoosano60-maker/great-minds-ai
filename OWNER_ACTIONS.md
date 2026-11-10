@@ -312,3 +312,14 @@ No production schema, RLS policy, secret, account or user data was modified in t
 - Student Profile's local-history button now clearly states its limited scope: it clears only the V2 homework/quiz history on this device, not nickname, other local demo data, or Supabase cloud records.
 - Spot-checked dynamic HTML rendering in connected dashboards: parent/student cloud data is escaped before HTML insertion; teacher cloud records are rendered with textContent. Dictionary rendering uses its bundled fixed word list. Local role-play pages continue to warn that they are not secure accounts and must use fictional data.
 - Reconciled historical AI Teacher and secure-homework notes in the Master Guide. Current live status is in the 10 November authoritative sections; the old Cloudflare Worker endpoint is not the active website route.
+
+
+## Sign-out privacy hardening across role pages — 10 November 2026
+
+A broader pass found the same asynchronous sign-out/display issue could affect other role pages if Realtime channel cleanup failed before the auth sign-out call. The sign-out sequence has now been standardised in:
+- Parent Dashboard: clears progress and homework/feedback panels.
+- Student Dashboard: clears cloud learning-history panel.
+- Teacher Dashboard: clears student progress and homework submission panels.
+- International Classrooms: clears classroom/request details, consent code and consent checkbox.
+
+All four pages now clear visible private data and the local signed-in page state immediately, attempt Supabase Auth sign-out independently, and attempt Realtime channel removal separately so a channel-cleanup failure does not prevent the sign-out request. Password fields are cleared as part of sign-out. All four updated files were re-fetched and the relevant handlers source-verified. Actual session invalidation under offline/network-failure conditions still needs owner testing.
