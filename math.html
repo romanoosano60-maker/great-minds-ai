@@ -68,7 +68,7 @@ read.addEventListener('click',()=>{
   const locale=(document.documentElement.lang||'en-US').toLowerCase();
   const base=locale.split('-')[0];
   const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale)||voices.find(v=>v.lang&&v.lang.toLowerCase()===base)||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(base+'-'));
-if(!voice){status.textContent='No '+locale+' voice is installed or available. Install the selected language in Android Text-to-speech settings; another language will not be substituted.';return false;}
+if(!voice){status.textContent='No '+locale+' voice is installed or available. Install the selected language in Android Text-to-speech settings; another language will not be substituted.';return true;}
   const utterance=new SpeechSynthesisUtterance(text);utterance.rate=0.88;
   if(voice){utterance.voice=voice;utterance.lang=voice.lang}else{utterance.lang=locale}
   utterance.onstart=()=>{if(request===readRequest)status.textContent='🔊 Reading the lesson aloud…'};
