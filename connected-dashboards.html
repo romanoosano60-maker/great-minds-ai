@@ -95,14 +95,13 @@ async function checkConnection(){
 }
 document.getElementById('checkConnection').addEventListener('click',checkConnection);
 document.getElementById('teacherLogin').addEventListener('click',async()=>{
- const email=document.getElementById('teacherEmail').value.trim(),password=document.getElementById('teacherPassword').value;
+ const email=document.getElementById('teacherEmail').value.trim(),passwordField=document.getElementById('teacherPassword'),password=passwordField.value;
  authStatus.textContent='Checking teacher sign-in…';teacherAccessToken=null;
- if(!email||!password){authStatus.textContent='Enter the test teacher email and password.';return}
+ if(!email||!password){passwordField.value='';authStatus.textContent='Enter the test teacher email and password.';return}
  try{
   const cfg=project();
   const login=await fetch(cfg.url+'/auth/v1/token?grant_type=password',{method:'POST',headers:{apikey:cfg.publishableKey,'Content-Type':'application/json',Accept:'application/json'},body:JSON.stringify({email,password}),cache:'no-store'});
   const data=await login.json().catch(()=>({}));
-  document.getElementById('teacherPassword').value='';
   if(!login.ok||!data.access_token)throw new Error(data.msg||data.error_description||'Sign-in failed (HTTP '+login.status+').');
   teacherAccessToken=data.access_token;
   const userId=data.user&&data.user.id;
@@ -111,7 +110,7 @@ document.getElementById('teacherLogin').addEventListener('click',async()=>{
   const rows=await q.json().catch(()=>[]);
   if(!q.ok)throw new Error('Signed in, but the owned-classroom query failed (HTTP '+q.status+'). Check the teacher_id column, table permissions and RLS.');
   authStatus.textContent='Teacher account authenticated. RLS returned '+(Array.isArray(rows)?rows.length:0)+' classroom(s) owned by this account. The ownership filter is an additional check; RLS must still enforce access on the server. Teacher approval requires a protected role/approval record and has not been verified here.';
- }catch(e){teacherAccessToken=null;authStatus.textContent='Teacher check failed: '+e.message}
+ }catch(e){teacherAccessToken=null;authStatus.textContent='Teacher check failed: '+e.message}finally{passwordField.value=''}
 });
 document.getElementById('teacherLogout').addEventListener('click',async()=>{
  const token=teacherAccessToken;
