@@ -208,3 +208,9 @@ No database policies, indexes, student records, classroom records, or account da
 - Removed the redundant classroom-code unique index. The retained `classrooms_classroom_code_unique` index still enforces case-insensitive, trimmed uniqueness. No classroom rows were changed.
 - A fresh structural comparison found no remaining duplicate public index definitions.
 - No owner action is needed for this cleanup.
+
+
+### Teacher dashboard policy repair
+- Teacher homework read/mark and student-progress read policies now use approved classroom membership plus the protected guardian-consent status. They no longer require teachers to read private guardian-link rows.
+- Direct student/guardian operations retain their own active-link checks. Authenticated users cannot update the consent-status column; it is controlled by the guardian-consent RPC.
+- Test as a teacher account that is not itself a guardian: confirm it can view and mark work for an approved, consented classroom student, but cannot access an unrelated student's work.
