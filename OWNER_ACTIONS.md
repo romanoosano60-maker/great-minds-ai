@@ -337,3 +337,6 @@ All four pages now clear visible private data and the local signed-in page state
 - The secure cloud homework panel previously had no sign-out control of its own, even though it could display assignments, student answers and teacher feedback from the signed-in Supabase session.
 - Added a dedicated cloud sign-out button. It clears the secure homework results immediately, attempts Supabase Auth sign-out, then removes the Realtime channel independently. The notice explicitly states that signing out does not delete homework or learning records.
 - The updated Homework Manager was re-fetched and the button, scope notice and handler were source-verified. Live Android/session testing remains outstanding.
+
+### New owner verification — sign-out during loading
+The Student, Parent, and Teacher cloud dashboards now discard in-flight cloud results if sign-out occurs before a database request finishes. During the final Android acceptance pass, sign in to each role, start a refresh on a slow connection, and sign out before it finishes. Confirm the private progress/homework panels stay cleared. This source repair has not yet been runtime-tested on the device.
