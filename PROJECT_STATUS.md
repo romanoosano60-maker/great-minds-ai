@@ -987,3 +987,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Found one gap in `advanced-learning.html`: leaving the page or switching away aborted microphone recognition, but did not cancel active speech synthesis or invalidate a pending speech-start callback.
 - Repaired the inactive-page handler to invalidate pending speech, clear voice wait timers/listeners, abort recognition, and cancel speech synthesis on both hidden-page and pagehide events.
 - Source commit: `09342c6819408f0ae70b65d7be34fb797249b863`. This source change requires GitHub Pages deployment and Android confirmation; it is not counted as device-tested.
+
+
+## Story Studio and Advanced Learning media shutdown — 10 November 2026
+
+- Follow-up audit found a second media-lifecycle gap in `english-story-studio.html`: its generated background music oscillator and story narration could continue after the page was hidden or navigated away.
+- Added one inactive-page cleanup that stops the oscillator, stops narration, and cancels speech synthesis on `visibilitychange` (hidden) and `pagehide`. Commit: `4d5818b3d8b5aa9ed6a1d499c7ce681f51406ac7`.
+- Advanced Learning now cancels active speech synthesis as well as microphone recognition when hidden or navigated away. Commit: `09342c6819408f0ae70b65d7be34fb797249b863`.
+- Source re-fetch confirms both lifecycle changes. Browser/device behavior remains to be confirmed on Android after deployment.
