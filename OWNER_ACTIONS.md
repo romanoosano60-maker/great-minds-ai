@@ -188,8 +188,8 @@ No database policies, indexes, student records, classroom records, or account da
 ## Additional owner test checklist after 10 November security repairs
 
 ### Guardian-consent enforcement repair
-- The database UPDATE policy now requires an active guardian relationship whenever classroom membership consent is marked approved.
-- The classroom-call token service independently checks the student's active guardian relationship, even when the membership row says approved.
+- The teacher UPDATE policy requires `parent_consent_status='approved'` before membership can be approved. Authenticated clients can update `membership_status` but cannot update `parent_consent_status`; only the guardian-consent server-side RPC sets that field after validating the one-time code and active relationship.
+- The classroom-call token service independently checks the student's active guardian relationship before issuing a student token.
 - During the owner-led test, confirm a student without a guardian link cannot be approved for classroom participation or receive a call token; after a guardian link is active, teacher approval should allow access; after consent is revoked, further calls must be denied.
 - The live call-token function is now ACTIVE version 6 with JWT verification. Its source and deployed version were rechecked.
 
