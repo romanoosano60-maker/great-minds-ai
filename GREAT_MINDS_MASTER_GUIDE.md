@@ -254,3 +254,7 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - The latest application-code GitHub Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
 
 Do not mark the app complete or launch-ready until real-account role/consent tests, cross-device homework/progress, live AI response, LiveKit calls, Android audio, privacy/legal review, retention/deletion process and production operational checks are passed.
+
+
+### Teacher dashboard data-access correction — 10 November 2026
+Teacher-side homework submission and student-progress policies use approved teacher ownership, approved classroom membership and the protected guardian-consent status. They do not expose guardian-link records to teachers. Only the guardian-consent server-side RPC can set or revoke the consent-status column; student and guardian read/submit paths retain their own active-link checks. Verify with a separate approved teacher account during owner-led acceptance testing.
