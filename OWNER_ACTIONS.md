@@ -1,8 +1,10 @@
 # Great Minds AI — Owner Actions and Final Test Checklist
 
-Last checked: 9 November 2026
+Last checked: 10 November 2026
 
 This file lists only actions that still need the project owner or a real-device test. Source code and database configuration can be prepared from the connected tools, but a static code review cannot sign in as a real family, hear Android audio, or submit an app to an app store.
+
+Recent source repairs require an installed matching language voice rather than silently substituting a different language, and stop microphone recognition when AI Teacher or Advanced Learning is hidden or unloaded. Android verification remains outstanding.
 
 ## 1. AI Teacher — live endpoint verification
 
@@ -20,6 +22,7 @@ This file lists only actions that still need the project owner or a real-device 
 3. Select Mathematics and ask: “What is 8 + 7? Please show the steps.” Confirm the answer is generated live, follows the selected subject and appears in the reply area.
 4. Tap Listen and test the microphone separately on Android. Check that the selected language voice is available; browser speech quality depends on installed device voices.
 5. If available, repeat with an account that is not an approved teacher and has no active guardian relationship. Confirm access is rejected.
+6. Before using Speak question, review the browser/device speech-recognition provider privacy settings. Recognition may send microphone audio to that provider; Great Minds receives recognized text only if it is submitted as a question. Confirm the microphone stops when navigating away from the page.
 6. Do not share an OpenAI secret or a child's personal information in chat. The OpenAI secret must remain in Supabase Function Secrets.
 
 **Not complete until:** a real authenticated test receives a live AI answer, an unauthorised test is rejected, and Android microphone/playback are checked. The function's secret values are not readable through this audit, so their presence is not independently confirmed.
