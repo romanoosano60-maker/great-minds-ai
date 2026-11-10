@@ -85,8 +85,34 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </script></main><footer>Great Minds AI • Learn something helpful every day 🌟</footer>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
-function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
-function speak(text){if(!('speechSynthesis'in window)){alert('Audio reading is not supported in this browser.');return;}window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.rate=.9;window.speechSynthesis.speak(u);}
+function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host){host.appendChild(button);const status=document.createElement('p');status.id='gm-voice-status';status.setAttribute('role','status');status.setAttribute('aria-live','polite');status.textContent='Tap a lesson speaker to hear it read aloud.';host.appendChild(status);}}gmInstallStopVoiceControl();
+let gmSpeechRequest=0;
+function gmSpeakText(text,statusId,rate){
+ const status=statusId?document.getElementById(statusId):null;
+ const sayStatus=message=>{if(status)status.textContent=message;};
+ if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){
+  sayStatus("Spoken audio is unavailable in this browser. You can still read the lesson.");return;
+ }
+ const synth=window.speechSynthesis,request=++gmSpeechRequest;
+ synth.cancel();
+ const start=()=>{
+  if(request!==gmSpeechRequest)return;
+  const voices=synth.getVoices();
+  const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang=voice?voice.lang:"en-US";if(voice)utterance.voice=voice;utterance.rate=rate;
+  utterance.onstart=()=>sayStatus("Playing audio…");
+  utterance.onend=()=>sayStatus("Audio finished.");
+  utterance.onerror=()=>sayStatus("Audio could not play. Check that an English text-to-speech voice is installed on your phone, then try again.");
+  try{synth.resume();synth.speak(utterance);}catch(error){sayStatus("Audio could not start. Please try again.");}
+ };
+ if(synth.getVoices().length){start();return;}
+ let finished=false;
+ const onVoices=()=>{if(finished||request!==gmSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",onVoices);start();};
+ synth.addEventListener("voiceschanged",onVoices);
+ window.setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",onVoices);start();},1500);
+}
+function speak(text){gmSpeakText(text,"gm-voice-status",.9);}
 document.getElementById('quiz').addEventListener('submit',function(e){e.preventDefault();const answers={q1:'b',q2:'a',q3:'c',q4:'b',q5:'c'};let correct=0;for(const [q,a] of Object.entries(answers)){const selected=this.querySelector('input[name="'+q+'"]:checked');if(selected&&selected.value===a)correct++;}
 const score=Math.round(correct/5*100);document.getElementById('result').className='result';document.getElementById('result').textContent='You scored '+correct+' out of 5 ('+score+'%). '+(correct===5?'Excellent work!':correct>=3?'Good effort — review the topics and try again.':'Keep learning — listen to the lessons and try again.');
 try{const key='greatMindsConnectedDemoV1';const data=JSON.parse(localStorage.getItem(key)||'{}');data.quizzes=Array.isArray(data.quizzes)?data.quizzes:[];data.quizzes.push({subject:'Home Science',score:score,total:100,correct:correct,questions:5,completedAt:new Date().toISOString(),source:'home-science'});data.quizzes=data.quizzes.slice(-100);localStorage.setItem(key,JSON.stringify(data));}catch(err){console.warn('Local demo progress could not be saved.',err);}
