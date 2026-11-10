@@ -241,3 +241,16 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - AI Teacher now includes Social Studies, History, Geography and Home Science alongside Mathematics, English, Science, Computer Studies and General Knowledge.
 - Each new subject has a prepared example Q&A and a link to its corresponding full lesson page. Static syntax and local-link checks passed.
 - Live AI backend connection remains pending.
+
+
+## Current technical state superseding older prototype notes — 10 November 2026
+
+- AI Teacher is no longer only a prepared-answer prototype in source: the frontend calls the Supabase `ai-teacher` Edge Function (ACTIVE version 4, JWT verification enabled). The request includes the Supabase publishable `apikey` and the signed-in user's bearer token. A real authenticated response and Android voice test are still required before calling it live.
+- Classroom calling uses the Supabase `classroom-call-token` Edge Function (ACTIVE version 6, JWT verification enabled) and requires a WSS LiveKit endpoint. Students need approved membership and a current active guardian relationship; the server checks both independently.
+- The database classroom-membership UPDATE policy now prevents a teacher from marking guardian consent approved unless an active guardian relationship exists. Consent revocation remains a separate guardian-only RPC path.
+- Classroom microphone and camera start OFF. Participants must opt in. Guardian observer tokens cannot publish media.
+- The full repository tree contains 195 files: 56 HTML pages, 99 SVG assets, 7 JavaScript files, 12 SQL files, 3 TypeScript Edge Function files and 18 Markdown documents. All 56 HTML pages passed a static check for missing local `href` and `src` targets. No exact duplicate Git blobs were found; local demos, connected dashboards and redirect wrappers are intentionally distinct.
+- Supabase RLS is enabled on all 11 inspected application tables. Three informational no-policy notices correspond to tables intentionally closed to direct client access. Leaked Password Protection remains disabled and plan-gated.
+- The latest application-code GitHub Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
+
+Do not mark the app complete or launch-ready until real-account role/consent tests, cross-device homework/progress, live AI response, LiveKit calls, Android audio, privacy/legal review, retention/deletion process and production operational checks are passed.
