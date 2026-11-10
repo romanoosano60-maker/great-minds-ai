@@ -14,11 +14,11 @@
 <section class="panel"><h2>Call status</h2><div id="status" class="status" role="status" aria-live="polite">Checking your sign-in…</div><p class="notice">Use your camera and microphone only if you are in a private, appropriate place. Ask a parent or teacher before enabling them. Calls are not recorded by Great Minds AI. A guardian joining as an observer can watch and listen but cannot publish audio or video.</p></section>
 <section class="panel"><h2>Participants</h2><div id="tiles" class="tiles"></div></section>
 <section class="panel"><h2>Call controls</h2><div class="controls">
-<button id="mic" type="button" disabled>🎙️ Mute microphone</button>
-<button id="camera" type="button" disabled>📷 Turn camera off</button>
+<button id="mic" type="button" disabled>🎙️ Turn microphone on</button>
+<button id="camera" type="button" disabled>📷 Turn camera on</button>
 <button id="leave" type="button" class="secondary" disabled>Leave call</button>
 <button id="end" type="button" class="danger" hidden>End classroom call</button>
-</div><p class="muted" id="controlNote">Camera and microphone are only enabled after you join and grant browser permission.</p><a href="international-classrooms.html">← Back to International Classrooms</a></section>
+</div><p class="muted" id="controlNote">Microphone and camera start OFF. Turn them on only when you are ready and have permission.</p><a href="international-classrooms.html">← Back to International Classrooms</a></section>
 </main>
 <script type="module">
 let Room=null,RoomEvent=null,Track=null;
@@ -83,15 +83,14 @@ async function start(){
   });
   await room.connect(data.server_url,data.token);
   for(const p of room.remoteParticipants.values())for(const pub of p.trackPublications.values())if(pub.track)addTrack(pub.track,p);
-  if(tokenRole!=="guardian_observer"){
-    micOn=await room.localParticipant.setMicrophoneEnabled(true);
-    if(mode==="video")cameraOn=await room.localParticipant.setCameraEnabled(true);
-  }
+  // Privacy by default: joining a room never starts the microphone or camera.
+  // Each participant must deliberately enable their own media with the controls below.
+  micOn=false;cameraOn=false;
   $("mic").disabled=tokenRole==="guardian_observer";$("camera").disabled=tokenRole==="guardian_observer"||mode!=="video";
-  $("leave").disabled=false;$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on";
-  $("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on";
+  $("leave").disabled=false;$("mic").textContent="🎙️ Turn microphone on";
+  $("camera").textContent="📷 Turn camera on";
   if(tokenRole==="guardian_observer")$("controlNote").textContent="Guardian observer mode: microphone and camera are disabled.";
-  else $("controlNote").textContent="You can control your microphone and camera below.";
+  else $("controlNote").textContent="Your microphone and camera start OFF. Turn them on only when you are ready.";
   if(tokenRole==="teacher")$("leave").textContent="End & leave call";
   status("Connected. Role: "+tokenRole.replaceAll("_"," ")+". "+(mode==="video"?"Video call":"Audio call")+" is active.");
  }catch(e){
