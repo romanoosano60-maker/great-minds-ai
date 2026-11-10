@@ -70,7 +70,7 @@ objects.push(
 );
 for(let i=0;i<110;i++){const a=Math.random()*Math.PI*2,r=8+Math.random()*18,y=(Math.random()-.5)*12;const star=new THREE.Mesh(new THREE.SphereGeometry(.022+Math.random()*.025,6,6),new THREE.MeshBasicMaterial({color:0xffffff}));star.position.set(Math.cos(a)*r,y,Math.sin(a)*r);root.add(star);}
 document.getElementById('scene-title').textContent='Our Solar System';
-document.getElementById('scene-text').textContent='Explore Earth's Moon, Mars's Phobos and Deimos, Jupiter's four large moons—Io, Europa, Ganymede and Callisto—and Saturn's Titan. Their moons travel around their own planets as the planets orbit the Sun. This is a simplified model, not to scale.';
+document.getElementById("scene-text").textContent="Explore Earth's Moon, Mars's Phobos and Deimos, Jupiter's four large moons—Io, Europa, Ganymede and Callisto—and Saturn's Titan. Their moons travel around their own planets as the planets orbit the Sun. This is a simplified model, not to scale.";
 }else if(which==='rocket'){
 camera.position.set(0,0,9.5);camera.lookAt(0,0,0);
 const body=cylinder(.48,.62,2.7,0xf2f6ff,0,0,0);body.position.y=.15;
