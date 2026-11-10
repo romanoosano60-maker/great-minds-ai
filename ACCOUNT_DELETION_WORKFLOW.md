@@ -13,7 +13,7 @@ The adult request form is now included on the International Classrooms page. It 
 
 ## Live components
 - `public.account_deletion_requests`: live, RLS enabled; no anon/authenticated table privileges; service_role can insert.
-- `account-deletion-request`: deployed version 3, JWT verification on, request-only.
+- `account-deletion-request`: deployed version 4, JWT verification on, request-only.
 - Adult request form: `international-classrooms.html`.
 - Source: `supabase/functions/account-deletion-request/index.ts`.
 - SQL source: `supabase/account-deletion-requests.sql`.
