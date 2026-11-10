@@ -1135,3 +1135,12 @@ A fresh read-only inspection of the live Supabase project and GitHub source conf
 - The current database contains no homework submissions and no classroom membership rows at this snapshot. This is a test-data snapshot, not proof that the user's earlier cross-device test failed; repeat the key flow in a controlled test session before final sign-off.
 
 No production schema, RLS policy, secret, account or user data was modified during this audit.
+
+
+## Account and password source audit — 2026-11-10
+
+- Sign-in and test-account password fields in the International Classrooms, Unified Hub, connected Parent and connected Teacher pages now clear after every attempt, including failed network/authentication attempts. The four updated pages were re-fetched after their commits to confirm the cleanup code.
+- The test-account form checks for a minimum of 8 characters. The effective Supabase Auth password policy still needs confirmation in project settings.
+- No in-app password reset or password-change journey was found in the reviewed pages.
+- Account deletion remains request-only and requires human review; no automatic account, session or learning-data deletion is implemented.
+- A public Pages deployment could not be independently confirmed from the available repository checks. Android runtime testing remains open.
