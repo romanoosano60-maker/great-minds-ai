@@ -849,7 +849,7 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 ## Full inline JavaScript syntax sweep and repairs — 10 November 2026
 
-- Extracted and syntax-checked inline JavaScript from all 56 HTML pages using the JavaScript parser. Three previously unnoticed syntax defects were found and repaired:
+- Extracted and syntax-checked inline JavaScript from all 56 HTML pages using the JavaScript parser. Four previously unnoticed syntax defects were found and repaired:
   1. `advanced-learning.html`: literal backslash-n sequences between Urdu, Bengali and Hindi phrase-table entries were invalid JavaScript. Replaced them with real line breaks. The page's inline scripts now parse.
   2. `gm-3d-learning-world.html`: apostrophes in the Moon/planet description terminated a single-quoted JavaScript string. Changed the description to a correctly quoted double-quoted string. The page's inline script now parses.
   3. `international-classrooms.html`: removed a stray literal `\n` before the refresh event handler. The page's inline scripts now parse.
