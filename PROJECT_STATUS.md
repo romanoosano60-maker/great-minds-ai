@@ -1046,3 +1046,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Replaced the stale bootstrap block with the per-child `revoke_guardian_consent_for_student(student_id)` function and public invoker wrapper; explicitly revoke all client execution rights from the legacy account-wide function.
 - Also aligned the bootstrap consent-redemption function with the live SHA-256 token hashing, explicit guardian affirmation, verified-email check, one-time row lock, expiry check and legacy MD5 compatibility window. No live database migration was applied because the live functions were already hardened.
 - Re-fetched and verified the updated bootstrap SQL. The saved setup source no longer re-enables account-wide revocation or downgrades new consent tokens to MD5.
+
+
+## Homework policy source alignment — 10 November 2026
+
+- Compared live `pg_policies` definitions with `supabase/classroom-homework.sql`.
+- Found the checked-in homework-assignment SELECT policy did not explicitly require an active guardian relationship for the classroom student, although the live policy did. The live database was already enforcing the stronger rule.
+- Updated the saved SQL source to join an active guardian relationship before a student or linked guardian can read assignments, while preserving approved classroom membership and parent-consent checks.
+- Re-fetched the SQL and verified the active-guardian join, teacher-side consent checks for submissions and score maximum validation remain present. No live database policy change was required.
