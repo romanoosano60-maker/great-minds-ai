@@ -356,3 +356,12 @@ Additional follow-up: the same stale-response guard was added to `international-
 - The AI Teacher change was re-fetched from GitHub after commit `5165881e7a3e25ab417d81f4c3eabecad0a1e682`; source contains the sign-out listener and request-generation checks. Runtime behavior still requires a live owner test.
 - Repository search found no implemented `resetPasswordForEmail` or `updateUser({ password... })` flow in the reviewed authentication pages. Do not add a reset link until the production site origin and Supabase Auth redirect allowlist are confirmed; otherwise the recovery email may lead to an unapproved redirect.
 - Supabase project metadata confirms the project is active and hosted in `eu-west-2`; the project metadata endpoint does not expose the Auth URL allowlist or password policy. Those settings remain owner/dashboard verification items. No Auth settings were changed.
+
+
+## 2026-11-10 follow-up — browser configuration and learner-data review
+- Rechecked `supabase-config.js`: browser code contains the Supabase project URL and a publishable key only. The service-role key and AI provider key are referenced only as server-side environment secrets in Edge Function source; no secret value was found in the reviewed browser configuration. Publishable keys are expected to be public; RLS and server authorization remain essential.
+- Rechecked `student-cloud-progress.js` and `student-cloud-homework.js`: cloud reads/writes obtain the signed-in Supabase user and rely on RLS/server-side authorization rather than trusting a UI-selected role. These paths still need real account/device tests.
+- Rechecked Reading & Writing: saved learner writing is explicitly stored in this browser only, with a visible clear action that removes the page's local saved draft. Parents should avoid entering sensitive personal information, and should clear drafts on shared devices.
+- Rechecked the local role dashboards and practice/certificate pages: they are browser-local demonstration data, not secure cross-device student accounts. Continue using fictional names/details in those demo pages.
+- Static-audit workflow source was reviewed. It checks local HTML href/src targets and standalone JavaScript syntax; it does not execute browser flows or parse inline scripts. A passing GitHub Actions run has not been verified, so this is not a build/test pass.
+- No production database, Auth setting, secret, account, or child record was changed during this review.
