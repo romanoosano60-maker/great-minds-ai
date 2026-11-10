@@ -26,7 +26,7 @@ const $=id=>document.getElementById(id);
 const params=new URLSearchParams(location.search);
 const classroomId=params.get("classroom");
 const mode=params.get("mode")==="video"?"video":"audio";
-const action=params.get("action")==="start"?"start":"join";
+const action=["start","join","end"].includes(params.get("action"))?params.get("action"):"join";
 let client=null,room=null,tokenRole="",micOn=false,cameraOn=false;
 $("callTitle").textContent=(mode==="video"?"📹 Video":"🎙️ Audio")+" classroom";
 $("callSubtitle").textContent="Classroom "+(classroomId||"not selected")+" · "+(action==="start"?"Teacher starting session":"Joining teacher's session");
@@ -52,6 +52,7 @@ async function invoke(actionName){
  return data;
 }
 async function start(){
+ if(action==="end"){try{if(!classroomId||!/^[0-9]+$/.test(classroomId))throw Error("No valid classroom was selected.");await invoke("end");status("The teacher ended the classroom call. All participants have been disconnected.");$("end").disabled=true;return}catch(e){status(e.message);return}}
  if(!classroomId||!/^[0-9]+$/.test(classroomId)){status("No valid classroom was selected. Return to International Classrooms.");return}
  try{
   status("Checking your classroom membership and preparing the secure call…");
