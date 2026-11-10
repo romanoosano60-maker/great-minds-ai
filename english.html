@@ -197,7 +197,28 @@ $("songSpeed").addEventListener("input",()=>{$("songSpeedLabel").textContent=spe
 (function(){
 const letters=[["A","a","Apple","🍎"],["B","b","Boy","🧒"],["C","c","Cat","🐱"],["D","d","Dog","🐶"],["E","e","Elephant","🐘"],["F","f","Fish","🐟"],["G","g","Goat","🐐"],["H","h","House","🏠"],["I","i","Ice cream","🍦"],["J","j","Juice","🧃"],["K","k","Kite","🪁"],["L","l","Lion","🦁"],["M","m","Monkey","🐒"],["N","n","Nest","🪺"],["O","o","Orange","🍊"],["P","p","Pencil","✏️"],["Q","q","Queen","👑"],["R","r","Rabbit","🐰"],["S","s","Sun","☀️"],["T","t","Tiger","🐯"],["U","u","Umbrella","☂️"],["V","v","Van","🚐"],["W","w","Water","💧"],["X","x","Xylophone","🎼"],["Y","y","Yo-yo","🪀"],["Z","z","Zebra","🦓"]];
 const vowels=[["A","a","Apple","🍎"],["E","e","Egg","🥚"],["I","i","Igloo","🧊"],["O","o","Orange","🍊"],["U","u","Umbrella","☂️"]];
-function speak(t){if(!("speechSynthesis"in window))return;speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.82;u.pitch=1.08;speechSynthesis.speak(u)}
+let gmExtraSpeechRequest=0;
+function speak(t){
+ if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined")return;
+ const synth=window.speechSynthesis,request=++gmExtraSpeechRequest;
+ synth.cancel();
+ const start=()=>{
+  if(request!==gmExtraSpeechRequest)return;
+  const voices=synth.getVoices();
+  const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.82;u.pitch=1.08;
+  const status=document.getElementById("gmAbcdStatus");
+  u.onstart=()=>{if(status)status.textContent="Playing audio…";};
+  u.onerror=()=>{if(status)status.textContent="Audio could not play. Check your phone's English text-to-speech voice.";};
+  u.onend=()=>{if(status)status.textContent="Audio finished.";};
+  synth.resume();synth.speak(u);
+ };
+ if(synth.getVoices().length){start();return;}
+ let finished=false;
+ const ready=()=>{if(finished||request!==gmExtraSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();};
+ synth.addEventListener("voiceschanged",ready);
+ window.setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
+}
 function makeCard(item,cls){const [cap,small,word,pic]=item;const el=document.createElement("div");el.className=cls;const icon=document.createElement("span");icon.className="pic";icon.textContent=pic;const letters=document.createElement("div");letters.className="big";letters.textContent=cap+" "+small;const label=document.createElement("strong");label.textContent=word;const b=document.createElement("button");b.type="button";b.textContent="🔊 Listen";b.addEventListener("click",()=>speak(cap+". "+word));el.append(icon,letters,label,b);return el}
 const lg=document.getElementById("gmLetterGrid");letters.forEach(x=>lg.appendChild(makeCard(x,"gm-letter-card")));
 const vg=document.getElementById("gmVowelGrid");vowels.forEach(x=>vg.appendChild(makeCard(x,"gm-vowel-card")));
@@ -208,7 +229,25 @@ document.getElementById("gmSpeakAbcd").addEventListener("click",()=>speak("A. B.
 <script>
 (function(){
 const $=id=>document.getElementById(id);
-function say(t){if(!("speechSynthesis" in window))return;window.speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(t);u.lang="en-US";u.rate=.84;u.pitch=1.06;window.speechSynthesis.speak(u)}
+let gmSightSpeechRequest=0;
+function say(t){
+ if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined")return;
+ const synth=window.speechSynthesis,request=++gmSightSpeechRequest;
+ synth.cancel();
+ const start=()=>{
+  if(request!==gmSightSpeechRequest)return;
+  const voices=synth.getVoices();
+  const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.84;u.pitch=1.06;
+  u.onerror=()=>{const status=$("gmPhonicsFeedback");if(status)status.textContent="Audio could not play. Check your phone's English text-to-speech voice.";};
+  synth.resume();synth.speak(u);
+ };
+ if(synth.getVoices().length){start();return;}
+ let finished=false;
+ const ready=()=>{if(finished||request!==gmSightSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();};
+ synth.addEventListener("voiceschanged",ready);
+ window.setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
+}
 const sight=["I","a","the","is","to","and","you","we","see","my","like","can","go","come","here","said"];
 const grid=$("gmSightWordGrid");
 sight.forEach(w=>{const card=document.createElement("div");card.className="gm-letter-card";const word=document.createElement("div");word.className="big";word.textContent=w;const b=document.createElement("button");b.type="button";b.textContent="🔊 Hear word";b.addEventListener("click",()=>say(w));card.append(word,b);grid.append(card)});
