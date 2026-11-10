@@ -106,6 +106,15 @@ async function start(){
 $("mic").onclick=async()=>{try{micOn=await room.localParticipant.setMicrophoneEnabled(!micOn);$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on"}catch(e){status("Microphone error: "+e.message)}};
 $("camera").onclick=async()=>{try{cameraOn=await room.localParticipant.setCameraEnabled(!cameraOn);$("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on"}catch(e){status("Camera error: "+e.message)}};
 $("leave").onclick=async()=>{try{if(tokenRole==="teacher")await invoke("end");if(room)await room.disconnect();room=null;$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;status(tokenRole==="teacher"?"You ended the supervised classroom call. All participants have been disconnected.":"You left the call.")}catch(e){status("Could not leave safely: "+e.message)}};
-$("end").onclick=async()=>{try{await invoke("end");if(room)await room.disconnect();$("leave").disabled=true;$("end").disabled=true;status("The teacher ended the classroom call. All participants have been disconnected.")}catch(e){status("Could not end the classroom call: "+e.message)}};
+$("end").onclick=async()=>{try{await invoke("end");if(room)await room.disconnect();room=null;micOn=false;cameraOn=false;$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;status("The teacher ended the classroom call. All participants have been disconnected.")}catch(e){status("Could not end the classroom call: "+e.message)}};
+
+// Stop local media immediately if the call page is left, refreshed, or closed.
+window.addEventListener("pagehide",()=>{
+ const activeRoom=room;
+ room=null;
+ micOn=false;
+ cameraOn=false;
+ if(activeRoom){try{void activeRoom.disconnect().catch(()=>{})}catch(_disconnectError){}}
+});
 start();
 </script></body></html>
