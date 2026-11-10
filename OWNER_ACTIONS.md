@@ -302,7 +302,7 @@ No production schema, RLS policy, secret, account or user data was modified in t
 - Confirmed `homework.html` and `student-cloud-homework.js` exist in the current main-branch tree. The secure cloud homework area is separate from local demo tabs.
 - Rechecked the current Supabase advisor snapshot: health has no findings; security has three restricted RLS/no-policy notices and leaked-password protection disabled; performance has five unused-index notices and two multiple-permissive-SELECT-policy notices. No broad policy changes or index removals were made.
 - Rechecked the deployed Edge Function inventory: AI Teacher v6, classroom-call-token v7 and account-deletion-request v5 are ACTIVE with JWT verification enabled.
-- Rechecked the repository tree: 200 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
+- Rechecked the repository tree: 202 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
 - Source changes are not a substitute for Android/runtime tests. Keep deployment, live backend, owner acceptance, and launch readiness as separate completion measures.
 
 
