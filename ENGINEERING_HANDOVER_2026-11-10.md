@@ -7,7 +7,7 @@
 
 This is the consolidated engineering handover for the current source/backend review. It separates code inspection and backend configuration evidence from public deployment, real-device execution, and owner acceptance tests.
 
-The GitHub repository tree contains **199 tracked files**. The source review covered the app entry page, core subject/audio pages, AI Teacher, International Classrooms, supervised classroom calling, student/teacher/parent dashboards, homework, account-request workflow, shared Supabase configuration, relevant backend functions, database policy scripts, and project records. An earlier repository-wide duplicate-blob comparison found no exact duplicate files; no files were deleted.
+The GitHub repository tree contains **200 tracked files**. The source review covered the app entry page, core subject/audio pages, AI Teacher, International Classrooms, supervised classroom calling, student/teacher/parent dashboards, homework, account-request workflow, shared Supabase configuration, relevant backend functions, database policy scripts, and project records. An earlier repository-wide duplicate-blob comparison found no exact duplicate files; no files were deleted.
 
 This pass did not create real child records, expose secrets, alter production accounts, broaden RLS, or remove database policies/indexes.
 
@@ -115,3 +115,8 @@ This handover records **source/backend audit work**, not a final product-complet
 - legal/privacy and launch readiness.
 
 The project is not marked 100% complete until each required item is genuinely implemented, deployed where applicable, and tested. Marketing, pricing, publishing, and advertising remain out of scope until the owner confirms the app has reached genuine completion.
+
+
+## Final homepage route check — 10 November 2026
+
+The current main-branch tree contains **200 tracked files** after adding this handover. All 30 local script/page references parsed from the main `index.html` navigation were matched to tracked files; no missing homepage navigation target was found. This is a static repository-path check, not a live GitHub Pages click-through test.
