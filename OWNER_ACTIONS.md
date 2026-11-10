@@ -246,3 +246,10 @@ No database policies, indexes, student records, classroom records, or account da
 ## Audio follow-up — Android verification still required
 - After the latest GitHub Pages deployment, open `english.html` and `vocabulary.html` on Android. Start a vocabulary word, tap Stop, then quickly leave the page; confirm no delayed voice starts. Start each English song, switch apps or navigate away, then return; confirm the music and narration have stopped. Repeat with the phone screen locked if practical.
 - Confirm individual word, example sentence, alphabet, story, speaking and song playback on the installed English voice. Source fixes do not prove that the device has an English voice installed or that GitHub Pages has deployed the latest commits.
+
+
+### AI Teacher microphone privacy check — added 10 November 2026
+- Read the notice on the published AI Teacher page before enabling the microphone.
+- Confirm it explains that browser/device speech recognition may be processed by that provider and that Great Minds receives recognised text only after Ask Teacher is tapped.
+- On Android, review the browser/device speech-recognition privacy settings. Do not speak passwords, names, addresses, school details, phone numbers or other private information.
+- Confirm the wording is visible on the deployed page; the source update alone does not verify Pages deployment.
