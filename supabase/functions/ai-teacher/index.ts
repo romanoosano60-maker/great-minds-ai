@@ -54,9 +54,18 @@ Deno.serve(async (req: Request) => {
       return json({ error: "AI Teacher is available only to approved teachers and accounts with an active guardian link. Please ask a parent or administrator for help." }, 403);
     }
 
-    const declaredLength = Number(req.headers.get("content-length") || "0");
-    if (declaredLength > 12000) return json({ error: "Your message is too long. Please shorten it." }, 413);
-    const body = await req.json();
+    // Enforce the limit on the actual body bytes, not only the optional Content-Length header.
+    const rawBody = await req.text();
+    if (new TextEncoder().encode(rawBody).byteLength > 12000) {
+      return json({ error: "Your message is too long. Please shorten it." }, 413);
+    }
+    let body: any;
+    try { body = JSON.parse(rawBody); } catch {
+      return json({ error: "Invalid request format." }, 400);
+    }
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return json({ error: "Invalid request format." }, 400);
+    }
     const question = String(body.question || "").trim().slice(0, 1000);
     const subject = String(body.subject || "Ask Anything").trim().slice(0, 80);
     const allowedSubjects = new Set(["English","Mathematics","Science","Social Studies","History","Geography","Computer Studies","General Knowledge","Home Science","IQ & Logical Reasoning","Ask Anything"]);
