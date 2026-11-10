@@ -52,7 +52,7 @@ nav button{min-height:46px}
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-homework.js"></script><script>
 const STORAGE='greatMindsHomeworkV1';
 let tasks=[];
-let cloudHomeworkChannel=null,cloudRefreshTimer=null;
+let cloudHomeworkChannel=null,cloudRefreshTimer=null,cloudHomeworkRequest=0;
 function watchSecureHomework(){
  const client=window.greatMindsDB;if(!client||cloudHomeworkChannel)return;
  cloudHomeworkChannel=client.channel('great-minds-secure-homework')
@@ -113,16 +113,17 @@ const done=tasks.filter(t=>t.submission).length,marked=tasks.filter(t=>t.submiss
 const stats=document.getElementById('parentStats');stats.replaceChildren(el('p','Total: '+tasks.length+' | Submitted: '+done+' | Pending: '+(tasks.length-done)),el('p','Marked: '+marked.length));
 }
 async function cloudHomeworkRefresh(){
+ const requestId=++cloudHomeworkRequest;
  const status=document.getElementById('cloudHomeworkStatus'),root=document.getElementById('cloudAssignments');root.replaceChildren();status.textContent='Loading secure homework…';
  const api=window.gmHomeworkCloud;if(!api){status.textContent='Cloud helper unavailable.';return}
- let who;try{who=await api.currentUser()}catch(error){status.textContent='Could not check your sign-in. Check your connection and try again.';return}if(who.error||!who.user){status.textContent='Sign in on the International Classroom page first.';return}
+ let who;try{who=await api.currentUser()}catch(error){if(requestId===cloudHomeworkRequest)status.textContent='Could not check your sign-in. Check your connection and try again.';return}if(requestId!==cloudHomeworkRequest)return;if(who.error||!who.user){status.textContent='Sign in on the International Classroom page first.';return}
  watchSecureHomework();
- const classroomId=document.getElementById('cloudClassroomId').value.trim();let result;try{result=await api.listAssignments(classroomId)}catch(error){status.textContent='Could not load secure assignments. Check your connection and try again.';return}if(!result.ok){status.textContent=result.message;return}
+ const classroomId=document.getElementById('cloudClassroomId').value.trim();let result;try{result=await api.listAssignments(classroomId)}catch(error){if(requestId===cloudHomeworkRequest)status.textContent='Could not load secure assignments. Check your connection and try again.';return}if(requestId!==cloudHomeworkRequest)return;if(!result.ok){status.textContent=result.message;return}
  status.textContent='Signed in. '+result.message+' Database permissions control what you can see.';
  if(!result.rows.length){root.textContent='No secure assignments visible to this account yet.';return}
  for(const a of result.rows){
   const card=el('div',undefined,'task');card.append(el('h3',a.title),el('span',a.subject+' • Due '+a.due_at+' • '+a.max_points+' points','pill'),el('p',a.instructions));
-  let sub;try{sub=await api.listSubmissions(a.id)}catch(error){card.append(el('p','Could not load submission details. Refresh and try again.'));root.append(card);continue}if(!sub.ok){card.append(el('p',sub.message));root.append(card);continue}
+  let sub;try{sub=await api.listSubmissions(a.id)}catch(error){if(requestId!==cloudHomeworkRequest)return;card.append(el('p','Could not load submission details. Refresh and try again.'));root.append(card);continue}if(requestId!==cloudHomeworkRequest)return;if(!sub.ok){card.append(el('p',sub.message));root.append(card);continue}
   const mine=sub.rows.find(x=>x.student_id===who.user.id);
   if(who.user.id===a.teacher_id){
    card.append(el('strong','Teacher view — submissions in your classroom.'));if(!sub.rows.length)card.append(el('p','No submissions yet.'));
@@ -133,7 +134,7 @@ async function cloudHomeworkRefresh(){
    }
   }else if(mine){card.append(el('p','Your answer has been submitted.'),el('p',mine.answer),el('p',mine.score===null?'Awaiting teacher marking':'Score: '+mine.score+'/'+a.max_points),el('p','Feedback: '+(mine.feedback||'Not yet provided')))}
   else{
-   let enrolled;try{enrolled=await api.isEnrolledStudent(a.classroom_id)}catch(error){enrolled={ok:false,isStudent:false}}
+   let enrolled;try{enrolled=await api.isEnrolledStudent(a.classroom_id)}catch(error){enrolled={ok:false,isStudent:false}}if(requestId!==cloudHomeworkRequest)return;
    if(enrolled.ok&&enrolled.isStudent){
     const answer=el('textarea');answer.maxLength=3000;answer.placeholder='Write your homework answer here';
     card.append(el('p','Submit your answer for this classroom assignment.'),answer,btn('Submit homework',async()=>{const r=await api.submitAnswer(a.id,answer.value);alert(r.message);if(r.ok)cloudHomeworkRefresh()}));
@@ -173,6 +174,8 @@ document.getElementById('cloudSignOut').addEventListener('click',async()=>{
 });
 document.getElementById('cloudRefresh').addEventListener('click',cloudHomeworkRefresh);
 load();syncHomeworkToRoleDashboards();tab('teacher');
+const homeworkAuthClient=window.greatMindsDB;
+if(homeworkAuthClient){homeworkAuthClient.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;cloudHomeworkRequest++;const root=document.getElementById('cloudAssignments');root.replaceChildren();document.getElementById('cloudHomeworkStatus').textContent='Signed out in another tab or page. Secure homework was cleared.';if(cloudHomeworkChannel){const channel=cloudHomeworkChannel;cloudHomeworkChannel=null;homeworkAuthClient.removeChannel(channel).catch(()=>{});}});}
 const classroomFromUrl=new URLSearchParams(location.search).get('classroom');
 if(classroomFromUrl&&/^\d+$/.test(classroomFromUrl)){document.getElementById('cloudClassroomId').value=classroomFromUrl;cloudHomeworkRefresh();}
 // Refresh the local role-dashboard mirror when this homework page is open in another tab.
