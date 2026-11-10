@@ -65,14 +65,14 @@ English should combine listening, speaking, reading, writing and play:
 - Both files were re-fetched from GitHub and the new page and home-screen link were confirmed present. GitHub Pages live rendering, Android audio, accessibility and child usability remain untested; this is a development completion, not launch readiness.
 
 ## Open work — not yet verified complete
-1. Inspect all existing pages and their navigation; identify broken links, overlapping pages and genuinely unused files before any cleanup.
-2. Review existing English, vocabulary and reading/writing pages; design/integrate the agreed story, comprehension, spelling, writing and music experience without duplicating working features.
+1. Finish the remaining page-by-page behaviour/content review and the live Android click-through. Static local-link checks have been completed; no files should be removed without proof of being unused.
+2. Complete the final Android and content-quality acceptance of the existing English, Vocabulary, Dictionary, Story Studio and Reading/Writing experiences; preserve the integrated pages and avoid duplicate implementations.
 3. Browser-test the committed Dictionary, World Atlas, Encyclopedia and Guided Research Centre on Android; then inspect and improve existing learning modules.
-4. Check 3D gallery image paths/assets and restore missing images if confirmed.
+4. The owner has reported the 3D graphics repair complete. Verify the gallery and learning-world visuals in the final Android acceptance pass; change assets only if an actual defect is found.
 5. Verify GitHub Pages deployment and test every main navigation path on Android.
-6. Verify Supabase frontend configuration and real teacher sign-in/classroom creation. Never put a service-role or secret key in browser code.
+6. Supabase browser configuration, Edge Function routes and RLS have been source/live-audited. The owner has reported teacher/student/parent coordination working; repeat the separate-account flow once for final acceptance. Never put a service-role or secret key in browser code.
 7. Finish international classroom privacy, consent, RLS and cross-device tests.
-8. Resume Cloudflare Worker /ask and AI Teacher voice integration when the required code/screenshots and safe backend configuration are available.
+8. Test the active Supabase AI Teacher endpoint with an approved account and an unrelated account, then test browser speech on Android. The older Cloudflare Worker /ask template is not the active website route; continuous voice-to-voice AI remains a separate unfinished enhancement.
 9. Complete functional, security, age-suitability, accessibility and publishing-readiness checks before launch.
 
 ## Supabase checkpoint from the user's prior testing (historical; re-verify before relying on it)
@@ -1105,7 +1105,7 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Consolidated the current owner/device test plan in `OWNER_ACTIONS.md` and corrected the current AI Teacher deployment reference there. The current deployed versions recorded by the latest audit are AI Teacher v6, classroom-call-token v7 and account-deletion-request v5, all with JWT verification enabled. Older version references in dated historical entries are checkpoints, not current deployment claims.
 - Reconfirmed the current AI Teacher route in `ai-teacher-config.js`: the website calls the Supabase Edge Function, not the older Cloudflare `/ask` template. The AI Teacher page supports text questions, browser speech recognition and browser speech synthesis. Live authenticated answer success, unauthorized-account rejection, secret presence and Android voice quality remain owner/device checks.
 - Reviewed repository packaging indicators: no Capacitor configuration, Android project, `package.json`, service worker or web-app manifest was found by repository code search. Android packaging has not started and remains a later phase after the GitHub app passes testing.
-- The latest available source audit has reviewed 20 core subject/extension pages for speech, Stop/cancel controls and shared language toolbar; 56 HTML pages for local-reference integrity; 195 tracked files for exact duplicate blobs; and selected high-risk dynamic renderers for learner-text HTML injection. These are repository checks, not full browser, penetration, or Android tests.
+- The latest available source audit has reviewed 20 core subject/extension pages for speech, Stop/cancel controls and shared language toolbar; 56 HTML pages for local-reference integrity; 202 tracked files for exact duplicate blobs; and selected high-risk dynamic renderers for learner-text HTML injection. These are repository checks, not full browser, penetration, or Android tests.
 - No files were deleted in this pass. Similar page implementations and local demo pages were not treated as duplicates without evidence.
 - Deployment status for the latest audio commits could not be independently confirmed from the available GitHub status-check interface in this pass. Do not assume that the English/vocabulary lifecycle repairs are already live on GitHub Pages until the published pages are checked.
 - The consolidated owner checklist now groups AI Teacher voice, English/vocabulary audio, subject narration, classroom calling and consent, cross-device homework/progress, Android navigation/graphics, and privacy/account checks into one controlled testing session.
