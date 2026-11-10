@@ -158,3 +158,28 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 - Added Stop Voice controls to English, Vocabulary, Dictionary, Home Science, Computer Studies, General Knowledge and all five extra practice pages.
 - Added a shared Stop Voice control to the language toolbar for pages without their own dedicated stop control.
 - Re-fetched the updated files and verified the controls and speech-cancellation handlers in source. These repairs do not replace the Android audio, voice, navigation, graphics or cross-device tests listed above.
+
+
+## 2026-11-10 autonomous engineering review
+
+### Completed without requiring the owner
+
+- Rechecked Supabase Security, Performance and Health Advisors. Health has no findings.
+- Confirmed three `RLS Enabled No Policy` notices: `private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`. These are intentionally not directly client-accessible; do not add permissive policies just to silence the informational notices.
+- Confirmed the remaining Auth warning is Leaked Password Protection Disabled. It is plan-gated in this project; no upgrade or purchase was made.
+- Confirmed the performance advisor still reports five unused-index notices and two sets of multiple permissive SELECT policies. No indexes or policies were removed or merged because low traffic and different access roles do not establish that those changes are safe.
+- Re-fetched the deployed `account-deletion-request` function: ACTIVE version 4, JWT verification enabled. It accepts eligible adult requests for manual review only; it does not automatically delete accounts or child data.
+- Re-fetched the deployed `ai-teacher` function: ACTIVE version 4, JWT verification enabled. Live authenticated AI answers, secret presence and Android audio still need owner/device testing.
+- Hardened classroom calling: the token function now rejects any LiveKit URL that is not `wss://`; the insecure `ws://` fallback was removed. The matching GitHub source was committed and the Supabase Edge Function deployed as ACTIVE version 5 with JWT verification enabled.
+- Re-fetched both GitHub source and deployed function to verify the WSS-only guard is present. This is a configuration/code hardening check, not a successful LiveKit call test.
+- Updated `ACCOUNT_DELETION_WORKFLOW.md` to reflect deployed version 4.
+
+### Owner/device work still required
+
+1. Confirm the LiveKit secrets are configured in Supabase Function Secrets (never send the secret values in chat), then test teacher start, student join, guardian observer, teacher end, and unexpected teacher disconnect using adult-controlled test accounts.
+2. Run the separate student/guardian/teacher classroom and homework flow on real accounts and a second device.
+3. Test an authenticated AI Teacher answer and an unauthorised-account rejection; then test Android microphone and playback.
+4. Decide launch territories and obtain qualified child-privacy/legal review before finalising guardian verification, retention and deletion rules.
+5. The Pro-only leaked-password protection remains pending until the owner chooses whether to upgrade.
+
+No database policies, indexes, student records, classroom records, or account data were changed during this review.
