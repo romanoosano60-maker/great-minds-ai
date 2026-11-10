@@ -1169,3 +1169,11 @@ See [ENGINEERING_HANDOVER_2026-11-10.md](ENGINEERING_HANDOVER_2026-11-10.md) for
 
 - Final static route check on 10 November: all 30 local page/script references parsed from the main homepage navigation resolve to tracked paths in the current repository tree. No missing homepage navigation target was found. This does not replace a live published-site click-through test.
 - Current repository tree contains 200 tracked files, including the consolidated handover.
+
+
+## Second privacy/source audit — 10 November 2026
+
+- Repaired the Parent Dashboard sign-out path: it previously cleared cloud progress but could leave the separate cloud homework answers/feedback visible. Sign-out now clears both cloud panels and the password field immediately, resets the page's signed-in state, removes the Realtime channel and attempts Auth sign-out. The committed file was re-fetched and source-verified.
+- Clarified the Student Profile local-history clear button so it accurately says it removes only that page's V2 homework/quiz history on the current device; it does not delete other local demo data or Supabase records.
+- Reviewed the connected dashboard rendering paths for dynamic HTML insertion. Parent/student cloud values are escaped, teacher cloud values use textContent, and the fixed dictionary word bank is not derived from learner search input. The local role-play dashboards remain demos and must not be used with real child information.
+- Updated older Master Guide and Owner Actions statements that incorrectly described the current AI endpoint as pending or the cloud homework tables as absent. Historical dated notes remain identifiable as historical checkpoints.
