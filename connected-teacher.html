@@ -88,11 +88,11 @@ render();
   $('teacherCloudProgress').textContent='Sign in to load records.';
   $('teacherCloudHomework').textContent='Sign in to load submissions.';
   if(!db){say('Cloud service unavailable. Cloud records cleared from this page.');return}
-  try{
-   if(cloudChannel){const channel=cloudChannel;cloudChannel=null;await db.removeChannel(channel)}
-   const {error}=await db.auth.signOut();
-   say(error?'Sign-out issue: '+error.message:'Signed out.');
-  }catch(e){say('Sign-out issue: '+e.message+'. Cloud records were cleared from this page.')}
+  let result='Signed out.';
+  try{const {error}=await db.auth.signOut();if(error)result='Sign-out issue: '+error.message}
+  catch(e){result='Sign-out issue: '+e.message}
+  if(cloudChannel){const channel=cloudChannel;cloudChannel=null;try{await db.removeChannel(channel)}catch(e){result+=' Realtime cleanup issue: '+e.message}}
+  say(result+' Cloud records were cleared from this page.');
  });
  $('teacherCloudRefresh').addEventListener('click',load);init();
 })();
