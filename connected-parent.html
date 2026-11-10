@@ -84,12 +84,11 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  }
  el('parentLogin').addEventListener('click',async()=>{
   if(!db){say('Cloud service unavailable.');return}
-  const email=el('parentEmail').value.trim(),password=el('parentPassword').value;
-  if(!email||!password){say('Enter the Parent test account email and password.');return}
-  say('Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password});
-  el('parentPassword').value='';
+  const email=el('parentEmail').value.trim(),passwordField=el('parentPassword'),password=passwordField.value;
+  if(!email||!password){passwordField.value='';say('Enter the Parent test account email and password.');return}
+  try{say('Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password});
   if(error){say('Sign-in failed: '+error.message);return}
-  user=data.user;await load();watchCloud();
+  user=data.user;await load();watchCloud();}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}
  });
  el('parentLogout').addEventListener('click',async()=>{
   if(!db)return;if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}const {error}=await db.auth.signOut();user=null;records.textContent='Sign in to load cloud progress.';
