@@ -75,7 +75,7 @@ render();
   const s=await db.from('homework_submissions').select('id,assignment_id,student_id,answer,score,feedback,submitted_at').order('submitted_at',{ascending:false}).limit(100);
   const hr=$('teacherCloudHomework');hr.replaceChildren();
   if(s.error){hr.textContent='Homework submissions could not be loaded for this account.';say('Signed in. Some classroom data is unavailable.');return}
-  if(!s.data.length){hr.textContent='No homework submissions are visible yet.';say('Cloud overview refreshed. Access is restricted by Supabase RLS.');return}
+  if(!s.data.length){hr.textContent='No homework submissions are visible yet.';say('Cloud overview refreshed. No homework submissions are visible to this teacher yet.');return}
   const ids=[...new Set(s.data.map(x=>x.assignment_id))];
   const a=await db.from('homework_assignments').select('id,title,subject,max_points').in('id',ids);
   const byId=new Map((a.data||[]).map(x=>[x.id,x]));
