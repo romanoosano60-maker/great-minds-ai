@@ -896,3 +896,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 
 - Also repaired `reading-writing.html`: its voice selector previously fell back to the device's default/first voice even when that voice was a different language. It now requires a voice matching the selected language, reports when that language is unavailable, and resumes the speech engine before playback. Commit: `6e3182bdbba41bdff20a09008cac599d842d230c`.
+
+
+## Microphone privacy wording correction — 10 November 2026
+
+- Corrected the microphone notices in `advanced-learning.html` and `ai-teacher.html`. The Web Speech Recognition browser API may use the browser/device provider's recognition service, so the previous blanket statement that audio never leaves the browser was too strong.
+- The notices now explain that speech recognition is provided by the browser/device and may use its service; Great Minds receives recognized text for the AI Teacher, not raw microphone audio. Children are warned not to speak private information.
+- Commits: `advanced-learning.html` `fbdeadd8308a37b7654301bfdf393305481bfa5c`; `ai-teacher.html` `b6d40929cd940a93ade4287b0688a7fec0220d0f`.
+- This is a source-copy correction, not a full vendor privacy audit. The exact speech-recognition provider and its retention/processing terms still need confirmation for the supported Android browser/device configuration.
