@@ -893,3 +893,6 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Updated `ai-teacher.html` to use the same voice-readiness and cancellation safeguards for teaching-language phrases and spoken answers. Stop Voice now cancels both active playback and pending voice setup.
 - Source commits: `gm-language.js` 66c9df657930a5527b0bc6995966e63c065c2b73` (follow-up language-match correction `7c2b36e7102674109c7a5773c145775c63e5974b`); `ai-teacher.html` `7464660de5b46de2ce6f12f226da873af3e42f29` (follow-up language-match correction `a332c19189d37af418a150f18f51273a2b4cc129`).
 - These are source-level repairs only. Android playback, selected-language pronunciation and microphone recognition still require device testing. The AI Teacher's live signed-in response also remains unverified.
+
+
+- Also repaired `reading-writing.html`: its voice selector previously fell back to the device's default/first voice even when that voice was a different language. It now requires a voice matching the selected language, reports when that language is unavailable, and resumes the speech engine before playback. Commit: `6e3182bdbba41bdff20a09008cac599d842d230c`.
