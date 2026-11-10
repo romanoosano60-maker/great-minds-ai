@@ -56,7 +56,7 @@ A successful GitHub Pages deployment confirms that the site was deployed; it doe
 
 ## 2026-11-05 implementation update
 
-The AI Teacher now has a configurable frontend connection and a Cloudflare Worker source template in cloudflare/worker.js. The frontend and Worker allowlist now include Hindi, Bengali, Tamil, Telugu and Marathi alongside the previous teaching languages. This does not mean the AI service is deployed. Before live use, configure the Worker secret and variables, the per-user rate-limit binding, set the deployed /ask URL in ai-teacher-config.js, and test with an adult-controlled student account that has a valid active guardian link. The Worker is not a replacement for a full child-safety programme.
+Historical 5 November checkpoint: the Cloudflare Worker was prepared as an alternative template, but it was not the active endpoint. The current website calls the deployed Supabase AI Teacher Edge Function; see the authoritative 10 November reconciliation below. The Cloudflare Worker is not required by the current frontend.
 
 The Mathematics, English, Science, Social Studies, History, Geography, Home Science, Computer Studies and General Knowledge lesson quizzes use the cloud progress helper. On 5 November, the guardian-consent revocation correction and homework maximum-score trigger were applied and rollback-tested, as recorded in DATABASE_SECURITY_VERIFICATION_2026-11-05.md. connected-progress.html now displays RLS-filtered cloud progress records separately from local demo points and stars. connected-practice.html also offers its results to secure cloud progress. Real-account and cross-device tests are still required.
 
@@ -68,7 +68,7 @@ The Mathematics, English, Science, Social Studies, History, Geography, Home Scie
 - Added visible Stop Voice controls to Computer Studies, General Knowledge, English, Vocabulary, Dictionary, Home Science and the five extra subject practice pages. The controls cancel browser speech synthesis; source presence is verified, but Android playback/cancellation remains untested.
 - Static DOM-reference checks on the main subject pages, student profile, parent/teacher centre, classroom/homework pages and connected dashboards found no missing literal `getElementById` targets in the inspected files.
 - Language support remains partial: the shared language script itself states that lesson text is not fully translated. Menu/label translations do not prove complete lesson, quiz-feedback or AI-response translation. Urdu and Swahili are not complete app-wide translation packs.
-- AI Teacher still has no deployed live answer endpoint. Its prepared examples and browser speech tools are not equivalent to unrestricted multilingual AI tutoring.
+- Historical 6 November checkpoint: at that time no live AI endpoint had been accepted. This was superseded by the deployed Supabase AI Teacher endpoint recorded in the 10 November reconciliation below; live authenticated response and Android speech acceptance remain open.
 - The following remain launch blockers: real Android microphone/audio and language voice tests; real student/parent/teacher account and guardian-consent flows; server-enforced RLS and realtime authorization tests; cross-device/cross-country classroom tests; complete translation review; accessibility and device navigation; privacy/legal approval; native app packaging and store submission.
 
 Source-code repairs above are development progress only. Do not change the production-ready or launch-ready status until the listed device, backend, safety and publishing checks pass.
@@ -83,7 +83,7 @@ Source-code repairs above are development progress only. Do not change the produ
 - The deployed function verifies the Supabase user and checks for an approved teacher profile or active guardian relationship before allowing a request. It consumes a database-enforced quota of 10 requests per account and 100 requests service-wide per UTC day before making a paid AI call.
 - The function calls the OpenAI Responses API with `store:false`, applies child-focused safety instructions, and does not send the student's email, account ID or profile fields in the prompt.
 - A real authenticated question-and-answer test, unauthorised-account rejection test, secret-presence check and Android microphone/text-to-speech test remain outstanding. Function deployment and source inspection do not prove successful live AI responses.
-- Security Advisor reports `private.ai_teacher_daily_usage` with RLS disabled. The table currently has zero rows; this audit found no direct table grants to `anon` or `authenticated`, but the RLS finding still requires owner review. Suggested statement: `ALTER TABLE private.ai_teacher_daily_usage ENABLE ROW LEVEL SECURITY;`. The table and its quota `SECURITY DEFINER` function are owned by `postgres`; do not apply this change until the owner approves it and the quota function can be re-tested.
+- Historical 9 November finding: `private.ai_teacher_daily_usage` was then reported with RLS disabled. The owner approved enabling RLS later on 9 November; the transaction/privilege test and current no-policy advisor notice are recorded in the following RLS-hardening section. Do not reapply the old suggested statement.
 - Leaked Password Protection remains disabled in Supabase Auth. Enable it if the current project plan supports it.
 - The existing Cloudflare Worker source is an alternative template, not the endpoint currently configured in the website.
 
@@ -102,18 +102,18 @@ Source-code repairs above are development progress only. Do not change the produ
 Older statements in this document saying that no Supabase AI Teacher endpoint is deployed are superseded by the current implementation:
 
 - Frontend: `ai-teacher.html` uses `ai-teacher-config.js` and calls the Supabase Edge Function endpoint.
-- Backend: `ai-teacher` is ACTIVE version 4 with JWT verification enabled. The OpenAI key is read from server-side Function Secrets. The browser request now includes both the public Supabase `apikey` and the user's bearer token.
+- Backend: `ai-teacher` is currently ACTIVE version 6 with JWT verification enabled. The OpenAI key is read from server-side Function Secrets. The browser request includes both the public Supabase `apikey` and the user's bearer token.
 - Status: deployed and configured in source, but not accepted as live until an authenticated answer, an unauthorised-account rejection and Android speech tests pass. Natural low-latency voice-to-voice streaming is not implemented.
 
 ### Additional child-consent hardening
 - The teacher UPDATE policy requires `parent_consent_status='approved'` before membership can be approved. Authenticated clients cannot update that consent column; the guardian-consent server-side RPC sets it only after validating the one-time code and active relationship.
 - The classroom-call token endpoint independently verifies the student's active guardian relationship before issuing a student token.
-- `classroom-call-token` is ACTIVE version 6 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
+- `classroom-call-token` is currently ACTIVE version 7 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
 - Supabase confirms RLS is enabled on all 11 inspected application tables and no direct anon table privileges are present. Three intentionally closed tables continue to produce informational no-policy notices.
 
 ### Repository integrity checks
 - All 56 HTML pages were checked for local `href` and `src` references; no missing local targets were found.
-- The 195-file repository has no exact duplicate Git blobs. Legacy demos and connected pages are different implementations, not duplicate copies, and were not deleted.
+- The current 202-file repository has no exact duplicate Git blobs identified by the earlier scan. Legacy demos and connected pages are different implementations, not duplicate copies, and were not deleted.
 - Latest application-code Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
 
 The application remains not launch-ready until all owner/device tests, actual secret configuration checks, child-privacy/legal review, retention/deletion decisions, backups/monitoring and native packaging requirements are completed.
