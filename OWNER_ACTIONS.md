@@ -340,3 +340,4 @@ All four pages now clear visible private data and the local signed-in page state
 
 ### New owner verification — sign-out during loading
 The Student, Parent, and Teacher cloud dashboards now discard in-flight cloud results if sign-out occurs before a database request finishes. During the final Android acceptance pass, sign in to each role, start a refresh on a slow connection, and sign out before it finishes. Confirm the private progress/homework panels stay cleared. This source repair has not yet been runtime-tested on the device.
+Additional follow-up: the same stale-response guard was added to `international-classrooms.html`. Classroom refreshes now discard in-flight classroom/member/guardian-link results if the account signs out or the auth session changes. Re-fetched the file and verified request-generation guards and logout/auth-state invalidation. Owner device testing remains required.
