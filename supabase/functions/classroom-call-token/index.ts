@@ -99,12 +99,10 @@ Deno.serve(async (req: Request) => {
     const roomName = `gm-classroom-${classroomId}`;
     // Browser clients connect over WSS; the server RoomService API requires HTTPS.
     // Accept the normal LiveKit project URL and derive the HTTPS host for server-side room control.
-    if (!(livekitUrl.startsWith("wss://") || livekitUrl.startsWith("ws://"))) {
-      return json({ error: "The classroom calling service URL must begin with wss://." }, 503);
+    if (!livekitUrl.startsWith("wss://")) {
+      return json({ error: "The classroom calling service URL must begin with wss:// for encrypted calls." }, 503);
     }
-    const livekitHttpUrl = livekitUrl.startsWith("wss://")
-      ? "https://" + livekitUrl.slice(6)
-      : "http://" + livekitUrl.slice(5);
+    const livekitHttpUrl = "https://" + livekitUrl.slice(6);
     const roomService = new RoomServiceClient(livekitHttpUrl, livekitKey, livekitSecret);
     if (action === "end") {
       if (!isClassTeacher) return json({ error: "Only the approved classroom teacher can end this call." }, 403);
