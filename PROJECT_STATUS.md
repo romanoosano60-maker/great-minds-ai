@@ -963,3 +963,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 - Updated `gm-language.js` so shared toolbar narration stops when the page becomes hidden, on `pagehide`, and immediately when the learner changes the selected language. This extends the lifecycle safeguard to pages using the shared language toolbar. Commit: `0245fde598ff3ebd6f12931360413aed73dbd09c`.
 - Android backgrounding and language-switch tests remain outstanding; this is source-level protection only.
+
+
+## Backend request-size enforcement audit — 10 November 2026
+
+- Re-reviewed the deployed `ai-teacher` and `classroom-call-token` Edge Function request handlers. Both previously relied only on the optional `Content-Length` header for request-size checks, which can be absent on some requests.
+- Updated both handlers to read the actual request body, enforce byte limits (12 KB for AI Teacher; 3 KB for classroom call tokens), reject malformed JSON, and reject non-object JSON before processing fields.
+- Deployed and re-fetched both functions to verify the change is active: `ai-teacher` v5 and `classroom-call-token` v7. JWT verification remains enabled on both.
+- This is a server-side input-hardening improvement. It does not replace authenticated account, consent, Android, or cross-device workflow tests.
