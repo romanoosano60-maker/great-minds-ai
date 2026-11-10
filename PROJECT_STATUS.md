@@ -907,3 +907,10 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 
 - Further hardened `advanced-learning.html` speech playback. The earlier inspection initially missed a helper declared in a later inline script, so the prior note that `gmQueueUtterance()` was undefined was incorrect. The updated page no longer depends on that helper for its main voice flow; it now performs its own voice readiness, language-matched selection, speech-engine resume/start, and pending timer/listener cancellation. Stop invalidates pending playback. Commit: `9ca7bcc8df6ae35860f2f4da3bae0b7f2a2a74b6`.
+
+
+## English voice fallback audit continuation — 10 November 2026
+
+- `dictionary.html`, `computer.html`, and `english-story-studio.html` now require an installed English voice before speaking. They no longer silently fall back to a default non-English device voice. Pending voice-change listeners and timers are cleaned up when playback is cancelled or replaced. Commits: `322dd64756b743e1e0a008119268677104787b3e`, `2d18a3cf3674e36a282b1cf8d5b5f19f0d45122e`, `17eef418408b93665d77cf00e6eff3011845cbc2`.
+- `vocabulary.html` and `home-science.html` now refuse to use a non-English default voice when no English voice is installed, and display a clear Android Text-to-speech instruction instead. Commits: `4afa69c65b0ab6d1a6f0fb8ce3face93b62cc06b`, `997dd081e1201c041e32ae6288e23faec200cb95`.
+- These remain source-level repairs. Actual Android sound, voice selection and pronunciation must still be tested on the owner's device.
