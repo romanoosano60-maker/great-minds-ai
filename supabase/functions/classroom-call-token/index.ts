@@ -71,7 +71,13 @@ Deno.serve(async (req: Request) => {
         .eq("classroom_id", classroomId).eq("user_id", userId)
         .eq("membership_status", "approved").eq("parent_consent_status", "approved").maybeSingle();
       if (memberError) return json({ error: "Classroom membership could not be checked." }, 503);
-      isApprovedStudent = !!membership;
+      const { data: studentGuardianLinks, error: studentGuardianError } = await supabase
+        .from("guardian_relationships").select("student_id")
+        .eq("student_id", userId).eq("relationship_status", "active").limit(1);
+      if (studentGuardianError) return json({ error: "Student guardian consent could not be checked." }, 503);
+      // A classroom_members status alone is not proof of guardian consent.
+      // Require a live guardian relationship independently at call-token time.
+      isApprovedStudent = !!membership && !!studentGuardianLinks?.length;
 
       const { data: relationships, error: guardianError } = await supabase
         .from("guardian_relationships").select("student_id")
