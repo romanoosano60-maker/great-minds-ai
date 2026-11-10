@@ -8,6 +8,7 @@ Use [GREAT MINDS MASTER GUIDE](GREAT_MINDS_MASTER_GUIDE.md) as the single source
 Start the app at [index.html](index.html), then open the [Unified Learning & Classroom Hub](connected-dashboards.html).
 
 ## Project checklists
+- [Consolidated engineering handover (10 November 2026)](ENGINEERING_HANDOVER_2026-11-10.md)
 - [Owner actions and remaining tests](OWNER_ACTIONS.md)
 - [Project status](PROJECT_STATUS.md)
 - [Master guide](GREAT_MINDS_MASTER_GUIDE.md)
