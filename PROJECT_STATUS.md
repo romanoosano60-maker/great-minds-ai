@@ -1177,3 +1177,14 @@ See [ENGINEERING_HANDOVER_2026-11-10.md](ENGINEERING_HANDOVER_2026-11-10.md) for
 - Clarified the Student Profile local-history clear button so it accurately says it removes only that page's V2 homework/quiz history on the current device; it does not delete other local demo data or Supabase records.
 - Reviewed the connected dashboard rendering paths for dynamic HTML insertion. Parent/student cloud values are escaped, teacher cloud values use textContent, and the fixed dictionary word bank is not derived from learner search input. The local role-play dashboards remain demos and must not be used with real child information.
 - Updated older Master Guide and Owner Actions statements that incorrectly described the current AI endpoint as pending or the cloud homework tables as absent. Historical dated notes remain identifiable as historical checkpoints.
+
+
+## Sign-out privacy hardening across role pages — 10 November 2026
+
+A broader pass found the same asynchronous sign-out/display issue could affect other role pages if Realtime channel cleanup failed before the auth sign-out call. The sign-out sequence has now been standardised in:
+- Parent Dashboard: clears progress and homework/feedback panels.
+- Student Dashboard: clears cloud learning-history panel.
+- Teacher Dashboard: clears student progress and homework submission panels.
+- International Classrooms: clears classroom/request details, consent code and consent checkbox.
+
+All four pages now clear visible private data and the local signed-in page state immediately, attempt Supabase Auth sign-out independently, and attempt Realtime channel removal separately so a channel-cleanup failure does not prevent the sign-out request. Password fields are cleared as part of sign-out. All four updated files were re-fetched and the relevant handlers source-verified. Actual session invalidation under offline/network-failure conditions still needs owner testing.
