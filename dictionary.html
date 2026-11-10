@@ -43,10 +43,31 @@ const words=[
 ];
 let topic="all";
 function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
-function speak(w){if(!("speechSynthesis"in window)){alert("Speech is not available in this browser.");return}speechSynthesis.cancel();let u=new SpeechSynthesisUtterance(w);u.lang="en-US";u.rate=.85;speechSynthesis.speak(u)}
+function speak(w){gmSpeakSafe(w)}
 function render(){let q=document.getElementById("search").value.trim().toLowerCase();let found=words.filter(x=>(topic==="all"||x.t===topic)&&(!q||x.w.includes(q)||x.d.toLowerCase().includes(q)));document.getElementById("results").innerHTML=found.length?found.map(x=>'<article class="word"><div class="meaning"><strong>'+x.w+'</strong> <span class="muted">('+x.p+')</span></div><p>'+x.d+'</p><p><strong>Example:</strong> '+x.e+'</p><button type="button" data-hear="'+x.w+'">🔊 Hear pronunciation</button><button type="button" class="use" data-word="'+x.w+'">Practise this word</button></article>').join(""):'<p>No matching word yet. Try another spelling or choose All words.</p>';document.querySelectorAll("[data-hear]").forEach(b=>b.onclick=()=>speak(b.dataset.hear));document.querySelectorAll(".use").forEach(b=>b.onclick=()=>{document.getElementById("chosen").value=b.dataset.word;document.getElementById("sentence").focus()})}
 document.getElementById("search").addEventListener("input",render);document.querySelectorAll("[data-topic]").forEach(b=>b.onclick=()=>{topic=b.dataset.topic;render()});
 let today=words[new Date().getDate()%words.length];document.getElementById("daily").innerHTML='<strong>'+today.w+'</strong><p>'+today.d+'</p><p><strong>Example:</strong> '+today.e+'</p><button type="button" id="dailyHear">🔊 Hear word</button>';document.getElementById("dailyHear").onclick=()=>speak(today.w);
 document.getElementById("save").onclick=()=>{let w=document.getElementById("chosen").value.trim(),s=document.getElementById("sentence").value.trim();if(!w||s.length<8){document.getElementById("saveMsg").textContent="Choose a word and write a complete sentence first.";return}try{let a=JSON.parse(localStorage.getItem("gm_dictionary_practice")||"[]");a.push({word:w,sentence:s});localStorage.setItem("gm_dictionary_practice",JSON.stringify(a));document.getElementById("saveMsg").textContent="🌟 Your sentence has been saved on this device."}catch(e){document.getElementById("saveMsg").textContent="Could not save in this browser. Your sentence is still on screen."}};
 render();
-</script></body></html>
+</script><script>function gmSpeakSafe(text){
+ const synth=window.speechSynthesis;
+ const status=document.getElementById("voiceStatus")||document.getElementById("gmVoiceStatus")||document.getElementById("letterInfo")||document.getElementById("readStatus");
+ if(!synth||typeof SpeechSynthesisUtterance==="undefined"){if(status)status.textContent="Speech is unavailable in this browser. Open Chrome and check Android Text-to-speech output.";return;}
+ if(!synth.__gmCancelWrapped){const nativeCancel=synth.cancel.bind(synth);synth.cancel=function(){window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1;return nativeCancel();};synth.__gmCancelWrapped=true;}
+ const clean=String(text||"").trim();if(!clean){if(status)status.textContent="There is no text to read.";return;}
+ synth.cancel();const request=(window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1);
+ if(status)status.textContent="Preparing voice…";
+ const start=()=>{if(request!==window.__gmSpeechRequest)return;try{
+  const voices=synth.getVoices?synth.getVoices():[];
+  const voice=voices.find(v=>/^en-US$/i.test(v.lang))||voices.find(v=>/^en-GB$/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const u=new SpeechSynthesisUtterance(clean);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.88;
+  u.onstart=()=>{if(status)status.textContent="🔊 Speaking…";};
+  u.onend=()=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Audio finished.";};
+  u.onerror=e=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Audio could not play ("+(e.error||"error")+"). Check your phone's English voice.";};
+  synth.resume();synth.speak(u);
+  setTimeout(()=>{if(status&&request===window.__gmSpeechRequest&&!synth.speaking&&!synth.pending)status.textContent="No sound started. Check Android Text-to-speech output.";},5000);
+ }catch(e){if(status)status.textContent="Audio could not start. Check Android Text-to-speech output.";}}
+ if(synth.getVoices&&synth.getVoices().length){setTimeout(start,60);return;}
+ let finished=false;const ready=()=>{if(finished||request!==window.__gmSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();};
+ synth.addEventListener("voiceschanged",ready);setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
+}</script></body></html>
