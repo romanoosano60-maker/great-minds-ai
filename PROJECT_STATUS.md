@@ -1078,3 +1078,17 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Added a `pagehide` handler to `classroom-call.html`. When the call page is refreshed, closed or navigated away from, it clears the local room reference and explicitly disconnects the LiveKit room so local microphone/camera tracks are stopped by the SDK.
 - The teacher's explicit End action now also clears the room reference and resets local media state after disconnecting.
 - Re-fetched the page and verified the page-exit handler, disconnect call, room reference reset and teacher-end reset. This is a source-level safeguard; Android device testing is still required.
+
+
+## AI Teacher error-status correction and deployment — 10 November 2026
+
+- Corrected the AI Teacher Edge Function catch-all response: unexpected network, upstream or runtime failures now return HTTP 500 instead of incorrectly reporting HTTP 400 (bad client input).
+- Deployed the corrected function as ACTIVE version 6 with JWT verification enabled.
+- The change affects error classification only; it does not alter eligibility, quotas, prompts, data storage or request limits.
+- Re-fetched the source and verified the corrected 500 response. A live successful AI response test still requires the owner-controlled configured service and a signed-in eligible test account.
+
+
+## Classroom call page-exit cleanup — deployment check pending
+
+- Source commit `712cfbb3cac4a3af05473dc15ad18c535f1ef2e2` adds explicit LiveKit room disconnect on `pagehide` and resets local media state after teacher end-call.
+- Source was re-fetched and verified. GitHub Pages workflow run `42809664344` was still running at the last check; do not yet treat this page repair as live.
