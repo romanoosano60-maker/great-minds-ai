@@ -78,3 +78,10 @@ Supabase warns that deleting an Auth user does not retroactively invalidate an a
 - Complete parent/guardian identity verification, separate from email verification and self-declaration.
 
 This is an engineering audit, not legal advice, a compliance certification, or public-launch approval.
+
+
+## 2026-11-10 live workflow reconciliation
+
+The deployed `account-deletion-request` Edge Function is now ACTIVE version 5 with JWT verification enabled. It accepts eligible verified-adult requests for manual review only. It does not delete the Auth account, revoke all device sessions, or delete/anonymise child learning records. This is a request-intake endpoint, not a completed deletion system.
+
+The interim retention hold in `DATA_RETENTION_DECISIONS_REQUIRED.md` remains in force: no automatic purge or scheduled deletion is authorised until retention periods, legal basis, classroom transfer, backups and processor deletion are formally decided. No production user or learning data was deleted in this audit.
