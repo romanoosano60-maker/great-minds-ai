@@ -932,3 +932,8 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 - Reviewed `classroom-call.html` and the deployed `classroom-call-token` v6 implementation. The browser joins with microphone and camera OFF; explicit user controls are required to publish media. Audio mode disables camera controls. Guardian-observer tokens cannot publish; the UI disables guardian mic/camera controls. Only the approved classroom owner can start/end a call. Student/guardian joins require approved membership, approved consent status, an active guardian relationship and the teacher's live presence. Unexpected teacher disconnect triggers participant disconnect on the client. Recording is disabled in the issued token response.
 - These controls pass source review only. Real LiveKit credentials, cross-device call setup, Android permission prompts, teacher disconnect handling and guardian observer behaviour remain owner/device tests. Do not mark live calling complete until those tests pass.
+
+## Microphone background-stop safeguard — 10 November 2026
+
+- Added automatic speech-recognition shutdown when the AI Teacher or Advanced Learning page becomes hidden or is being unloaded. This aborts any active browser/device recognition session, clears recognition callbacks and restores the microphone control. This reduces the risk of a child leaving microphone recognition running after switching away from the page. Commits: `4b0744cf3d05ea88e3dac4f421142d7b2f08b191` (`ai-teacher.html`) and `fdf84e79613ccb55e871f4f3b8d98b8b52d7d867` (`advanced-learning.html`).
+- This is a source-level privacy safeguard. Actual Android browser behaviour and microphone permission indicators still require device testing.
