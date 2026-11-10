@@ -193,6 +193,9 @@ document.querySelectorAll("#learningSongs [data-song]").forEach(b=>b.addEventLis
 document.querySelectorAll("#learningSongs [data-replay]").forEach(b=>b.addEventListener("click",()=>play(b.dataset.replay,0)));
 document.querySelectorAll("#learningSongs [data-stop]").forEach(b=>b.addEventListener("click",()=>{if(current&&!paused){if(timer){clearTimeout(timer);timer=null}paused=true;if("speechSynthesis"in window)speechSynthesis.pause();$(current+"Status").textContent="Paused. Press Play to continue.";}}));
 $("songSpeed").addEventListener("input",()=>{$("songSpeedLabel").textContent=speed()<0.9?"Slow":speed()>1.1?"Fast":"Normal";});$("songVolume").addEventListener("input",()=>{const v=Number($("songVolume").value);$("songVolumeLabel").textContent=Math.round(v*100)+"%";if(masterGain&&ctx)masterGain.gain.setTargetAtTime(v,ctx.currentTime,0.02);if(voice)voice.volume=v});$("testSongSound").addEventListener("click",()=>{if(!ctx){const AC=window.AudioContext||window.webkitAudioContext;if(!AC)return;ctx=new AC();masterGain=ctx.createGain();masterGain.gain.value=Number($("songVolume").value);masterGain.connect(ctx.destination)}ctx.resume().then(()=>{const o=ctx.createOscillator(),g=ctx.createGain();o.type="sine";o.frequency.value=660;g.gain.setValueAtTime(0.0001,ctx.currentTime);g.gain.exponentialRampToValueAtTime(0.25,ctx.currentTime+0.03);g.gain.exponentialRampToValueAtTime(0.0001,ctx.currentTime+0.45);o.connect(g);g.connect(masterGain);o.start();o.stop(ctx.currentTime+0.5)});});
+function stopSongWhenInactive(){stop();current=null;resumeCurrent=null;if(ctx&&ctx.state==="running"){ctx.suspend().catch(()=>{});}}
+document.addEventListener("visibilitychange",()=>{if(document.hidden)stopSongWhenInactive();});
+window.addEventListener("pagehide",stopSongWhenInactive);
 })();
 </script><script>
 (function(){
