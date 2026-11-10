@@ -88,7 +88,7 @@ function speakInTeacherLanguage(text,rate){
   if(started||request!==teacherSpeechRequest)return started;
   const voices=synth.getVoices()||[];
   const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale.toLowerCase())||voices.find(v=>v.lang&&v.lang.toLowerCase().split("-")[0]===base);
-  if(voice){utterance.voice=voice;utterance.lang=voice.lang}
+  if(!voice)return false;utterance.voice=voice;utterance.lang=voice.lang;
   started=true;
   utterance.onstart=()=>{if(request===teacherSpeechRequest)$("voiceStatus").textContent="Speaking in "+(voice?voice.lang:locale)+"…"};
   utterance.onend=()=>{if(request===teacherSpeechRequest)$("voiceStatus").textContent="Finished speaking."};
@@ -98,7 +98,7 @@ function speakInTeacherLanguage(text,rate){
  const ready=()=>{if(finished||request!==teacherSpeechRequest||!synth.getVoices().length)return;finished=true;if(teacherVoicesHandler){synth.removeEventListener("voiceschanged",teacherVoicesHandler);teacherVoicesHandler=null}start()};
  if(synth.getVoices().length){start();return}
  teacherVoicesHandler=ready;synth.addEventListener("voiceschanged",ready);
- teacherSpeechTimer=setTimeout(()=>{if(request!==teacherSpeechRequest||started)return;finished=true;if(teacherVoicesHandler){synth.removeEventListener("voiceschanged",teacherVoicesHandler);teacherVoicesHandler=null}start();if(!started)$("voiceStatus").textContent="No voice could be started. Check Android Text-to-speech output and install the selected language voice.",teacherSpeechTimer=null},2500)
+ teacherSpeechTimer=setTimeout(()=>{if(request!==teacherSpeechRequest||started)return;finished=true;if(teacherVoicesHandler){synth.removeEventListener("voiceschanged",teacherVoicesHandler);teacherVoicesHandler=null}start();if(!started)$("voiceStatus").textContent="No "+locale+" voice is installed or available on this device. Install the selected language in Android Text-to-speech settings; another language will not be substituted.";teacherSpeechTimer=null},2500)
 }
 $("teacherPhraseSpeak").addEventListener("click",()=>{const lang=$("teacherLanguage").value;const phrases=teacherPhrases[lang]||teacherPhrases["en-US"];const p=phrases[teacherPhraseIndex%phrases.length];speakInTeacherLanguage(p[1],.88)});
 
