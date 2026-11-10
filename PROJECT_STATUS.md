@@ -1111,3 +1111,10 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - The consolidated owner checklist now groups AI Teacher voice, English/vocabulary audio, subject narration, classroom calling and consent, cross-device homework/progress, Android navigation/graphics, and privacy/account checks into one controlled testing session.
 
 **Handoff decision:** development-side source work is substantially prepared, but the project is not yet declared ready for owner testing until the latest GitHub Pages deployment is confirmed and the final source/deployment audit closes any newly found defects. No overall completion percentage is assigned in this entry because deployment and live feature verification remain open.
+
+
+### AI Teacher microphone privacy wording — 10 November 2026
+- Updated `ai-teacher.html` to explain that browser/device speech recognition may be processed by the speech provider, while Great Minds sends only the recognised text after the learner taps Ask Teacher to its AI endpoint; the page now advises checking provider privacy settings and avoiding private information.
+- This is a wording correction, not proof of the browser provider's internal processing path or a live privacy/security certification.
+- Source update commit: `e91ca1afa40f5970a7f2149a2044ecc70d5f2860`.
+- The updated file was re-fetched from the default branch and the new wording was confirmed. Published Pages deployment and Android behaviour remain to be checked.
