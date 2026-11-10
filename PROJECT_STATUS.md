@@ -1071,3 +1071,10 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Authenticated clients cannot directly insert/update guardian relationships or read/insert account-deletion requests.
 - Anonymous clients have no direct SELECT privilege on classrooms or homework assignments.
 - These results match the intended RPC/server-controlled consent and request-only deletion design. No live privilege change was needed.
+
+
+## Classroom call page-exit media cleanup — 10 November 2026
+
+- Added a `pagehide` handler to `classroom-call.html`. When the call page is refreshed, closed or navigated away from, it clears the local room reference and explicitly disconnects the LiveKit room so local microphone/camera tracks are stopped by the SDK.
+- The teacher's explicit End action now also clears the room reference and resets local media state after disconnecting.
+- Re-fetched the page and verified the page-exit handler, disconnect call, room reference reset and teacher-end reset. This is a source-level safeguard; Android device testing is still required.
