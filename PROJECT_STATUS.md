@@ -811,3 +811,37 @@ Remaining owner/device actions are unchanged: confirm LiveKit and OpenAI secrets
 - Updated the initial button labels and on-page explanation to make the opt-in behaviour clear. Guardian observer mode remains unable to publish media.
 - Re-fetched the committed page and verified the automatic `setMicrophoneEnabled(true)` and `setCameraEnabled(true)` calls are absent while the explicit user-triggered toggle handlers remain.
 - This is source-level verification only. The owner still needs to test microphone/camera prompts and the opt-in controls on Android with adult-controlled accounts.
+
+
+## Autonomous repository, application and security audit — 10 November 2026
+
+### Repository-wide findings
+- Audited the complete default-branch Git tree: 195 tracked files (56 HTML, 99 SVG, 7 JavaScript, 12 SQL, 3 TypeScript and 18 Markdown).
+- Compared every tracked Git blob SHA: no exact duplicate files exist. No files were deleted. Several similarly named pages are intentionally different (local-only demos versus Supabase-connected pages, or legacy redirect wrappers); deleting them would break their stated purpose or old links.
+- Checked local `href` and `src` file references across all 56 HTML pages against the complete repository tree: zero missing local targets found.
+- Reviewed the main home, classroom, AI Teacher, dashboard, progress and subject-page routes. No hardcoded Supabase service-role key or OpenAI secret value was found in browser source. The public publishable key remains in the shared browser configuration as intended; server secrets are referenced only through server-side environment variables.
+- Reviewed dynamic HTML insertion in connected dashboards and the legacy classroom demonstration. User-provided dashboard fields are escaped before HTML insertion; the legacy demo also escapes stored message text. The legacy classroom page remains explicitly labelled as local-only and not a real moderated classroom.
+
+### Repairs made
+- Fixed the AI Teacher frontend request to include the Supabase publishable `apikey` header alongside the signed-in user's bearer token. The function endpoint remains the deployed Supabase `ai-teacher` function, ACTIVE version 4 with JWT verification. This corrects a missing gateway request header; a successful authenticated AI answer still needs a real-account test.
+- Found and repaired a guardian-consent enforcement gap. The classroom membership UPDATE policy now requires an active `guardian_relationships` row whenever `parent_consent_status='approved'`. Teachers cannot approve a student merely by changing classroom membership status; the policy also continues to require an approved teacher profile and ownership of the classroom.
+- Added an independent server-side check in `classroom-call-token`: a student must have both approved classroom membership and a currently active guardian relationship before a call token can be issued.
+- Deployed `classroom-call-token` as ACTIVE version 6 with JWT verification enabled. It also retains WSS-only LiveKit endpoint validation and the guardian observer's no-publish permissions.
+- The classroom browser page continues to start microphone and camera OFF; participants must deliberately opt in.
+
+### Verification
+- Supabase confirms the updated classroom-membership UPDATE policy includes the active guardian relationship check.
+- Supabase confirms all 11 listed public/private application tables have RLS enabled. No direct anon table privileges were found. Private usage, join-attempt and account-deletion records have no direct authenticated table privileges.
+- Security Advisor: three informational RLS-enabled/no-policy notices remain on intentionally closed tables; Leaked Password Protection remains disabled and plan-gated. No database access was opened to silence these notices.
+- The latest GitHub Pages workflow for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
+- No student, guardian, classroom, progress, homework or account-deletion records were modified. The only database change in this audit was the targeted RLS policy hardening migration `20261110_require_active_guardian_for_classroom_approval`.
+
+### Still requires owner/device testing
+- Real teacher/student/guardian accounts: join request, guardian consent, teacher approval and consent revocation.
+- Cross-device progress and complete homework assignment, submission, marking and guardian view.
+- Authenticated AI Teacher response and unauthorised-account rejection.
+- LiveKit secret configuration and supervised audio/video tests, including Android permissions and unexpected teacher disconnect.
+- Android speech recognition, selected-language speech playback, Stop Voice and offline/slow-network behaviour.
+- Territory-specific child-privacy/legal review, actual publisher/support details, retention schedule and approved deletion process.
+
+This audit does not certify the application as 100% complete or launch-ready. Source, policy and deployment checks are not substitutes for the remaining real-account and device tests.
