@@ -41,7 +41,7 @@ Recent source repairs require an installed matching language voice rather than s
 - `cloudflare/worker.js` remains an alternative source template; it is not the endpoint currently configured by the website.
 
 **Owner actions**
-1. Open the AI Teacher page: `https://romanoosano60-maker.github.io/great-minds-ai/ai-teacher.html`.
+1. After confirming the live GitHub Pages origin, open AI Teacher at that published origin. The conventional `romanoosano60-maker.github.io` address has not been independently verified and must not be treated as a confirmed deployment URL.
 2. Sign in using an approved teacher test account, or a student test account with an active guardian relationship. Use adult-controlled test accounts only.
 3. Select Mathematics and ask: “What is 8 + 7? Please show the steps.” Confirm the answer is generated live, follows the selected subject and appears in the reply area.
 4. Tap Listen and test the microphone separately on Android. Check that the selected language voice is available; browser speech quality depends on installed device voices.
