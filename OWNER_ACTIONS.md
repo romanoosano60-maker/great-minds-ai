@@ -304,3 +304,11 @@ No production schema, RLS policy, secret, account or user data was modified in t
 - Rechecked the deployed Edge Function inventory: AI Teacher v6, classroom-call-token v7 and account-deletion-request v5 are ACTIVE with JWT verification enabled.
 - Rechecked the repository tree: 200 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
 - Source changes are not a substitute for Android/runtime tests. Keep deployment, live backend, owner acceptance, and launch readiness as separate completion measures.
+
+
+## Second source/privacy review — 10 November 2026
+
+- Found and fixed a parent-dashboard sign-out display gap: cloud homework answers/feedback remained rendered after sign-out even though cloud progress was cleared. The current handler now clears both panels and the password field immediately, resets local user state, removes the Realtime channel and attempts Supabase Auth sign-out. Source was re-fetched and verified.
+- Student Profile's local-history button now clearly states its limited scope: it clears only the V2 homework/quiz history on this device, not nickname, other local demo data, or Supabase cloud records.
+- Spot-checked dynamic HTML rendering in connected dashboards: parent/student cloud data is escaped before HTML insertion; teacher cloud records are rendered with textContent. Dictionary rendering uses its bundled fixed word list. Local role-play pages continue to warn that they are not secure accounts and must use fictional data.
+- Reconciled historical AI Teacher and secure-homework notes in the Master Guide. Current live status is in the 10 November authoritative sections; the old Cloudflare Worker endpoint is not the active website route.
