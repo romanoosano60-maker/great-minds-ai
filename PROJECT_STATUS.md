@@ -857,3 +857,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Re-ran the syntax check on each repaired page; all inline scripts passed. The complete 56-page sweep now has no inline JavaScript syntax errors.
 - Checked the seven standalone JavaScript files. Six parsed directly; the Cloudflare Worker parsed after accounting for its expected ES-module `export default` declaration. The three deployed Supabase TypeScript Edge Functions are ACTIVE; the current classroom function was redeployed successfully as version 6.
 - These checks establish source syntax only, not runtime behaviour in Android browsers or external CDN availability.
+
+
+## Duplicate-index cleanup — 10 November 2026
+
+- Database index audit found two equivalent partial unique indexes on `public.classrooms`: both enforced case-insensitive, whitespace-trimmed uniqueness of nonblank `classroom_code` values. Neither backed a table constraint, and both had zero observed scans.
+- Retained `classrooms_classroom_code_unique` and removed the redundant `classrooms_classroom_code_normalized_uidx` through migration `20261110_drop_duplicate_classroom_code_index`.
+- Updated `supabase/international-classrooms.sql` so the setup script no longer recreates the redundant index.
+- Re-ran a structural duplicate-index query across valid public indexes: no duplicate index definitions remain.
+- No classroom records or classroom codes were modified. The retained unique index continues enforcing normalized classroom-code uniqueness.
