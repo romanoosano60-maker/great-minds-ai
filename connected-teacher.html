@@ -61,6 +61,7 @@ render();
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
+  db.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;user=null;cloudLoadRequest++;$('teacherCloudProgress').replaceChildren();$('teacherCloudHomework').textContent='Sign in to load submissions.';say('Signed out in another tab or page. Cloud records were cleared.');if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db.removeChannel(channel).catch(()=>{});}});
   const {data,error}=await db.auth.getUser();if(error){say('Account verification failed.');return}
   user=data.user||null;if(user){say('Teacher account verified.');load();watchCloud()}else say('Not signed in.');
  }
