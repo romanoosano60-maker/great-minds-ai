@@ -58,6 +58,13 @@ function readStory(){if(typeof window.speak==='function'){window.speak(storyText
 let audio=null,osc=null,gain=null;
 function startMusic(){try{audio=audio||new(window.AudioContext||window.webkitAudioContext)();audio.resume();if(osc)return;osc=audio.createOscillator();gain=audio.createGain();osc.type='sine';osc.frequency.value=261.63;gain.gain.value=Number(document.getElementById('volume').value);osc.connect(gain);gain.connect(audio.destination);osc.start();}catch(e){alert('Soft music is not supported on this device.')}} 
 function stopMusic(){if(osc){osc.stop();osc.disconnect();osc=null;}if(gain){gain.disconnect();gain=null;}}
+function stopStoryMediaWhenInactive(){
+ stopMusic();
+ stopReading();
+ if('speechSynthesis'in window){try{window.speechSynthesis.cancel()}catch(e){}}
+}
+document.addEventListener('visibilitychange',()=>{if(document.hidden)stopStoryMediaWhenInactive()});
+window.addEventListener('pagehide',stopStoryMediaWhenInactive);
 document.getElementById('musicStart').onclick=startMusic;document.getElementById('musicStop').onclick=stopMusic;document.getElementById('volume').oninput=e=>{if(gain)gain.gain.value=Number(e.target.value)};
 const spellWords=['seed','soil','shoot','patience'];let wi=0;let currentWord=spellWords[wi];
 function updateWord(){currentWord=spellWords[wi];document.getElementById('spellPrompt').textContent='Word '+(wi+1)+' of '+spellWords.length;document.getElementById('spelling').value='';document.getElementById('spellFeedback').textContent='';}
