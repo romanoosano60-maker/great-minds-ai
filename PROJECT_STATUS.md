@@ -1153,3 +1153,15 @@ No production schema, RLS policy, secret, account or user data was modified duri
 - The README identifies `index.html` as the entry page but does not provide a confirmed published-site URL. A direct check of the conventional GitHub Pages URL was not accessible through the available verification path. Do not treat deployment as confirmed.
 - Latest source/documentation commits returned no GitHub commit status checks and no workflow runs. This means there is no CI result to count as a successful build or deployment.
 - Re-ran Supabase security and health advisors: health findings remain empty; security findings remain three RLS-enabled/no-policy notices for private/service-only tables and the warning that leaked-password protection is disabled. No policy was broadened and no schema change was made.
+
+
+## Consolidated engineering handover — 2026-11-10
+
+See [ENGINEERING_HANDOVER_2026-11-10.md](ENGINEERING_HANDOVER_2026-11-10.md) for the full consolidated audit and final owner test sequence.
+
+- Student and teacher dashboard sign-in flows received a final edge-case repair: password fields now clear when the cloud service is unavailable, when authentication/network work fails, and on sign-out. Both files were re-fetched after commits.
+- Current main-branch tree contains 199 tracked files. The secure Homework Manager and shared cloud homework helper are present; local demo tabs remain separate from the secure Supabase workflow.
+- Current deployed functions: AI Teacher v6, classroom-call-token v7, account-deletion-request v5; all ACTIVE with JWT verification enabled.
+- Current Supabase advisor snapshot: no health findings; three restricted RLS/no-policy notices, leaked-password protection disabled, five unused-index notices and two multiple-permissive-SELECT-policy notices. No production policy or schema changes were made.
+- Public Pages deployment and Android packaging are not confirmed. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present in the repository tree.
+- Final owner testing should follow the single ordered checklist in the consolidated handover. Do not mark 100% until deployed/runtime and owner acceptance tests pass.
