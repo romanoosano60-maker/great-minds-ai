@@ -21,7 +21,8 @@
 </div><p class="muted" id="controlNote">Camera and microphone are only enabled after you join and grant browser permission.</p><a href="international-classrooms.html">← Back to International Classrooms</a></section>
 </main>
 <script type="module">
-import { Room, RoomEvent, Track } from "https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/+esm";
+let Room=null,RoomEvent=null,Track=null;
+const LIVEKIT_CLIENT_URL="https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/+esm";
 const $=id=>document.getElementById(id);
 const params=new URLSearchParams(location.search);
 const classroomId=params.get("classroom");
@@ -56,6 +57,9 @@ async function start(){
  if(!classroomId||!/^[0-9]+$/.test(classroomId)){status("No valid classroom was selected. Return to International Classrooms.");return}
  try{
   status("Checking your classroom membership and preparing the secure call…");
+  // Load the media SDK only for start/join. Teacher end-call must still work if the CDN is unavailable.
+  const livekit=await import(LIVEKIT_CLIENT_URL);
+  Room=livekit.Room;RoomEvent=livekit.RoomEvent;Track=livekit.Track;
   const data=await invoke(action);
   tokenRole=data.participant_role;
   if(action==="start")$("end").hidden=false;
