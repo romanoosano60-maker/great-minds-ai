@@ -37,8 +37,8 @@ This file lists only actions that still need the project owner or a real-device 
 **Database state checked**
 - Seven public tables exist and all seven have Row Level Security enabled: classrooms, teacher_profiles, classroom_members, guardian_relationships, student_learning_progress, homework_assignments, homework_submissions.
 - Realtime publication includes classrooms, classroom_members, homework_assignments, homework_submissions and student_learning_progress.
-- Current row counts: 1 classroom, 1 teacher profile, 1 active guardian relationship, 0 classroom memberships.
-- No real student progress, homework assignments or homework submissions exist yet.
+- Latest live row counts checked 10 November 2026: 2 classrooms, 1 teacher profile, 1 active guardian relationship, 0 classroom memberships, 3 student-learning-progress rows, 1 homework assignment, and 0 homework submissions.
+- These counts confirm that some test/demo records exist, but do not prove that a real student joined with guardian consent or completed the full homework workflow. Treat the 3 progress rows and 1 assignment as unverified test data until the owner confirms their origin.
 
 **Database correction applied and rollback-tested**
 - Migration `20261105081455_fix_guardian_consent_revocation_result` has since been applied and rollback-tested, according to `DATABASE_SECURITY_VERIFICATION_2026-11-05.md`. The live function now reports success only when an active guardian link was actually revoked and blocks the linked student's classroom memberships. No further application of this migration is required.
