@@ -942,3 +942,10 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 - Corrected the offline-mode connection notice in `ai-teacher.html`: browser/device speech recognition may send microphone audio to its own speech-recognition provider. Great Minds receives recognized text only if the user submits it as a question. The notice now tells users to review provider privacy settings and avoid speaking private information. This avoids implying that raw audio is necessarily processed only on-device. Commit: `f76ee2be0aafe5c493533ce96736060cb53c56b6`.
 - This is a privacy-transparency wording correction, not a verification of the browser/device provider's identity, processing location, or retention terms.
+
+## Lesson speech privacy lifecycle safeguards — 10 November 2026
+
+- Added page-inactive speech cleanup to `reading-writing.html`, `math.html`, `science.html`, `history.html`, `geography.html`, `social-studies.html`, `home-science.html`, `computer.html`, `vocabulary.html`, and `dictionary.html`.
+- These pages now cancel browser speech synthesis when the page becomes hidden and on `pagehide`, reducing the risk of lesson audio continuing after navigation or app switching.
+- Source commits: `9283851ff67340c1caf2a5e109871b16961d0359`, `386d180fd3f7426e3b11ee51c3e863f0304db853`, `fc9fd679116272537c758f50dd01d23482e87dc5`, `3069b48fd31edd169a943f960898e6fbf0be0ab3`, `d2f96235e9bc3cfb1980e088b95a7b2ae3646cbb`, `9fbc858439c757e7af68ee71a177d41bbd72ed22`, `c37cc38d99b44a5d2c386cc60ccd0c7dce77cee3`, `19d44ea69b1ec78cd3338d52bf1cf81c9dbf2c1f`, `55d708fe75e2f4cb9cbd0781ac87ec6172b0127b`, `d6848b412b2b7ecb195de3765cebe614717e7a32`.
+- Source-level change only. Android backgrounding/navigation tests remain required. `english-story-studio.html` was reviewed but not included in this batch.
