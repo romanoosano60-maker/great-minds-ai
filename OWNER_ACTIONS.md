@@ -2,6 +2,30 @@
 
 Last checked: 10 November 2026
 
+## Latest engineering handoff — 10 November 2026
+
+The following are the current deployed backend versions recorded in the latest source/deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
+- AI Teacher: ACTIVE version 6; JWT verification enabled.
+- Classroom call token: ACTIVE version 7; JWT verification enabled; WSS-only LiveKit endpoint and server-side consent/membership checks.
+- Account deletion request: ACTIVE version 5; JWT verification enabled; request-only, not automatic deletion.
+- AI Teacher frontend is configured for the Supabase Edge Function. The Cloudflare `/ask` Worker is an older alternative template and is not the active frontend route.
+- The OpenAI secret's actual value/presence cannot be read during this audit. Do not paste secrets into chat or browser code. A successful authenticated AI response has not yet been confirmed.
+
+**One consolidated owner/device test session**
+1. AI Teacher: sign in with an approved adult-controlled teacher account; ask a Mathematics question and confirm a live generated answer. Repeat with an unrelated account and confirm it is denied.
+2. AI Teacher voice: test English and one other selected language; test microphone permission, speech-to-text, Listen, Stop, switching language, leaving the page and returning. Confirm no voice or microphone continues in the background.
+3. English and Vocabulary: test individual words, example sentences, alphabet/ABC, story narration and every song; stop audio and navigate away while audio is active.
+4. Subject audio: test Read/Stop on the 20 reviewed core subject/extension pages, including language selection. Confirm the chosen language is spoken and no unrelated-language fallback occurs.
+5. Classroom calling: verify teacher start/end, student join only after approved membership and active guardian consent, guardian observer, microphone/camera OFF until opted in, permission-denial cleanup and unexpected teacher disconnect.
+6. Classroom and learning records: use separate adult-controlled teacher, student and guardian accounts; test join request, approval, consent revocation, one quiz progress save, homework publish/submit/mark, guardian visibility and a second-device refresh.
+7. Home/navigation/graphics: check all home tiles, dashboard links, 3D gallery and picture library on Android; record any 404, blank page, missing image or unresponsive control.
+8. Account/privacy: verify password and session behaviour, guardian access boundaries, deletion-request wording and that a request is not represented as completed deletion. Do not use real child personal data.
+
+**Not owner tests:** the source-level audio lifecycle fixes, 56-page local-reference check, exact duplicate-file check, targeted rendering-safety review, Supabase RLS/privilege checks and backend request hardening have been reviewed from source/live configuration. These do not replace the device/account tests above.
+
+**Packaging status:** no Capacitor, Android project, package manifest or web-app manifest was found by the current repository code search. Android packaging has not started; choose the packaging route after the GitHub web app passes the final audit. GitHub Pages itself is not an installable Play Store package.
+
+
 This file lists only actions that still need the project owner or a real-device test. Source code and database configuration can be prepared from the connected tools, but a static code review cannot sign in as a real family, hear Android audio, or submit an app to an app store.
 
 Recent source repairs require an installed matching language voice rather than silently substituting a different language, and stop microphone recognition when AI Teacher or Advanced Learning is hidden or unloaded. Android verification remains outstanding.
@@ -9,7 +33,7 @@ Recent source repairs require an installed matching language voice rather than s
 ## 1. AI Teacher — live endpoint verification
 
 **Prepared and deployed**
-- Supabase Edge Function `ai-teacher` is ACTIVE at version 4, with JWT verification enabled.
+- Supabase Edge Function `ai-teacher` is ACTIVE at version 6, with JWT verification enabled (latest deployment rechecked 10 November 2026).
 - `ai-teacher-config.js` points the website to the project's Supabase Edge Function URL.
 - `ai-teacher.html` obtains the signed-in Supabase access token and sends the selected subject, teaching language, question and recent text turns.
 - The deployed function verifies the account, permits approved teachers or accounts with an active guardian relationship, applies database-enforced daily usage limits (10 requests per account and 100 requests service-wide, UTC day), and calls the OpenAI Responses API with `store:false`.
