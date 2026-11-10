@@ -376,3 +376,5 @@ Additional follow-up: the same stale-response guard was added to `international-
 - Created `FINAL_ANDROID_ACCEPTANCE_TESTS.md` with the eight-part Android owner test and pass/fail evidence sheet.
 - Supabase project is active/healthy in `eu-west-2`. No database schema, RLS policy, Auth setting, secret, user account, or child record was modified in this batch.
 - Engineering source preparation is complete for the five workstreams, but live password recovery, latest deployment after these commits, and owner Android acceptance tests remain unverified. Do not label the app 100% complete until these pass.
+
+- Extended the shared recovery button to the remaining teacher sign-in utility pages (`supabase-connect.html` and `connected-dashboards.html`), so all six reviewed sign-in entry pages expose the same recovery route. The helper relies on the shared public Supabase client configuration and never stores or logs the entered password.
