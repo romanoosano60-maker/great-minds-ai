@@ -127,3 +127,17 @@ The application remains not launch-ready until all owner/device tests, actual se
 
 ### Teacher access policy correction — 10 November 2026
 Teacher-side homework and progress policies were updated so they do not query the private guardian-link table as the teacher. They now rely on approved classroom membership and the consent-status column, which authenticated clients cannot update. Student/guardian paths continue to verify their own active relationship. Separate-account tests are still required.
+
+
+## 2026-11-10 authoritative status reconciliation
+
+This section supersedes older historical status bullets above wherever they conflict with the current live backend and repository audit.
+
+- The live Supabase project currently lists `ai-teacher` v6, `classroom-call-token` v7 and `account-deletion-request` v5 as ACTIVE with JWT verification enabled. Older v4/v5/v6 function references elsewhere in this document are historical snapshots.
+- The latest security advisor reports RLS enabled but no direct policies on `private.ai_teacher_daily_usage`, `private.classroom_join_attempts` and `public.account_deletion_requests`. These are intentionally restricted tables; do not add broad client policies. Leaked-password protection remains disabled.
+- The current AI Teacher is an authenticated text-answer API with browser/device speech recognition and browser speech synthesis. It is not continuous voice-to-voice AI. Live approved-account response and rejected-account tests remain owner actions.
+- The account-deletion endpoint is a request-only, verified-adult/manual-review process. It does not delete Auth accounts, revoke all sessions or erase child learning data. A documented retention schedule and approved deletion execution process remain launch blockers.
+- The latest repository inventory contains 199 tracked files and no Android project, Capacitor configuration, package manifest, web-app manifest or service worker. Native Android packaging has not started.
+- Public GitHub Pages deployment and its final URL remain unconfirmed. Latest source commits have no reported CI workflow/status results.
+- The owner has reported successful teacher/student/parent coordination in an earlier test session; that report is retained. A fresh persisted end-to-end homework/consent/revocation acceptance pass is still required before marking the complete workflow verified.
+- The earlier note that the AI usage table had RLS disabled is superseded: the current advisor reports RLS enabled with no client policy.
