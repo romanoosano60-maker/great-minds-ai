@@ -183,3 +183,22 @@ These new integrations passed source-level JavaScript syntax checks but are not 
 5. The Pro-only leaked-password protection remains pending until the owner chooses whether to upgrade.
 
 No database policies, indexes, student records, classroom records, or account data were changed during this review.
+
+
+## Additional owner test checklist after 10 November security repairs
+
+### Guardian-consent enforcement repair
+- The database UPDATE policy now requires an active guardian relationship whenever classroom membership consent is marked approved.
+- The classroom-call token service independently checks the student's active guardian relationship, even when the membership row says approved.
+- During the owner-led test, confirm a student without a guardian link cannot be approved for classroom participation or receive a call token; after a guardian link is active, teacher approval should allow access; after consent is revoked, further calls must be denied.
+- The live call-token function is now ACTIVE version 6 with JWT verification. Its source and deployed version were rechecked.
+
+### AI Teacher request-header repair
+- The AI Teacher browser request now sends the Supabase publishable `apikey` header as well as the user's signed-in bearer token. Test one allowed account and one unrelated account. The backend remains ACTIVE version 4 with JWT verification.
+- Do not share the OpenAI key, Supabase service-role key, LiveKit API secret, passwords or access tokens.
+
+### Repository audit result
+- 56 HTML pages checked for local file references: no missing local `href` or `src` targets found.
+- 195 tracked files compared by exact Git blob SHA: no exact duplicate files found. Similar-looking demo/connected/redirect pages are intentionally different and were retained.
+- The latest Pages workflow for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully. The later status-documentation commit does not change application code.
+- All 11 inspected application tables have RLS enabled; no direct anon table privileges were found. The three no-policy advisor notices are intentional closed tables.
