@@ -126,8 +126,9 @@ if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:'Home Sci
  const clean=String(text||"").replace(/[\u{1F300}-\u{1FAFF}\u{2600}-\u{27BF}]/gu,"").trim();
  if(!synth||typeof SpeechSynthesisUtterance==="undefined"){if(status)status.textContent="Read-aloud is unavailable. Open this page in Chrome and check Android Text-to-speech output.";return;}
  if(!clean){if(status)status.textContent="There is no lesson text to read.";return;}
- const request=(window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1);
+ if(!synth.__gmCancelWrapped){const nativeCancel=synth.cancel.bind(synth);synth.cancel=function(){window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1;return nativeCancel();};synth.__gmCancelWrapped=true;}
  synth.cancel();
+ const request=(window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1);
  if(status)status.textContent="Preparing voice…";
  const start=()=>{
   if(request!==window.__gmSpeechRequest)return;
