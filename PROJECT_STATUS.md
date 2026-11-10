@@ -914,3 +914,14 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - `dictionary.html`, `computer.html`, and `english-story-studio.html` now require an installed English voice before speaking. They no longer silently fall back to a default non-English device voice. Pending voice-change listeners and timers are cleaned up when playback is cancelled or replaced. Commits: `322dd64756b743e1e0a008119268677104787b3e`, `2d18a3cf3674e36a282b1cf8d5b5f19f0d45122e`, `17eef418408b93665d77cf00e6eff3011845cbc2`.
 - `vocabulary.html` and `home-science.html` now refuse to use a non-English default voice when no English voice is installed, and display a clear Android Text-to-speech instruction instead. Commits: `4afa69c65b0ab6d1a6f0fb8ce3face93b62cc06b`, `997dd081e1201c041e32ae6288e23faec200cb95`.
 - These remain source-level repairs. Actual Android sound, voice selection and pronunciation must still be tested on the owner's device.
+
+## Fresh Supabase security and deployment audit — 10 November 2026
+
+- Rechecked the active project: `ryuchmmnyjyldwouidyy` is `ACTIVE_HEALTHY`.
+- Re-fetched deployed Edge Functions: `ai-teacher` v4, `account-deletion-request` v4, and `classroom-call-token` v6 are ACTIVE; JWT verification is enabled on all three.
+- Rechecked the eight classroom/homework/progress/account-request public tables and three private operational tables. RLS is enabled on every inspected table. No `anon` SELECT or INSERT privileges were found on these tables. The private operational tables and account-deletion request table have no direct `authenticated` SELECT/INSERT privileges.
+- Verified column-level protection on `classroom_members`: authenticated users can update `membership_status` but cannot update `parent_consent_status`, `user_id`, `classroom_id` or `created_at`. This preserves the guardian-consent boundary.
+- Rechecked current advisors: Health has no findings. Security still reports three informational RLS-enabled/no-policy notices (intentionally closed tables) and the Leaked Password Protection warning. Performance still reports five unused-index notices and two multiple-permissive SELECT-policy notices. No change is justified without workload/role testing; no index or policy was removed.
+- Current live deletion workflow remains request-only: adult request authentication, email verification, role/guardian-link checks and classroom ownership checks are present. No Auth account or learning data is automatically deleted. Retention duration, verified guardian authority for a child's deletion, classroom transfer/closure and supervised deletion remain unimplemented.
+- Corrected the stale version-3 line in `ACCOUNT_DELETION_WORKFLOW.md` to version 4.
+- GitHub Pages deployment for commit `fe4ba941a478bd46b6eebe03d24bccf40f1b3ae1` was still `in_progress` at the time of this check. Do not assume the new audio repairs are live until that run succeeds.
