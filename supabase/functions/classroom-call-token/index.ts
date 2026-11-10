@@ -43,9 +43,18 @@ Deno.serve(async (req: Request) => {
     if (userError || !userData.user?.id) return json({ error: "Your session is invalid or expired. Please sign in again." }, 401);
     const userId = userData.user.id;
 
-    const declaredLength = Number(req.headers.get("content-length") || "0");
-    if (declaredLength > 3000) return json({ error: "Request is too large." }, 413);
-    const body = await req.json();
+    // Enforce the limit on the actual body bytes, not only the optional Content-Length header.
+    const rawBody = await req.text();
+    if (new TextEncoder().encode(rawBody).byteLength > 3000) {
+      return json({ error: "Request is too large." }, 413);
+    }
+    let body: any;
+    try { body = JSON.parse(rawBody); } catch {
+      return json({ error: "Invalid request format." }, 400);
+    }
+    if (!body || typeof body !== "object" || Array.isArray(body)) {
+      return json({ error: "Invalid request format." }, 400);
+    }
     const classroomId = Number(body.classroom_id);
     const mode = body.mode === "video" ? "video" : body.mode === "audio" ? "audio" : "";
     const action = body.action === "start" ? "start" : body.action === "join" ? "join" : body.action === "end" ? "end" : "";
