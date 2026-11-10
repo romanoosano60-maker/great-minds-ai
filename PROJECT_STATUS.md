@@ -1092,3 +1092,9 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 - Source commit `712cfbb3cac4a3af05473dc15ad18c535f1ef2e2` adds explicit LiveKit room disconnect on `pagehide` and resets local media state after teacher end-call.
 - Source was re-fetched and verified. GitHub Pages workflow run `42809664344` was still running at the last check; do not yet treat this page repair as live.
+
+
+## English and vocabulary audio lifecycle follow-up — 10 November 2026
+- Re-reviewed `vocabulary.html` and `english.html` against the current source. Vocabulary's inactive-page cleanup cancelled speech but did not invalidate a delayed voice-start callback; added request invalidation before cancellation so pending speech cannot start after the page is hidden or unloaded. Commit: `70d7d457848fa0a0699737450ea4a1b47120ad8a`.
+- The English song player cleared its timer and speech when manually stopped/paused, but lacked automatic hidden-page/page-exit cleanup. Added inactive-page handling to stop the song timer and narration, clear resume state, and suspend the generated AudioContext. Commit: `83759968bf9a8f9d58a9838d97342dc8a39daa04`.
+- Both changes were re-fetched from GitHub and their expected source markers verified. They are source-level repairs only; GitHub Pages deployment and real Android audio tests remain pending. No files were deleted. Similar speech helper code in separate learning pages is not treated as duplicate files.
