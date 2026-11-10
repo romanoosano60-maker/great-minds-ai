@@ -904,3 +904,6 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - The notices now explain that speech recognition is provided by the browser/device and may use its service; Great Minds receives recognized text for the AI Teacher, not raw microphone audio. Children are warned not to speak private information.
 - Commits: `advanced-learning.html` `fbdeadd8308a37b7654301bfdf393305481bfa5c`; `ai-teacher.html` `b6d40929cd940a93ade4287b0688a7fec0220d0f`.
 - This is a source-copy correction, not a full vendor privacy audit. The exact speech-recognition provider and its retention/processing terms still need confirmation for the supported Android browser/device configuration.
+
+
+- Fixed a separate confirmed defect in `advanced-learning.html`: its speech button called `gmQueueUtterance()`, but that function is not defined by the page or its loaded shared language script. The button could therefore fail before playback. Replaced it with self-contained voice readiness, language-matched selection, speech-engine resume/start, and cancellation of pending timers/listeners. Stop now invalidates pending playback. Commit: `9ca7bcc8df6ae35860f2f4da3bae0b7f2a2a74b6`.
