@@ -83,7 +83,7 @@ render();
   say('Cloud overview loaded for the approved teacher account.');
  }
  $('teacherCloudLogin').addEventListener('click',async()=>{const passwordField=$('teacherCloudPassword');if(!db){passwordField.value='';say('Cloud service unavailable.');return}const email=$('teacherCloudEmail').value.trim(),password=passwordField.value;if(!email||!password){passwordField.value='';say('Enter your teacher test account details.');return}try{say('Signing in…');const r=await db.auth.signInWithPassword({email,password});if(r.error){say('Sign-in failed. Check account details.');return}user=r.data.user;await load();watchCloud()}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}});
- $('teacherCloudLogout').addEventListener('click',async()=>{if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}if(db)await db.auth.signOut();user=null;$('teacherCloudProgress').textContent='Sign in to load records.';$('teacherCloudHomework').textContent='Sign in to load submissions.';say('Signed out.')});
+ $('teacherCloudLogout').addEventListener('click',async()=>{$('teacherCloudPassword').value='';if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}if(db)await db.auth.signOut();user=null;$('teacherCloudProgress').textContent='Sign in to load records.';$('teacherCloudHomework').textContent='Sign in to load submissions.';say('Signed out.')});
  $('teacherCloudRefresh').addEventListener('click',load);init();
 })();
  // Keep open role dashboards refreshed when another same-browser tab saves shared demo data.
