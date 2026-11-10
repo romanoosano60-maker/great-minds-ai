@@ -108,7 +108,7 @@ read.addEventListener('click',()=>{
   if(!voices.length)return false;
   const locale=(document.documentElement.lang||'en-US').toLowerCase();
   const base=locale.split('-')[0];
-  const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale)||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(base+'-'))||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('en-'))||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith('en'));
+  const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale)||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(base+'-'));
   const utterance=new SpeechSynthesisUtterance(text);utterance.rate=0.88;
   if(voice){utterance.voice=voice;utterance.lang=voice.lang}else{utterance.lang=locale}
   utterance.onstart=()=>{if(request===readRequest)status.textContent='🔊 Reading the lesson aloud…'};
