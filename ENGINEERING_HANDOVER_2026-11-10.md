@@ -120,3 +120,11 @@ The project is not marked 100% complete until each required item is genuinely im
 ## Final homepage route check — 10 November 2026
 
 The current main-branch tree contains **200 tracked files** after adding this handover. All 30 local script/page references parsed from the main `index.html` navigation were matched to tracked files; no missing homepage navigation target was found. This is a static repository-path check, not a live GitHub Pages click-through test.
+
+
+## Additional privacy/UI corrections — second audit pass
+
+- Found and repaired a parent-dashboard sign-out privacy gap: before the repair, the parent cloud progress panel was cleared but the separate cloud homework panel could remain visible after sign-out. The sign-out handler now clears the password field, resets the signed-in user state, clears both progress and homework displays immediately, removes the Realtime channel, and attempts Supabase Auth sign-out. The updated file was re-fetched and the handler was source-verified.
+- Clarified the Student Profile's local-history clear control. It now states that it clears only that page's V2 homework/quiz history on the current device; it does not delete the nickname, other local demo data, or Supabase cloud records. This prevents the button from implying a complete account/data deletion.
+- Reconciled older master-guide entries that described the AI endpoint as pending or the secure cloud homework tables as absent. The historical checkpoints are now labelled as historical, and current implementation status is linked to the authoritative 10 November section.
+- Rendering-safety spot check: the reviewed connected parent/student cloud records escape dynamic text before HTML insertion; teacher cloud records use text nodes/textContent. The dictionary's HTML template uses its fixed bundled word list, not learner search text. The local role-play dashboards remain explicitly labelled demonstrations and must not be used with real child details.
