@@ -1165,3 +1165,7 @@ See [ENGINEERING_HANDOVER_2026-11-10.md](ENGINEERING_HANDOVER_2026-11-10.md) for
 - Current Supabase advisor snapshot: no health findings; three restricted RLS/no-policy notices, leaked-password protection disabled, five unused-index notices and two multiple-permissive-SELECT-policy notices. No production policy or schema changes were made.
 - Public Pages deployment and Android packaging are not confirmed. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present in the repository tree.
 - Final owner testing should follow the single ordered checklist in the consolidated handover. Do not mark 100% until deployed/runtime and owner acceptance tests pass.
+
+
+- Final static route check on 10 November: all 30 local page/script references parsed from the main homepage navigation resolve to tracked paths in the current repository tree. No missing homepage navigation target was found. This does not replace a live published-site click-through test.
+- Current repository tree contains 200 tracked files, including the consolidated handover.
