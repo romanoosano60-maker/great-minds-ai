@@ -341,3 +341,11 @@ All four pages now clear visible private data and the local signed-in page state
 ### New owner verification — sign-out during loading
 The Student, Parent, and Teacher cloud dashboards now discard in-flight cloud results if sign-out occurs before a database request finishes. During the final Android acceptance pass, sign in to each role, start a refresh on a slow connection, and sign out before it finishes. Confirm the private progress/homework panels stay cleared. This source repair has not yet been runtime-tested on the device.
 Additional follow-up: the same stale-response guard was added to `international-classrooms.html`. Classroom refreshes now discard in-flight classroom/member/guardian-link results if the account signs out or the auth session changes. Re-fetched the file and verified request-generation guards and logout/auth-state invalidation. Owner device testing remains required.
+
+
+## 2026-11-10 follow-up — cross-tab sign-out privacy
+- Student, Parent, and Teacher connected dashboards now listen for Supabase `SIGNED_OUT` events, including sign-out initiated from another page or browser tab. They clear private cloud panels, invalidate in-flight reads, and remove their Realtime channel.
+- Homework Manager now does the same for its secure cloud assignment/submission panel. Its async refresh is guarded by a request generation so a response started before sign-out cannot repopulate the panel afterward.
+- The four updated pages were fetched again from GitHub and the listener/request guards were verified in source. This is a source-level repair; separate-device/browser behavior and the deployed Pages build still require owner testing.
+- Latest relevant repair commit: `9137ad969847859b7903e8f6ca21e970c41f5dfd` (Homework Manager); dashboard commits: `0edd47b3937028ace1aebac1383d804ec1093486`, `d4a0b53b64b360a5799e569f33ab839b4f492cda`, `b7c3340db40d663c2bd1cfbfb7ad765be1067269`.
+- GitHub combined status and the available workflow-run lookup returned no results for the latest commit; do not count CI or deployment as passed.
