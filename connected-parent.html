@@ -77,6 +77,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable. The local demo remains available.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
+  db.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;user=null;cloudLoadRequest++;records.textContent='Sign in to load cloud progress.';el('cloudHomeworkRecords').textContent='Sign in to load homework records.';say('Signed out in another tab or page. Cloud records were cleared.');if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db.removeChannel(channel).catch(()=>{});}});
   const {data,error}=await db.auth.getUser();
   if(error){say('Account verification failed: '+error.message);return}
   user=data.user||null;
