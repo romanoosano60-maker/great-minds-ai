@@ -80,14 +80,14 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   }).catch(e=>setStatus('Could not check session: '+e.message));
  }
  el('cloudLogin').addEventListener('click',async()=>{
-  if(!db){setStatus('Cloud service is unavailable.');return}
-  const email=el('cloudEmail').value.trim(),password=el('cloudPassword').value;
-  if(!email||!password){setStatus('Enter the Student test account email and password.');return}
-  setStatus('Signing in…');
-  const {data,error}=await db.auth.signInWithPassword({email,password});
-  el('cloudPassword').value='';
+  const passwordField=el('cloudPassword');
+  if(!db){passwordField.value='';setStatus('Cloud service is unavailable.');return}
+  const email=el('cloudEmail').value.trim(),password=passwordField.value;
+  if(!email||!password){passwordField.value='';setStatus('Enter the Student test account email and password.');return}
+  try{setStatus('Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password});
   if(error){setStatus('Sign-in failed: '+error.message);return}
   user=data.user;saveBtn.disabled=!user;setStatus('Student signed in. Your cloud save is ready.');await loadCloudHistory();watchCloud();
+  }catch(e){setStatus('Sign-in failed: '+e.message)}finally{passwordField.value=''}
  });
  el('refreshStudentCloud').addEventListener('click',loadCloudHistory);
  el('cloudLogout').addEventListener('click',async()=>{
