@@ -36,11 +36,11 @@ $('signout').onclick=async()=>{
  $('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;user=null;
  msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.');
  if(!client){msg('authStatus','Cloud service unavailable. Classroom display cleared.');return}
- try{
-  if(liveChannel){const channel=liveChannel;liveChannel=null;await client.removeChannel(channel)}
-  const {error}=await client.auth.signOut();
-  msg('authStatus',error?'Sign-out issue: '+error.message:'Signed out.');
- }catch(e){msg('authStatus','Sign-out issue: '+e.message+'. Classroom details were cleared from this page.')}
+ let result='Signed out.';
+ try{const {error}=await client.auth.signOut();if(error)result='Sign-out issue: '+error.message}
+ catch(e){result='Sign-out issue: '+e.message}
+ if(liveChannel){const channel=liveChannel;liveChannel=null;try{await client.removeChannel(channel)}catch(e){result+=' Realtime cleanup issue: '+e.message}}
+ msg('authStatus',result+' Classroom details were cleared from this page.');
 };
 function generateSecureClassroomCode(){
  const alphabet='ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
