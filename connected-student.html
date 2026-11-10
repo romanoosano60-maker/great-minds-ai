@@ -57,13 +57,15 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('student-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>loadCloudHistory()).subscribe();}
  const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');
- let db=null,user=null;
+ let db=null,user=null,cloudHistoryRequest=0;
  function setStatus(t){status.textContent=t}
  function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  async function loadCloudHistory(){
   const box=el('studentCloudRecords');if(!db||!user){box.textContent='Sign in to view cloud history.';return}
+  const requestId=++cloudHistoryRequest,requestedUserId=user.id;
   box.textContent='Loading your saved cloud lessons…';
   const {data,error}=await db.from('student_learning_progress').select('subject,activity_key,score,max_score,correct_count,question_count,source,completed_at').order('completed_at',{ascending:false}).limit(100);
+  if(requestId!==cloudHistoryRequest||!user||user.id!==requestedUserId)return;
   if(error){box.textContent='Cloud history is not available for this account.';return}
   if(!data||!data.length){box.textContent='No cloud lesson results saved yet. Complete a quiz while signed in to save it.';return}
   box.innerHTML=data.map(r=>'<div class="item"><b>'+escCloud(r.subject)+'</b><p>'+escCloud(r.activity_key)+' — '+escCloud(r.score)+' / '+escCloud(r.max_score)+'</p><small>'+escCloud(r.source)+' • '+escCloud(new Date(r.completed_at).toLocaleString())+'</small></div>').join('');
@@ -91,7 +93,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  });
  el('refreshStudentCloud').addEventListener('click',loadCloudHistory);
  el('cloudLogout').addEventListener('click',async()=>{
-  el('cloudPassword').value='';user=null;saveBtn.disabled=true;
+  el('cloudPassword').value='';user=null;cloudHistoryRequest++;saveBtn.disabled=true;
   el('studentCloudRecords').textContent='Sign in to view cloud history.';
   if(!db){setStatus('Cloud service unavailable. Local cloud display cleared.');return}
   let result='Signed out of cloud progress.';
