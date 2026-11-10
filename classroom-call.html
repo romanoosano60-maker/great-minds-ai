@@ -75,12 +75,21 @@ async function start(){
   $("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on";
   if(tokenRole==="guardian_observer")$("controlNote").textContent="Guardian observer mode: microphone and camera are disabled.";
   else $("controlNote").textContent="You can control your microphone and camera below.";
+  if(tokenRole==="teacher")$("leave").textContent="End & leave call";
   status("Connected. Role: "+tokenRole.replaceAll("_"," ")+". "+(mode==="video"?"Video call":"Audio call")+" is active.");
- }catch(e){status(e.message);$("end").hidden=action!=="start"}
+ }catch(e){
+  // If a device permission or media setup fails after connecting, disconnect immediately.
+  // This prevents a microphone from remaining active behind an error message.
+  if(room){try{await room.disconnect()}catch(_disconnectError){}room=null;}
+  micOn=false;cameraOn=false;
+  $("mic").disabled=true;$("camera").disabled=true;$("leave").disabled=true;
+  status(e.message||"The classroom call could not be started. Your device media has been stopped.");
+  $("end").hidden=action!=="start";
+ }
 }
 $("mic").onclick=async()=>{try{micOn=await room.localParticipant.setMicrophoneEnabled(!micOn);$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on"}catch(e){status("Microphone error: "+e.message)}};
 $("camera").onclick=async()=>{try{cameraOn=await room.localParticipant.setCameraEnabled(!cameraOn);$("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on"}catch(e){status("Camera error: "+e.message)}};
-$("leave").onclick=async()=>{if(room)await room.disconnect();$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;status("You left the call.")};
+$("leave").onclick=async()=>{try{if(tokenRole==="teacher")await invoke("end");if(room)await room.disconnect();room=null;$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;status(tokenRole==="teacher"?"You ended the supervised classroom call. All participants have been disconnected.":"You left the call.")}catch(e){status("Could not leave safely: "+e.message)}};
 $("end").onclick=async()=>{try{await invoke("end");if(room)await room.disconnect();$("leave").disabled=true;$("end").disabled=true;status("The teacher ended the classroom call. All participants have been disconnected.")}catch(e){status("Could not end the classroom call: "+e.message)}};
 start();
 </script></body></html>
