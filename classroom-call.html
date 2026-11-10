@@ -67,11 +67,12 @@ async function start(){
   room=new Room({adaptiveStream:true,dynacast:true});
   room.on(RoomEvent.TrackSubscribed,(track,publication,participant)=>addTrack(track,participant));
   room.on(RoomEvent.TrackUnsubscribed,(track)=>removeTrack(track));
-  room.on(RoomEvent.ParticipantDisconnected,(participant)=>{
+  room.on(RoomEvent.ParticipantDisconnected,async(participant)=>{
    document.querySelector('[data-participant="'+CSS.escape(participant.identity)+'"]')?.remove();
    // If the teacher unexpectedly disconnects, students and guardians leave too.
    if(tokenRole!=="teacher"&&teacherIdentity&&participant.identity===teacherIdentity){
-    if(room){room.disconnect();room=null;}
+    const activeRoom=room;
+    if(activeRoom){try{await activeRoom.disconnect()}catch(_disconnectError){}if(room===activeRoom)room=null;}
     $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;
     status("The teacher has left. This supervised classroom session has ended.");
    }
