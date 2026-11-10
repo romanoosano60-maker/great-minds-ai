@@ -90,7 +90,7 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
-(function(){const $=id=>document.getElementById(id);function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{gmSpeechRequest++;if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";$("letterInfo").textContent="Voice stopped.";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
+(function(){const $=id=>document.getElementById(id);function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{gmSpeechRequest++;if(typeof gmExtraSpeechRequest!=="undefined")gmExtraSpeechRequest++;if(typeof gmSightSpeechRequest!=="undefined")gmSightSpeechRequest++;if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";$("letterInfo").textContent="Voice stopped.";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
 let gmSpeechRequest=0;
 function speak(text){
  const status=$("letterInfo");
@@ -103,9 +103,10 @@ function speak(text){
   if(request!==gmSpeechRequest)return;
   const voices=synth.getVoices();
   const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  if(!voice){status.textContent="No English voice is installed or available. Install an English voice in Android Text-to-speech settings; another language will not be substituted.";return;}
   const utterance=new SpeechSynthesisUtterance(text);
-  utterance.lang=voice?voice.lang:"en-US";
-  if(voice)utterance.voice=voice;
+  utterance.lang=voice.lang;
+  utterance.voice=voice;
   utterance.rate=.86;
   utterance.onstart=()=>{status.textContent="🔊 Playing audio…";};
   utterance.onend=()=>{status.textContent="Audio finished. Choose another lesson to listen again.";};
@@ -206,7 +207,8 @@ function speak(t){
   if(request!==gmExtraSpeechRequest)return;
   const voices=synth.getVoices();
   const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
-  const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.82;u.pitch=1.08;
+  if(!voice){if(status)status.textContent="No English voice is installed or available. Install an English voice in Android Text-to-speech settings; another language will not be substituted.";return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang=voice.lang;u.voice=voice;u.rate=.82;u.pitch=1.08;
   const status=document.getElementById("gmAbcdStatus");
   u.onstart=()=>{if(status)status.textContent="Playing audio…";};
   u.onerror=()=>{if(status)status.textContent="Audio could not play. Check your phone's English text-to-speech voice.";};
@@ -238,7 +240,8 @@ function say(t){
   if(request!==gmSightSpeechRequest)return;
   const voices=synth.getVoices();
   const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
-  const u=new SpeechSynthesisUtterance(t);u.lang=voice?voice.lang:"en-US";if(voice)u.voice=voice;u.rate=.84;u.pitch=1.06;
+  const status=$("gmPhonicsFeedback");if(!voice){if(status)status.textContent="No English voice is installed or available. Install an English voice in Android Text-to-speech settings; another language will not be substituted.";return;}
+  const u=new SpeechSynthesisUtterance(t);u.lang=voice.lang;u.voice=voice;u.rate=.84;u.pitch=1.06;
   u.onerror=()=>{const status=$("gmPhonicsFeedback");if(status)status.textContent="Audio could not play. Check your phone's English text-to-speech voice.";};
   synth.resume();synth.speak(u);
  };
