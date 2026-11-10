@@ -115,6 +115,7 @@ Deno.serve(async (req: Request) => {
     if (!answer) return json({ error: "The AI Teacher returned no answer. Please try again." }, 502);
     return json({ answer });
   } catch (_error) {
-    return json({ error: "Something went wrong. Please try again." }, 400);
+    // Unexpected upstream/network/runtime failures are server errors, not bad input.
+    return json({ error: "Something went wrong. Please try again." }, 500);
   }
 });
