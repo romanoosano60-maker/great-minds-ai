@@ -10,6 +10,10 @@ const reply = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: corsHeaders });
 
 Deno.serve(async (req: Request) => {
+  const origin = req.headers.get("origin");
+  if (origin && origin !== "https://romanoosano60-maker.github.io") {
+    return reply({ error: "Origin not allowed." }, 403);
+  }
   if (req.method === "OPTIONS") return new Response("ok", { headers: corsHeaders });
   if (req.method !== "POST") return reply({ error: "Method not allowed" }, 405);
   const url = Deno.env.get("SUPABASE_URL");
@@ -19,15 +23,23 @@ Deno.serve(async (req: Request) => {
   const authHeader = req.headers.get("Authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
   if (!token) return reply({ error: "Sign in is required" }, 401);
+  // Bound the request body by its actual UTF-8 byte size.
+  const rawBody = await req.text();
+  if (new TextEncoder().encode(rawBody).byteLength > 3000) {
+    return reply({ error: "Request is too large." }, 413);
+  }
   let body: { confirm?: boolean };
-  try { body = await req.json(); } catch { return reply({ error: "Invalid request" }, 400); }
+  try { body = JSON.parse(rawBody); } catch { return reply({ error: "Invalid request" }, 400); }
+  if (!body || typeof body !== "object" || Array.isArray(body)) {
+    return reply({ error: "Invalid request" }, 400);
+  }
   if (body.confirm !== true) return reply({ error: "Explicit confirmation is required" }, 400);
 
   const authClient = createClient(url, anonKey, { auth: { persistSession: false, autoRefreshToken: false } });
   const { data: { user }, error: authError } = await authClient.auth.getUser(token);
   if (authError || !user) return reply({ error: "Session could not be verified. Sign in again." }, 401);
   if (!user.email_confirmed_at) return reply({ error: "Verify your email before submitting an account request." }, 403);
-  if (user.user_metadata?.account_purpose === "student") {
+  if (user.app_metadata?.account_purpose === "student" || user.user_metadata?.account_purpose === "student") {
     return reply({ error: "A student account cannot submit an adult account-deletion request. A parent or legal guardian must contact support for a supervised review." }, 403);
   }
 
