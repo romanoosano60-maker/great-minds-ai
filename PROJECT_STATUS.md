@@ -1118,3 +1118,20 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - This is a wording correction, not proof of the browser provider's internal processing path or a live privacy/security certification.
 - Source update commit: `e91ca1afa40f5970a7f2149a2044ecc70d5f2860`.
 - The updated file was re-fetched from the default branch and the new wording was confirmed. Published Pages deployment and Android behaviour remain to be checked.
+
+
+## Engineering audit follow-up — 10 November 2026
+
+A fresh read-only inspection of the live Supabase project and GitHub source confirmed:
+
+- The three deployed Edge Functions remain ACTIVE at AI Teacher v6, classroom-call-token v7, and account-deletion-request v5; deployed source exactly matches GitHub source for all three. JWT verification is enabled for each.
+- Classroom call-token logic checks authenticated user identity, approved teacher ownership, approved membership plus an active guardian relationship for student participants, and active guardian links plus approved membership for guardian observers. Only the classroom's approved teacher may start/end; students/guardians can join only while the teacher is present. Guardian observer tokens cannot publish. Token lifetime is 10 minutes.
+- The classroom call page starts camera and microphone OFF, gives explicit controls, disconnects local media on pagehide, and disconnects supervised participants if the teacher leaves. Actual LiveKit secret presence and device call quality remain unverified.
+- Account deletion remains an adult-only, email-verified, manual-review request. The endpoint never deletes accounts or learning data. Teacher-owned classrooms trigger a transfer/closure status.
+- Live RLS policies were inspected read-only. Classroom membership, guardian relationship, homework and progress reads/writes are restricted by account identity, approved teacher status, consent and active relationships. Private consent-code and quota tables have no direct client policy; do not add broad client access.
+- Guardian consent RPCs require a signed-in user, verified guardian email, explicit affirmation and a one-time 64-character code; teacher approval remains separately required for classroom membership. This is account-asserted consent, not independent proof of legal guardianship.
+- The AI Teacher quota function is database-enforced and caps each account at 10 requests/day and the shared service at 100/day.
+- Remaining live configuration: confirm presence of LiveKit secrets in Supabase without exposing values; check leaked-password protection availability; test authenticated/unauthorized role paths, consent revocation, call start/join/end, and account deletion review lifecycle.
+- The current database contains no homework submissions and no classroom membership rows at this snapshot. This is a test-data snapshot, not proof that the user's earlier cross-device test failed; repeat the key flow in a controlled test session before final sign-off.
+
+No production schema, RLS policy, secret, account or user data was modified during this audit.
