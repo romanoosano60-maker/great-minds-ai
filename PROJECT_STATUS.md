@@ -1168,7 +1168,7 @@ See [ENGINEERING_HANDOVER_2026-11-10.md](ENGINEERING_HANDOVER_2026-11-10.md) for
 
 
 - Final static route check on 10 November: all 30 local page/script references parsed from the main homepage navigation resolve to tracked paths in the current repository tree. No missing homepage navigation target was found. This does not replace a live published-site click-through test.
-- Current repository tree contains 200 tracked files, including the consolidated handover.
+- Current repository tree contains 202 tracked files, including the consolidated handover.
 
 
 ## Second privacy/source audit — 10 November 2026
