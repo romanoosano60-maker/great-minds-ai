@@ -240,7 +240,7 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 ## 20. AI Teacher additional subjects (5 November 2026)
 - AI Teacher now includes Social Studies, History, Geography and Home Science alongside Mathematics, English, Science, Computer Studies and General Knowledge.
 - Each new subject has a prepared example Q&A and a link to its corresponding full lesson page. Static syntax and local-link checks passed.
-- Live AI backend connection remains pending.
+- Historical checkpoint only: at the time of this 5 November entry the live endpoint had not yet been accepted. Current backend deployment and feature boundaries are recorded in the authoritative 10 November technical-state section below.
 
 
 ## Current technical state superseding older prototype notes — 10 November 2026
