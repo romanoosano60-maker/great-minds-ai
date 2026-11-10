@@ -24,14 +24,14 @@ walk(root);
 
 const missing = [];
 const checkedRefs = [];
-const refPattern = /(?:href|src)\\s*=\\s*(["'])(.*?)\\1/gi;
+const refPattern = /(?:href|src)\s*=\s*(["'])(.*?)\1/gi;
 for (const file of htmlFiles) {
   const source = readFileSync(file, "utf8");
   let match;
   while ((match = refPattern.exec(source))) {
     const raw = match[2].trim();
     if (!raw || raw.startsWith("#") || raw.startsWith("?") ||
-        /^(?:https?:|data:|mailto:|tel:|javascript:|blob:|\\/\\/)/i.test(raw) ||
+        /^(?:https?:|data:|mailto:|tel:|javascript:|blob:|\/\/)/i.test(raw) ||
         raw.includes("${") || raw.includes("{{")) continue;
 
     let pathname;
@@ -77,12 +77,12 @@ console.log(`Checked ${checkedRefs.length} local href/src references.`);
 
 if (missing.length || syntaxFailures.length) {
   if (missing.length) {
-    console.error("\\nBroken or unsafe local references:");
+    console.error("\nBroken or unsafe local references:");
     for (const item of missing) console.error(`- ${item.file}: ${item.ref} (${item.reason})`);
   }
   if (syntaxFailures.length) {
-    console.error("\\nJavaScript syntax failures:");
-    for (const item of syntaxFailures) console.error(`- ${item.file}\\n${item.output}`);
+    console.error("\nJavaScript syntax failures:");
+    for (const item of syntaxFailures) console.error("- " + item.file + "\n" + item.output);
   }
   process.exitCode = 1;
 } else {
