@@ -1003,3 +1003,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Found two further broad fallback paths: the Science lesson reader could fall back to any English voice even when the page language was different; Home Science could select any English locale, including an unrelated regional voice.
 - Tightened Science to exact or same-base selected-language voice matching only. Tightened Home Science to the supported English US/UK voices and removed the broad English fallback.
 - Source changes saved in `science.html` and `home-science.html`; latest source was re-fetched and checked. These changes still require Pages deployment and Android voice testing.
+
+
+## Repository-wide HTML rendering safety spot-check — 10 November 2026
+
+- Reviewed the current 56-page HTML tree and inspected the highest-risk dynamic HTML renderers identified by repository code search.
+- Connected student, parent and teacher dashboard renderers escape dynamic text before placing it in HTML. The safe classroom demo escapes participant aliases and message text. Guided Research escapes the learner's own question before HTML rendering; its topic guide content is static trusted in-file content.
+- Dictionary results and daily-word cards are rendered from the page's fixed in-file vocabulary dataset, not raw learner input. Story Studio answer options come from its fixed in-file quiz data.
+- No unescaped learner-supplied text injection was identified in this targeted pass. This is a source review, not a full penetration test or browser test.
