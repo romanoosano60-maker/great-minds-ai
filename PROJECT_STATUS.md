@@ -1144,3 +1144,12 @@ No production schema, RLS policy, secret, account or user data was modified duri
 - No in-app password reset or password-change journey was found in the reviewed pages.
 - Account deletion remains request-only and requires human review; no automatic account, session or learning-data deletion is implemented.
 - A public Pages deployment could not be independently confirmed from the available repository checks. Android runtime testing remains open.
+
+
+## Extended sign-in and deployment audit — 2026-11-10
+
+- Found and repaired one additional legacy utility, `supabase-connect.html`: its password field now clears on every sign-in attempt, and its clear-session control attempts a Supabase Auth logout before reporting the result. Re-fetched the file after commit and verified both changes.
+- Repository is public and uses `main` as its default branch. Repository visibility does not establish that GitHub Pages is enabled or deployed.
+- The README identifies `index.html` as the entry page but does not provide a confirmed published-site URL. A direct check of the conventional GitHub Pages URL was not accessible through the available verification path. Do not treat deployment as confirmed.
+- Latest source/documentation commits returned no GitHub commit status checks and no workflow runs. This means there is no CI result to count as a successful build or deployment.
+- Re-ran Supabase security and health advisors: health findings remain empty; security findings remain three RLS-enabled/no-policy notices for private/service-only tables and the warning that leaked-password protection is disabled. No policy was broadened and no schema change was made.
