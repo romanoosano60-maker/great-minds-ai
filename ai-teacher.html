@@ -102,7 +102,7 @@ function speakInTeacherLanguage(text,rate){
 }
 $("teacherPhraseSpeak").addEventListener("click",()=>{const lang=$("teacherLanguage").value;const phrases=teacherPhrases[lang]||teacherPhrases["en-US"];const p=phrases[teacherPhraseIndex%phrases.length];speakInTeacherLanguage(p[1],.88)});
 
-if(AI_ENDPOINT){$("connectionNotice").textContent="Secure AI endpoint is configured. Sign in with an approved teacher account or a student account with an active guardian relationship. A successful live response test is still required before this is considered verified.";}else{$("connectionNotice").textContent="Offline demonstration mode. Prepared examples are available, but live AI answers are not connected. Microphone speech recognition, when supported, converts speech to text in the browser; this page does not send audio recordings.";}
+if(AI_ENDPOINT){$("connectionNotice").textContent="Secure AI endpoint is configured. Sign in with an approved teacher account or a student account with an active guardian relationship. A successful live response test is still required before this is considered verified.";}else{$("connectionNotice").textContent="Offline demonstration mode. Prepared examples are available, but live AI answers are not connected. Microphone speech recognition is provided by your browser or device and may use its speech-recognition service. Great Minds sends the recognized text only; it does not receive the raw microphone audio.";}
 const lessonPages={"Mathematics":"math.html","English":"english.html","Science":"science.html","Computer Studies":"computer.html","General Knowledge":"general-knowledge.html",
 "Social Studies":"social-studies.html",
 "History":"history.html",
