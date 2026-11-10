@@ -1020,3 +1020,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Hardened `account-deletion-request` to enforce a 3 KB actual UTF-8 request-body limit and reject malformed JSON, null, arrays and non-object payloads before checking explicit confirmation. Deployed as v5 with JWT verification still enabled.
 - Verified active deployed versions after deployment: AI Teacher v5, classroom call token v7, account deletion request v5; all require JWT verification.
 - This does not make account deletion automatic. The endpoint remains request-only and does not delete accounts or learning data.
+
+
+## AI Teacher speech lifecycle repair — 10 November 2026
+
+- AI Teacher previously stopped microphone recognition when the page became hidden or navigated away, but did not stop an already-playing spoken answer.
+- Updated the hidden/pagehide cleanup to cancel AI Teacher speech synthesis as well as abort recognition.
+- Changing the selected teaching language now cancels speech already queued in the previous language, preventing old-language audio from continuing after the selection changes.
+- Re-fetched the edited page and verified both cleanup paths and the pagehide listener. Android/browser playback still needs owner testing.
