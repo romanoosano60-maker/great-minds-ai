@@ -1028,3 +1028,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Updated the hidden/pagehide cleanup to cancel AI Teacher speech synthesis as well as abort recognition.
 - Changing the selected teaching language now cancels speech already queued in the previous language, preventing old-language audio from continuing after the selection changes.
 - Re-fetched the edited page and verified both cleanup paths and the pagehide listener. Android/browser playback still needs owner testing.
+
+
+## AI quota eligibility source alignment and account deletion documentation — 10 November 2026
+
+- Queried the live PostgreSQL function definitions and role grants. Confirmed the live public quota RPC is SECURITY INVOKER and calls a private SECURITY DEFINER eligibility gate; the gate permits only approved teachers and accounts with an active guardian relationship, then invokes the private counter.
+- Confirmed the low-level counter is not executable by anon or authenticated directly; the eligibility gate and public wrapper are executable by authenticated; anon has no execute permission; authenticated has private schema usage; the usage table has no anon/authenticated table grants.
+- Found the checked-in `supabase/ai-teacher-daily-usage-limits.sql` did not fully match this live arrangement. Corrected it to preserve the eligibility gate and prevent direct client execution of the low-level counter. No live database migration was needed; the live database was already correct.
+- Updated `ACCOUNT_DELETION_WORKFLOW.md` from deployed function v4 to v5 and documented the 3 KB request-body validation. The endpoint remains request-only.
+- Re-fetched both files and verified the expected eligibility and version markers. Pages deployment is checked separately; SQL/docs updates do not themselves alter the live database.
