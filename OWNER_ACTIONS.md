@@ -279,3 +279,14 @@ Engineering has now completed a read-only review of live Edge Function source, d
 7. Verify the public GitHub Pages deployment and then complete Android device testing.
 
 No production schema, RLS policy, secret, account or user data was modified in this audit.
+
+
+## Password and account-flow source audit — 2026-11-10
+
+- Reviewed the sign-in and account creation flows in `international-classrooms.html`, `connected-dashboards.html`, `connected-parent.html` and `connected-teacher.html`.
+- Repaired all four flows so password fields are cleared in a `finally` path after successful, rejected or interrupted sign-in attempts. Re-fetched each file after commit and confirmed the cleanup code is present.
+- New test-account creation checks for at least 8 characters in the browser. This is only the client-side minimum check; the effective Supabase Auth password policy still needs owner verification in project settings.
+- No in-app password reset or password-change flow was found in the reviewed pages. Add and test a secure email reset/change journey before public launch; configure its allowed redirect URL deliberately.
+- Supabase Leaked Password Protection remains disabled and plan-gated in the current security-advisor snapshot. This is an outstanding hardening item, not a reason to weaken or bypass RLS.
+- Account deletion remains a verified-adult request and manual-review workflow only. It does not currently delete the Auth account, revoke every device session, or erase learning records automatically. The retention and classroom-transfer procedure must be approved and tested before processing real requests.
+- No password, service-role key, provider secret, user account or production database policy was changed during this pass.
