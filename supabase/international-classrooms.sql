@@ -216,74 +216,157 @@ create policy "No direct client access to guardian consent codes"
 on private.guardian_consent_codes for all to anon, authenticated
 using (false) with check (false);
 
--- Revoke all linked children's classroom requests if a guardian revokes consent.
-create or replace function private.revoke_guardian_consent()
-returns text language plpgsql security definer set search_path = ''
-as $$
+-- Revoke consent for one explicitly selected child at a time.
+-- Never restore the legacy account-wide revocation function's execute grant.
+create or replace function private.revoke_guardian_consent_for_student(p_student_id uuid)
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $function$
 declare
   v_guardian uuid := auth.uid();
+  v_revoked_student uuid;
+  v_memberships_blocked integer := 0;
 begin
-  if v_guardian is null then raise exception 'Sign in to the guardian account first'; end if;
-  with revoked as (
-    update public.guardian_relationships
-    set relationship_status='revoked', revoked_at=now()
-    where guardian_id=v_guardian and relationship_status='active'
-    returning student_id
-  )
-  update public.classroom_members m
-  set parent_consent_status='rejected', membership_status='rejected'
-  where m.user_id in (select student_id from revoked);
-  if not exists (
-    select 1 from public.guardian_relationships
-    where guardian_id=v_guardian and relationship_status='revoked'
-      and revoked_at > now() - interval '1 minute'
-  ) then
-    raise exception 'No active guardian link was found';
+  if v_guardian is null then
+    raise exception 'Sign in to the guardian account first';
   end if;
-  return 'Guardian consent revoked for linked child accounts. Their classroom membership requests have been blocked.';
+  if p_student_id is null then
+    raise exception 'Choose the child whose consent you want to revoke';
+  end if;
+
+  update public.guardian_relationships
+  set relationship_status = 'revoked', revoked_at = now()
+  where guardian_id = v_guardian
+    and student_id = p_student_id
+    and relationship_status = 'active'
+  returning student_id into v_revoked_student;
+
+  if v_revoked_student is null then
+    raise exception 'No active guardian relationship for this child was found';
+  end if;
+
+  update public.classroom_members
+  set parent_consent_status = 'rejected',
+      membership_status = 'rejected'
+  where user_id = v_revoked_student
+    and (parent_consent_status <> 'rejected'
+         or membership_status <> 'rejected');
+  get diagnostics v_memberships_blocked = row_count;
+
+  return 'Consent revoked for the selected child. ' ||
+    v_memberships_blocked::text ||
+    ' classroom membership request(s) blocked. Other linked children were not changed.';
 end;
-$$;
-revoke all on function private.revoke_guardian_consent() from public, anon;
-grant execute on function private.revoke_guardian_consent() to authenticated;
+$function$;
+revoke all on function private.revoke_guardian_consent_for_student(uuid)
+  from public, anon, authenticated;
+grant execute on function private.revoke_guardian_consent_for_student(uuid)
+  to authenticated;
+
+create or replace function public.revoke_guardian_consent_for_student(p_student_id uuid)
+returns text
+language sql
+security invoker
+set search_path = ''
+as $function$
+  select private.revoke_guardian_consent_for_student(p_student_id);
+$function$;
+revoke all on function public.revoke_guardian_consent_for_student(uuid)
+  from public, anon, authenticated;
+grant execute on function public.revoke_guardian_consent_for_student(uuid)
+  to authenticated;
+
+-- Keep the legacy account-wide action disabled for old clients.
+revoke all on function private.revoke_guardian_consent()
+  from public, anon, authenticated;
+revoke all on function public.revoke_guardian_consent()
+  from public, anon, authenticated;
 
 
--- Latest consent redemption hardening: verify account email, prevent self-
--- consent, lock the one-time token, and serialize guardian linking per student.
+-- Latest consent redemption hardening: SHA-256 token hashes, email
+-- verification, explicit guardian affirmation, one-time locking and legacy
+-- MD5 compatibility only for unexpired tokens issued before this change.
 create or replace function private.redeem_guardian_consent_code(p_code text, p_guardian_affirms boolean)
-returns text language plpgsql security definer set search_path = ''
-as $$
+returns text
+language plpgsql
+security definer
+set search_path = ''
+as $function$
 declare
   v_guardian uuid := auth.uid();
   v_student uuid;
   v_confirmed timestamptz;
   v_rows integer;
+  v_hash text;
+  v_legacy_hash text;
 begin
-  if v_guardian is null then raise exception 'Sign in to the parent or guardian account first'; end if;
-  if p_guardian_affirms is distinct from true then raise exception 'The parent or guardian must explicitly confirm consent'; end if;
-  select u.email_confirmed_at into v_confirmed from auth.users u where u.id=v_guardian;
-  if v_confirmed is null then raise exception 'Verify the guardian account email before giving consent'; end if;
-  if p_code is null or length(trim(p_code)) <> 64 then raise exception 'Enter the full 64-character consent code'; end if;
-  select c.student_id into v_student from private.guardian_consent_codes c
-  where c.code_hash=md5(trim(p_code)) and c.used_at is null and c.expires_at>now()
+  if v_guardian is null then
+    raise exception 'Sign in to the parent or guardian account first';
+  end if;
+  if p_guardian_affirms is distinct from true then
+    raise exception 'The parent or guardian must explicitly confirm consent';
+  end if;
+  select u.email_confirmed_at into v_confirmed
+  from auth.users u where u.id = v_guardian;
+  if v_confirmed is null then
+    raise exception 'Verify the guardian account email before giving consent';
+  end if;
+  if p_code is null or length(trim(p_code)) <> 64
+     or trim(p_code) !~ '^[0-9a-fA-F]{64}-- The normalized unique index is created once above as
+-- classrooms_classroom_code_unique. A second equivalent index was removed
+-- by migration 20261110_drop_duplicate_classroom_code_index.sql.
+ then
+    raise exception 'Enter the full 64-character consent code';
+  end if;
+
+  v_hash := encode(extensions.digest(trim(p_code), 'sha256'), 'hex');
+  v_legacy_hash := md5(trim(p_code));
+
+  select c.student_id into v_student
+  from private.guardian_consent_codes c
+  where c.code_hash in (v_hash, v_legacy_hash)
+    and c.used_at is null and c.expires_at > now()
   for update;
-  if v_student is null then raise exception 'Consent code is invalid, expired, or already used'; end if;
-  if v_student=v_guardian then raise exception 'A student account cannot approve its own guardian consent'; end if;
-  insert into public.guardian_relationships(student_id,guardian_id,relationship_status,consented_at,revoked_at)
-  values(v_student,v_guardian,'active',now(),null)
-  on conflict(student_id) do update set guardian_id=excluded.guardian_id,
-    relationship_status='active',consented_at=now(),revoked_at=null
-  where public.guardian_relationships.relationship_status='revoked';
+
+  if v_student is null then
+    raise exception 'Consent code is invalid, expired, or already used';
+  end if;
+  if v_student = v_guardian then
+    raise exception 'A student account cannot approve its own guardian consent';
+  end if;
+
+  insert into public.guardian_relationships(student_id, guardian_id, relationship_status, consented_at, revoked_at)
+  values (v_student, v_guardian, 'active', now(), null)
+  on conflict (student_id) do update set
+    guardian_id = excluded.guardian_id,
+    relationship_status = 'active',
+    consented_at = now(),
+    revoked_at = null
+  where public.guardian_relationships.relationship_status = 'revoked';
+
   get diagnostics v_rows = row_count;
-  if v_rows=0 then raise exception 'A guardian is already linked to this student; revoke or contact support before changing it'; end if;
-  update private.guardian_consent_codes set used_at=now() where code_hash=md5(trim(p_code));
-  update public.classroom_members set parent_consent_status='approved',
-    membership_status=case when membership_status='rejected' then 'pending' else membership_status end
-  where user_id=v_student and membership_status in ('pending','rejected');
+  if v_rows = 0 then
+    raise exception 'A guardian is already linked to this student; revoke or contact support before changing it';
+  end if;
+
+  update private.guardian_consent_codes
+  set used_at = now()
+  where code_hash in (v_hash, v_legacy_hash);
+
+  update public.classroom_members
+  set parent_consent_status = 'approved',
+      membership_status = case when membership_status = 'rejected' then 'pending' else membership_status end
+  where user_id = v_student and membership_status in ('pending', 'rejected');
+
   return 'Guardian consent recorded. Classroom membership still requires teacher approval.';
 end;
-$$;
-revoke all on function private.redeem_guardian_consent_code(text,boolean) from public, anon;
-grant execute on function private.redeem_guardian_consent_code(text,boolean) to authenticated;
+$function$;
+revoke all on function private.redeem_guardian_consent_code(text, boolean)
+  from public, anon;
+grant execute on function private.redeem_guardian_consent_code(text, boolean)
+  to authenticated;
 
 
 -- The normalized unique index is created once above as
