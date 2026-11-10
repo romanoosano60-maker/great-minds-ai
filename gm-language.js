@@ -172,7 +172,7 @@ function gmSpeakText(requestedText){
  const startSpeech=()=>{if(started||request!==gmSpeechRequest)return started;
   const voices=synth.getVoices?synth.getVoices():[];
   const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale.toLowerCase())||voices.find(v=>v.lang&&v.lang.toLowerCase().split('-')[0]===base);
-  if(voice){utterance.voice=voice;utterance.lang=voice.lang}
+  if(!voice)return false;utterance.voice=voice;utterance.lang=voice.lang;
   started=true;utterance.onstart=()=>{};utterance.onerror=()=>{};
   try{synth.resume();synth.speak(utterance);return true}catch(error){alert('Speech could not start. Check Android Text-to-speech output.');return false}
  };
