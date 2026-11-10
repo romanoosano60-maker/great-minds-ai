@@ -95,3 +95,25 @@ Source-code repairs above are development progress only. Do not change the produ
 - This is deliberate: the private table is accessed only through the `SECURITY DEFINER` quota function owned by `postgres`; direct browser access remains blocked.
 - Ran `public.consume_ai_teacher_quota()` under the `authenticated` database role with a simulated JWT subject inside a transaction, then rolled back the transaction. Result: `allowed=true`, `user_remaining=9`, `service_remaining=99`. This verifies the database function path with RLS enabled but is not a real signed-in end-user request or a live AI answer test.
 - Security Advisor no longer flags RLS as disabled. It now emits an informational `RLS Enabled No Policy` notice for the private usage table, which is intentional. The separate `Leaked Password Protection Disabled` warning remains open.
+
+
+## Current implementation correction — 10 November 2026
+
+Older statements in this document saying that no Supabase AI Teacher endpoint is deployed are superseded by the current implementation:
+
+- Frontend: `ai-teacher.html` uses `ai-teacher-config.js` and calls the Supabase Edge Function endpoint.
+- Backend: `ai-teacher` is ACTIVE version 4 with JWT verification enabled. The OpenAI key is read from server-side Function Secrets. The browser request now includes both the public Supabase `apikey` and the user's bearer token.
+- Status: deployed and configured in source, but not accepted as live until an authenticated answer, an unauthorised-account rejection and Android speech tests pass. Natural low-latency voice-to-voice streaming is not implemented.
+
+### Additional child-consent hardening
+- The classroom membership UPDATE policy now requires an active guardian relationship for any row marked with approved guardian consent.
+- The classroom-call token endpoint independently verifies the student's active guardian relationship before issuing a token.
+- `classroom-call-token` is ACTIVE version 6 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
+- Supabase confirms RLS is enabled on all 11 inspected application tables and no direct anon table privileges are present. Three intentionally closed tables continue to produce informational no-policy notices.
+
+### Repository integrity checks
+- All 56 HTML pages were checked for local `href` and `src` references; no missing local targets were found.
+- The 195-file repository has no exact duplicate Git blobs. Legacy demos and connected pages are different implementations, not duplicate copies, and were not deleted.
+- Latest application-code Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
+
+The application remains not launch-ready until all owner/device tests, actual secret configuration checks, child-privacy/legal review, retention/deletion decisions, backups/monitoring and native packaging requirements are completed.
