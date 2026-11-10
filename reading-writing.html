@@ -79,18 +79,18 @@ function speakReading(text,label){
    return;
   }
   const voices=synth.getVoices()||[];
-  const voice=voices.find(v=>v.lang.toLowerCase()===locale.toLowerCase())||
-   voices.find(v=>v.lang.toLowerCase().startsWith(selected+"-"))||
-   voices.find(v=>v.default)||voices[0]||null;
+  const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===locale.toLowerCase())||
+   voices.find(v=>v.lang&&v.lang.toLowerCase().split("-")[0]===selected);
+  if(!voice){voiceStatus.textContent="No "+locale+" voice is installed or available. Install the selected language in Android Text-to-speech settings; another language will not be substituted.";return;}
   const utterance=new SpeechSynthesisUtterance(chunks[index].trim());
-  utterance.lang=voice?voice.lang:locale;
+  utterance.lang=voice.lang;
   utterance.rate=0.88;
-  if(voice)utterance.voice=voice;
+  utterance.voice=voice;
   let started=false;
   utterance.onstart=()=>{started=true;if(run===speechRun)voiceStatus.textContent=voice&&voice.lang.toLowerCase().startsWith(selected)?"🔊 "+label+"…":"🔊 Speaking with the phone's available voice. Install the selected language voice for a closer match.";};
   utterance.onend=()=>{if(run!==speechRun)return;index++;setTimeout(speakNext,120);};
   utterance.onerror=(event)=>{if(run!==speechRun)return;voiceStatus.textContent="The phone's speech engine stopped ("+(event.error||"unknown error")+"). Check Android Text-to-speech settings and try Test voice again.";};
-  try{synth.speak(utterance);}catch(error){voiceStatus.textContent="The browser could not start speech. Open this page in Chrome and check Android Text-to-speech settings.";return;}
+  try{synth.resume();synth.speak(utterance);}catch(error){voiceStatus.textContent="The browser could not start speech. Open this page in Chrome and check Android Text-to-speech settings.";return;}
   setTimeout(()=>{if(run===speechRun&&!started&&index<chunks.length)voiceStatus.textContent="No sound started. Your phone may have its Text-to-speech engine disabled or no voice installed. Check Android Settings → General management → Text-to-speech output.";},6000);
  }
  const begin=()=>{if(run===speechRun)setTimeout(speakNext,180);};
