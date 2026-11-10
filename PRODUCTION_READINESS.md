@@ -123,3 +123,7 @@ The application remains not launch-ready until all owner/device tests, actual se
 - Removed redundant `classrooms_classroom_code_normalized_uidx`; retained `classrooms_classroom_code_unique` with equivalent normalized uniqueness enforcement.
 - Updated the repository SQL setup script so it no longer recreates the duplicate.
 - Rechecked valid public index definitions: no exact structural duplicates remain. No classroom data changed.
+
+
+### Teacher access policy correction — 10 November 2026
+Teacher-side homework and progress policies were updated so they do not query the private guardian-link table as the teacher. They now rely on approved classroom membership and the consent-status column, which authenticated clients cannot update. Student/guardian paths continue to verify their own active relationship. Separate-account tests are still required.
