@@ -90,11 +90,74 @@ img,svg,video,canvas{max-width:100%;height:auto}
 </main>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script>
 <script>
-(function(){const $=id=>document.getElementById(id);function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
-function speak(text){if(!("speechSynthesis"in window)){$("letterInfo").textContent="Speech is not supported in this browser. You can still read the words.";return}speechSynthesis.cancel();const u=new SpeechSynthesisUtterance(text);u.lang="en-US";u.rate=.86;speechSynthesis.speak(u)}
+(function(){const $=id=>document.getElementById(id);function gmInstallStopVoiceControl(){if(document.getElementById("gm-stop-voice"))return;const button=document.createElement("button");button.type="button";button.id="gm-stop-voice";button.textContent="⏹ Stop voice";button.setAttribute("aria-label","Stop spoken lesson audio");button.addEventListener("click",()=>{gmSpeechRequest++;if("speechSynthesis" in window)window.speechSynthesis.cancel();button.textContent="⏹ Voice stopped";$("letterInfo").textContent="Voice stopped.";});const host=document.querySelector("header")||document.querySelector("main");if(host)host.appendChild(button);}gmInstallStopVoiceControl();
+let gmSpeechRequest=0;
+function speak(text){
+ const status=$("letterInfo");
+ if(!("speechSynthesis" in window)||typeof SpeechSynthesisUtterance==="undefined"){
+  status.textContent="Spoken audio is not available in this browser. You can still read the lesson.";return;
+ }
+ const synth=window.speechSynthesis,request=++gmSpeechRequest;
+ synth.cancel();
+ const start=()=>{
+  if(request!==gmSpeechRequest)return;
+  const voices=synth.getVoices();
+  const voice=voices.find(v=>/^en-US/i.test(v.lang))||voices.find(v=>/^en-GB/i.test(v.lang))||voices.find(v=>/^en/i.test(v.lang));
+  const utterance=new SpeechSynthesisUtterance(text);
+  utterance.lang=voice?voice.lang:"en-US";
+  if(voice)utterance.voice=voice;
+  utterance.rate=.86;
+  utterance.onstart=()=>{status.textContent="🔊 Playing audio…";};
+  utterance.onend=()=>{status.textContent="Audio finished. Choose another lesson to listen again.";};
+  utterance.onerror=()=>{status.textContent="Audio could not play. Check that an English text-to-speech voice is installed on your phone.";};
+  try{synth.resume();synth.speak(utterance);}catch(error){status.textContent="Audio could not start. Please try again.";}
+ };
+ if(synth.getVoices().length){start();return;}
+ let finished=false;
+ const onVoices=()=>{
+  if(finished||request!==gmSpeechRequest||!synth.getVoices().length)return;
+  finished=true;synth.removeEventListener("voiceschanged",onVoices);start();
+ };
+ synth.addEventListener("voiceschanged",onVoices);
+ window.setTimeout(()=>{
+  if(finished)return;
+  finished=true;synth.removeEventListener("voiceschanged",onVoices);start();
+ },1800);
+}
 const examples=["Apple","Ball","Cat","Dog","Elephant","Fish","Goat","House","Ice cream","Juice","Kite","Lion","Moon","Nest","Orange","Pencil","Queen","Rabbit","Sun","Tree","Umbrella","Van","Water","X-ray","Yo-yo","Zebra"];
 "ABCDEFGHIJKLMNOPQRSTUVWXYZ".split("").forEach((letter,i)=>{const b=document.createElement("button");b.type="button";b.textContent=letter;b.setAttribute("aria-label","Letter "+letter);b.addEventListener("click",()=>{$("letterInfo").textContent=letter+" is for "+examples[i];speak(letter+". "+letter+" is for "+examples[i])});$("letters").appendChild(b)});
-const vocab=[["Curious","Wanting to learn or know more","The curious child asked a question."],["Brave","Ready to face something difficult","The brave girl tried again."],["Protect","To keep someone or something safe","We protect plants by caring for them."],["Journey","A trip from one place to another","Their journey took two days."],["Gentle","Kind, calm or careful","Use a gentle voice with the puppy."],["Discover","To find or learn something new","We discover facts by exploring."]];
+const vocab=[
+["Curious","Wanting to learn or know more","The curious child asked a question."],
+["Brave","Ready to face something difficult","The brave girl tried again."],
+["Protect","To keep someone or something safe","We protect plants by caring for them."],
+["Journey","A trip from one place to another","Their journey took two days."],
+["Gentle","Kind, calm or careful","Use a gentle voice with the puppy."],
+["Discover","To find or learn something new","We discover facts by exploring."],
+["Ancient","Very old; from a long time ago","We read about ancient Egypt."],
+["Adventure","An exciting or unusual experience","Our class went on a nature adventure."],
+["Bright","Giving lots of light; clever","The bright student solved the puzzle."],
+["Careful","Taking care to avoid mistakes or danger","Be careful when crossing the road."],
+["Compare","To find how things are alike or different","Compare the two pictures."],
+["Create","To make something new","We create a story together."],
+["Delicious","Having a very pleasant taste","The mango was delicious."],
+["Eager","Very ready and excited to do something","I am eager to learn a new word."],
+["Explore","To look around and learn about a place or idea","We explore the garden."],
+["Famous","Known by many people","The famous scientist made a discovery."],
+["Generous","Happy to give or share with others","A generous friend shares fairly."],
+["Grateful","Feeling thankful","I am grateful for my family."],
+["Honest","Truthful and fair","An honest person tells the truth."],
+["Imagine","To form a picture or idea in your mind","Imagine a house on the moon."],
+["Improve","To make or become better","Practice helps us improve our reading."],
+["Knowledge","Information and understanding gained by learning","Books can increase our knowledge."],
+["Observe","To watch carefully and notice details","Observe how the seed grows."],
+["Patient","Able to wait calmly","Be patient while the paint dries."],
+["Protect","To keep someone or something safe","A helmet helps protect your head."],
+["Responsible","Doing what you should do and being dependable","A responsible learner finishes their work."],
+["Solution","An answer to a problem","We found a solution to the puzzle."],
+["Unique","Being the only one of its kind","Every snowflake has a unique shape."],
+["Whisper","To speak very quietly","Please whisper in the library."],
+["Wonderful","Very good or pleasing","We had a wonderful learning day."]
+];
 vocab.forEach(([w,d,e])=>{const el=document.createElement("article");el.className="word";const strong=document.createElement("strong");strong.textContent=w;const p=document.createElement("span");p.textContent=d;const small=document.createElement("small");small.textContent=e;const b=document.createElement("button");b.type="button";b.textContent="🔊 Listen";b.addEventListener("click",()=>speak(w+". "+d+". "+e));el.append(strong,p,small,b);$("words").appendChild(el)});
 $("readStory").addEventListener("click",()=>speak($("story").textContent));
 const reading=[{q:"What did Mina plant?",a:["A seed","A tree","A flower"],c:0},{q:"Where did Mina put the pot?",a:["In a cupboard","Near a sunny window","Outside in the rain"],c:1},{q:"What appeared after some days?",a:["A red fruit","A tiny green shoot","A butterfly"],c:1}];let ri=0,rd=false;function showRead(){rd=false;$("readProgress").textContent="Question "+(ri+1)+" of 3";$("readQuestion").textContent=reading[ri].q;$("readFeedback").textContent="";$("readNext").hidden=true;$("readAnswers").innerHTML="";reading[ri].a.forEach((v,i)=>{const b=document.createElement("button");b.textContent=v;b.addEventListener("click",()=>{if(rd)return;rd=true;Array.from($("readAnswers").children).forEach(x=>x.disabled=true);$("readFeedback").textContent=i===reading[ri].c?"🌟 Correct! Well read.":"Good try! The answer is "+reading[ri].a[reading[ri].c]+".";$("readNext").hidden=false});$("readAnswers").appendChild(b)})}$("readNext").addEventListener("click",()=>{if(!rd)return;ri=(ri+1)%reading.length;showRead()});showRead();
