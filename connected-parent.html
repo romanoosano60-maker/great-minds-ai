@@ -92,8 +92,16 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   user=data.user;await load();watchCloud();}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}
  });
  el('parentLogout').addEventListener('click',async()=>{
-  if(!db)return;if(cloudChannel){await db.removeChannel(cloudChannel);cloudChannel=null}const {error}=await db.auth.signOut();user=null;records.textContent='Sign in to load cloud progress.';
-  say(error?'Sign-out issue: '+error.message:'Signed out of cloud progress.');
+  el('parentPassword').value='';
+  user=null;
+  records.textContent='Sign in to load cloud progress.';
+  el('cloudHomeworkRecords').textContent='Sign in to load homework records.';
+  if(!db){say('Cloud service unavailable. Local cloud display cleared.');return}
+  try{
+   if(cloudChannel){const channel=cloudChannel;cloudChannel=null;await db.removeChannel(channel)}
+   const {error}=await db.auth.signOut();
+   say(error?'Sign-out issue: '+error.message:'Signed out of cloud progress.');
+  }catch(e){say('Sign-out issue: '+e.message+'. Cloud records were cleared from this page.')}
  });
  el('refreshCloud').addEventListener('click',load);
  init();
