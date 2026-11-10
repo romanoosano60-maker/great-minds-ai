@@ -876,3 +876,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Verified authenticated users can update `classroom_members.membership_status` but cannot update `parent_consent_status`, `user_id` or other identity fields. Consent status is controlled by the guardian-consent SECURITY DEFINER RPC; the call-token function also independently verifies an active guardian link before issuing student tokens.
 - Migration `20261110_fix_teacher_rls_guardian_visibility` applied successfully. Updated `supabase/classroom-homework.sql` to match the final teacher policies. The student-progress setup script already uses the protected consent status for its teacher read policy.
 - No classroom, guardian, homework or progress rows were changed. Real teacher/student/guardian tests remain necessary to confirm the complete workflow.
+
+## Android subject read-aloud hardening — 10 November 2026
+
+- Updated the shared read-aloud controls embedded in `math.html`, `science.html`, `history.html`, `geography.html` and `social-studies.html`.
+- Read-aloud now waits for Android/browser speech voices to become available before speaking, prefers the page language and then an available English voice, resumes the speech engine, and reports a clear timeout/error message when no voice is available.
+- Stop Voice now invalidates the pending speech request and clears its watchdog so a delayed voice event cannot restart playback after the user has stopped it.
+- This is a source-level improvement only. The owner still needs to verify actual sound and language selection on the Android device with installed voice data.
+- Latest source commits: d091810594f27096bf551a1d2718a58748c91160, c6e33e17cdf048f540d10e7eec45f14931d4bd1a, 74a7007f19e3541f6def95f9b6888353decc8d7c, 4b0cbab5ad4b7139be24e5e5ba0ea9a1a5bd35c1, 6e730bc3954e6506224eab3e6414212a03f8a1f1.
