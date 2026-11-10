@@ -979,3 +979,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - AI question/answer and speech-recognition transcript output use text properties rather than injecting response text as HTML. Classroom participant labels are created as text nodes; participant selector values are CSS-escaped. Classroom call UI starts local media OFF and disconnects on failed setup or teacher departure.
 - Account-deletion UI clearly describes this as a request, requires an explicit checkbox, and tells the user that account and learning records have NOT been deleted. No false completion claim is shown.
 - No additional source change was justified in these three pages during this pass. Live Android microphone/camera, cross-account permissions and actual deletion lifecycle remain unverified owner tests.
+
+
+## Advanced Learning media lifecycle audit — 10 November 2026
+
+- Rechecked all 12 core learning/voice pages in the current audit batch. All have speech playback; all include a Stop control; all include background/pagehide handling for the relevant media or playback.
+- Found one gap in `advanced-learning.html`: leaving the page or switching away aborted microphone recognition, but did not cancel active speech synthesis or invalidate a pending speech-start callback.
+- Repaired the inactive-page handler to invalidate pending speech, clear voice wait timers/listeners, abort recognition, and cancel speech synthesis on both hidden-page and pagehide events.
+- Source commit: `09342c6819408f0ae70b65d7be34fb797249b863`. This source change requires GitHub Pages deployment and Android confirmation; it is not counted as device-tested.
