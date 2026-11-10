@@ -290,3 +290,6 @@ No production schema, RLS policy, secret, account or user data was modified in t
 - Supabase Leaked Password Protection remains disabled and plan-gated in the current security-advisor snapshot. This is an outstanding hardening item, not a reason to weaken or bypass RLS.
 - Account deletion remains a verified-adult request and manual-review workflow only. It does not currently delete the Auth account, revoke every device session, or erase learning records automatically. The retention and classroom-transfer procedure must be approved and tested before processing real requests.
 - No password, service-role key, provider secret, user account or production database policy was changed during this pass.
+
+
+- Additional legacy connection test page `supabase-connect.html` audited on 2026-11-10: password now clears after every login attempt; the Clear test session button now attempts Supabase Auth sign-out before reporting completion. The page was re-fetched and both changes confirmed.
