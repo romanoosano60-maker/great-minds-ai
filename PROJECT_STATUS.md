@@ -803,3 +803,11 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - No classroom/student/guardian data, RLS policies, grants or indexes were changed during this follow-up. The only live deployment change was the WSS-only classroom-call endpoint hardening.
 
 Remaining owner/device actions are unchanged: confirm LiveKit and OpenAI secrets in Supabase Function Secrets without sharing them; run separate-account classroom, consent, progress and homework tests across devices; test AI Teacher with an authenticated account and a rejected unauthorised account; test Android audio/video and text-to-speech; and obtain territory-specific privacy/legal review before launch.
+
+
+## Classroom media privacy default — 10 November 2026
+
+- Updated `classroom-call.html` so joining an audio/video room does not automatically activate the participant's microphone or camera. Both start OFF; the user must deliberately tap the corresponding control to publish media.
+- Updated the initial button labels and on-page explanation to make the opt-in behaviour clear. Guardian observer mode remains unable to publish media.
+- Re-fetched the committed page and verified the automatic `setMicrophoneEnabled(true)` and `setCameraEnabled(true)` calls are absent while the explicit user-triggered toggle handlers remain.
+- This is source-level verification only. The owner still needs to test microphone/camera prompts and the opt-in controls on Android with adult-controlled accounts.
