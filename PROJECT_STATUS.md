@@ -884,3 +884,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Stop Voice now invalidates the pending speech request and clears its watchdog so a delayed voice event cannot restart playback after the user has stopped it.
 - This is a source-level improvement only. The owner still needs to verify actual sound and language selection on the Android device with installed voice data.
 - Latest source commits: d091810594f27096bf551a1d2718a58748c91160, c6e33e17cdf048f540d10e7eec45f14931d4bd1a, 74a7007f19e3541f6def95f9b6888353decc8d7c, 4b0cbab5ad4b7139be24e5e5ba0ea9a1a5bd35c1, 6e730bc3954e6506224eab3e6414212a03f8a1f1.
+
+
+## Shared English voice and AI Teacher speech hardening — 10 November 2026
+
+- Updated `gm-language.js`, the shared speech helper used by pages including Dictionary and Computer Studies. It now resumes the speech engine, waits for voice data, removes pending voice listeners/timers when a new request or Stop Voice occurs, and prevents delayed playback from restarting after Stop Voice.
+- Preserved language correctness: the helper requires an exact or same-language voice (for example, an English voice for English) and does not intentionally substitute an unrelated language when the selected language voice is unavailable.
+- Updated `ai-teacher.html` to use the same voice-readiness and cancellation safeguards for teaching-language phrases and spoken answers. Stop Voice now cancels both active playback and pending voice setup.
+- Source commits: `gm-language.js` 66c9df657930a5527b0bc6995966e63c065c2b73` (follow-up language-match correction `7c2b36e7102674109c7a5773c145775c63e5974b`); `ai-teacher.html` `7464660de5b46de2ce6f12f226da873af3e42f29` (follow-up language-match correction `a332c19189d37af418a150f18f51273a2b4cc129`).
+- These are source-level repairs only. Android playback, selected-language pronunciation and microphone recognition still require device testing. The AI Teacher's live signed-in response also remains unverified.
