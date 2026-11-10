@@ -937,3 +937,8 @@ This audit does not certify the application as 100% complete or launch-ready. So
 
 - Added automatic speech-recognition shutdown when the AI Teacher or Advanced Learning page becomes hidden or is being unloaded. This aborts any active browser/device recognition session, clears recognition callbacks and restores the microphone control. This reduces the risk of a child leaving microphone recognition running after switching away from the page. Commits: `4b0744cf3d05ea88e3dac4f421142d7b2f08b191` (`ai-teacher.html`) and `fdf84e79613ccb55e871f4f3b8d98b8b52d7d867` (`advanced-learning.html`).
 - This is a source-level privacy safeguard. Actual Android browser behaviour and microphone permission indicators still require device testing.
+
+## AI Teacher microphone privacy wording correction — 10 November 2026
+
+- Corrected the offline-mode connection notice in `ai-teacher.html`: browser/device speech recognition may send microphone audio to its own speech-recognition provider. Great Minds receives recognized text only if the user submits it as a question. The notice now tells users to review provider privacy settings and avoid speaking private information. This avoids implying that raw audio is necessarily processed only on-device. Commit: `f76ee2be0aafe5c493533ce96736060cb53c56b6`.
+- This is a privacy-transparency wording correction, not a verification of the browser/device provider's identity, processing location, or retention terms.
