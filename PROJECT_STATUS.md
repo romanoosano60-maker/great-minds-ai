@@ -925,3 +925,5 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Current live deletion workflow remains request-only: adult request authentication, email verification, role/guardian-link checks and classroom ownership checks are present. No Auth account or learning data is automatically deleted. Retention duration, verified guardian authority for a child's deletion, classroom transfer/closure and supervised deletion remain unimplemented.
 - Corrected the stale version-3 line in `ACCOUNT_DELETION_WORKFLOW.md` to version 4.
 - GitHub Pages deployment for commit `fe4ba941a478bd46b6eebe03d24bccf40f1b3ae1` was still `in_progress` at the time of this check. Do not assume the new audio repairs are live until that run succeeds.
+
+- Further repaired `english.html`: its alphabet, ABCD/vowel and sight-word/phonics readers now require an installed English voice instead of allowing a different device-default language. The Stop Voice control now invalidates all three independent speech request queues so a delayed voice-load callback cannot restart playback after Stop. Commit: `65494abca09bc8becf29375f09391a5589c14716`.
