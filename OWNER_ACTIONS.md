@@ -293,3 +293,14 @@ No production schema, RLS policy, secret, account or user data was modified in t
 
 
 - Additional legacy connection test page `supabase-connect.html` audited on 2026-11-10: password now clears after every login attempt; the Clear test session button now attempts Supabase Auth sign-out before reporting completion. The page was re-fetched and both changes confirmed.
+
+
+## Final consolidated audit pass — 2026-11-10
+
+- Added `ENGINEERING_HANDOVER_2026-11-10.md` as the consolidated engineering record, including verified work, current live backend evidence, security-advisor findings, honest feature boundaries, deployment/Android gaps, and the single owner acceptance sequence.
+- Additional password edge cases fixed after the earlier role-page pass: Student Dashboard now clears the password on network/auth errors and service-unavailable exits, and on sign-out; Teacher Dashboard now clears the password if the cloud service is unavailable and on sign-out. Both files were re-fetched after commits and verified.
+- Confirmed `homework.html` and `student-cloud-homework.js` exist in the current main-branch tree. The secure cloud homework area is separate from local demo tabs.
+- Rechecked the current Supabase advisor snapshot: health has no findings; security has three restricted RLS/no-policy notices and leaked-password protection disabled; performance has five unused-index notices and two multiple-permissive-SELECT-policy notices. No broad policy changes or index removals were made.
+- Rechecked the deployed Edge Function inventory: AI Teacher v6, classroom-call-token v7 and account-deletion-request v5 are ACTIVE with JWT verification enabled.
+- Rechecked the repository tree: 199 tracked files. No Android project, Capacitor config, package manifest, web-app manifest or service worker is present. Public GitHub Pages deployment remains unconfirmed.
+- Source changes are not a substitute for Android/runtime tests. Keep deployment, live backend, owner acceptance, and launch readiness as separate completion measures.
