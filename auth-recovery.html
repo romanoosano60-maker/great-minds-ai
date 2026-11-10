@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Reset Password | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;padding:20px;background:#eef5ff;color:#19345a;font:16px Arial,sans-serif}
+main{max-width:520px;margin:7vh auto;background:white;border-radius:18px;padding:24px;box-shadow:0 3px 14px #1232}
+h1{color:#5149d7}label{display:block;font-weight:bold;margin:16px 0 7px}
+input{width:100%;padding:13px;border:1px solid #a8b9d3;border-radius:10px;font:inherit}
+button,a{display:inline-block;margin-top:16px;padding:12px 16px;border:0;border-radius:10px;background:#5149d7;color:white;text-decoration:none;font-weight:bold;cursor:pointer}
+button:disabled{opacity:.6}#recoveryStatus{padding:12px;background:#f1f4ff;border-radius:9px;line-height:1.5}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+<script defer src="auth-recovery-page.js"></script>
+</head>
+<body><main>
+<h1>Reset your password</h1>
+<p>Use the latest recovery email sent by Great Minds AI. Choose a new password you do not use on another website.</p>
+<p id="recoveryStatus" role="status" aria-live="polite">Checking your secure recovery link…</p>
+<form id="recoveryForm" hidden>
+<label for="newPassword">New password</label>
+<input id="newPassword" type="password" minlength="8" autocomplete="new-password" required>
+<label for="confirmPassword">Confirm new password</label>
+<input id="confirmPassword" type="password" minlength="8" autocomplete="new-password" required>
+<button type="submit">Update password</button>
+</form>
+<a href="international-classrooms.html">Return to Great Minds AI sign in</a>
+</main></body></html>
