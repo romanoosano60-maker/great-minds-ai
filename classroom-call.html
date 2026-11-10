@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Great Minds AI | Supervised Classroom Call</title>
+<style>
+*{box-sizing:border-box}body{margin:0;background:linear-gradient(145deg,#eaf5ff,#f8edff);font:16px system-ui,Arial;color:#142443}.wrap{max-width:1000px;margin:auto;padding:16px}header,.panel{background:#fff;border:1px solid #dce6f4;border-radius:18px;padding:18px;margin-bottom:14px;box-shadow:0 4px 16px #19305a12}header{background:linear-gradient(120deg,#1745ac,#6545e8);color:#fff}h1{margin:0 0 8px}.muted{color:#53617a;font-size:14px}.status{padding:12px;background:#eef3fa;border-radius:10px;white-space:pre-wrap;overflow-wrap:anywhere}button{font:inherit;min-height:46px;padding:11px 14px;border:0;border-radius:10px;background:#2259cf;color:#fff;font-weight:650;margin:6px 6px 6px 0;cursor:pointer}.secondary{background:#53617a}.danger{background:#a52c43}button:disabled{opacity:.55;cursor:not-allowed}.tiles{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:12px}.tile{background:#101827;border-radius:14px;min-height:170px;overflow:hidden;position:relative}.tile video{width:100%;height:100%;min-height:170px;object-fit:cover}.tile audio{width:100%;position:absolute;bottom:8px;left:0}.tile span{position:absolute;left:10px;top:10px;background:#111c;color:white;padding:5px 8px;border-radius:8px;font-size:13px}.controls{display:flex;flex-wrap:wrap;gap:6px}.notice{background:#fff3d5;padding:12px;border-radius:10px;line-height:1.5}@media(max-width:480px){.wrap{padding:10px}.panel,header{padding:14px}.tiles{grid-template-columns:1fr 1fr}.tile,.tile video{min-height:130px}}
+</style>
+<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+<script src="supabase-config.js"></script>
+</head>
+<body><main class="wrap">
+<header><h1>🌍 Great Minds AI</h1><strong id="callTitle">Supervised classroom call</strong><p id="callSubtitle">A teacher-led classroom session.</p></header>
+<section class="panel"><h2>Call status</h2><div id="status" class="status" role="status" aria-live="polite">Checking your sign-in…</div><p class="notice">Use your camera and microphone only if you are in a private, appropriate place. Ask a parent or teacher before enabling them. Calls are not recorded by Great Minds AI. A guardian joining as an observer can watch and listen but cannot publish audio or video.</p></section>
+<section class="panel"><h2>Participants</h2><div id="tiles" class="tiles"></div></section>
+<section class="panel"><h2>Call controls</h2><div class="controls">
+<button id="mic" type="button" disabled>🎙️ Mute microphone</button>
+<button id="camera" type="button" disabled>📷 Turn camera off</button>
+<button id="leave" type="button" class="secondary" disabled>Leave call</button>
+<button id="end" type="button" class="danger" hidden>End classroom call</button>
+</div><p class="muted" id="controlNote">Camera and microphone are only enabled after you join and grant browser permission.</p><a href="international-classrooms.html">← Back to International Classrooms</a></section>
+</main>
+<script type="module">
+import { Room, RoomEvent, Track } from "https://cdn.jsdelivr.net/npm/livekit-client@2.15.6/+esm";
+const $=id=>document.getElementById(id);
+const params=new URLSearchParams(location.search);
+const classroomId=params.get("classroom");
+const mode=params.get("mode")==="video"?"video":"audio";
+const action=params.get("action")==="start"?"start":"join";
+let client=null,room=null,tokenRole="",micOn=false,cameraOn=false;
+$("callTitle").textContent=(mode==="video"?"📹 Video":"🎙️ Audio")+" classroom";
+$("callSubtitle").textContent="Classroom "+(classroomId||"not selected")+" · "+(action==="start"?"Teacher starting session":"Joining teacher's session");
+function status(s){$("status").textContent=s}
+function addTrack(track,participant){
+ const key=participant.identity;
+ let tile=document.querySelector('[data-participant="'+CSS.escape(key)+'"]');
+ if(!tile){tile=document.createElement("div");tile.className="tile";tile.dataset.participant=key;const label=document.createElement("span");label.textContent=participant.name||"Classroom participant";tile.append(label);$("tiles").append(tile)}
+ const element=track.attach();
+ if(track.kind===Track.Kind.Video){element.autoplay=true;element.playsInline=true;tile.prepend(element)}
+ else {element.autoplay=true;element.controls=false;tile.append(element)}
+}
+function removeTrack(track){track.detach().forEach(el=>el.remove())}
+async function invoke(actionName){
+ const cfg=window.greatMindsSupabaseConfig;
+ if(!cfg?.url||!cfg?.publishableKey)throw Error("Supabase configuration is missing.");
+ if(!client)client=window.supabase.createClient(cfg.url,cfg.publishableKey);
+ const {data:{session},error}=await client.auth.getSession();
+ if(error||!session?.access_token)throw Error("Please sign in on the International Classrooms page first.");
+ const response=await fetch(cfg.url+"/functions/v1/classroom-call-token",{method:"POST",headers:{"Content-Type":"application/json","apikey":cfg.publishableKey,"Authorization":"Bearer "+session.access_token},body:JSON.stringify({classroom_id:classroomId,mode,action:actionName})});
+ const data=await response.json().catch(()=>({}));
+ if(!response.ok)throw Error(data.error||"The secure classroom call could not be prepared.");
+ return data;
+}
+async function start(){
+ if(!classroomId||!/^[0-9]+$/.test(classroomId)){status("No valid classroom was selected. Return to International Classrooms.");return}
+ try{
+  status("Checking your classroom membership and preparing the secure call…");
+  const data=await invoke(action);
+  tokenRole=data.participant_role;
+  if(action==="start")$("end").hidden=false;
+  room=new Room({adaptiveStream:true,dynacast:true});
+  room.on(RoomEvent.TrackSubscribed,(track,publication,participant)=>addTrack(track,participant));
+  room.on(RoomEvent.TrackUnsubscribed,(track)=>removeTrack(track));
+  room.on(RoomEvent.ParticipantDisconnected,(participant)=>{document.querySelector('[data-participant="'+CSS.escape(participant.identity)+'"]')?.remove()});
+  room.on(RoomEvent.Disconnected,()=>status("You have disconnected from the classroom call."));
+  await room.connect(data.server_url,data.token);
+  for(const p of room.remoteParticipants.values())for(const pub of p.trackPublications.values())if(pub.track)addTrack(pub.track,p);
+  if(tokenRole!=="guardian_observer"){
+    micOn=await room.localParticipant.setMicrophoneEnabled(true);
+    if(mode==="video")cameraOn=await room.localParticipant.setCameraEnabled(true);
+  }
+  $("mic").disabled=tokenRole==="guardian_observer";$("camera").disabled=tokenRole==="guardian_observer"||mode!=="video";
+  $("leave").disabled=false;$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on";
+  $("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on";
+  if(tokenRole==="guardian_observer")$("controlNote").textContent="Guardian observer mode: microphone and camera are disabled.";
+  else $("controlNote").textContent="You can control your microphone and camera below.";
+  status("Connected. Role: "+tokenRole.replaceAll("_"," ")+". "+(mode==="video"?"Video call":"Audio call")+" is active.");
+ }catch(e){status(e.message);$("end").hidden=action!=="start"}
+}
+$("mic").onclick=async()=>{try{micOn=await room.localParticipant.setMicrophoneEnabled(!micOn);$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on"}catch(e){status("Microphone error: "+e.message)}};
+$("camera").onclick=async()=>{try{cameraOn=await room.localParticipant.setCameraEnabled(!cameraOn);$("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on"}catch(e){status("Camera error: "+e.message)}};
+$("leave").onclick=async()=>{if(room)await room.disconnect();$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;status("You left the call.")};
+$("end").onclick=async()=>{try{await invoke("end");if(room)await room.disconnect();$("leave").disabled=true;$("end").disabled=true;status("The teacher ended the classroom call. All participants have been disconnected.")}catch(e){status("Could not end the classroom call: "+e.message)}};
+start();
+</script></body></html>
