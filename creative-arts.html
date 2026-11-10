@@ -13,7 +13,7 @@
 const $=id=>document.getElementById(id);
 $("mix").addEventListener("click",()=>$("mixAnswer").textContent="Red + yellow can make orange.");
 $("pattern").addEventListener("click",()=>$("patternAnswer").textContent="🔵 Blue comes next.");
-$("rhythm").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("rhythmStatus").textContent="Speech is not available on this browser.";return}const u=new SpeechSynthesisUtterance("Clap, clap, pause. Clap, clap, pause. Try it with me!");u.lang="en-US";u.rate=.85;speechSynthesis.cancel();speechSynthesis.speak(u);$("rhythmStatus").textContent="Listen, then clap along."});
+$("rhythm").addEventListener("click",()=>{if(!("speechSynthesis"in window)){$("rhythmStatus").textContent="Speech is not available on this browser.";return}const u=new SpeechSynthesisUtterance("Clap, clap, pause. Clap, clap, pause. Try it with me!");u.lang="en-US";u.rate=.85;gmQueueUtterance(u,$("rhythmStatus"));});
 const bank=[
 ["Which are traditional primary paint colours?",["Red, yellow and blue","Green, orange and purple","Black, white and pink"],0],
 ["Red mixed with yellow makes…",["Green","Orange","Purple"],1],
@@ -36,4 +36,23 @@ function show(){done=false;const q=bank[i];$("meta").textContent="Question "+(i+
 $("next").addEventListener("click",()=>{if(!done)return;i++;if(i<bank.length)show();else{$("meta").textContent="Challenge complete";$("question").textContent="You finished the Art Challenge!";$("choices").innerHTML="";$("feedback").textContent="Your score: "+score+" out of "+bank.length+". Keep creating!";$("next").hidden=true;if(window.gmSaveStudentProgress)window.gmSaveStudentProgress({subject:"Creative Arts",activity_key:"creative-arts-challenge",score,max_score:bank.length,correct_count:score,question_count:bank.length,source:"creative-arts"}).catch(()=>{})}});
 $("restart").addEventListener("click",()=>{i=0;score=0;$("score").textContent="Score: 0 / "+bank.length;show()});show();
 })();
-</script></body></html>
+</script><script>function gmQueueUtterance(utterance,status){
+ const synth=window.speechSynthesis;
+ if(!synth||typeof SpeechSynthesisUtterance==="undefined"){if(status)status.textContent="Audio is unavailable. Check Android Text-to-speech output.";return;}
+ if(!synth.__gmCancelWrapped){const nativeCancel=synth.cancel.bind(synth);synth.cancel=function(){window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1;return nativeCancel();};synth.__gmCancelWrapped=true;}
+ synth.cancel();const request=(window.__gmSpeechRequest=(window.__gmSpeechRequest||0)+1);
+ if(status)status.textContent="Preparing voice…";
+ const start=()=>{if(request!==window.__gmSpeechRequest)return;try{
+  const voices=synth.getVoices?synth.getVoices():[];const wanted=(utterance.lang||"en-US").toLowerCase();
+  const voice=voices.find(v=>v.lang&&v.lang.toLowerCase()===wanted)||voices.find(v=>v.lang&&v.lang.toLowerCase().startsWith(wanted.split("-")[0]));
+  if(voice){utterance.voice=voice;utterance.lang=voice.lang;}
+  const oldStart=utterance.onstart,oldEnd=utterance.onend,oldError=utterance.onerror;
+  utterance.onstart=e=>{if(status)status.textContent="🔊 Reading aloud…";if(oldStart)oldStart(e);};
+  utterance.onend=e=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Finished reading.";if(oldEnd)oldEnd(e);};
+  utterance.onerror=e=>{if(status&&request===window.__gmSpeechRequest)status.textContent="Audio could not play. Check the phone's text-to-speech voice.";if(oldError)oldError(e);};
+  synth.resume();synth.speak(utterance);
+ }catch(e){if(status)status.textContent="Audio could not start. Check Android Text-to-speech output.";}}
+ if(synth.getVoices&&synth.getVoices().length){setTimeout(start,60);return;}
+ let done=false;const ready=()=>{if(done||request!==window.__gmSpeechRequest||!synth.getVoices().length)return;done=true;synth.removeEventListener("voiceschanged",ready);start();};
+ synth.addEventListener("voiceschanged",ready);setTimeout(()=>{if(done)return;done=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
+}</script></body></html>
