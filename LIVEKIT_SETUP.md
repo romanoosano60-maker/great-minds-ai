@@ -22,5 +22,6 @@ The backend converts the `wss://` project URL to `https://` only for its server-
 3. Sign in as an approved student with guardian consent on another device and join.
 4. Sign in as the linked guardian on a third device and use Observe. The guardian should not be able to publish a microphone or camera track.
 5. End the call from the teacher account and confirm the other participants disconnect.
+6. Separately test the teacher leaving or losing connection unexpectedly; student and guardian clients should leave when the teacher-disconnected event is received.
 
 Do not use real children's names or personal information during initial testing. The call integration is not complete until these tests pass.
