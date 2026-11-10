@@ -749,3 +749,13 @@ General Knowledge also gained optional browser read-aloud for each question and 
 - Source update commit: cb5f899693550ab7a430698e9fd6ec957edf7386.
 - Verified the updated GitHub source contains all 15 embedded artworks, the perspective styling and reduced-motion fallback. This is source verification only; Android visual rendering still needs the user's confirmation.
 - No paid assets, subscriptions, or external 3D model dependencies were introduced. The artwork remains static images with 3D-style presentation; this update does not add animated 3D models.
+
+
+## Live Supabase advisor and access review — 10 November 2026
+- Queried the active project `ryuchmmnyjyldwouidyy` directly. Project status is ACTIVE_HEALTHY.
+- Current security advisor: Leaked Password Protection remains disabled (WARN). Three RLS-enabled/no-policy findings were reviewed: `private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`.
+- Read-only grants/schema inspection found the private schema is not USAGE-accessible to `anon`; the two private tables have no grants to `anon` or `authenticated` (only database owner/service-role privileges). `public.account_deletion_requests` likewise has no client-role table grants (only owner/service-role). No broad client access was found, so no permissive policies were added. These no-policy findings are intentionally left closed pending function/workflow review.
+- Current performance advisor: two multiple-permissive-SELECT-policy notices on `homework_assignments` and `student_learning_progress`, plus five unused-index notices. These are optimization/review items, not evidence of data exposure. Health advisor returned no findings.
+- No database schema, grants or RLS policies were changed in this review.
+- Remaining action: enable Leaked Password Protection in Supabase Authentication settings (dashboard action; not changed through SQL), then re-run the security advisor. Continue real Android teacher sign-in and classroom checks at `supabase-connect.html`; separate-account parent/student consent, approval, Realtime and cross-device tests remain pending.
+- Source-level status and live advisor findings are not equivalent to end-to-end verification. Do not mark international classroom integration or launch readiness complete.
