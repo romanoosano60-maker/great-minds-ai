@@ -866,3 +866,13 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Updated `supabase/international-classrooms.sql` so the setup script no longer recreates the redundant index.
 - Re-ran a structural duplicate-index query across valid public indexes: no duplicate index definitions remain.
 - No classroom records or classroom codes were modified. The retained unique index continues enforcing normalized classroom-code uniqueness.
+
+
+## Teacher dashboard RLS visibility repair — 10 November 2026
+
+- Further review found teacher-side homework-submission and student-progress policies joining `guardian_relationships`. That table intentionally allows direct SELECT only to the linked student and guardian, so an unrelated approved teacher would not see those link rows inside a policy subquery.
+- Updated teacher-only branches of homework submission SELECT/UPDATE and student progress SELECT to rely on the student's approved classroom membership and protected `parent_consent_status='approved'`, together with approved teacher profile and classroom ownership.
+- Preserved direct guardian-link checks for student/guardian operations (student progress inserts, homework submissions and guardian reads). Teacher branches no longer need to read private guardian identities.
+- Verified authenticated users can update `classroom_members.membership_status` but cannot update `parent_consent_status`, `user_id` or other identity fields. Consent status is controlled by the guardian-consent SECURITY DEFINER RPC; the call-token function also independently verifies an active guardian link before issuing student tokens.
+- Migration `20261110_fix_teacher_rls_guardian_visibility` applied successfully. Updated `supabase/classroom-homework.sql` to match the final teacher policies. The student-progress setup script already uses the protected consent status for its teacher read policy.
+- No classroom, guardian, homework or progress rows were changed. Real teacher/student/guardian tests remain necessary to confirm the complete workflow.
