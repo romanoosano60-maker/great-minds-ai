@@ -845,3 +845,15 @@ Remaining owner/device actions are unchanged: confirm LiveKit and OpenAI secrets
 - Territory-specific child-privacy/legal review, actual publisher/support details, retention schedule and approved deletion process.
 
 This audit does not certify the application as 100% complete or launch-ready. Source, policy and deployment checks are not substitutes for the remaining real-account and device tests.
+
+
+## Full inline JavaScript syntax sweep and repairs — 10 November 2026
+
+- Extracted and syntax-checked inline JavaScript from all 56 HTML pages using the JavaScript parser. Three previously unnoticed syntax defects were found and repaired:
+  1. `advanced-learning.html`: literal backslash-n sequences between Urdu, Bengali and Hindi phrase-table entries were invalid JavaScript. Replaced them with real line breaks. The page's inline scripts now parse.
+  2. `gm-3d-learning-world.html`: apostrophes in the Moon/planet description terminated a single-quoted JavaScript string. Changed the description to a correctly quoted double-quoted string. The page's inline script now parses.
+  3. `international-classrooms.html`: removed a stray literal `\n` before the refresh event handler. The page's inline scripts now parse.
+  4. `vocabulary.html`: removed two stray literal `\n` sequences before the alphabet table and ABC renderer. The page's inline scripts now parse.
+- Re-ran the syntax check on each repaired page; all inline scripts passed. The complete 56-page sweep now has no inline JavaScript syntax errors.
+- Checked the seven standalone JavaScript files. Six parsed directly; the Cloudflare Worker parsed after accounting for its expected ES-module `export default` declaration. The three deployed Supabase TypeScript Edge Functions are ACTIVE; the current classroom function was redeployed successfully as version 6.
+- These checks establish source syntax only, not runtime behaviour in Android browsers or external CDN availability.
