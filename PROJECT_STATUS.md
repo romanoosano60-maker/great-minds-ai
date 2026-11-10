@@ -1062,3 +1062,12 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Confirmed authenticated users can insert only `assignment_id`, `student_id`, and `answer`; they cannot insert `score`, `feedback`, `marked_by`, or `marked_at`. Marking columns are updateable, with RLS restricting that update to the approved classroom teacher. This is a live privilege check; no live grant change was needed.
 - Found the checked-in `supabase/classroom-homework.sql` still used a broader table-level INSERT grant that did not match the live least-privilege configuration. Corrected the source to grant SELECT separately and INSERT only on the three student submission columns. Marking columns remain separate UPDATE privileges.
 - Re-fetched and verified the saved SQL source. This prevents a future reapplication from widening student insert privileges.
+
+
+## Classroom and account access privilege recheck — 10 November 2026
+
+- Rechecked live column/table privileges after the RLS source audit.
+- Authenticated teachers can update classroom membership status but cannot update parent consent status or change the member user ID.
+- Authenticated clients cannot directly insert/update guardian relationships or read/insert account-deletion requests.
+- Anonymous clients have no direct SELECT privilege on classrooms or homework assignments.
+- These results match the intended RPC/server-controlled consent and request-only deletion design. No live privilege change was needed.
