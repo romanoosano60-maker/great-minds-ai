@@ -44,7 +44,10 @@ alter table public.homework_assignments enable row level security;
 alter table public.homework_submissions enable row level security;
 revoke all on table public.homework_assignments,public.homework_submissions from public,anon,authenticated;
 grant select,insert,update,delete on public.homework_assignments to authenticated;
-grant select,insert on public.homework_submissions to authenticated;
+grant select on public.homework_submissions to authenticated;
+-- Students may submit only the answer identity/content fields. Score and
+-- teacher feedback/marking columns are never insertable by a student.
+grant insert(assignment_id,student_id,answer) on public.homework_submissions to authenticated;
 grant update(score,feedback,marked_by,marked_at) on public.homework_submissions to authenticated;
 
 drop policy if exists "Approved teachers manage own classroom assignments" on public.homework_assignments;
