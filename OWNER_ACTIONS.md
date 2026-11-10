@@ -217,3 +217,8 @@ No database policies, indexes, student records, classroom records, or account da
 - Teacher homework read/mark and student-progress read policies now use approved classroom membership plus the protected guardian-consent status. They no longer require teachers to read private guardian-link rows.
 - Direct student/guardian operations retain their own active-link checks. Authenticated users cannot update the consent-status column; it is controlled by the guardian-consent RPC.
 - Test as a teacher account that is not itself a guardian: confirm it can view and mark work for an approved, consented classroom student, but cannot access an unrelated student's work.
+
+
+## Audio follow-up — Android verification still required
+- After the latest GitHub Pages deployment, open `english.html` and `vocabulary.html` on Android. Start a vocabulary word, tap Stop, then quickly leave the page; confirm no delayed voice starts. Start each English song, switch apps or navigate away, then return; confirm the music and narration have stopped. Repeat with the phone screen locked if practical.
+- Confirm individual word, example sentence, alphabet, story, speaking and song playback on the installed English voice. Source fixes do not prove that the device has an English voice installed or that GitHub Pages has deployed the latest commits.
