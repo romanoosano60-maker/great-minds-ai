@@ -958,3 +958,8 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Removed cross-language fallback. Narration now requires an exact or same-base-language voice; when unavailable, it displays an instruction to install the selected language rather than substituting English. The no-voice message is retained without repeatedly registering a voice-ready retry.
 - Source commits: `535402fc7cb12c4afbdc86cf870bb9eb8859ce85`, `9c0de5990263426f6d1bd96cd83636534bd3a656`, `9267e27efcc257a921fb24e3710d0c73056de990`, `6d9df558af9bf94aedd30335903e8b0750acf7ae`, `595105f42fcd03ecd05d2705e304f98a96ba8ead`, `98a390fa412b5a004eed02894616fc35d23f26ab`, `1053826be4b87907ef729068fe1704086ccd08b6`, `2b9fdbe6634efbad777b09c366e71512a87fc475`.
 - This is source-level verification only. Actual voice availability and playback still require Android tests for each selected language.
+
+## Shared language-toolbar speech lifecycle — 10 November 2026
+
+- Updated `gm-language.js` so shared toolbar narration stops when the page becomes hidden, on `pagehide`, and immediately when the learner changes the selected language. This extends the lifecycle safeguard to pages using the shared language toolbar. Commit: `0245fde598ff3ebd6f12931360413aed73dbd09c`.
+- Android backgrounding and language-switch tests remain outstanding; this is source-level protection only.
