@@ -293,5 +293,15 @@ showQuestion();
  window.__gmSpeechCleanup=cleanup;
  const start=()=>{if(request!==window.__gmSpeechRequest||done)return;const voices=synth.getVoices?synth.getVoices():[];const voice=voices.find(v=>v.lang&&/^en-US$/i.test(v.lang))||voices.find(v=>v.lang&&/^en-GB$/i.test(v.lang))||voices.find(v=>v.lang&&/^en-/i.test(v.lang));if(!voice){cleanup();if(status)status.textContent="No English voice is installed or available. Install an English voice in Android Text-to-speech settings; another language will not be substituted.";return;}cleanup();try{const u=new SpeechSynthesisUtterance(clean);u.lang=voice.lang;u.voice=voice;u.rate=.88;u.onstart=()=>{if(request===window.__gmSpeechRequest&&status)status.textContent="🔊 Speaking…"};u.onend=()=>{if(request===window.__gmSpeechRequest&&status)status.textContent="Audio finished."};u.onerror=e=>{if(request===window.__gmSpeechRequest&&status)status.textContent="Audio could not play ("+(e.error||"error")+"). Check your phone's English voice."};synth.resume();synth.speak(u);setTimeout(()=>{if(request===window.__gmSpeechRequest&&status&&!synth.speaking&&!synth.pending)status.textContent="No sound started. Check Android Text-to-speech output."},5000);}catch(e){if(status)status.textContent="Audio could not start. Check Android Text-to-speech output.";}}
  const voices=synth.getVoices?synth.getVoices():[];if(voices.length){timer=setTimeout(start,60);return;}handler=()=>{if(request===window.__gmSpeechRequest&&synth.getVoices().length)start()};synth.addEventListener("voiceschanged",handler);timer=setTimeout(start,1800);
-}</script></body>
+}</script>
+<script>
+// Stop lesson audio when the learner leaves this page or switches away.
+(function gmStopSpeechWhenPageInactive(){
+  if(!("speechSynthesis" in window)) return;
+  const stopLessonAudio=()=>{try{window.speechSynthesis.cancel();}catch(_){}};
+  document.addEventListener("visibilitychange",()=>{if(document.hidden)stopLessonAudio();});
+  window.addEventListener("pagehide",stopLessonAudio);
+})();
+</script>
+</body>
 </html>
