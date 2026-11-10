@@ -199,7 +199,7 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 - Mathematics, Science, Social Studies, Geography and Home Science now attempt cloud saves at quiz completion. Existing local demo history remains in place as a fallback. Student Profile includes a cloud progress refresh/read panel.
 - `supabase/least-privilege-grants.sql` documents tightened grants: no anonymous/public privileges on the five core tables; authenticated permissions are limited by table and RLS. Verified all five tables still have RLS enabled and anonymous SELECT/INSERT are false.
 - This is source integration only until tested in a real signed-in browser session with a test student account and an active guardian link. A successful code commit is not proof that REST inserts/reads work.
-- Homework assignment/submission storage and parent/teacher dashboard cloud views are not implemented yet. Child-to-child messaging remains disabled. Leaked-password protection is still reported disabled by the Supabase security advisor and must be enabled before real family accounts.
+- Secure Supabase homework assignment/submission tables, RLS policies and the shared cloud client helper are implemented. The separate teacher-publish → student-submit → teacher-mark → linked-parent-view flow still needs owner acceptance on separate accounts/devices. Older local homework tabs remain local demonstrations. Child-to-child messaging remains disabled. Leaked-password protection remains disabled and plan-gated.
 
 
 ## 15. Secure cloud homework — first increment (5 November 2026)
@@ -245,11 +245,11 @@ Open the deployed app's permanent home screen, then choose **Unified Learning & 
 
 ## Current technical state superseding older prototype notes — 10 November 2026
 
-- AI Teacher is no longer only a prepared-answer prototype in source: the frontend calls the Supabase `ai-teacher` Edge Function (ACTIVE version 4, JWT verification enabled). The request includes the Supabase publishable `apikey` and the signed-in user's bearer token. A real authenticated response and Android voice test are still required before calling it live.
-- Classroom calling uses the Supabase `classroom-call-token` Edge Function (ACTIVE version 6, JWT verification enabled) and requires a WSS LiveKit endpoint. Students need approved membership and a current active guardian relationship; the server checks both independently.
+- AI Teacher frontend calls the Supabase `ai-teacher` Edge Function (current ACTIVE version 6, JWT verification enabled). The request includes the publishable `apikey` and signed-in user's bearer token. The endpoint is deployed, but successful authenticated response and Android voice tests remain required.
+- Classroom calling uses the Supabase `classroom-call-token` Edge Function (current ACTIVE version 7, JWT verification enabled) and requires a WSS LiveKit endpoint. Students need approved membership and an active guardian relationship; the server checks both independently.
 - The teacher UPDATE policy requires the consent status to be approved before membership approval. Authenticated clients cannot update the consent column; only the guardian-consent server-side RPC can set it after validating the one-time code and active guardian relationship. Consent revocation remains a separate guardian-only RPC path.
 - Classroom microphone and camera start OFF. Participants must opt in. Guardian observer tokens cannot publish media.
-- The full repository tree contains 195 files: 56 HTML pages, 99 SVG assets, 7 JavaScript files, 12 SQL files, 3 TypeScript Edge Function files and 18 Markdown documents. All 56 HTML pages passed a static check for missing local `href` and `src` targets. No exact duplicate Git blobs were found; local demos, connected dashboards and redirect wrappers are intentionally distinct.
+- The current repository tree contains 200 tracked files. The earlier static check of all 56 HTML pages found no missing local `href`/`src` targets; the latest focused check found all 30 local homepage navigation references resolve to tracked files. An earlier exact duplicate-blob scan found no byte-for-byte duplicates; local demos, connected dashboards and redirect wrappers are intentionally distinct.
 - Supabase RLS is enabled on all 11 inspected application tables. Three informational no-policy notices correspond to tables intentionally closed to direct client access. Leaked Password Protection remains disabled and plan-gated.
 - The latest application-code GitHub Pages build for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully.
 
@@ -262,7 +262,7 @@ Teacher-side homework submission and student-progress policies use approved teac
 
 ## 17. Live backend reconciliation — 10 November 2026
 
-This section supersedes older statements in Sections 7 and 9 that described the AI Teacher backend as not yet implemented.
+This section supersedes older implementation/status statements in earlier sections that described the AI Teacher backend as not yet implemented or secure homework as absent.
 
 ### Confirmed live deployment and source match
 The connected Supabase project was inspected directly. These Edge Functions are ACTIVE, require JWT verification, and their deployed `index.ts` contents match the corresponding GitHub files byte-for-byte:
