@@ -286,7 +286,7 @@ document.querySelectorAll(".gm-mini-options").forEach(group=>{
 // Stop lesson audio when the learner leaves this page or switches away.
 (function gmStopSpeechWhenPageInactive(){
   if(!("speechSynthesis" in window)) return;
-  const stopLessonAudio=()=>{try{window.speechSynthesis.cancel();}catch(_){}};
+  const stopLessonAudio=()=>{gmSpeechRequest++;try{window.speechSynthesis.cancel();}catch(_){}};
   document.addEventListener("visibilitychange",()=>{if(document.hidden)stopLessonAudio();});
   window.addEventListener("pagehide",stopLessonAudio);
 })();
