@@ -1,7 +1,7 @@
 # Great Minds AI — Account deletion workflow
 
 ## Current status
-A **request-only** Edge Function is deployed as `account-deletion-request` (version 4, JWT verification enabled). It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
+A **request-only** Edge Function is deployed as `account-deletion-request` (version 5, JWT verification enabled). It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
 
 The adult request form is now included on the International Classrooms page. It requires sign-in and an explicit confirmation. The request table is live with RLS enabled, no direct anon/authenticated access, and service-role-only access. It currently contains zero requests.
 
@@ -13,7 +13,7 @@ The adult request form is now included on the International Classrooms page. It 
 
 ## Live components
 - `public.account_deletion_requests`: live, RLS enabled; no anon/authenticated table privileges; service_role can insert.
-- `account-deletion-request`: deployed version 4, JWT verification on, request-only.
+- `account-deletion-request`: deployed version 5, JWT verification on, request-only.
 - Adult request form: `international-classrooms.html`.
 - Source: `supabase/functions/account-deletion-request/index.ts`.
 - SQL source: `supabase/account-deletion-requests.sql`.
@@ -43,6 +43,13 @@ Do not invent durations. Before launch, approve retention periods and legal basi
 
 ## 2026-11-10 live deployment recheck
 
-- Re-fetched the deployed `account-deletion-request` function. It is ACTIVE at version 4 with JWT verification enabled.
+- Re-fetched the deployed `account-deletion-request` function. It is ACTIVE at version 5 with JWT verification enabled.
 - Confirmed the current handler still records an adult request for manual review only. It does not delete Auth users, child accounts, classroom records, learning progress, homework, or consent evidence.
-- The earlier version 3 references in this document have been corrected to version 4.
+- The earlier version 3 references in this document have been corrected to version 5.
+
+
+## 10 November 2026 — request-body hardening update
+
+- `account-deletion-request` is deployed as ACTIVE version 5 with JWT verification enabled.
+- The handler now reads the actual request body, enforces a 3 KB UTF-8 byte limit, rejects malformed JSON and non-object payloads, and still requires explicit confirmation.
+- It remains request-only. No Auth user, classroom, child progress, homework, consent record or other application data is automatically deleted.
