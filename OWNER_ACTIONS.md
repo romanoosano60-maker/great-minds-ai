@@ -202,3 +202,9 @@ No database policies, indexes, student records, classroom records, or account da
 - 195 tracked files compared by exact Git blob SHA: no exact duplicate files found. Similar-looking demo/connected/redirect pages are intentionally different and were retained.
 - The latest Pages workflow for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7` completed successfully. The later status-documentation commit does not change application code.
 - All 11 inspected application tables have RLS enabled; no direct anon table privileges were found. The three no-policy advisor notices are intentional closed tables.
+
+
+### Duplicate index cleanup
+- Removed the redundant classroom-code unique index. The retained `classrooms_classroom_code_unique` index still enforces case-insensitive, trimmed uniqueness. No classroom rows were changed.
+- A fresh structural comparison found no remaining duplicate public index definitions.
+- No owner action is needed for this cleanup.
