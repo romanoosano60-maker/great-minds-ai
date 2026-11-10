@@ -1195,3 +1195,10 @@ All four pages now clear visible private data and the local signed-in page state
 - Added scripts/static-audit.mjs to check local href/src references across HTML pages and parse standalone JavaScript files with Node.js.
 - Added .github/workflows/static-audit.yml to run these checks on pushes and pull requests to main.
 - The workflow and script were re-fetched from GitHub after commit. GitHub currently reports no workflow run or status result for the latest commits, so the automated check is installed in source but has not yet produced a passing CI result. Do not report it as a successful build until a run completes.
+
+
+## Secure Homework Manager sign-out — 10 November 2026
+
+- The secure cloud homework panel previously had no sign-out control of its own, even though it could display assignments, student answers and teacher feedback from the signed-in Supabase session.
+- Added a dedicated cloud sign-out button. It clears the secure homework results immediately, attempts Supabase Auth sign-out, then removes the Realtime channel independently. The notice explicitly states that signing out does not delete homework or learning records.
+- The updated Homework Manager was re-fetched and the button, scope notice and handler were source-verified. Live Android/session testing remains outstanding.
