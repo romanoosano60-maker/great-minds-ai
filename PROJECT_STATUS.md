@@ -971,3 +971,11 @@ This audit does not certify the application as 100% complete or launch-ready. So
 - Updated both handlers to read the actual request body, enforce byte limits (12 KB for AI Teacher; 3 KB for classroom call tokens), reject malformed JSON, and reject non-object JSON before processing fields.
 - Deployed and re-fetched both functions to verify the change is active: `ai-teacher` v5 and `classroom-call-token` v7. JWT verification remains enabled on both.
 - This is a server-side input-hardening improvement. It does not replace authenticated account, consent, Android, or cross-device workflow tests.
+
+
+## High-risk classroom and AI UI source review — 10 November 2026
+
+- Re-reviewed `ai-teacher.html`, `classroom-call.html` and `international-classrooms.html` after the backend request-hardening change.
+- AI question/answer and speech-recognition transcript output use text properties rather than injecting response text as HTML. Classroom participant labels are created as text nodes; participant selector values are CSS-escaped. Classroom call UI starts local media OFF and disconnects on failed setup or teacher departure.
+- Account-deletion UI clearly describes this as a request, requires an explicit checkbox, and tells the user that account and learning records have NOT been deleted. No false completion claim is shown.
+- No additional source change was justified in these three pages during this pass. Live Android microphone/camera, cross-account permissions and actual deletion lifecycle remain unverified owner tests.
