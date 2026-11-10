@@ -123,7 +123,7 @@ A successful login and classroom SELECT do not by themselves prove that the teac
 
 ## 7. AI Teacher backend
 
-The AI Teacher voice interface is a prototype until the backend endpoint is implemented and tested end to end. The Cloudflare Worker root response previously indicated the backend was running, but the `/ask` route was not found in the inspected version.
+Historical checkpoint: the older Cloudflare `/ask` route was not found at that time. The current website uses the active Supabase AI Teacher endpoint. Its current feature is authenticated text answers with browser/device speech recognition and speech synthesis, not continuous voice-to-voice AI; live response and Android voice acceptance tests remain open.
 
 Before enabling real AI responses:
 - Implement and test an authenticated server-side endpoint.
