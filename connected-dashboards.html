@@ -42,7 +42,7 @@ footer{padding:24px 12px}
  <h3>Teacher account check</h3>
  <label for="teacherEmail">Test teacher email</label><input id="teacherEmail" type="email" autocomplete="username" style="width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit">
  <label for="teacherPassword">Password</label><input id="teacherPassword" type="password" autocomplete="current-password" style="width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit">
- <button id="teacherLogin" type="button">Sign in and check classrooms</button> <button id="teacherLogout" type="button">Clear session</button>
+ <button id="teacherLogin" type="button">Sign in and check classrooms</button> <button type="button" data-gm-forgot-password data-email-input="teacherEmail" data-status-output="teacherAuthStatus">Forgot password?</button> <button id="teacherLogout" type="button">Clear session</button>
  <div id="teacherAuthStatus" class="status" role="status" aria-live="polite">No teacher session.</div>
  <p class="note">A reachable project is not the same as a verified account. Real student records stay disabled until role approval, classroom membership, parental consent and database security are tested.</p></section>
 <section class="card"><h2>🎒 Student learning</h2><div class="grid">
@@ -125,4 +125,4 @@ document.getElementById('teacherLogout').addEventListener('click',async()=>{
  }catch(e){authStatus.textContent='This page cleared its in-memory token, but server sign-out could not be confirmed: '+e.message;}
 });
 checkConnection();
-</script><section class="panel"><h2>🎨 3D Graphics Gallery</h2><p>Explore the Great Minds AI artwork previews.</p><p><a href="gm-3d-graphics-gallery-1.html">Open the 3D Graphics Gallery</a></p></section></body></html>
+</script><script src="auth-recovery.js"></script><section class="panel"><h2>🎨 3D Graphics Gallery</h2><p>Explore the Great Minds AI artwork previews.</p><p><a href="gm-3d-graphics-gallery-1.html">Open the 3D Graphics Gallery</a></p></section></body></html>
