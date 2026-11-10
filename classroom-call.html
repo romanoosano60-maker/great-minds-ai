@@ -28,7 +28,7 @@ const params=new URLSearchParams(location.search);
 const classroomId=params.get("classroom");
 const mode=params.get("mode")==="video"?"video":"audio";
 const action=["start","join","end"].includes(params.get("action"))?params.get("action"):"join";
-let client=null,room=null,tokenRole="",micOn=false,cameraOn=false;
+let client=null,room=null,tokenRole="",teacherIdentity="",micOn=false,cameraOn=false;
 $("callTitle").textContent=(mode==="video"?"📹 Video":"🎙️ Audio")+" classroom";
 $("callSubtitle").textContent="Classroom "+(classroomId||"not selected")+" · "+(action==="start"?"Teacher starting session":"Joining teacher's session");
 function status(s){$("status").textContent=s}
@@ -62,12 +62,24 @@ async function start(){
   Room=livekit.Room;RoomEvent=livekit.RoomEvent;Track=livekit.Track;
   const data=await invoke(action);
   tokenRole=data.participant_role;
+  teacherIdentity=String(data.teacher_identity||"");
   if(action==="start")$("end").hidden=false;
   room=new Room({adaptiveStream:true,dynacast:true});
   room.on(RoomEvent.TrackSubscribed,(track,publication,participant)=>addTrack(track,participant));
   room.on(RoomEvent.TrackUnsubscribed,(track)=>removeTrack(track));
-  room.on(RoomEvent.ParticipantDisconnected,(participant)=>{document.querySelector('[data-participant="'+CSS.escape(participant.identity)+'"]')?.remove()});
-  room.on(RoomEvent.Disconnected,()=>status("You have disconnected from the classroom call."));
+  room.on(RoomEvent.ParticipantDisconnected,(participant)=>{
+   document.querySelector('[data-participant="'+CSS.escape(participant.identity)+'"]')?.remove();
+   // If the teacher unexpectedly disconnects, students and guardians leave too.
+   if(tokenRole!=="teacher"&&teacherIdentity&&participant.identity===teacherIdentity){
+    if(room){room.disconnect();room=null;}
+    $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;
+    status("The teacher has left. This supervised classroom session has ended.");
+   }
+  });
+  room.on(RoomEvent.Disconnected,()=>{
+   $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;
+   status("You have disconnected from the classroom call.");
+  });
   await room.connect(data.server_url,data.token);
   for(const p of room.remoteParticipants.values())for(const pub of p.trackPublications.values())if(pub.track)addTrack(pub.track,p);
   if(tokenRole!=="guardian_observer"){
