@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Independent Student Learning | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#19305a;background:linear-gradient(180deg,#edf7ff,#fff8e8)}
+header{text-align:center;padding:22px 14px;background:linear-gradient(120deg,#6248df,#16b8c4);color:white}
+main{max-width:900px;margin:auto;padding:14px}.card{background:white;border:1px solid #dce8f6;border-radius:18px;padding:18px;margin:14px 0;box-shadow:0 5px 18px #18305a12}
+h1{margin:4px 0}h2{color:#294b91;margin-top:0}.muted{color:#58677c;font-size:14px;line-height:1.5}
+label{display:block;font-weight:bold;margin:12px 0 5px}input,select{width:100%;padding:12px;border:1px solid #bbc9da;border-radius:10px;font:inherit}
+button,.link{display:inline-block;border:0;border-radius:11px;padding:12px 15px;margin:6px 5px 6px 0;background:#6048dc;color:white;text-decoration:none;font-weight:bold;font-size:15px;min-height:45px;cursor:pointer}
+.secondary{background:#167b78}.light{background:#e8efff;color:#24468f}.danger{background:#a93b48}
+.grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(145px,1fr));gap:10px}.subject{display:block;background:#f5f8ff;border:1px solid #dce7fa;border-radius:13px;padding:13px;text-align:center;text-decoration:none;color:#24468f;font-weight:bold;min-height:72px}
+.record{padding:12px 4px;border-bottom:1px solid #e2e8f0;line-height:1.5}.pill{display:inline-block;background:#e9f1ff;color:#24468f;padding:4px 8px;border-radius:20px;font-size:12px;font-weight:bold}
+.notice{background:#fff5d9;border-left:5px solid #e0ad36;padding:12px;border-radius:8px;line-height:1.5}[hidden]{display:none!important}
+button:focus-visible,a:focus-visible,input:focus-visible,select:focus-visible{outline:3px solid #f2ad35;outline-offset:3px}
+@media(max-width:420px){main{padding:9px}.card{padding:14px}.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+</style></head><body>
+<header><h1>🎒 Independent Student Learning</h1><p>Learn at your own pace • Save your progress • Keep your history</p></header>
+<main>
+<section class="card" id="welcome"><h2>🌟 My learning space</h2>
+<p class="muted">A student can open lessons and practise independently. A nickname is enough for this device-based learning space.</p>
+<label for="studentName">Student nickname</label><input id="studentName" maxlength="35" placeholder="Example: Star Learner">
+<label for="studentLevel">Learning level</label><select id="studentLevel"><option>Beginner</option><option>Intermediate</option><option>Advanced</option></select>
+<button id="startLearning" type="button">Start my learning</button><p id="welcomeStatus" role="status" class="muted"></p></section>
+<section class="card" id="learningSpace" hidden><h2>📚 Choose a subject</h2><p id="helloStudent"></p>
+<div class="grid">
+<a class="subject" href="english.html">📖 English</a><a class="subject" href="math.html">🔢 Mathematics</a><a class="subject" href="science.html">🔬 Science</a><a class="subject" href="social-studies.html">🌍 Social Studies</a><a class="subject" href="geography.html">🗺️ Geography</a><a class="subject" href="history.html">🏛️ History</a><a class="subject" href="computer.html">💻 Computer Studies</a><a class="subject" href="home-science.html">🏡 Home Science</a><a class="subject" href="vocabulary.html">🔤 Vocabulary</a><a class="subject" href="reading-writing.html">✍️ Reading & Writing</a><a class="subject" href="games.html">🎮 Learning Games</a><a class="subject" href="general-knowledge.html">🧠 General Knowledge</a>
+</div>
+<div style="margin-top:14px"><button id="saveWork" class="secondary" type="button">Save my completed work</button><button id="refreshHistory" class="light" type="button">Refresh learning history</button><button id="signOut" class="danger" type="button">Sign out</button></div>
+<p id="saveStatus" role="status" class="muted"></p></section>
+<section class="card"><h2>📅 My learning history</h2><p class="muted">Saved activities are grouped by date and subject. Your history stays on this device after sign-out.</p><div id="historyList">No saved work yet.</div></section>
+<section class="card"><h2>🏠 More Great Minds AI</h2><a class="link light" href="index.html">Home</a><a class="link light" href="student-profile.html">Student Profile</a></section>
+<p class="notice"><strong>Privacy note:</strong> Independent learning and saved history on this page are stored in this browser on this device. This is not a secure student login and does not sync to another device. Use a nickname, not a child's full name or contact details. Secure cloud records remain subject to the app's parent/guardian consent and database access rules.</p>
+</main>
+<script>
+(function(){
+"use strict";
+const PROFILE="gm_independent_student_profile",PENDING="gm_independent_pending_progress",SAVED="gm_independent_saved_history";
+const $=id=>document.getElementById(id);
+function read(key){try{const v=JSON.parse(localStorage.getItem(key)||"[]");return Array.isArray(v)?v:[]}catch(e){return []}}
+function getProfile(){try{return JSON.parse(localStorage.getItem(PROFILE)||"null")}catch(e){return null}}
+function status(id,message){$(id).textContent=message}
+function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
+function dateKey(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return "Date not recorded";return d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"})}
+function renderHistory(){
+ const saved=read(SAVED),root=$("historyList");
+ if(!saved.length){root.textContent="No saved work yet. Start a lesson, complete an activity, then return here and press Save my completed work.";return}
+ const groups={};
+ saved.slice().sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).forEach(function(r){const day=dateKey(r.completed_at);if(!groups[day])groups[day]=[];groups[day].push(r)});
+ root.innerHTML=Object.keys(groups).map(function(day){
+  const entries=groups[day].map(function(r){return '<div class="record"><span class="pill">'+esc(r.subject)+'</span> <strong>'+esc(r.activity_key)+'</strong><br>Score: '+esc(r.score)+' / '+esc(r.max_score)+' <span class="muted">• '+esc(new Date(r.completed_at).toLocaleTimeString([],{hour:"2-digit",minute:"2-digit"}))+'</span></div>'}).join("");
+  return '<div class="record"><h3>'+esc(day)+'</h3>'+entries+'</div>';
+ }).join("");
+}
+function openSpace(profile){$("welcome").hidden=true;$("learningSpace").hidden=false;$("helloStudent").textContent="Hello, "+profile.nickname+"! Your level is "+profile.level+". Choose any subject and learn at your own pace.";renderHistory()}
+$("startLearning").addEventListener("click",function(){
+ const nickname=$("studentName").value.trim().slice(0,35);
+ if(!nickname){status("welcomeStatus","Please enter a nickname to continue.");return}
+ const profile={nickname:nickname,level:$("studentLevel").value,started_at:new Date().toISOString()};
+ localStorage.setItem(PROFILE,JSON.stringify(profile));openSpace(profile);status("saveStatus","Your independent learning space is ready. Complete a lesson, then return here to save your work.");
+});
+const existing=getProfile();if(existing){$("studentName").value=existing.nickname||"";$("studentLevel").value=existing.level||"Beginner";openSpace(existing)}
+$("saveWork").addEventListener("click",function(){
+ const pending=read(PENDING),saved=read(SAVED),seen=new Set(saved.map(function(r){return r.local_id}));let added=0;
+ pending.forEach(function(r){
+  const stamp=r.completed_at||new Date().toISOString(),fingerprint=[r.subject,r.activity_key,r.score,r.max_score,r.source,stamp].join("|");
+  if(seen.has(fingerprint))return;
+  saved.push({local_id:fingerprint,student_nickname:(getProfile()||{}).nickname||"Learner",subject:r.subject,activity_key:r.activity_key,score:r.score,max_score:r.max_score,correct_count:r.correct_count,question_count:r.question_count,source:r.source,completed_at:stamp});seen.add(fingerprint);added++;
+ });
+ try{
+  const demo=JSON.parse(localStorage.getItem("greatMindsConnectedDemoV1")||"{}");
+  (Array.isArray(demo.quizzes)?demo.quizzes:[]).forEach(function(r){
+   const stamp=r.completedAt||new Date().toISOString(),subject=String(r.subject||"Learning"),score=Number(r.correct!=null?r.correct:r.score),max=Number(r.questions||r.total||100);
+   const fingerprint=[subject,r.source||"subject-quiz",score,max,stamp].join("|");if(seen.has(fingerprint))return;
+   saved.push({local_id:fingerprint,student_nickname:(getProfile()||{}).nickname||"Learner",subject:subject,activity_key:r.source||"completed-quiz",score:score,max_score:max,source:r.source||"subject-quiz",completed_at:stamp});seen.add(fingerprint);added++;
+  });
+ }catch(e){}
+ localStorage.setItem(SAVED,JSON.stringify(saved.slice(-500)));renderHistory();
+ status("saveStatus",added?"Saved "+added+" new learning record(s) to your dated subject history on this device.":"Your completed work is already saved, or no completed quiz has been recorded yet. Complete a subject challenge and try again.");
+});
+$("refreshHistory").addEventListener("click",renderHistory);
+$("signOut").addEventListener("click",function(){
+ if(!confirm("Sign out of this independent learning space? Your saved learning history will stay on this device."))return;
+ localStorage.removeItem(PROFILE);$("learningSpace").hidden=true;$("welcome").hidden=false;$("studentName").value="";$("studentLevel").value="Beginner";
+ status("welcomeStatus","You are signed out. Your saved learning history has been kept on this device.");renderHistory();
+});
+renderHistory();
+})();
+</script></body></html>
