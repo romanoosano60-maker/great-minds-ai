@@ -76,7 +76,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   if(!cfg||!window.supabase||!window.supabase.createClient){setStatus('Cloud service unavailable. The local dashboard still works.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
   db.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;user=null;activeStudentLink=false;cloudHistoryRequest++;saveBtn.disabled=true;el('studentCloudRecords').textContent='Sign in to view cloud history.';setStatus('Signed out in another tab or page. Cloud history was cleared.');if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db.removeChannel(channel).catch(()=>{});}});
-  db.auth.getUser().then(({data,error})=>{
+  db.auth.getUser().then(async ({data,error})=>{
    if(error)throw error;
    user=data.user||null;
    if(user){if(await verifyActiveStudentLink(user.id)){setStatus('Student account and active guardian link confirmed. Cloud history is available.');saveBtn.disabled=false;loadCloudHistory();watchCloud()}else{setStatus('Account signed in, but guardian consent is not linked yet. Cloud progress saving is disabled.');saveBtn.disabled=true}}else{activeStudentLink=false;setStatus('Not signed in to cloud progress.');saveBtn.disabled=true}
@@ -94,7 +94,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  });
  el('refreshStudentCloud').addEventListener('click',loadCloudHistory);
  el('cloudLogout').addEventListener('click',async()=>{
-  el('cloudPassword').value='';user=null;cloudHistoryRequest++;saveBtn.disabled=true;
+  el('cloudPassword').value='';user=null;activeStudentLink=false;cloudHistoryRequest++;saveBtn.disabled=true;
   el('studentCloudRecords').textContent='Sign in to view cloud history.';
   if(!db){setStatus('Cloud service unavailable. Local cloud display cleared.');return}
   let result='Signed out of cloud progress.';
