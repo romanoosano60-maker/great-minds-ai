@@ -211,5 +211,6 @@ showQuestion();
  if(synth.getVoices&&synth.getVoices().length){setTimeout(start,60);return;}
  let finished=false;const ready=()=>{if(finished||request!==window.__gmSpeechRequest||!synth.getVoices().length)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();};
  synth.addEventListener("voiceschanged",ready);setTimeout(()=>{if(finished)return;finished=true;synth.removeEventListener("voiceschanged",ready);start();},1800);
-}</script></body>
+}</script><script src="assets/js/level-challenges.js" defer></script>
+</body>
 </html>
