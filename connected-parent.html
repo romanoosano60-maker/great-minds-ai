@@ -53,11 +53,12 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  const el=id=>document.getElementById(id);const status=el('parentCloudStatus'),records=el('cloudRecords');
  let cloudChannel=null;
  function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('parent-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
- let db=null,user=null,cloudLoadRequest=0;
+ let db=null,user=null,cloudLoadRequest=0,activeGuardianLink=false;
+ async function verifyActiveGuardian(userId){const {data,error}=await db.from('guardian_relationships').select('student_id').eq('guardian_id',userId).eq('relationship_status','active').limit(1);if(error)throw error;activeGuardianLink=!!data&&data.length>0;return activeGuardianLink;}
  function say(t){status.textContent=t}
  function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  async function load(){
-  if(!db||!user){say('Please sign in with the Parent test account first.');return}
+  if(!db||!user||!activeGuardianLink){say('Sign in with the Parent account and complete the child-link consent process first.');return}
   say('Loading records permitted for this Parent account…');records.textContent='Loading…';const requestId=++cloudLoadRequest,requestedUserId=user.id;el('cloudHomeworkRecords').textContent='Loading homework…';
   const {data:progress,error:progressError}=await db.from('student_learning_progress').select('student_id,subject,activity_key,score,max_score,correct_count,question_count,source,completed_at').order('completed_at',{ascending:false}).limit(50);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   if(progressError){say('Cloud progress read failed: '+progressError.message);records.textContent='Progress could not be loaded.'}
@@ -77,11 +78,11 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   const cfg=window.greatMindsSupabaseConfig;
   if(!cfg||!window.supabase||!window.supabase.createClient){say('Cloud service unavailable. The local demo remains available.');return}
   db=window.greatMindsDB||window.supabase.createClient(cfg.url,cfg.publishableKey);
-  db.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;user=null;cloudLoadRequest++;records.textContent='Sign in to load cloud progress.';el('cloudHomeworkRecords').textContent='Sign in to load homework records.';say('Signed out in another tab or page. Cloud records were cleared.');if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db.removeChannel(channel).catch(()=>{});}});
+  db.auth.onAuthStateChange((event)=>{if(event!=='SIGNED_OUT')return;user=null;activeGuardianLink=false;cloudLoadRequest++;records.textContent='Sign in to load cloud progress.';el('cloudHomeworkRecords').textContent='Sign in to load homework records.';say('Signed out in another tab or page. Cloud records were cleared.');if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db.removeChannel(channel).catch(()=>{});}});
   const {data,error}=await db.auth.getUser();
   if(error){say('Account verification failed: '+error.message);return}
   user=data.user||null;
-  if(user){say('Parent account verified.');await load();watchCloud()}else say('Not signed in to cloud progress.');
+  if(user){try{if(await verifyActiveGuardian(user.id)){say('Parent account and active child link confirmed.');await load();watchCloud()}else say('Parent account signed in. No active child link yet; complete guardian consent on the International Classrooms page.')}catch(e){activeGuardianLink=false;say('Parent link could not be verified. Cloud child records remain unavailable.')}}else say('Not signed in to cloud progress.');
  }
  el('parentLogin').addEventListener('click',async()=>{
   const passwordField=el('parentPassword');
@@ -90,7 +91,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   if(!email||!password){passwordField.value='';say('Enter the Parent test account email and password.');return}
   try{say('Signing in…');const {data,error}=await db.auth.signInWithPassword({email,password});
   if(error){say('Sign-in failed: '+error.message);return}
-  user=data.user;await load();watchCloud();}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}
+  user=data.user;if(await verifyActiveGuardian(user.id)){say('Parent account and active child link confirmed.');await load();watchCloud()}else say('Parent account signed in. No active child link yet; complete guardian consent on the International Classrooms page.');}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}
  });
  el('parentLogout').addEventListener('click',async()=>{
   el('parentPassword').value='';
