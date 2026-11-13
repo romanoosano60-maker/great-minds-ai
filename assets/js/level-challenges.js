@@ -36,7 +36,7 @@ pro:[
 ["What is 0.6 as a percentage?",["6%","60%","600%"],1]],
 advanced:[
 ["Solve: 3(2x − 4) = 18.",["x = 5","x = 7","x = 9"],0],
-["What is 15% of 240?",["24","36"," forty"],1],
+["What is 15% of 240?",["24","36","40"],1],
 ["A ratio is 3:5 and the total is 64. What is the smaller share?",["24","30","40"],0],
 ["What is the area of a triangle with base 12 cm and height 7 cm?",["42 cm²","84 cm²","19 cm²"],0],
 ["Simplify 18/24 to its lowest terms.",["2/3","3/4","4/5"],1]]
@@ -202,8 +202,51 @@ advanced:[
 ["Why might an artist create multiple drafts?",["To test ideas and refine choices","To avoid making decisions","To ensure every draft is identical"],0]]
 }}
 };
+
+sets["general-knowledge.html"]={name:"General Knowledge",icon:"🧠",levels:{
+beginner:[
+["Which planet do we live on?",["Earth","Mars","Venus"],0],
+["How many days are in a week?",["5","7","10"],1],
+["Which animal is known as the king of the jungle?",["Lion","Rabbit","Goat"],0],
+["Which season is usually the coldest?",["Winter","Summer","Spring"],0],
+["What do bees make?",["Honey","Milk","Bread"],0]],
+pro:[
+["Which gas do plants absorb from the air?",["Carbon dioxide","Oxygen only","Helium"],0],
+["How many continents are commonly recognised?",["5","6","7"],2],
+["Which instrument measures temperature?",["Thermometer","Compass","Ruler"],0],
+["What is the largest planet in our solar system?",["Jupiter","Earth","Mars"],0],
+["Which organ helps humans breathe?",["Lungs","Stomach","Kidneys"],0]],
+advanced:[
+["Which part of the atmosphere contains most of the ozone layer?",["Stratosphere","Troposphere","Mesosphere"],0],
+["What is the smallest prime number?",["1","2","3"],1],
+["Which branch of science studies heredity?",["Genetics","Geology","Astronomy"],0],
+["What is the main function of a nation's central bank?",["Manage monetary policy and currency stability","Run all schools","Build every road"],0],
+["Which process turns atmospheric nitrogen into compounds plants can use?",["Nitrogen fixation","Condensation","Combustion"],0]]
+}};
+sets["encyclopedia.html"]={name:"Little Learners Encyclopedia",icon:"📖",levels:{
+beginner:[
+["Which animal has a trunk?",["Elephant","Tiger","Penguin"],0],
+["What do roots take in from soil?",["Water","Sunlight","Sound"],0],
+["Which object helps us see distant stars?",["Telescope","Toaster","Compass"],0],
+["What do we call a baby dog?",["Puppy","Kitten","Calf"],0],
+["Which part of the body helps us hear?",["Ears","Elbows","Knees"],0]],
+pro:[
+["What is a habitat?",["The natural home of an organism","A type of weather","A machine part"],0],
+["Which planet has prominent rings?",["Saturn","Mercury","Mars"],0],
+["What is the job of a pollinator?",["Move pollen between flowers","Make soil disappear","Chop tree roots"],0],
+["Which material is a good electrical conductor?",["Copper","Rubber","Dry wood"],0],
+["What is a fossil?",["Preserved evidence of past life","A newly grown seed","A modern plastic toy"],0]],
+advanced:[
+["What is biodiversity?",["The variety of life in an area or on Earth","The age of one animal","The number of clouds"],0],
+["Why are decomposers essential to ecosystems?",["They return nutrients to the environment","They stop photosynthesis","They remove all oxygen"],0],
+["What is an adaptation?",["A feature that helps an organism survive or reproduce","A random weather event","A type of rock only"],0],
+["Which scale is commonly used to measure mineral hardness?",["Mohs scale","Beaufort scale","Richter scale"],0],
+["What does the term renewable resource mean?",["A resource replenished naturally on a human timescale","A resource that can never be used","A resource found only underground"],0]]
+}};
+const aliases={"english-extra.html":"english.html","reading-writing.html":"english.html","math-extra.html":"math.html","science-extra.html":"science.html","social-extra.html":"social-studies.html","social.html":"social-studies.html","computer-extra.html":"computer.html"};
+
 const file=location.pathname.split("/").pop()||"";
-const data=sets[file];if(!data)return;
+const data=sets[file]||sets[aliases[file]];if(!data)return;
 function start(){
  if(document.getElementById("gm-level-challenges"))return;
  const section=document.createElement("section");section.id="gm-level-challenges";section.className="gm-extra-panel";
