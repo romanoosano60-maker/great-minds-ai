@@ -16,9 +16,31 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
+
+/* Little Learners dictionary picture-led refresh */
+header{position:relative;overflow:hidden;background:radial-gradient(circle at 12% 15%,#ffffff35 0 6%,transparent 6.5%),radial-gradient(circle at 90% 80%,#ffffff2b 0 9%,transparent 9.5%),linear-gradient(120deg,#5635d9,#009fbe)}
+header h1{text-shadow:0 2px 8px #1d245633}
+.gm-dictionary-hero{display:grid;grid-template-columns:1fr 1.1fr;align-items:center;gap:14px;padding:18px;border-radius:22px;background:linear-gradient(125deg,#fff5d9,#f1eaff 55%,#e4faff);border:1px solid #e2e8f8;box-shadow:0 8px 20px #263b6512}
+.gm-dictionary-kicker{font-size:11px;font-weight:900;letter-spacing:1.5px;color:#6747d9}
+.gm-dictionary-copy h2{margin:5px 0;color:#3d398e}.gm-dictionary-copy p{margin:0;color:#4d5c78}
+.gm-dictionary-pictures{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:8px}
+.gm-dictionary-pictures figure{margin:0;min-width:0;padding:8px 5px;border-radius:15px;background:#ffffffd9;border:1px solid #e1e8f5;text-align:center}
+.gm-dictionary-pictures img{display:block;width:100%;height:82px;object-fit:contain}
+.gm-dictionary-pictures figcaption{font-size:12px;font-weight:800;color:#354c7d}
+#results{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,260px),1fr));gap:10px}
+#results .word{margin:0;border:1px solid #e0e9f8;background:linear-gradient(145deg,#fff,#f2f7ff);box-shadow:0 4px 12px #263b650c}
+#results .word .meaning{color:#4939a5;font-size:20px}
+#results .word button{font-size:14px;padding:10px 12px}
+.chips{display:flex;flex-wrap:wrap;gap:7px}.chips button{margin:0;border:1px solid #dce5f7}
+.chips button:hover{background:#dce8ff}
+#daily{border:1px solid #f0dfad;background:linear-gradient(120deg,#fff8df,#f0f5ff)}
+#save{min-height:46px}
+@media(max-width:620px){.gm-dictionary-hero{grid-template-columns:1fr}.gm-dictionary-copy{text-align:center}.gm-dictionary-pictures img{height:72px}}
+@media(max-width:360px){.gm-dictionary-pictures{gap:5px}.gm-dictionary-pictures figure{padding:6px 3px}}
+@media(prefers-reduced-motion:reduce){.gm-dictionary-pictures img{animation:none!important}}
 </style><script src="gm-language.js" defer></script></head><body>
 <header><div style="font-size:44px">🔤📚</div><h1>Little Learners Dictionary</h1><p>Discover words • Hear them • Understand them • Use them</p><a href="index.html">🏠 Back to Great Minds Home</a><a href="connected-dashboards.html">🌐 Unified Hub</a></header>
-<main>
+<main><section class="gm-dictionary-hero" aria-label="Picture word adventure"><div class="gm-dictionary-copy"><span class="gm-dictionary-kicker">LOOK · SAY · LEARN</span><h2>🌟 Grow Your Word Power!</h2><p>Explore new words, hear how they sound and use them in your own sentences.</p></div><div class="gm-dictionary-pictures"><figure><img src="assets/3d-style/apple.svg" alt="Apple"><figcaption>Apple</figcaption></figure><figure><img src="assets/3d-style/globe.svg" alt="Globe"><figcaption>Our world</figcaption></figure><figure><img src="assets/3d-style/pencil.svg" alt="Pencil"><figcaption>Write a word</figcaption></figure></div></section>
 <section><h2>🔎 Find a word</h2><label for="search">Type a word or choose a topic</label><input id="search" type="search" placeholder="Try: curious, habitat, brave..."><div class="chips"><button type="button" data-topic="all">All words</button><button type="button" data-topic="nature">Nature</button><button type="button" data-topic="feelings">Feelings</button><button type="button" data-topic="school">School</button></div><p class="muted">This starter dictionary contains child-friendly words and explanations. More entries can be added as lessons grow.</p></section>
 <section><h2>📖 Word of the day</h2><div id="daily" class="word"></div></section>
 <section><h2>Dictionary results</h2><div id="results" aria-live="polite"></div></section>
