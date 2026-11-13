@@ -79,20 +79,34 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 </style>
 <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
 <script src="supabase-config.js"></script>
-<style id="gm-android-fit">html{overflow-x:hidden}body{max-width:100%;overflow-x:hidden}img,svg,video{max-width:100%}main,section,article,.card,.panel{min-width:0}button,.btn,a.btn{min-height:44px;touch-action:manipulation;white-space:normal;line-height:1.25}input,select,textarea{max-width:100%;font:inherit;min-width:0}.grid,.subjects,.gm-exp-grid,.country-grid,.continent-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}@media(max-width:420px){main{padding-left:12px!important;padding-right:12px!important}.card,.panel,.gm-extra-panel{padding:14px!important}h1{font-size:clamp(26px,8vw,36px)}.answers button{width:100%}}</style></head>
+<style id="gm-android-fit">html{overflow-x:hidden}body{max-width:100%;overflow-x:hidden}img,svg,video{max-width:100%}main,section,article,.card,.panel{min-width:0}button,.btn,a.btn{min-height:44px;touch-action:manipulation;white-space:normal;line-height:1.25}input,select,textarea{max-width:100%;font:inherit;min-width:0}.grid,.subjects,.gm-exp-grid,.country-grid,.continent-grid{grid-template-columns:repeat(auto-fit,minmax(min(100%,180px),1fr))}@media(max-width:420px){main{padding-left:12px!important;padding-right:12px!important}.card,.panel,.gm-extra-panel{padding:14px!important}h1{font-size:clamp(26px,8vw,36px)}.answers button{width:100%}}</style>
+<style id="gm-home-pagination-style">
+#gm-home-pages{min-height:45vh}.gm-home-page[hidden]{display:none!important}
+#gm-home-pagination{max-width:1000px;margin:18px auto 0;padding:14px 12px;display:flex;flex-wrap:wrap;justify-content:center;gap:9px;background:#fff;border:1px solid #dce8f6;border-radius:18px;box-shadow:0 5px 16px #1d397012}
+#gm-home-pagination>[data-home-target]{flex:1 1 145px;min-height:48px;padding:11px 12px;border:2px solid #d9e4f6;border-radius:13px;background:#f5f8ff;color:#29416e;font-weight:800}
+#gm-home-pagination>[data-home-target][aria-current="page"]{background:linear-gradient(115deg,#6848ed,#397fe8);border-color:#6848ed;color:#fff}
+#gm-home-pagination .gm-home-page-actions{display:flex;align-items:center;justify-content:space-between;gap:12px;flex:1 1 100%;padding-top:8px}
+#gm-home-pagination .gm-home-page-actions button{min-height:46px;padding:10px 16px}
+#gm-home-pagination .gm-home-page-actions button:disabled{opacity:.4;cursor:not-allowed}
+#gm-home-pagination button:focus-visible{outline:3px solid #ffb52e;outline-offset:3px}
+@media(max-width:480px){#gm-home-pagination{margin:12px 10px;padding:10px}#gm-home-pagination>[data-home-target]{flex:1 1 100%}#gm-home-pagination .gm-home-page-actions{gap:7px}#gm-home-pagination .gm-home-page-actions button{padding:9px 11px;font-size:14px}}
+</style>
+</head>
 <body>
 <div class="language-bar"><label for="gm-language">Language / 语言 / Sprache:</label><select id="gm-language" aria-label="Choose app language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="zh">中文（简体）</option><option value="de">Deutsch</option><option value="es">Español</option><option value="fr">Français</option><option value="ar">العربية</option></select></div>
 <header>
 <h1>🌟 Great Minds AI</h1>
 <p data-gm="tagline">Learn • Explore • Imagine • Create</p>
 </header>
+<main id="gm-home-pages">
+<div class="gm-home-page" id="gm-home-page-1" data-home-page="1">
 <section class="hero">
 <div class="rocket">🚀🌎</div><div class="gm-home-art" aria-label="Explore with pictures"><img src="assets/3d-style/rocket.svg" alt="Rocket" width="120" height="120"><img src="assets/3d-style/globe.svg" alt="Globe" width="140" height="140"><img src="assets/3d-style/rainbow.svg" alt="Rainbow" width="120" height="120"></div>
 <h2 data-gm="hero">Launch Your Learning Adventure!</h2>
 <p data-gm="intro">Explore science, English, mathematics and more.</p>
 <div class="people">👩‍🏫 👧🏽 👦🏾 👧🏻</div>
 <p data-gm="support">Teachers and parents supporting every child ❤️</p>
-<button type="button" onclick="document.getElementById('subjects').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" data-gm="start">Start Learning 🚀</button>
+<button type="button" onclick="gmShowHomePage(1);document.getElementById('subjects').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" data-gm="start">Start Learning 🚀</button>
 <a href="independent-student.html" style="display:inline-block;margin:12px 6px;padding:14px 20px;border-radius:14px;background:#167b78;color:white;text-decoration:none;font-weight:bold;min-height:48px">🎒 Independent Student Space</a>
 <a href="picture-stories.html" style="display:inline-block;margin:12px 6px;padding:14px 20px;border-radius:14px;background:#ef8b2c;color:white;text-decoration:none;font-weight:bold;min-height:48px">📚 Picture Books & Stories</a>
 </section>
@@ -108,7 +122,7 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 <button type="button" onclick="window.location.href='international-classrooms.html'" data-gm="classroom">International Classroom</button>
   </div>
 </section>
-<footer data-gm="footer">Great Minds AI — Every Child Can Shine ✨</footer>
+
 <script>
 function lesson(subject) {
   const pages = {
@@ -139,6 +153,7 @@ function lesson(subject) {
 }
 </script>
 <section id="more-subjects" style="padding:20px;background:#eaf5ff;text-align:center">
+  <div class="gm-home-page" id="gm-home-page-2" data-home-page="2">
   <h2 data-gm="complete">📚 Complete Educational Subjects</h2>
   <div class="subjects">
     <div class="subject"><span>🏡</span><a class="subject-link" href="home-science.html" data-gm="homeScience">Home Science</a></div>
@@ -161,6 +176,8 @@ function lesson(subject) {
     <div class="subject"><span>📚</span><a class="subject-link" href="encyclopedia.html" data-gm="encyclopedia">Little Learners Encyclopedia</a></div>
     <div class="subject"><span>🔎</span><a class="subject-link" href="guided-research.html" data-gm="research">Guided Research Centre</a></div>
   </div>
+</div>
+  <div class="gm-home-page" id="gm-home-page-3" data-home-page="3">
   <h2 data-gm="people">👨‍👩‍👧 Student, Teacher & Parent</h2>
   <div class="subjects">
     <div class="subject"><span>🎒</span><a class="subject-link" href="student-profile.html" data-gm="profile">Student Profile</a></div>
@@ -174,7 +191,36 @@ function lesson(subject) {
     <div class="subject"><span>🤖</span><a class="subject-link" href="ai-teacher.html" data-gm="voice">AI Teacher — Voice Demo</a></div>
     <div class="subject"><span>🌍</span><a class="subject-link" href="group-learning.html" data-gm="groupDemo">Group Learning Demo</a></div>
   </div>
+</div>
 </section>
+</main>
+<nav id="gm-home-pagination" aria-label="Home dashboard pages">
+  <button type="button" data-home-target="1" aria-current="page">1 · Start & Learn</button>
+  <button type="button" data-home-target="2">2 · All Subjects</button>
+  <button type="button" data-home-target="3">3 · Family & Tools</button>
+  <div class="gm-home-page-actions"><button type="button" id="gm-home-prev" disabled>← Previous</button><span id="gm-home-page-label" aria-live="polite">Page 1 of 3</span><button type="button" id="gm-home-next">Next →</button></div>
+</nav>
+<footer data-gm="footer">Great Minds AI — Every Child Can Shine ✨</footer>
+
+<script>
+(function(){
+ let current=1;
+ window.gmShowHomePage=function(page){
+  const target=Math.max(1,Math.min(3,Number(page)||1));current=target;
+  document.querySelectorAll("[data-home-page]").forEach(el=>{el.hidden=Number(el.dataset.homePage)!==current});
+  document.querySelectorAll("#gm-home-pagination [data-home-target]").forEach(btn=>{if(Number(btn.dataset.homeTarget)===current)btn.setAttribute("aria-current","page");else btn.removeAttribute("aria-current")});
+  const label=document.getElementById("gm-home-page-label"),prev=document.getElementById("gm-home-prev"),next=document.getElementById("gm-home-next");
+  if(label)label.textContent="Page "+current+" of 3";if(prev)prev.disabled=current===1;if(next)next.disabled=current===3;
+  window.scrollTo({top:0,behavior:window.matchMedia("(prefers-reduced-motion: reduce)").matches?"auto":"smooth"});
+ };
+ document.addEventListener("DOMContentLoaded",()=>{
+  document.querySelectorAll("#gm-home-pagination [data-home-target]").forEach(btn=>btn.addEventListener("click",()=>window.gmShowHomePage(btn.dataset.homeTarget)));
+  document.getElementById("gm-home-prev").addEventListener("click",()=>window.gmShowHomePage(current-1));
+  document.getElementById("gm-home-next").addEventListener("click",()=>window.gmShowHomePage(current+1));
+  window.gmShowHomePage(1);
+ });
+})();
+</script>
 <script>
 const gmTranslations={
 en:{tagline:"Learn • Explore • Imagine • Create",hero:"Launch Your Learning Adventure!",intro:"Explore science, English, mathematics and more.",support:"Teachers and parents supporting every child ❤️",start:"Start Learning 🚀",science:"Science",math:"Mathematics",english:"English",games:"Learning Games",ai:"AI Teacher",group:"Group Learning",classroom:"International Classroom",complete:"📚 Complete Educational Subjects",homeScience:"Home Science",extraMath:"Extra Mathematics Practice",extraScience:"Extra Science Practice",extraSocial:"Extra Social Studies Practice",vocabulary:"Vocabulary",dictionary:"Little Learners Dictionary",story:"English Story Studio",reading:"Reading & Writing",social:"Social Studies",history:"History",geography:"Geography",computer:"Computer Studies",knowledge:"General Knowledge",encyclopedia:"Little Learners Encyclopedia",research:"Guided Research Centre",people:"👨‍👩‍👧 Student, Teacher & Parent",profile:"Student Profile",parent:"Parents & Teachers Center",hub:"Unified Learning & Classroom Hub",homework:"Homework Manager",gallery:"3D Learning Graphics Gallery",lessons:"English Lessons",voice:"AI Teacher — Voice Demo",groupDemo:"Group Learning Demo",footer:"Great Minds AI — Every Child Can Shine ✨"},
