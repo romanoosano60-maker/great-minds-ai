@@ -33,6 +33,17 @@ img,svg,video,canvas{max-width:100%;height:auto}
 .gm-quick-nav a:hover{background:#dce8ff}
 @media(max-width:480px){.gm-quick-nav{justify-content:flex-start;flex-wrap:nowrap;overflow-x:auto;padding:9px 10px;scrollbar-width:thin}.gm-quick-nav a{flex:0 0 auto}}
 @media(prefers-reduced-motion:reduce){.gm-quick-nav a{transition:none!important;scroll-behavior:auto!important}}
+
+/* Bright, friendly visual polish for subject pages */
+header{position:relative;overflow:hidden;box-shadow:0 8px 22px #203b6c18}
+header h1{letter-spacing:.2px;text-shadow:0 2px 8px #162d5a30}
+.card,.panel,section,article{border-color:#e5ebfa}
+.tile,.lesson-card,.activity-card{border-radius:18px;background:linear-gradient(145deg,#fff 0%,#f1f6ff 100%);box-shadow:0 5px 13px #24436c0c;transition:transform .18s ease,box-shadow .18s ease}
+.tile:hover,.lesson-card:hover,.activity-card:hover{transform:translateY(-3px);box-shadow:0 10px 20px #24436c18}
+.emoji{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;border-radius:16px;background:linear-gradient(145deg,#fff1c9,#e7edff);filter:drop-shadow(0 3px 3px #233b6520)}
+button,.back,.btn{box-shadow:0 4px 9px #4b4da51a;transition:transform .16s ease,filter .16s ease}
+button:active,.back:active,.btn:active{transform:scale(.98)}
+@media(prefers-reduced-motion:reduce){.tile,.lesson-card,.activity-card,button,.back,.btn{transition:none!important}}
 </style><script src="gm-language.js" defer></script></head><body>
 <nav class="gm-quick-nav" aria-label="Great Minds learning navigation">
 <a href="index.html">🏠 Home</a><a href="vocabulary.html">🔤 Vocabulary</a><a href="math.html">🔢 Maths</a><a href="science.html">🔬 Science</a><a href="geography.html">🌍 Geography</a><a href="history.html">📜 History</a><a href="social-studies.html">🤝 Social Studies</a><a href="computer.html">💻 Computer</a><a href="home-science.html">🏡 Home Science</a>
