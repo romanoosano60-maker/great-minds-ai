@@ -12,5 +12,5 @@ function renderPage(){const p=active.pages[index];document.getElementById('pagea
 document.getElementById('prev').addEventListener('click',()=>{if(index>0){index--;renderPage()}});
 document.getElementById('next').addEventListener('click',()=>{if(index<active.pages.length-1){index++;renderPage()}else{reader.classList.remove('active');grid.scrollIntoView({behavior:'smooth',block:'start'})}});
 document.getElementById('closebook').addEventListener('click',()=>reader.classList.remove('active'));
-document.getElementById('speak').addEventListener('click',()=>{if(!('speechSynthesis'in window)){alert('Read-aloud is not available on this device yet.');return}speechSynthesis.cancel();const p=active.pages[index];const utterance=new SpeechSynthesisUtterance(p[0]+'. '+p[1]);utterance.lang='en-US';utterance.rate=.85;speechSynthesis.speak(utterance)});
+document.getElementById('speak').addEventListener('click',()=>{if(!('speechSynthesis'in window)){alert('Read-aloud is not available on this device yet.');return}speechSynthesis.cancel();const p=active.pages[index];const utterance=new SpeechSynthesisUtterance(p[2]+'. '+p[3]);utterance.lang='en-US';utterance.rate=.85;speechSynthesis.speak(utterance)});
 </script></body></html>
