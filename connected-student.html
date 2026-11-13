@@ -83,6 +83,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   }).catch(e=>setStatus('Could not check session: '+e.message));
  }
  el('cloudLogin').addEventListener('click',async()=>{
+  user=null;activeStudentLink=false;cloudHistoryRequest++;saveBtn.disabled=true;el('studentCloudRecords').textContent='Checking Student account…';if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db?.removeChannel(channel).catch(()=>{})}
   const passwordField=el('cloudPassword');
   if(!db){passwordField.value='';setStatus('Cloud service is unavailable.');return}
   const email=el('cloudEmail').value.trim(),password=passwordField.value;
