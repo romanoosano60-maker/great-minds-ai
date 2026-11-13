@@ -13,7 +13,20 @@ img,svg,video,canvas{max-width:100%;height:auto}
 @media(max-width:340px){.grid,.lesson-grid,.activity-grid{grid-template-columns:1fr}}
 @media(prefers-reduced-motion:reduce){*,*::before,*::after{scroll-behavior:auto!important;animation-duration:.01ms!important;transition-duration:.01ms!important}}
 
-</style><script src="gm-language.js" defer></script></head><body><header><h1>🌍 Great Minds AI</h1><h2 style="color:white">📚 English Language</h2><p>Listen • Read • Write • Speak • Play</p><a class="back" href="index.html">🏠 Back Home</a><a href="connected-dashboards.html">🌐 Unified Hub</a></header><main>
+
+/* Friendly learning-card refresh */
+header{position:relative;overflow:hidden;box-shadow:0 8px 22px #203b6c18}
+header h1{letter-spacing:.2px;text-shadow:0 2px 8px #162d5a30}
+.card,.panel,section{border:1px solid #e5ebfa}
+.tile{border-radius:18px;background:linear-gradient(145deg,#fff 0%,#f1f6ff 100%);box-shadow:0 5px 13px #24436c0c;transition:transform .18s ease,box-shadow .18s ease}
+.tile:hover{transform:translateY(-3px);box-shadow:0 10px 20px #24436c18}
+.tile .emoji,.emoji{display:inline-flex;align-items:center;justify-content:center;min-width:48px;min-height:48px;border-radius:16px;background:linear-gradient(145deg,#fff1c9,#e7edff);filter:drop-shadow(0 3px 3px #233b6520)}
+.gm-subject-art figure{background:linear-gradient(145deg,#fff,#f2f6ff);border:1px solid #e3eafa;border-radius:18px;padding:8px;box-shadow:0 5px 14px #233b6510}
+.gm-subject-art figure img{display:block;max-height:112px;object-fit:contain}
+button,.back,.btn{box-shadow:0 4px 9px #4b4da51a;transition:transform .16s ease,filter .16s ease}
+button:active,.back:active,.btn:active{transform:scale(.98)}
+@media(prefers-reduced-motion:reduce){.tile,button,.back,.btn{transition:none!important}}
+</style><script src="gm-language.js" defer></script></head><body><header><h1>🌍 Great Minds AI</h1><h2 style="color:white">📚 English Language</h2><p>Listen • Read • Write • Speak • Play</p><a class="back" href="index.html">🏠 Back Home</a><a href="connected-dashboards.html">🌐 Unified Hub</a></header><main><section class="gm-english-welcome"><h2>🌈 Welcome to English Adventure!</h2><p>Look, listen, read and practise new words with pictures.</p><div class="gm-subject-art gm-english-art" role="group" aria-label="English learning pictures" style="display:flex;gap:12px;flex-wrap:wrap;justify-content:center;margin:14px auto 18px"><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/apple.svg" alt="Apple picture for the letter A" width="240" height="180" loading="lazy" decoding="async"><figcaption>A is for Apple</figcaption></figure><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/notebook.svg" alt="Notebook for reading and writing" width="240" height="180" loading="lazy" decoding="async"><figcaption>Read and write</figcaption></figure><figure style="margin:0;flex:1 1 105px;max-width:145px;text-align:center"><img src="assets/3d-style/pencil.svg" alt="Pencil for spelling practice" width="240" height="180" loading="lazy" decoding="async"><figcaption>Practise spelling</figcaption></figure></div></section>
 <section><h2>🔤 Lesson 1: Alphabet A–Z</h2><p>Tap a letter to hear its name and an example word.</p><div class="letters" id="letters"></div><div class="card" id="letterInfo" aria-live="polite">Choose a letter to begin!</div></section>
 <section><h2>🍎 Lesson 2: Vocabulary</h2><p>Learn a word, its meaning and an example. Tap Listen to hear it.</p><div id="words"></div></section>
 <section><h2>📖 Lesson 3: Reading and comprehension</h2><div class="card"><p id="story">Mina planted a small seed in a pot. She gave it water and placed it near a sunny window. After some days, a tiny green shoot appeared. Mina was excited to watch her plant grow.</p><button type="button" id="readStory">🔊 Read story aloud</button></div><div id="readingQuiz"><p id="readProgress">Question 1 of 3</p><h3 id="readQuestion"></h3><div class="answers" id="readAnswers"></div><p id="readFeedback" aria-live="polite"></p><button type="button" id="readNext" hidden>Next question →</button><button type="button" id="readRestart">↻ Restart reading quiz</button></div></section>
