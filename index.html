@@ -53,6 +53,24 @@ header h1{letter-spacing:.2px;text-shadow:0 2px 8px #18305a35}
 button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 @media(max-width:520px){.subjects{gap:10px;padding:12px}.subject{min-height:136px;padding:16px 8px}.hero .people{font-size:34px}}
 
+
+/* Bright, child-friendly visual refresh */
+.hero{position:relative;overflow:hidden;background:radial-gradient(circle at 12% 18%,#fff 0 5%,transparent 5.5%),radial-gradient(circle at 88% 24%,#fff7 0 4%,transparent 4.5%),linear-gradient(135deg,#c8f5ff 0%,#e8e4ff 48%,#fff0c8 100%)}
+.gm-home-art{display:flex;align-items:center;justify-content:center;gap:clamp(12px,4vw,30px);margin:12px auto 18px;max-width:520px}
+.gm-home-art img{width:clamp(66px,18vw,112px);height:clamp(66px,18vw,112px);object-fit:contain;filter:drop-shadow(0 8px 7px #24416b25)}
+.gm-home-art img:nth-child(2){width:clamp(82px,22vw,138px)}
+.subject{position:relative;overflow:hidden;background:linear-gradient(155deg,#fff 0%,#f6f9ff 100%);border:2px solid #e5eaff;border-radius:22px;padding:18px 12px;box-shadow:0 8px 18px #293f7512}
+.subject:after{content:"";position:absolute;width:76px;height:76px;border-radius:50%;background:#eaf2ff;right:-28px;top:-30px;z-index:0}
+.subject>*{position:relative;z-index:1}
+.subject span{font-size:42px}
+.subject img.gm-card-art{display:block;width:100%;max-width:116px;height:76px;object-fit:contain;margin:0 auto 8px;filter:drop-shadow(0 5px 5px #1c315522)}
+.subject button,.subject-link{border-radius:14px;background:linear-gradient(115deg,#6848ed,#397fe8);box-shadow:0 5px 10px #4a55bb25}
+.subject:nth-child(3n+2) button,.subject:nth-child(3n+2) .subject-link{background:linear-gradient(115deg,#0b9f9a,#28b7cf)}
+.subject:nth-child(3n) button,.subject:nth-child(3n) .subject-link{background:linear-gradient(115deg,#ed8a32,#f2b83f)}
+#more-subjects{background:linear-gradient(180deg,#eaf5ff,#f7f1ff 55%,#fff7e8)!important}
+#more-subjects>.subjects .subject{min-height:160px}
+@media(prefers-reduced-motion:no-preference){.gm-home-art img:nth-child(1){animation:gmHomeFloat 5s ease-in-out infinite}.gm-home-art img:nth-child(2){animation:gmHomeFloat 5.8s ease-in-out -1.5s infinite}.gm-home-art img:nth-child(3){animation:gmHomeFloat 5.2s ease-in-out -3s infinite}@keyframes gmHomeFloat{0%,100%{transform:translateY(0)}50%{transform:translateY(-7px)}}}
+@media(max-width:480px){.gm-home-art{gap:8px}.subject img.gm-card-art{max-width:90px;height:64px}.subject{border-radius:18px}}
 </style>
 <style>
 .language-bar{display:flex;flex-wrap:wrap;justify-content:center;align-items:center;gap:9px;padding:10px;background:#fff}
@@ -69,7 +87,7 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 <p data-gm="tagline">Learn • Explore • Imagine • Create</p>
 </header>
 <section class="hero">
-<div class="rocket">🚀🌎</div>
+<div class="rocket">🚀🌎</div><div class="gm-home-art" aria-label="Explore with pictures"><img src="assets/3d-style/rocket.svg" alt="Rocket" width="120" height="120"><img src="assets/3d-style/globe.svg" alt="Globe" width="140" height="140"><img src="assets/3d-style/rainbow.svg" alt="Rainbow" width="120" height="120"></div>
 <h2 data-gm="hero">Launch Your Learning Adventure!</h2>
 <p data-gm="intro">Explore science, English, mathematics and more.</p>
 <div class="people">👩‍🏫 👧🏽 👦🏾 👧🏻</div>
@@ -79,12 +97,12 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 <a href="picture-stories.html" style="display:inline-block;margin:12px 6px;padding:14px 20px;border-radius:14px;background:#ef8b2c;color:white;text-decoration:none;font-weight:bold;min-height:48px">📚 Picture Books & Stories</a>
 </section>
 <section id="subjects" class="subjects">
-<div class="subject"><span>🔬</span><button type="button" onclick="window.location.href='science.html'" data-gm="science">Science</button></div>
-<div class="subject"><span>🔢</span><button type="button" onclick="window.location.href='math.html'" data-gm="math">Mathematics</button></div>
-<div class="subject"><span>📚</span><button type="button" onclick="lesson('English')" data-gm="english">English</button></div>
-<div class="subject"><span>🎮</span><button type="button" onclick="lesson('Learning Games')" data-gm="games">Learning Games</button></div>
-<div class="subject"><span>🤖</span><button type="button" onclick="lesson('AI Teacher')" data-gm="ai">AI Teacher</button></div>
-<div class="subject"><span>🌍</span><button type="button" onclick="lesson('Group Learning')" data-gm="group">Group Learning</button></div>
+<div class="subject"><span>🔬</span><img class="gm-card-art" src="assets/3d-style/science-solar-system.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="window.location.href='science.html'" data-gm="science">Science</button></div>
+<div class="subject"><span>🔢</span><img class="gm-card-art" src="assets/3d-style/math-shapes.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="window.location.href='math.html'" data-gm="math">Mathematics</button></div>
+<div class="subject"><span>📚</span><img class="gm-card-art" src="assets/3d-style/apple.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="lesson('English')" data-gm="english">English</button></div>
+<div class="subject"><span>🎮</span><img class="gm-card-art" src="assets/3d-style/ball.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="lesson('Learning Games')" data-gm="games">Learning Games</button></div>
+<div class="subject"><span>🤖</span><img class="gm-card-art" src="assets/3d-style/computer-robot.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="lesson('AI Teacher')" data-gm="ai">AI Teacher</button></div>
+<div class="subject"><span>🌍</span><img class="gm-card-art" src="assets/3d-style/geography-globe.svg" alt="" loading="lazy" decoding="async"><button type="button" onclick="lesson('Group Learning')" data-gm="group">Group Learning</button></div>
   <div class="subject">
 <span>🌐</span>
 <button type="button" onclick="window.location.href='international-classrooms.html'" data-gm="classroom">International Classroom</button>
