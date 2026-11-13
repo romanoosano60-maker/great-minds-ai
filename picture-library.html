@@ -25,6 +25,18 @@ small{color:#536783}.retry{min-height:auto;margin:4px 0 12px;padding:10px 14px}
 footer{text-align:center;padding:22px;color:#536783;font-size:13px}
 @media(max-width:700px){.grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:420px){.categories{grid-template-columns:repeat(2,minmax(0,1fr))}.grid{grid-template-columns:1fr}figure img{height:220px}}
+
+/* Picture library visual polish */
+header{position:relative;overflow:hidden;background:radial-gradient(circle at 12% 18%,#ffffff38 0 6%,transparent 6.5%),radial-gradient(circle at 88% 76%,#ffffff2b 0 9%,transparent 9.5%),linear-gradient(120deg,#6545e8,#00a9c7)}
+.intro{background:linear-gradient(135deg,#fff,#f0f7ff 65%,#fff5df);box-shadow:0 7px 18px #18305a10}
+.categories button{box-shadow:0 5px 11px #233b651a;transition:transform .16s ease,filter .16s ease}
+.categories button:hover{transform:translateY(-2px);filter:brightness(1.04)}
+.categories button[aria-pressed=true]{background:linear-gradient(120deg,#087f8c,#13a5a0);outline:3px solid #9ce9e5;outline-offset:1px}
+figure{transition:transform .18s ease,box-shadow .18s ease}
+figure:hover{transform:translateY(-3px);box-shadow:0 10px 20px #18305a20}
+figure img{background:linear-gradient(145deg,#edf5ff,#fff7e7)}
+.notice{background:linear-gradient(135deg,#fff,#f5f8ff);border-left:4px solid #8b79e8}
+@media(prefers-reduced-motion:reduce){.categories button,figure{transition:none!important}}
 </style>
 </head>
 <body>
