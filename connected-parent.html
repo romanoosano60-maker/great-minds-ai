@@ -85,6 +85,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   if(user){try{if(await verifyActiveGuardian(user.id)){say('Parent account and active child link confirmed.');await load();watchCloud()}else say('Parent account signed in. No active child link yet; complete guardian consent on the International Classrooms page.')}catch(e){activeGuardianLink=false;say('Parent link could not be verified. Cloud child records remain unavailable.')}}else say('Not signed in to cloud progress.');
  }
  el('parentLogin').addEventListener('click',async()=>{
+  user=null;activeGuardianLink=false;cloudLoadRequest++;records.textContent='Checking Parent account…';el('cloudHomeworkRecords').textContent='Checking Parent account…';if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db?.removeChannel(channel).catch(()=>{})}
   const passwordField=el('parentPassword');
   if(!db){passwordField.value='';say('Cloud service unavailable.');return}
   const email=el('parentEmail').value.trim(),password=passwordField.value;
