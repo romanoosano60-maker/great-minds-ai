@@ -558,3 +558,16 @@ Reviewed and updated three additional learning pages:
 Source validation: re-fetched all three updated pages from GitHub and compiled all inline JavaScript blocks with syntax-only checks. General Knowledge: 3/3 scripts passed; Geography: 5/5; Home Science: 4/4. Total: 12/12 inline scripts passed.
 
 Limitations: this is source-level review and syntax validation only. It does not prove browser interaction, authenticated Supabase persistence, cross-device sync, offline recovery, account isolation, or RLS behavior. No database schema, RLS policy, secret, Edge Function, account, or learner record was changed.
+
+
+## 15 November 2026 — Continued coding audit: English, connected practice, Social Studies, and games
+
+Further reviewed and updated:
+- `english.html`: the English extra-practice quiz, reading-comprehension quiz, and main English quiz now display a visible cloud-save failure message when the save promise rejects.
+- `connected-practice.html`: the connected practice question now handles a rejected cloud-save request and explains that the result remains visible on the page.
+- `social.html`: the Social Studies foundations quiz now handles cloud-save rejection and safely handles a missing save-reason message.
+- `games.html`: the asynchronous game-score save now catches rejected requests and updates the cloud-status message instead of leaving an unhandled promise rejection.
+
+Source validation: re-fetched the four pages from GitHub and syntax-checked every inline script. English: 5/5; Connected Practice: 2/2; Social Studies: 2/2; Games: 1/1. Total: 10/10 inline scripts passed.
+
+Limitations remain: no live browser interaction, Android, authenticated Supabase, offline, cross-device, or RLS test has been performed as part of these edits. No database schema, RLS policy, secret, Edge Function, account, or learner record was changed.
