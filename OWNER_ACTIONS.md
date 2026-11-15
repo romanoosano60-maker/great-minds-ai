@@ -388,3 +388,12 @@ Additional follow-up: the same stale-response guard was added to `international-
 - Source review confirms the endpoint checks the signed-in user with Supabase Auth, checks approved-teacher or active guardian/student relationship records, applies a database-enforced usage quota before the provider call, restricts subject/language values, limits request size/history, sends the provider request server-side with `store: false`, and returns a concise error rather than exposing upstream details. The provider secret is referenced only through the server environment; its value was not retrieved or exposed.
 - This is a source/deployment audit only. No real signed-in approved-user AI answer, unrelated-account rejection, microphone permission, or Android speech test was performed. Do not mark AI Teacher fully tested or launch-ready on the basis of an ACTIVE function alone.
 - No learning content, live function, Auth setting, secret, database policy, account or learner record was changed in this pass.
+
+## 15 November 2026 — supervised classroom calling source audit
+
+- Live Supabase confirms `classroom-call-token` is ACTIVE version 9 with JWT verification enabled. The deployed Edge Function source exactly matches `supabase/functions/classroom-call-token/index.ts` in GitHub (9,331 characters).
+- The server verifies the bearer session through Supabase Auth, checks the classroom, requires the approved teacher who owns the classroom to start/end calls, checks student membership plus an active guardian relationship, and permits linked guardians only as observers. Students and guardians may join only while the teacher is actually connected.
+- Call tokens expire after 600 seconds. The function requires a `wss://` LiveKit URL and applies request/rate checks. Guardian observer tokens do not receive microphone/camera publish permissions.
+- `classroom-call.html` connects to the room without starting local media. Microphone and camera controls start disabled/off and are enabled only after the participant deliberately presses the corresponding control. This was source-inspected, not device-tested.
+- Remaining tests: approved teacher start/end, approved student join, linked guardian observer, unrelated/unapproved account rejection, teacher-absent rejection, token expiry, camera/microphone permission denial, and Android leave/end cleanup.
+- No call token was issued, no call was started, and no classroom or account data was changed during this source audit.
