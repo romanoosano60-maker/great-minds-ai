@@ -485,3 +485,10 @@ Read-only source trace completed for the five primary subject pages and the shar
 5. Run Android tests for online save, offline completion, signed-out completion, later sign-in, and guardian-consent/RLS rejection. Mark cloud persistence complete only after the returned status and database row are verified for the intended account.
 
 This remains a source trace, not a live browser or Android runtime test. No Supabase schema, policy, function, secret, learner record, or production app source was modified.
+
+
+### Follow-up page inventory verification (15 November 2026)
+- Checked the repository root: all 12 bank page files exist — English, Mathematics, Science, Social Studies, Geography, History, Computer Studies, Home Science, Vocabulary, Creative Arts, General Knowledge, and Encyclopedia.
+- Checked each of the seven additional subject pages (Geography, History, Home Science, Vocabulary, Creative Arts, General Knowledge, and Encyclopedia): each includes the shared `assets/js/level-challenges.js` script reference. Together with the five primary pages above, all 12 subject pages are wired to the shared level script in source.
+- Checked all seven declared extra-page aliases against the repository root: each alias page exists and maps to a defined primary bank.
+- This verifies file presence and script references only; it does not replace browser execution, console inspection, or Android completion tests.
