@@ -429,3 +429,32 @@ Read-only checks performed against the current default-branch source and live Su
 
 ### Documentation reconciliation note
 Earlier sections of this checklist contain historical deployment versions and older row-count snapshots. Use the dated live-audit entries in the current handoff and the live Supabase deployment/catalog as the source of truth; do not treat old version numbers or historical counts as current.
+
+
+## 15 November 2026 — learning challenge quality and reliability review
+
+Reviewed the complete current `assets/js/level-challenges.js` source (read-only). No question-bank or application code was changed in this review.
+
+### Confirmed structure
+- 12 subject/learning areas × 3 levels × 5 questions = 180 authored multiple-choice questions in the level-challenge bank.
+- Each question has three answer choices and an indexed correct answer.
+- The runtime randomizes the displayed answer order, locks choices after one answer, provides correct/incorrect feedback, tracks the score, and attempts to save a completed challenge.
+- The script supports explicit aliases for the English, Mathematics, Science, Social Studies, and Computer Studies extra pages.
+
+### Quality findings and improvements to make
+1. Five questions per level is too short for sustained practice and creates repeat exposure quickly. Expand in reviewed batches, initially targeting 10 questions per level per priority subject, then test every affected page.
+2. Answer shuffling currently uses `sort(() => Math.random() - 0.5)`. Replace with a Fisher–Yates shuffle for a properly unbiased shuffle.
+3. The cloud-save promise is deliberately caught with an empty handler. A learner can see “Challenge complete” even if cloud saving fails. Add a visible save state (saved / saved locally only / retry needed) and preserve local history as a fallback.
+4. Add validation before rendering: each question must have exactly three distinct choices, a valid correct-answer index, non-empty prompt/choices, and no duplicate prompt within the same level.
+5. Add age-appropriate review and more question formats over time (short response, matching, picture identification, ordering, and worked maths steps); do not label the current multiple-choice-only bank as a complete curriculum.
+6. A few general-knowledge items rely on conventions or colloquial phrasing (for example, the commonly taught seven-continent model and “king of the jungle”). Make convention-dependent wording explicit and prefer precise factual wording.
+7. Advanced questions vary significantly in reading difficulty across subjects. Review against a consistent age/grade band and explain unfamiliar terms in the lesson material.
+
+### Acceptance checks before marking this feature complete
+- All 12 subject pages load the correct bank without console errors.
+- Beginner, Pro, and Advanced each complete all five questions; correct and incorrect feedback, score, next-question flow, and retry/level switching behave correctly.
+- Answer order changes across repeated runs without changing the correct answer.
+- Cloud-save success and failure are both visibly handled; local history remains available if offline.
+- Android narrow-screen layout, keyboard/screen-reader labels, and tap targets are checked.
+
+This is a source-quality review only. It does not certify runtime behavior, cloud persistence, or curriculum completeness.
