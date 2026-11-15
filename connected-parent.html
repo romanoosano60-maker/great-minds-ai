@@ -109,4 +109,8 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  el('refreshCloud').addEventListener('click',load);
  init();
 })();
-</script><script src="auth-recovery.js"></script></body></html>
+</script><script src="auth-recovery.js"></script><style id="gm-password-toggle-style">.gm-password-toggle{display:inline-block;margin:6px 0 10px;padding:8px 12px;min-height:40px;border:1px solid #b9c8dd;border-radius:9px;background:#f2f6ff;color:#23416f;font:inherit;font-weight:700;cursor:pointer}.gm-password-toggle:focus-visible{outline:3px solid #ffb52e;outline-offset:2px}</style>
+<script id="gm-password-toggle-script">
+(function(){const field=document.getElementById("parentPassword");if(!field||field.dataset.visibilityToggleAdded)return;field.dataset.visibilityToggleAdded="true";const button=document.createElement("button");button.type="button";button.className="gm-password-toggle";button.textContent="Show password";button.setAttribute("aria-controls",field.id);button.setAttribute("aria-pressed","false");button.addEventListener("click",function(){const show=field.type==="password";field.type=show?"text":"password";button.textContent=show?"Hide password":"Show password";button.setAttribute("aria-pressed",String(show));});field.insertAdjacentElement("afterend",button);})();
+</script>
+</body></html>
