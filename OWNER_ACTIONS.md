@@ -546,3 +546,15 @@ Limitations: these are source-level repairs only. No browser/Android interaction
 - Social Studies main Community Helper quiz now also reports a rejected cloud-save request; a missing `reason` value no longer produces an unclear `undefined` message.
 - Re-fetched all five pages after editing. All 22 inline scripts across the five pages passed JavaScript syntax compilation; the feedback elements referenced by the new handlers were confirmed present.
 - This is source-level validation only. No Android/browser interaction, authenticated Supabase save, cross-device sync, offline behavior, or RLS authorization test was performed. No Supabase schema, policy, secret, function, account, or learner record was changed.
+
+
+## 15 November 2026 — Continued coding audit: visible cloud-save failure feedback
+
+Reviewed and updated three additional learning pages:
+- `general-knowledge.html`: the expanded General Knowledge challenge no longer silently swallows a rejected cloud-progress save; it now tells the learner that cloud saving could not be confirmed and the result remains visible on the device.
+- `geography.html`: the main World Explorer quiz now handles a rejected cloud-save promise and gives a fallback message when the save result has no reason text; the expanded Geography challenge also reports rejected cloud saves visibly.
+- `home-science.html`: the expanded Home Science challenge now reports rejected cloud saves instead of silently ignoring them.
+
+Source validation: re-fetched all three updated pages from GitHub and compiled all inline JavaScript blocks with syntax-only checks. General Knowledge: 3/3 scripts passed; Geography: 5/5; Home Science: 4/4. Total: 12/12 inline scripts passed.
+
+Limitations: this is source-level review and syntax validation only. It does not prove browser interaction, authenticated Supabase persistence, cross-device sync, offline recovery, account isolation, or RLS behavior. No database schema, RLS policy, secret, Edge Function, account, or learner record was changed.
