@@ -397,3 +397,35 @@ Additional follow-up: the same stale-response guard was added to `international-
 - `classroom-call.html` connects to the room without starting local media. Microphone and camera controls start disabled/off and are enabled only after the participant deliberately presses the corresponding control. This was source-inspected, not device-tested.
 - Remaining tests: approved teacher start/end, approved student join, linked guardian observer, unrelated/unapproved account rejection, teacher-absent rejection, token expiry, camera/microphone permission denial, and Android leave/end cleanup.
 - No call token was issued, no call was started, and no classroom or account data was changed during this source audit.
+
+
+## 15 November 2026 — follow-up classroom privacy and learning-level source audit
+
+Read-only checks performed against the current default-branch source and live Supabase catalog. No application code, learner data, database grants, RLS policies, accounts, or Edge Functions were changed.
+
+### Learning levels
+- `assets/js/level-challenges.js` defines Beginner, Pro, and Advanced banks for 12 subject areas.
+- Each level currently contains five questions per subject (15 questions across the three levels per subject). The quiz shuffles answer order, prevents a second answer to the same question, gives feedback, calculates a score, and attempts to save progress through `gmSaveStudentProgress`; it also stores a local score history.
+- This is a working source structure, not evidence that all 12 subjects render correctly or that cloud saving succeeds on a real account. The small five-question banks remain a content-depth task; expand in reviewed batches and test each subject before marking complete.
+
+### Parent and teacher dashboard distinction
+- `connected-parent.html` and `connected-teacher.html` explicitly label their shared-browser/localStorage panels as demos, not secure account systems. Their separate cloud panels use signed-in Supabase sessions and rely on database RLS for row filtering.
+- `teacher-dashboard.html` is a local-only lesson-plan/feedback/practice overview. It is not the secure cloud teacher dashboard and must not be presented as cross-device or authenticated classroom management.
+- The parent cloud panel displays only rows returned by its authenticated queries/RLS. Its progress details currently display a shortened student account UUID; consider replacing that with a non-identifying child label before public release. This is a source-review recommendation, not evidence of an account leak.
+- Parent/teacher dashboard sign-in, cross-device refresh, guardian-link revocation, and unrelated-account denial still require controlled Android tests using synthetic accounts.
+
+### Live database access-control snapshot
+- Confirmed RLS enabled on all seven reviewed public tables: `classrooms`, `teacher_profiles`, `classroom_members`, `guardian_relationships`, `student_learning_progress`, `homework_assignments`, and `homework_submissions`.
+- Confirmed no direct SELECT grant to `anon` on these seven tables. `authenticated` has table privileges only where needed; row access is further constrained by the live policies.
+- Reviewed live policies: teacher classroom creation/visibility requires the signed-in owner and approved teacher profile; student and active linked guardian membership visibility is scoped; student progress reads are self-only plus active linked guardian and approved classroom teacher access; homework submissions are scoped to the student, active linked guardian, or approved classroom teacher; student homework submission requires the student's own ID and approved classroom membership/consent.
+- This catalog inspection is not a full adversarial test of every policy path. Do not claim child privacy is fully certified until tests with separate student, linked guardian, unrelated guardian, approved teacher, and unrelated account prove both allowed and denied cases.
+
+### Current owner/device tests still required
+1. Verify a linked guardian sees only their own linked child's progress and homework on a second device.
+2. Verify an unrelated guardian and an unapproved teacher cannot see those records.
+3. Revoke a guardian link and confirm access is removed on refresh/new session.
+4. Test all three learning levels across the subject pages and confirm the cloud-save status, not merely the local score.
+5. Replace the shortened student UUID shown in parent progress details with a non-identifying display label before release.
+
+### Documentation reconciliation note
+Earlier sections of this checklist contain historical deployment versions and older row-count snapshots. Use the dated live-audit entries in the current handoff and the live Supabase deployment/catalog as the source of truth; do not treat old version numbers or historical counts as current.
