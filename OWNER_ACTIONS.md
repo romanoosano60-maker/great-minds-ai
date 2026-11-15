@@ -492,3 +492,15 @@ This remains a source trace, not a live browser or Android runtime test. No Supa
 - Checked each of the seven additional subject pages (Geography, History, Home Science, Vocabulary, Creative Arts, General Knowledge, and Encyclopedia): each includes the shared `assets/js/level-challenges.js` script reference. Together with the five primary pages above, all 12 subject pages are wired to the shared level script in source.
 - Checked all seven declared extra-page aliases against the repository root: each alias page exists and maps to a defined primary bank.
 - This verifies file presence and script references only; it does not replace browser execution, console inspection, or Android completion tests.
+
+
+## 15 November 2026 — challenge save feedback and local record accuracy
+
+Implemented a small reliability improvement in the shared level challenge flow:
+- The challenge completion screen now waits for the save helper result and tells the learner whether the result reached the secure learning profile, was saved only on the device, or could not be saved.
+- The existing local challenge score history remains in place as a separate fallback.
+- Replaced the biased random-sort answer shuffle with Fisher–Yates shuffling; correct-answer indexes remain attached to the original choices.
+- Updated `student-cloud-progress.js` to preserve a validated Beginner/Pro/Advanced level value in the device-local pending record only. No database column was assumed or added; the cloud row remains unchanged and the activity key already includes the level.
+- The helper now reports `localSaved` according to whether the local-storage write actually succeeded, rather than unconditionally claiming it did.
+
+Validation: fetched both updated files again from GitHub and passed JavaScript syntax compilation for each. This is source-level validation only. No browser, Android, offline, authenticated cloud-save, or RLS runtime test was performed. No Supabase schema, policy, function, secret, account, or learner data was changed.
