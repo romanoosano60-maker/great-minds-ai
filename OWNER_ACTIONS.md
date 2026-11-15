@@ -580,3 +580,19 @@ Completed a targeted sweep of the repository's discovered `gmSaveStudentProgress
 A fresh GitHub re-fetch and syntax-only compilation pass covered 20 progress-related source files (19 HTML pages plus `student-cloud-progress.js`): 58/58 inline or standalone JavaScript blocks compiled successfully. This checks JavaScript syntax only; it is not a browser runtime or application integration test.
 
 Important remaining boundary: the source sweep does not establish that all pages in the full repository were audited, nor does it prove runtime save behavior, duplicate handling, account-switch isolation, Android behavior, authenticated Supabase persistence, parent/teacher/student RLS separation, or deletion behavior. Those require separate source review and live acceptance tests.
+
+
+## 15 November 2026 — Role dashboards, classroom, and AI Teacher source review
+
+Reviewed the current source for the Student, Parent, and Teacher dashboards; student profile; Independent Student Space; unified dashboard hub; sign-in page; International Classrooms; supervised classroom-call page; AI Teacher page; homework page; and account-deletion/production-readiness notes.
+
+Source-level findings:
+- The connected Student, Parent, and Teacher dashboards still include a shared `localStorage` demonstration record. The pages identify this as demo data; it must not be treated as a secure cross-device student record.
+- The separate cloud views check the signed-in account and apply frontend eligibility gates (active guardian relationship for Student/Parent; approved teacher profile for Teacher). Their data queries rely on Supabase RLS to scope visible rows. The browser code alone cannot prove that unrelated accounts are blocked; separate-account runtime tests remain required.
+- Independent Student Space explicitly stores its nickname and history on the current device and is not a secure login or cross-device sync system.
+- Classroom and AI Teacher pages passed source syntax checks, but microphone, camera, live AI response, realtime classroom behavior, and role authorization still need real authenticated Android/browser tests.
+- The account-deletion audit records that a complete user-facing deletion workflow is not implemented. A request-only backend endpoint is not equivalent to verified deletion of the Auth account, child records, classroom ownership, and device data. Do not mark deletion complete until the full process is tested and approved.
+
+Additional syntax validation: the 11 role/profile/hub/homework pages with inline JavaScript contributed 19/19 passing blocks (the two static navigation-only pages contain no inline scripts). International Classrooms, Classroom Call, and AI Teacher contributed 3/3 passing blocks; the static Auth Recovery page contains no inline script; the Home page contributed 3/3. Combined with the earlier 58/58 progress-related checks, the reviewed set totals 83/83 JavaScript blocks compiled successfully across the audited source set. This remains syntax-only validation, not browser execution.
+
+No database schema, RLS policy, secret, Edge Function, account, classroom, or learner data was changed during this source review.
