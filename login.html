@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="theme-color" content="#6848ed">
+<title>Sign in | Great Minds AI</title>
+<style>
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:#19305a;background:linear-gradient(145deg,#e9f7ff,#f4efff 55%,#fff5df);min-height:100vh}
+header{text-align:center;padding:28px 16px 18px}h1{margin:0;font-size:clamp(27px,6vw,38px)}header p{margin:10px auto;max-width:560px;line-height:1.5}
+main{max-width:900px;margin:0 auto;padding:14px 16px 28px}.roles{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:14px}
+.role{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:10px;min-height:190px;padding:20px 14px;background:white;border:2px solid #e1e8f7;border-radius:20px;box-shadow:0 7px 20px #19305a12;text-decoration:none;color:#19305a;text-align:center;transition:transform .15s ease,box-shadow .15s ease}
+.role:active{transform:scale(.98)}.role:focus-visible,a.back:focus-visible{outline:3px solid #ffb52e;outline-offset:3px}
+.role .icon{font-size:48px}.role strong{font-size:19px}.role span:last-child{font-size:14px;line-height:1.4;color:#53647c}
+.note{margin:18px auto;padding:14px 16px;background:#fff;border:1px solid #dce8f6;border-radius:14px;line-height:1.5;max-width:760px}
+.actions{text-align:center;margin:20px 0}.back{display:inline-block;padding:12px 18px;border-radius:12px;background:#6848ed;color:white;text-decoration:none;font-weight:700;min-height:44px}
+@media(max-width:600px){main{padding:10px 12px 24px}.roles{grid-template-columns:1fr;gap:10px}.role{min-height:112px;display:grid;grid-template-columns:54px 1fr;grid-template-rows:auto auto;justify-items:start;text-align:left;padding:14px 16px;column-gap:12px}.role .icon{grid-row:1/3;font-size:38px}.role strong{align-self:end}.role span:last-child{align-self:start}}
+</style>
+</head>
+<body>
+<header><h1>🚀 Great Minds AI</h1><p>Welcome back! Choose your account type to continue to the correct secure sign-in page.</p></header>
+<main>
+<section class="roles" aria-label="Choose your account">
+<a class="role" href="connected-student.html"><span class="icon" aria-hidden="true">🎒</span><strong>Student</strong><span>Sign in to continue lessons and view your learning progress.</span></a>
+<a class="role" href="connected-teacher.html"><span class="icon" aria-hidden="true">👩‍🏫</span><strong>Teacher</strong><span>Sign in to manage approved classroom learning and homework.</span></a>
+<a class="role" href="connected-parent.html"><span class="icon" aria-hidden="true">👨‍👩‍👧</span><strong>Parent / Guardian</strong><span>Sign in to review progress for your linked child.</span></a>
+</section>
+<p class="note"><strong>Account help:</strong> New accounts, classroom setup and parent-child consent are managed through the International Classroom page. Choosing a role does not grant teacher approval or automatically link a child.</p>
+<div class="actions"><a class="back" href="international-classrooms.html">Account setup &amp; help</a>　<a class="back" href="index.html">Back to Home</a></div>
+</main>
+</body>
+</html>
