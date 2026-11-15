@@ -525,3 +525,17 @@ Safe next implementation:
 4. Re-fetch and syntax-check every changed script, then test online/offline and signed-in/signed-out cases on Android with separate test accounts.
 
 Scope and limitations: this is a source-level audit of handlers and user feedback, not proof of live cloud persistence. No production source, database schema, RLS policy, account, learner record, or Edge Function was changed in this audit pass.
+
+
+## 15 November 2026 — quiz save-feedback reliability repairs
+
+Applied targeted frontend changes to four quiz flows after the remaining-handler audit:
+
+- `creative-arts.html`: added a dedicated live save-status message, a bounded device-local quiz history record (last 100 entries), and explicit success / cloud-not-confirmed / unavailable / rejected-request feedback. The quiz score is not described as locally saved unless the browser storage write succeeds.
+- `guided-research.html`: applied the same save-status and local-history safeguards to its 12-question challenge.
+- `english.html`: repaired the English Explorer completion handler. It now awaits the cloud helper, records a bounded device-local result when storage is available, and reports cloud success, cloud failure, or helper unavailability rather than silently swallowing a rejection.
+- `english-9.html`: added rejection handling to the alphabet reading quiz's cloud-save request so a rejected promise is no longer silent.
+
+Validation performed: fetched all four changed pages again from GitHub and ran JavaScript syntax compilation on every inline script in each updated page. All checked inline scripts passed. The save-status strings and revised handlers were confirmed in the re-fetched files.
+
+Limitations: these are source-level repairs only. No browser/Android interaction, offline run, signed-in cloud insert, guardian-consent/RLS denial, or second-device read was performed. The local history uses browser storage and is not a substitute for the protected cloud learning record. No Supabase schema, RLS policy, Edge Function, secret, account, or learner data was changed.
