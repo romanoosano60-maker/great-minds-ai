@@ -53,3 +53,13 @@ Do not invent durations. Before launch, approve retention periods and legal basi
 - `account-deletion-request` is deployed as ACTIVE version 5 with JWT verification enabled.
 - The handler now reads the actual request body, enforces a 3 KB UTF-8 byte limit, rejects malformed JSON and non-object payloads, and still requires explicit confirmation.
 - It remains request-only. No Auth user, classroom, child progress, homework, consent record or other application data is automatically deleted.
+
+## 15 November 2026 — live audit reconciliation
+
+- Re-fetched the live Supabase Edge Function: `account-deletion-request` is ACTIVE at version 7 with JWT verification enabled.
+- The deployed handler remains request-only. It authenticates the bearer token, requires verified email and explicit confirmation, rejects student-purpose accounts, checks for an approved teacher profile or active guardian relationship, checks classroom ownership, and prevents duplicate open requests. It does not delete Auth users, revoke every session, or erase learning data.
+- Live database checks confirm `public.account_deletion_requests` has RLS enabled and no direct table grants to `anon` or `authenticated`. The validated `classrooms.teacher_id` foreign key uses RESTRICT, so a teacher account cannot be removed while it owns a classroom.
+- Security Advisor currently reports three informational RLS-enabled/no-policy findings for intentionally closed service-only tables (`private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`), plus the warning that leaked-password protection is disabled. Do not add permissive client policies to silence these findings. Health Advisor reports no findings.
+- The live deletion-request table currently contains an open request requiring classroom transfer. Do not process it or change classroom ownership without the account holder's explicit, case-specific instruction and a verified transfer/closure plan.
+- No Auth user, classroom, student record, homework, consent record, RLS policy, or secret was changed during this audit.
+- Still not implemented/verified: controlled server-side deletion execution, full session revocation, child-data disposition, backup/processor deletion, approved retention schedule, and live Android tests using disposable accounts.
