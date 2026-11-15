@@ -539,3 +539,10 @@ Applied targeted frontend changes to four quiz flows after the remaining-handler
 Validation performed: fetched all four changed pages again from GitHub and ran JavaScript syntax compilation on every inline script in each updated page. All checked inline scripts passed. The save-status strings and revised handlers were confirmed in the re-fetched files.
 
 Limitations: these are source-level repairs only. No browser/Android interaction, offline run, signed-in cloud insert, guardian-consent/RLS denial, or second-device read was performed. The local history uses browser storage and is not a substitute for the protected cloud learning record. No Supabase schema, RLS policy, Edge Function, secret, account, or learner data was changed.
+
+
+## 2026-11-15 — Quiz cloud-save error visibility
+- Updated Social Studies, Computer Studies, Vocabulary, Reading & Writing, and Little Learners Encyclopedia expanded-challenge save handlers so rejected cloud-save requests are shown in the relevant on-page feedback instead of being silently swallowed.
+- Social Studies main Community Helper quiz now also reports a rejected cloud-save request; a missing `reason` value no longer produces an unclear `undefined` message.
+- Re-fetched all five pages after editing. All 22 inline scripts across the five pages passed JavaScript syntax compilation; the feedback elements referenced by the new handlers were confirmed present.
+- This is source-level validation only. No Android/browser interaction, authenticated Supabase save, cross-device sync, offline behavior, or RLS authorization test was performed. No Supabase schema, policy, secret, function, account, or learner record was changed.
