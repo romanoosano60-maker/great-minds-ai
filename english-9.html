@@ -152,7 +152,7 @@ result.textContent="🎉 Correct! Well done!";
 result.textContent="Not quite. The correct answer is D.";
 }
 document.getElementById("score").textContent="Score: "+score;
-if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"English",activity_key:"english-alphabet-reading-quiz",score:score,max_score:1,correct_count:score,question_count:1,source:"english-9"}).then(r=>{result.textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+r.reason)})}
+if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"English",activity_key:"english-alphabet-reading-quiz",score:score,max_score:1,correct_count:score,question_count:1,source:"english-9"}).then(r=>{result.textContent+=(r&&r.saved?" Cloud progress saved to your secure learning profile.":" Cloud save was not confirmed: "+(r&&r.reason?String(r.reason):"please try again later."))}).catch(()=>{result.textContent+=" Cloud save could not be confirmed; this score is still shown on this screen."})}
 }
 </script>
 <script>function gmSpeakSafe(text){
