@@ -571,3 +571,12 @@ Further reviewed and updated:
 Source validation: re-fetched the four pages from GitHub and syntax-checked every inline script. English: 5/5; Connected Practice: 2/2; Social Studies: 2/2; Games: 1/1. Total: 10/10 inline scripts passed.
 
 Limitations remain: no live browser interaction, Android, authenticated Supabase, offline, cross-device, or RLS test has been performed as part of these edits. No database schema, RLS policy, secret, Edge Function, account, or learner record was changed.
+
+
+## 15 November 2026 — Quiz-save call-site sweep and syntax pass
+
+Completed a targeted sweep of the repository's discovered `gmSaveStudentProgress` call sites and the shared `student-cloud-progress.js` helper. The previously identified silent/rejected-save paths in the reviewed lesson pages have been given learner-visible status messages. The shared helper was reviewed without changing its database behavior: it validates score fields, checks the signed-in Supabase user, inserts only for that user, and relies on database RLS for authorization. Device-local pending history is not itself a cloud-sync guarantee.
+
+A fresh GitHub re-fetch and syntax-only compilation pass covered 20 progress-related source files (19 HTML pages plus `student-cloud-progress.js`): 58/58 inline or standalone JavaScript blocks compiled successfully. This checks JavaScript syntax only; it is not a browser runtime or application integration test.
+
+Important remaining boundary: the source sweep does not establish that all pages in the full repository were audited, nor does it prove runtime save behavior, duplicate handling, account-switch isolation, Android behavior, authenticated Supabase persistence, parent/teacher/student RLS separation, or deletion behavior. Those require separate source review and live acceptance tests.
