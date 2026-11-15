@@ -504,3 +504,24 @@ Implemented a small reliability improvement in the shared level challenge flow:
 - The helper now reports `localSaved` according to whether the local-storage write actually succeeded, rather than unconditionally claiming it did.
 
 Validation: fetched both updated files again from GitHub and passed JavaScript syntax compilation for each. This is source-level validation only. No browser, Android, offline, authenticated cloud-save, or RLS runtime test was performed. No Supabase schema, policy, function, secret, account, or learner data was changed.
+
+
+## 15 November 2026 — remaining quiz save-flow audit
+
+Reviewed the repository's other quiz completion handlers after the shared level-challenge improvement. Findings from source inspection:
+
+- English's 20-question practice and English Explorer both call `gmSaveStudentProgress`, but their rejection handlers are empty. A failed cloud save can therefore leave the learner without an honest final save-status message.
+- Social Studies and Computer Studies append a cloud-pending message when the helper returns an unsuccessful result. Computer Studies also handles promise rejection; the inspected Social Studies handler has no rejection handler.
+- Creative Arts calls the helper but suppresses rejection and does not display the returned save result.
+- Guided Research calls the helper but suppresses rejection and does not display whether cloud saving succeeded.
+- Connected Practice and the one-question English alphabet quiz display a returned cloud status, but their inspected handlers do not catch rejected promises.
+- Group Learning explicitly identifies itself as a local browser demonstration; its team scores are not a cross-device classroom record. Keep that distinction visible.
+- Reading & Writing and English Story Studio already provide clearer, explicit save-status messaging and keep the learner's writing local.
+
+Safe next implementation:
+1. Standardise completion feedback across quiz pages: cloud saved, saved locally/pending, or not saved; do not claim a local save unless verified.
+2. Add rejection handling wherever a promise currently has none or an empty catch.
+3. Keep local-only demonstrations labelled as local; do not silently promote them to cloud classroom features.
+4. Re-fetch and syntax-check every changed script, then test online/offline and signed-in/signed-out cases on Android with separate test accounts.
+
+Scope and limitations: this is a source-level audit of handlers and user feedback, not proof of live cloud persistence. No production source, database schema, RLS policy, account, learner record, or Edge Function was changed in this audit pass.
