@@ -458,3 +458,30 @@ Reviewed the complete current `assets/js/level-challenges.js` source (read-only)
 - Android narrow-screen layout, keyboard/screen-reader labels, and tap targets are checked.
 
 This is a source-quality review only. It does not certify runtime behavior, cloud persistence, or curriculum completeness.
+
+
+## 15 November 2026 — challenge-page wiring and cloud-save trace
+
+Read-only source trace completed for the five primary subject pages and the shared progress helper. No application code or learner data was changed.
+
+### Page wiring confirmed
+- `english.html`, `math.html`, `science.html`, `social-studies.html`, and `computer.html` each include `assets/js/level-challenges.js` with `defer`.
+- The shared script maps those five filenames to their corresponding subject banks and renders Beginner, Pro, and Advanced levels.
+- The level-bank script also defines Geography, History, Home Science, Vocabulary, Creative Arts, General Knowledge, and Little Learners Encyclopedia banks, and aliases the supported extra pages. This source inspection does not prove every mapped page exists or loads correctly in a browser.
+
+### Cloud-save trace and reliability gap
+- On completion, the level challenge calls `window.gmSaveStudentProgress` when available and passes the subject, activity key, score, maximum score, correct count, question count, source, and level.
+- `student-cloud-progress.js` validates the core score fields, writes a local pending-progress record, checks the signed-in Supabase user, then attempts an insert into `student_learning_progress`. It returns a result distinguishing cloud-saved from local-only.
+- The helper currently does not preserve the optional `level` field in the local pending record or cloud row. The challenge caller includes it, but the helper drops it; do not assume level-specific results are retained in the database.
+- The challenge completion handler catches the save promise with an empty handler and displays only “Challenge complete” and the score. The returned `saved` / `localSaved` / `reason` state is not shown to the learner. Therefore, the interface can look complete even when cloud sync failed.
+- The local pending records are stored, but this helper contains no retry/synchronisation worker that later uploads queued records. Treat them as device-local fallback records, not guaranteed deferred cloud sync.
+- Some pages include their own existing quiz-save handlers in addition to the shared level challenge. These separate activities must be tested independently; one successful save does not prove every activity saves.
+
+### Next safe implementation steps
+1. Add visible completion save feedback for cloud success versus device-only fallback, using the helper's returned result and without exposing technical error details to children.
+2. Decide and implement a deliberate retry/sync path for local pending records, with duplicate protection and server/RLS validation; do not silently upload old records without testing account changes and ownership.
+3. Decide whether level should be stored in a dedicated database column or encoded in an approved, validated activity field. Do not attempt to insert an undeclared column into the live table.
+4. Add automated/static checks for page script references, filename-to-bank mapping, and question structure.
+5. Run Android tests for online save, offline completion, signed-out completion, later sign-in, and guardian-consent/RLS rejection. Mark cloud persistence complete only after the returned status and database row are verified for the intended account.
+
+This remains a source trace, not a live browser or Android runtime test. No Supabase schema, policy, function, secret, learner record, or production app source was modified.
