@@ -183,7 +183,7 @@ if(current>=questions.length){
 document.getElementById("question").textContent="🎉 Quiz complete!";
 document.getElementById("choices").replaceChildren();
 document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
-if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Social Studies",activity_key:"social-studies-foundations",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"social-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+r.reason)})}
+if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Social Studies",activity_key:"social-studies-foundations",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"social-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+(r.reason||"not confirmed"))}).catch(()=>{document.getElementById("quizFeedback").textContent+=" Cloud save could not be confirmed; your result remains visible here."})}
 return;
 }
 showQuestion();
