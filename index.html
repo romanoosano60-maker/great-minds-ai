@@ -91,6 +91,29 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 #gm-home-pagination button:focus-visible{outline:3px solid #ffb52e;outline-offset:3px}
 @media(max-width:480px){#gm-home-pagination{margin:12px 10px;padding:10px}#gm-home-pagination>[data-home-target]{flex:1 1 100%}#gm-home-pagination .gm-home-page-actions{gap:7px}#gm-home-pagination .gm-home-page-actions button{padding:9px 11px;font-size:14px}}
 </style>
+<style id="gm-compact-dashboard">
+/* Compact home tiles: preserve every subject while reducing vertical scrolling on phones. */
+@media(max-width:600px){
+  .gm-home-page .subjects{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:9px!important;padding:10px!important}
+  .gm-home-page .subject,#more-subjects .gm-home-page .subject{min-height:112px!important;padding:11px 8px!important;border-radius:15px!important}
+  .gm-home-page .subject span{font-size:30px!important;margin-bottom:5px!important}
+  .gm-home-page .subject img.gm-card-art{height:48px!important;max-width:72px!important;margin-bottom:5px!important}
+  .gm-home-page .subject button,.gm-home-page .subject-link{min-height:44px!important;padding:8px 6px!important;font-size:12px!important;line-height:1.2!important;border-radius:11px!important}
+  #more-subjects{padding:10px!important}
+  #more-subjects .gm-home-page>h2{font-size:19px;padding:8px 6px}
+  .hero{padding:18px 12px!important}
+  .hero .rocket{font-size:52px!important}
+  .gm-home-art{margin:6px auto 10px!important}
+  .gm-home-art img{width:58px!important;height:58px!important}
+  .gm-home-art img:nth-child(2){width:72px!important}
+}
+@media(min-width:601px){
+  .gm-home-page .subjects{grid-template-columns:repeat(auto-fit,minmax(150px,1fr))}
+  .gm-home-page .subject,#more-subjects .gm-home-page .subject{min-height:128px;padding:13px 9px}
+}
+.gm-login-shortcut{display:inline-flex;align-items:center;justify-content:center;margin:10px 6px;padding:12px 18px;min-height:46px;border-radius:13px;background:#193f7a;color:#fff;text-decoration:none;font-weight:800}
+.gm-login-shortcut:focus-visible{outline:3px solid #ffb52e;outline-offset:3px}
+</style>
 </head>
 <body>
 <div class="language-bar"><label for="gm-language">Language / 语言 / Sprache:</label><select id="gm-language" aria-label="Choose app language"><option value="en">English</option><option value="hi">हिन्दी</option><option value="bn">বাংলা</option><option value="ta">தமிழ்</option><option value="te">తెలుగు</option><option value="mr">मराठी</option><option value="zh">中文（简体）</option><option value="de">Deutsch</option><option value="es">Español</option><option value="fr">Français</option><option value="ar">العربية</option></select></div>
@@ -107,6 +130,7 @@ button:focus-visible,.subject-link:focus-visible{outline-offset:4px}
 <div class="people">👩‍🏫 👧🏽 👦🏾 👧🏻</div>
 <p data-gm="support">Teachers and parents supporting every child ❤️</p>
 <button type="button" onclick="gmShowHomePage(1);document.getElementById('subjects').scrollIntoView({behavior:window.matchMedia('(prefers-reduced-motion: reduce)').matches?'auto':'smooth'})" data-gm="start">Start Learning 🚀</button>
+<a class="gm-login-shortcut" href="login.html">🔐 Sign in · Student / Teacher / Parent</a>
 <a href="independent-student.html" style="display:inline-block;margin:12px 6px;padding:14px 20px;border-radius:14px;background:#167b78;color:white;text-decoration:none;font-weight:bold;min-height:48px">🎒 Independent Student Space</a>
 <a href="picture-stories.html" style="display:inline-block;margin:12px 6px;padding:14px 20px;border-radius:14px;background:#ef8b2c;color:white;text-decoration:none;font-weight:bold;min-height:48px">📚 Picture Books & Stories</a>
 </section>
