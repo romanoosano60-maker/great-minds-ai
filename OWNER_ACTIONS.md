@@ -1,13 +1,13 @@
 # Great Minds AI — Owner Actions and Final Test Checklist
 
-Last checked: 10 November 2026
+Last checked: 19 November 2026
 
 ## Latest engineering handoff — 10 November 2026
 
 The following are the current deployed backend versions recorded in the latest source/deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
-- AI Teacher: ACTIVE version 6; JWT verification enabled.
-- Classroom call token: ACTIVE version 7; JWT verification enabled; WSS-only LiveKit endpoint and server-side consent/membership checks.
-- Account deletion request: ACTIVE version 5; JWT verification enabled; request-only, not automatic deletion.
+- AI Teacher: ACTIVE version 8; JWT verification enabled.
+- Classroom call token: ACTIVE version 9; JWT verification enabled; WSS-only LiveKit endpoint and server-side consent/membership checks.
+- Account deletion request: ACTIVE version 7; JWT verification enabled; request-only, not automatic deletion.
 - AI Teacher frontend is configured for the Supabase Edge Function. The Cloudflare `/ask` Worker is an older alternative template and is not the active frontend route.
 - The OpenAI secret's actual value/presence cannot be read during this audit. Do not paste secrets into chat or browser code. A successful authenticated AI response has not yet been confirmed.
 
@@ -596,3 +596,14 @@ Source-level findings:
 Additional syntax validation: the 11 role/profile/hub/homework pages with inline JavaScript contributed 19/19 passing blocks (the two static navigation-only pages contain no inline scripts). International Classrooms, Classroom Call, and AI Teacher contributed 3/3 passing blocks; the static Auth Recovery page contains no inline script; the Home page contributed 3/3. Combined with the earlier 58/58 progress-related checks, the reviewed set totals 83/83 JavaScript blocks compiled successfully across the audited source set. This remains syntax-only validation, not browser execution.
 
 No database schema, RLS policy, secret, Edge Function, account, classroom, or learner data was changed during this source review.
+
+
+## Evidence refresh — 19 November 2026
+
+- Re-fetched the current Supabase Edge Function source and confirmed AI Teacher v8 requires `OPENAI_API_KEY` plus either `SUPABASE_PUBLISHABLE_KEY` or `SUPABASE_ANON_KEY`. Secret values and presence are not exposed by the connected project tools; the owner must verify these privately in Supabase Function Secrets. Never paste a secret into chat or commit it.
+- The active AI Teacher function checks the signed-in user, approved-teacher status or active guardian relationship, and calls `public.consume_ai_teacher_quota()` before any OpenAI request. The repository SQL defines that public wrapper and delegates to the private eligibility-checked quota function. This source consistency check is not a live AI answer test.
+- Historical live failures recorded in the project evidence: HTTP 503 (12 November) and HTTP 502 (13 November). No successful live AI Teacher response has since been confirmed.
+- **Owner-reported password recovery — 11 November 2026:** recovery email arrived, password was changed, and sign-in with the new password succeeded. Keep Test 7 PARTIAL until old-password rejection, redirect behaviour, password-field clearing and session behaviour are separately verified.
+- Account deletion function v7 remains a manual-review request workflow. It does not automatically delete the Auth account, all associated learning records, or all sessions. Do not describe a submitted request as completed deletion.
+- Current security review still identifies Leaked Password Protection as disabled. The three RLS-enabled/no-policy notices are informational for intentionally private/request tables and must not be “fixed” by adding broad client policies.
+- No new owner/device acceptance PASS is recorded by this evidence refresh. Static checks, source inspection and active function status are not runtime/device tests.
