@@ -84,6 +84,8 @@
 
 ## Test 7 — Password recovery and account security
 
+**Owner-reported partial result — 11 November 2026:** the recovery email arrived, the password was changed, and sign-in with the new password succeeded. This is an owner-reported test, not an independently reproduced test. It supersedes the earlier blanket “BLOCKED” status for the basic recovery path. The old-password rejection, exact redirect behavior, password-field clearing, and session behavior have not all been separately recorded; keep this test PARTIAL until those checks are completed.
+
 **Do this only after the owner has added the exact recovery URL to Supabase Auth URL Configuration.**
 
 1. Open International Classrooms or a role cloud sign-in page.
@@ -118,7 +120,7 @@
 | Student cloud progress | NOT TESTED | |
 | Teacher classroom/homework | NOT TESTED | |
 | Parent cross-device view | NOT TESTED | |
-| Password recovery | BLOCKED until redirect allowlist is confirmed | |
+| Password recovery | PARTIAL — owner-reported basic reset passed 11 Nov; remaining security checks unverified | |
 | Sign-out and privacy | NOT TESTED | |
 | Stability / no freezing | NOT TESTED | |
 
