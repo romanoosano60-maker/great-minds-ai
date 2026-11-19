@@ -135,3 +135,14 @@
 | Stability / no freezing | NOT TESTED | |
 
 **Completion rule:** Do not mark Great Minds AI 100% complete until all required rows pass, deployment is current, password recovery is verified, and any failed test is repaired and repeated successfully.
+
+
+## Additional security-owner checks — 19 November 2026
+
+1. **Leaked-password protection:** in Supabase Auth security/password settings, enable leaked-password protection if the project plan supports it. Record PASS only after the setting is visibly enabled; otherwise record PLAN LIMITATION.
+2. **AI Teacher service secret:** in Supabase Edge Function Secrets, privately confirm `OPENAI_API_KEY` exists for the active `ai-teacher` function. Never copy the secret into chat, GitHub, a browser page, or a screenshot. Ask one simple Mathematics question from an approved adult-controlled test account and confirm a live answer. Confirm an unrelated unauthorized account is denied.
+3. **Account deletion wording:** submit only with a disposable adult test account if you need to inspect the request workflow. The current endpoint records a manual-review request only. It does not delete the login, learning records, sessions, or backups. Do not use the words “deleted” or “erased” until an administrator has completed and documented the full approved process.
+4. **Deletion lifecycle:** before implementation, the owner must approve the legal guardian/teacher authority check, classroom ownership transfer/closure, data retention exceptions, deletion of Auth and related records, session revocation, backup expiry, and confirmation procedure. Do not test destructive deletion using a real family account.
+5. **Guardian privacy:** use separate adult-controlled test accounts to verify that an unrelated parent cannot read a student's records, an unrelated teacher cannot read another classroom's records, and revoked guardian consent removes the previously granted access as intended.
+
+**Important:** source review and successful GitHub deployment do not prove Supabase secrets, RLS isolation, Auth settings, or Android behaviour. Mark these checks NOT TESTED until observed in the live project/device.
