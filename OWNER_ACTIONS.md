@@ -789,3 +789,10 @@ No production Supabase secrets, RLS policies, or live database functions were ch
 - A fresh re-fetch found a damaged duplicate fragment appended after the final comment in `supabase/international-classrooms.sql`. Removed the trailing fragment, leaving one complete `private.redeem_guardian_consent_code` definition, the 64-character hexadecimal validation, its grants, and the final explanatory comment.
 - This is a repository reference-file correction only. It was not applied to the live Supabase database. Do not rerun the full reference SQL on production.
 - The guardian page exposes a per-child revoke action and refreshes classroom state after the RPC. Source review confirms the RPC is scoped to the signed-in guardian and selected student; live cross-account/revocation behaviour still requires dedicated test accounts.
+
+
+## Teacher consent-policy reference alignment — 19 November 2026
+
+- Corrected the final teacher membership UPDATE policy in `supabase/international-classrooms.sql` to match migration `20261110_require_active_guardian_for_classroom_approval.sql`.
+- Teachers can approve a membership only when the protected consent field is approved, and they cannot set that consent field to approved unless an active `guardian_relationships` row exists for that student.
+- This is a repository SQL reference correction only. It has NOT been applied to the live Supabase project. Do not rerun the entire reference SQL on production; review/apply the dedicated migration only through the normal migration workflow if live status is not already confirmed.
