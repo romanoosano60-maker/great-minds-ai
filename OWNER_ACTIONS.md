@@ -698,3 +698,9 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Secure assignment creation, student answer submission, and teacher marking now request the affected row back from Supabase and only report success when a saved/updated row is returned.
 - Teacher marking now treats a zero-row update (including a row hidden by database permissions) as unconfirmed instead of claiming the mark was saved.
 - This is client-side success-reporting hardening only. Supabase RLS remains the authorization boundary; separate-account permission tests are still required.
+
+
+## 19 November 2026 — Classroom call media fail-closed handling
+
+- Microphone/camera control errors now disconnect the local LiveKit room, clear participant tiles, disable further call controls, and reset local media UI state rather than leaving a possibly active session behind an error message.
+- This is a browser-side privacy safeguard. It does not replace device testing, LiveKit configuration review, adult supervision, or separate-account authorization tests.
