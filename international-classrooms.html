@@ -32,8 +32,12 @@ function openClassroomCall(classroomId,mode,action){location.href='classroom-cal
 async function session(){const {data,error}=await setup().auth.getSession();if(error)throw error;user=data.session?.user||null;return user}
 $('signup').onclick=async()=>{const passwordField=$('newPassword');try{const c=setup();const email=$('newEmail').value.trim();const password=passwordField.value;if(!email||password.length<8)throw Error('Enter an email you can access and a password of at least 8 characters.');const purpose=$('accountPurpose').value;msg('signupStatus','Creating account…');const {data,error}=await c.auth.signUp({email,password,options:{data:{account_purpose:purpose}}});if(error)throw error;if(data.session){user=data.user;msg('signupStatus','Account created and signed in. Check your email if verification is requested.');msg('authStatus','Signed in: '+(user.email||'account')+'.');await refresh()}else{msg('signupStatus','Signup submitted. Check '+email+' for the verification email, then return here and sign in. If no email arrives, check spam and Supabase Auth email settings.');}}catch(e){msg('signupStatus','Account creation failed: '+e.message)}finally{passwordField.value=''}}; 
 $('signin').onclick=async()=>{const passwordField=$('password');try{const c=setup();msg('authStatus','Signing in…');const {data,error}=await c.auth.signInWithPassword({email:$('email').value.trim(),password:passwordField.value});if(error)throw error;user=data.user;msg('authStatus','Signed in: '+(user.email||'account')+'.');await refresh()}catch(e){msg('authStatus','Sign-in failed: '+e.message)}finally{passwordField.value=''}};
+function clearAccountScopedInputs(){
+ $('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;
+ $('joinCode').value='';$('className').value='';$('country').value='';$('code').value='';
+}
 $('signout').onclick=async()=>{
- $('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;user=null;classroomRefreshRequest++;
+ clearAccountScopedInputs();user=null;classroomRefreshRequest++;
  msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.');
  if(!client){msg('authStatus','Cloud service unavailable. Classroom display cleared.');return}
  let result='Signed out.';
@@ -90,7 +94,7 @@ $('submitDeleteRequest').onclick=async()=>{
  finally{button.disabled=false;button.textContent='Submit account-deletion request'}
 };
 $('refresh').onclick=refresh;
-const {data:authListener}=setup().auth.onAuthStateChange((event,session)=>{if(event!=='SIGNED_IN'&&event!=='SIGNED_OUT')return;user=session?.user||null;classroomRefreshRequest++;const root=$('classrooms');root.replaceChildren();if(liveChannel){const channel=liveChannel;liveChannel=null;client.removeChannel(channel).catch(()=>{});}if(event==='SIGNED_OUT'||!user){$('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.');return}msg('authStatus','Signed in: '+(user.email||'account')+'. Checking this account’s classroom access…');setTimeout(()=>refresh(),0);});
+const {data:authListener}=setup().auth.onAuthStateChange((event,session)=>{if(event!=='SIGNED_IN'&&event!=='SIGNED_OUT')return;const nextUser=session?.user||null;const accountChanged=!!user&&!!nextUser&&user.id!==nextUser.id;if(event==='SIGNED_OUT'||accountChanged)clearAccountScopedInputs();user=nextUser;classroomRefreshRequest++;const root=$('classrooms');root.replaceChildren();if(liveChannel){const channel=liveChannel;liveChannel=null;client.removeChannel(channel).catch(()=>{});}if(event==='SIGNED_OUT'||!user){$('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.');return}msg('authStatus','Signed in: '+(user.email||'account')+'. Checking this account’s classroom access…');setTimeout(()=>refresh(),0);});
 session().then(current=>{if(current){msg('authStatus','Signed in: '+(current.email||'account')+'.');refresh()}}).catch(e=>msg('authStatus','Session check failed: '+e.message));
 window.addEventListener('pagehide',()=>{if(liveChannel&&client)client.removeChannel(liveChannel);authListener?.subscription?.unsubscribe()});
 </script><script src="auth-recovery.js"></script></body></html>
