@@ -827,3 +827,11 @@ Live grants checked for the authenticated role:
 - `account_deletion_requests`: no direct SELECT, INSERT, UPDATE or DELETE; request intake is service-role-only through the Edge Function.
 
 Together with the earlier column check (`parent_consent_status` cannot be updated by authenticated clients), this confirms guardian links and consent cannot be directly forged by ordinary authenticated clients. This is a read-only live verification; no permissions were changed.
+
+
+## Account-deletion request body-limit hardening — 19 November 2026
+
+- Updated `supabase/functions/account-deletion-request/index.ts` to reject an oversized declared Content-Length before reading and to enforce the 3,000-byte cap while streaming the request body. This avoids buffering an arbitrarily large body before applying the previous size check.
+- Existing request-only behaviour remains unchanged: the endpoint verifies an authenticated adult-controlled account, creates a manual-review request, and does not delete an Auth account or learning data.
+- Source commit: `9eb4c5d45abf89edd1317a6a42528bbe5e351018`.
+- **Not deployed:** live Supabase account-deletion-request remains on the previously audited version until the owner explicitly approves a production function update. Static checks and deployment status for this source commit are pending.
