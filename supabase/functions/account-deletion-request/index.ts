@@ -4,6 +4,7 @@ const corsHeaders = {
   "Access-Control-Allow-Origin": "https://romanoosano60-maker.github.io",
   "Access-Control-Allow-Headers": "authorization, x-client-info, apikey, content-type",
   "Access-Control-Allow-Methods": "POST, OPTIONS",
+  "Vary": "Origin",
   "Content-Type": "application/json",
 };
 const reply = (body: unknown, status = 200) =>
@@ -22,7 +23,7 @@ Deno.serve(async (req: Request) => {
   if (!url || !anonKey || !serviceKey) return reply({ error: "Server configuration incomplete" }, 503);
   const authHeader = req.headers.get("Authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
-  if (!token) return reply({ error: "Sign in is required" }, 401);
+  if (token.length < 40 || token.length > 5000) return reply({ error: "A valid sign-in session is required" }, 401);
   // Bound the request body by its actual UTF-8 byte size.
   const rawBody = await req.text();
   if (new TextEncoder().encode(rawBody).byteLength > 3000) {
@@ -68,7 +69,20 @@ Deno.serve(async (req: Request) => {
   const { data, error } = await admin.from("account_deletion_requests")
     .insert({ requester_id: user.id, status: initialStatus })
     .select("id,status,requested_at").single();
-  if (error) return reply({ error: "Request could not be recorded." }, 500);
+  if (error?.code === "23505") {
+    // A second device/request may win the partial unique-index race. Return
+    // the existing open request instead of reporting a misleading server error.
+    const { data: racedRequest, error: racedLookupError } = await admin.from("account_deletion_requests")
+      .select("id,status,requested_at").eq("requester_id", user.id)
+      .in("status", ["requested","under_review","needs_classroom_transfer","approved"])
+      .order("requested_at", { ascending: false }).limit(1).maybeSingle();
+    if (racedLookupError) return reply({ error: "An existing request may be present. Contact support before retrying." }, 503);
+    if (racedRequest) return reply({
+      ...racedRequest,
+      message: "An open request already exists. No account data was deleted."
+    });
+  }
+  if (error || !data) return reply({ error: "Request could not be recorded." }, 500);
   return reply({
     ...data,
     message: initialStatus === "needs_classroom_transfer"
