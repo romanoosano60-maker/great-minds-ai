@@ -763,3 +763,15 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Re-reviewed the complete consent-redemption function after the first edit and found a duplicated, damaged tail left in the same reference SQL file. Removed that duplicate fragment and restored the full conditional: exactly 64 hexadecimal characters are required before hashing and redemption.
 - Re-fetched the committed file and verified it contains one `private.redeem_guardian_consent_code` definition, a complete `^[0-9a-fA-F]{64}$` validation condition, the explicit error branch, and the rest of the function through its grants.
 - This remains a repository reference-file repair only. The live Supabase migration was not changed by this edit; do not run the entire SQL file on production. Confirm live consent redemption only with dedicated test accounts and the already-applied migration history.
+
+
+## Classroom and AI access-control review — 19 November 2026
+
+A source-level review of the current AI Teacher and classroom-call endpoints found:
+
+- AI Teacher verifies the Supabase access token, checks approved-teacher or active guardian/student relationships, validates the request body by actual UTF-8 byte size, and calls the database-enforced daily quota before contacting the AI provider. The quota SQL stores only per-account and shared daily counters, denies direct client access to the private counter table/function, and applies the eligibility gate in a database wrapper. This is source review only; the live OpenAI secret and a successful live child-safe answer remain unverified.
+- Classroom-call tokens are issued only after a current session check and classroom-role check. Student access requires approved classroom membership plus an active guardian relationship; guardian observer access requires an active linked child with approved classroom membership; only the approved classroom owner can start or end a call. Students/guardians can join only while the teacher is connected. Tokens expire after ten minutes and guardian observers cannot publish media.
+- Corrected the classroom-call endpoint's upstream exception response: LiveKit/service failures now return HTTP 502 rather than incorrectly reporting a client HTTP 400. This improves diagnosis without exposing internal exception details.
+- Account deletion remains request-only. It verifies a signed-in, email-confirmed eligible adult account, checks classroom ownership, and records a manual-review request. No Auth account, learning record, consent record, storage object, or session is automatically deleted. A documented retention and supervised child-account deletion process is still required.
+
+No production Supabase secrets, RLS policies, or live database functions were changed by this review. Cross-account Android acceptance tests and live service tests remain outstanding.
