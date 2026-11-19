@@ -856,3 +856,10 @@ Read-only review of every live SECURITY DEFINER routine in the `public` and `pri
 - The publishable key configured in `supabase-config.js` exactly matches the active, non-disabled `sb_publishable_` key returned by Supabase. The older 401/invalid-key concern is therefore not explained by a current URL/key mismatch in this source file. No key was rotated or changed; no secret key was read.
 - Latest Security Advisor still reports the same three intentional RLS-enabled/no-policy informational findings for service-only/private tables and the warning that leaked-password protection is disabled. No broad client policies were added.
 - Owner action remains: enable leaked-password protection in Supabase Auth settings when available, then test a new password and password change using a disposable adult-controlled account.
+
+
+## AI Teacher request-body resource hardening — 19 November 2026
+
+- The AI Teacher Edge Function now rejects a declared Content-Length above 12,000 bytes before reading and enforces the same limit while streaming the body. This prevents the function from buffering an unbounded body before applying the previous byte-size check.
+- Authentication, approved-teacher/active-guardian authorization, daily quota consumption, child-safety instructions, `store:false`, and generic upstream errors are unchanged.
+- Source-only change. The live AI Teacher function remains version 8 until an explicitly approved deployment; no secrets were read or modified.
