@@ -667,3 +667,11 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - The local Parent and Teacher dashboard summaries now include the same combined demo totals, including certificate count.
 - This improves consistency across local demo pages only. It does not change Supabase records, establish cross-device synchronization, or make local demo totals authoritative cloud records. Authenticated cloud progress remains separately displayed under the secure progress sections.
 - Static checks and Pages deployment are pending for this source batch. Android acceptance testing is still required.
+
+
+## Secure homework interaction hardening — 19 November 2026
+
+- The secure homework page now prevents repeated rapid taps from issuing concurrent submissions for the same assignment or concurrent marks for the same submission. Controls show a temporary in-progress state and are restored after the request completes.
+- The homework page now clears any in-flight display and refreshes the visible assignments when the Supabase session changes to a newly signed-in account in another page. Sign-out still clears the secure homework display and removes the Realtime channel.
+- These are client-side reliability and display-isolation improvements. Supabase RLS remains the authorization boundary; no production database policy, schema, Auth setting, secret, account or learner record was changed.
+- Verification required: static workflow, Pages deployment, and owner tests with two distinct test accounts/tabs/devices. UI hardening is not a substitute for database uniqueness and RLS enforcement.
