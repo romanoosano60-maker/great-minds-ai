@@ -848,3 +848,11 @@ Read-only review of every live SECURITY DEFINER routine in the `public` and `pri
 - Classroom join RPC limits attempts to 20 per account/day and validates the code format. AI quota routine is not directly executable by anon or authenticated clients; the eligible-user wrapper checks approved-teacher or active guardian/student status.
 - Limitation: email confirmation plus an explicit guardian affirmation is not independent proof of legal adulthood or legal guardianship. Adult/guardian verification remains a product/legal acceptance blocker before public launch.
 - No database functions, grants, or policies were changed during this review.
+
+
+## Supabase browser configuration and current security advisor recheck — 19 November 2026
+
+- Read-only Supabase project metadata confirms the project's API URL matches `supabase-config.js`.
+- The publishable key configured in `supabase-config.js` exactly matches the active, non-disabled `sb_publishable_` key returned by Supabase. The older 401/invalid-key concern is therefore not explained by a current URL/key mismatch in this source file. No key was rotated or changed; no secret key was read.
+- Latest Security Advisor still reports the same three intentional RLS-enabled/no-policy informational findings for service-only/private tables and the warning that leaked-password protection is disabled. No broad client policies were added.
+- Owner action remains: enable leaked-password protection in Supabase Auth settings when available, then test a new password and password change using a disposable adult-controlled account.
