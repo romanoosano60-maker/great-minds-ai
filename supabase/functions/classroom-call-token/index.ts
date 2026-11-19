@@ -166,6 +166,7 @@ Deno.serve(async (req: Request) => {
       recording: false,
     });
   } catch (_error) {
-    return json({ error: "The classroom call could not be prepared. Please try again." }, 400);
+    // A LiveKit or upstream service failure is not a malformed client request.
+    return json({ error: "The classroom calling service is temporarily unavailable. Please try again." }, 502);
   }
 });
