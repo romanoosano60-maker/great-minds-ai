@@ -86,7 +86,7 @@
 
 **Owner-reported partial result — 11 November 2026:** the recovery email arrived, the password was changed, and sign-in with the new password succeeded. This is an owner-reported test, not an independently reproduced test. It supersedes the earlier blanket “BLOCKED” status for the basic recovery path. The old-password rejection, exact redirect behavior, password-field clearing, and session behavior have not all been separately recorded; keep this test PARTIAL until those checks are completed.
 
-**Do this only after the owner has added the exact recovery URL to Supabase Auth URL Configuration.**
+**For any repeat test, first confirm the exact recovery URL is allowlisted in Supabase Auth URL Configuration.** The 11 November owner-reported reset is recorded above; the remaining checks below are still required.
 
 1. Open International Classrooms or a role cloud sign-in page.
 2. Enter the email address for a test account and tap **Forgot password?**
