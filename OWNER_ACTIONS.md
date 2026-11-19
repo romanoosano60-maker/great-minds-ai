@@ -642,3 +642,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Account deletion function v7 remains a manual-review request workflow. It does not automatically delete the Auth account, all associated learning records, or all sessions. Do not describe a submitted request as completed deletion.
 - Current security review still identifies Leaked Password Protection as disabled. The three RLS-enabled/no-policy notices are informational for intentionally private/request tables and must not be “fixed” by adding broad client policies.
 - No new owner/device acceptance PASS is recorded by this evidence refresh. Static checks, source inspection and active function status are not runtime/device tests.
+
+
+## Four-mission navigation correction — 19 November 2026
+
+- Corrected the classroom destination label in `gm-continuation-navigation.html` so the displayed filename matches the real `safe-international-classroom-v3.html` page. The underlying destination was already the v3 page; this removes a misleading filename from the navigation review.
+- This is a source-level navigation correction only. It does not count as an end-to-end navigation test, a secure classroom test, or an Android device pass.
+- The continuation demo dashboards, records and rewards pages remain explicitly browser-local demonstrations; they are not the live Supabase student/parent/teacher dashboards and must not be counted as integrated production records.
