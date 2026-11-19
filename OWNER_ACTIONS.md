@@ -717,3 +717,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Leave and end-call controls now attempt the server-side end action separately from local cleanup. Regardless of server response, the local room is disconnected, participant tiles are cleared, and media controls are disabled/reset.
 - If the server cannot confirm ending the room, the page explicitly warns that other participants may remain connected. This avoids falsely reporting a global end while still allowing the current device to stop its local call.
 - Live multi-device testing is still required to verify LiveKit disconnect behaviour and server-side room termination.
+
+
+## 19 November 2026 — Classroom disconnect UI reset
+
+- When the teacher leaves or the LiveKit room disconnects unexpectedly, the call page now resets local microphone/camera state, disables all call controls, restores the OFF labels, and clears participant tiles.
+- This prevents stale participant media tiles or misleading enabled controls from remaining visible after the supervised session has ended.
+- Real-device and multi-account call testing is still required; UI reset does not independently prove remote media teardown or server room termination.
