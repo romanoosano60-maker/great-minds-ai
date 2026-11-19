@@ -704,3 +704,9 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 
 - Microphone/camera control errors now disconnect the local LiveKit room, clear participant tiles, disable further call controls, and reset local media UI state rather than leaving a possibly active session behind an error message.
 - This is a browser-side privacy safeguard. It does not replace device testing, LiveKit configuration review, adult supervision, or separate-account authorization tests.
+
+
+## 19 November 2026 — Classroom account-switch form cleanup
+
+- International Classrooms now clears classroom name, country, generated classroom code, join code, password, consent code and consent checkbox on sign-out and when the authenticated account changes. This reduces accidental disclosure or reuse of one account's classroom details by the next account using the same browser.
+- The teacher must generate a fresh classroom code after signing in again. This is a browser-side hygiene improvement, not a substitute for database authorization or separate-account testing.
