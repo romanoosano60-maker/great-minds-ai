@@ -724,3 +724,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - When the teacher leaves or the LiveKit room disconnects unexpectedly, the call page now resets local microphone/camera state, disables all call controls, restores the OFF labels, and clears participant tiles.
 - This prevents stale participant media tiles or misleading enabled controls from remaining visible after the supervised session has ended.
 - Real-device and multi-account call testing is still required; UI reset does not independently prove remote media teardown or server room termination.
+
+
+## 19 November 2026 — Android acceptance checklist reconciliation
+
+- Updated the final Android acceptance checklist to record previously owner-reported Picture Library, classroom coordination, basic password recovery and Student Space results separately from tests still awaiting evidence.
+- Removed the Picture Library from the routine remaining retest list; repeat only if a later change causes a regression. Historical owner reports are clearly distinguished from independently reproduced device tests.
+- This is test-record accuracy work only; it does not upgrade unverified device tests to engineering-confirmed passes.
