@@ -2,7 +2,7 @@
 
 Last checked: 19 November 2026
 
-## Latest engineering handoff — 10 November 2026
+## Current engineering handoff — 19 November 2026 (historical detail below is date-labelled)
 
 The following are the current deployed backend versions recorded in the latest source/deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
 - AI Teacher: ACTIVE version 8; JWT verification enabled.
