@@ -187,6 +187,11 @@ end $$;
 -- Final hardening additions applied to the connected project:
 -- Teachers may reject at any time, but may only approve after guardian consent.
 drop policy if exists "Approved classroom teachers update membership status" on public.classroom_members;
+-- Teacher RLS must not query guardian_relationships directly: that table
+-- intentionally exposes rows only to the linked student and guardian.
+-- parent_consent_status is protected by column-level privileges and can be
+-- changed only by the guardian-consent SECURITY DEFINER RPC. Teachers can
+-- update membership_status, but cannot manufacture guardian consent.
 create policy "Approved classroom teachers update membership status"
 on public.classroom_members for update to authenticated
 using (
@@ -207,15 +212,6 @@ with check (
       and tp.approved = true
   )
   and (membership_status <> 'approved' or parent_consent_status = 'approved')
-  and (
-    parent_consent_status <> 'approved'
-    or exists (
-      select 1
-      from public.guardian_relationships gr
-      where gr.student_id = classroom_members.user_id
-        and gr.relationship_status = 'active'
-    )
-  )
 );
 
 -- Keep the guardian code table inaccessible to all direct client queries.
