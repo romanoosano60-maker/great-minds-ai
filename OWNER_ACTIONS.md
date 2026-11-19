@@ -808,3 +808,11 @@ Security advisor findings:
 - The live `account-deletion-request` Edge Function is still version 7 and its deployed source does not yet include the latest GitHub hardening (token length bound, Vary: Origin, and concurrent duplicate-request recovery). The repository source is updated, but deployment was NOT performed. Owner approval is required before replacing the live function.
 - The live `ai-teacher` function is version 8 with JWT verification enabled. Its live source matches the reviewed guarded request flow. Its runtime success still depends on configured secrets; no secrets were inspected or changed.
 - The Pages deployment for commit `22715713246f69e41dcb5c58e0d15c7ab8d8589e` completed successfully. Static checks passed for the same commit.
+
+
+## Reconciled teacher approval policy against live Supabase — 19 November 2026
+
+- Follow-up read-only database inspection resolved the apparent mismatch: migration `20261110_require_active_guardian_for_classroom_approval` was later intentionally superseded by `20261110_restore_teacher_approval_policy_for_rls_visibility`. Teachers cannot directly read `guardian_relationships`, so querying that table inside teacher RLS would incorrectly block valid approvals.
+- Live privilege checks confirm authenticated users can update `classroom_members.membership_status`, cannot update `parent_consent_status`, and do not have table-wide UPDATE. The protected consent field is set/revoked through SECURITY DEFINER guardian-consent RPCs only. The live per-child revoke RPC is executable by authenticated users; its private implementation is also granted to authenticated.
+- Therefore the final teacher policy correctly relies on the protected `parent_consent_status='approved'` field and does not directly query guardian_relationships. Removed the extra direct relationship EXISTS clause that had been added to the repository reference file in the preceding review, and documented the security rationale in the SQL file.
+- No live database changes were made. This was a source-reference alignment and read-only privilege verification.
