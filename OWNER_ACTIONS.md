@@ -731,3 +731,22 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Updated the final Android acceptance checklist to record previously owner-reported Picture Library, classroom coordination, basic password recovery and Student Space results separately from tests still awaiting evidence.
 - Removed the Picture Library from the routine remaining retest list; repeat only if a later change causes a regression. Historical owner reports are clearly distinguished from independently reproduced device tests.
 - This is test-record accuracy work only; it does not upgrade unverified device tests to engineering-confirmed passes.
+
+
+## Current security and service handoff — 19 November 2026
+
+### Verified source/deployment state
+- Latest documented GitHub Pages commit `43eba42bb91c48b82b00e7ecba9c2c41977119e4`: static repository checks succeeded (workflow `44532785677`) and Pages deployment succeeded (workflow `44532787316`).
+- AI Teacher source currently uses the Supabase Edge Function, checks the authenticated user, allows approved teachers or accounts with an active guardian relationship, validates request size/subject/language, applies a database-enforced quota before calling the OpenAI Responses API, and requests `store:false`. This is a source review, not proof the OpenAI secret is present or that a live answer works. Failed upstream attempts may still consume quota because quota is charged before the upstream request.
+- Account deletion endpoint is deliberately request-only. It verifies the signed-in, email-confirmed account, requires an approved teacher or active guardian relationship, prevents student-purpose accounts from submitting the adult request, checks classroom ownership, and records a manual-review request. It does **not** delete the Auth account, revoke all sessions, erase learning data, or remove backups. The response explicitly says no data was deleted.
+- Classroom call source now disconnects local media and clears participant tiles on permission/control failures and disconnect events. This does not replace Android microphone/camera permission and multi-account call tests.
+- Latest Android acceptance checklist records historical owner-reported passes separately from tests independently reproduced in this audit. No new owner-device pass is claimed.
+
+### Owner / Supabase actions still required
+1. In Supabase Auth security settings, enable **Leaked Password Protection** if the current plan supports it. If unavailable on the plan, record that as a limitation; do not claim the setting is enabled.
+2. In Supabase Edge Function Secrets, privately verify that `OPENAI_API_KEY` is present for `ai-teacher`. Never paste the value into ChatGPT, GitHub, browser code, or a screenshot. Confirm the configured model is available to the key owner. Then run one authenticated Mathematics question and one unauthorized-account denial test.
+3. Run the separate-account Android tests in `FINAL_ANDROID_ACCEPTANCE_TESTS.md`: student, approved teacher, and linked guardian; cross-account read denial; consent revocation; progress and homework publish/submit/mark; sign-out clearing; classroom call permissions and disconnect.
+4. Do not tell a user that an account has been deleted after submitting the current request form. A human administrator must review ownership/transfer, determine the applicable retention and legal requirements, perform approved deletion of Auth and related records, revoke sessions, handle backups under the retention policy, and confirm completion to the requester. No automated destructive deletion was introduced because the required retention/transfer policy and guardian/legal authority process are not established in code.
+5. Decide and document retention periods, guardian consent evidence, consent revocation handling, support contact and backup-erasure schedule before public use. Email confirmation or a self-declared relationship alone is not proof of legal guardianship.
+
+**Completion boundary:** these actions cannot be truthfully marked complete by repository edits. The app is not 100% complete until the owner-side settings and device/account tests pass, the AI Teacher receives a live answer, and an approved account-deletion lifecycle is implemented and verified. Advertising, pricing, and marketing remain out of scope until that point.
