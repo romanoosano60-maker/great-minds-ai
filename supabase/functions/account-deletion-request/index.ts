@@ -24,10 +24,39 @@ Deno.serve(async (req: Request) => {
   const authHeader = req.headers.get("Authorization") ?? "";
   const token = authHeader.startsWith("Bearer ") ? authHeader.slice(7) : "";
   if (token.length < 40 || token.length > 5000) return reply({ error: "A valid sign-in session is required" }, 401);
-  // Bound the request body by its actual UTF-8 byte size.
-  const rawBody = await req.text();
-  if (new TextEncoder().encode(rawBody).byteLength > 3000) {
+  // Reject an oversized declared body early, then enforce the same limit
+  // while streaming so a client cannot make the function buffer an unbounded body.
+  const MAX_BODY_BYTES = 3000;
+  const declaredLength = Number(req.headers.get("content-length"));
+  if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
     return reply({ error: "Request is too large." }, 413);
+  }
+  let rawBody = "";
+  if (req.body) {
+    const reader = req.body.getReader();
+    const chunks: Uint8Array[] = [];
+    let totalBytes = 0;
+    try {
+      while (true) {
+        const { done, value } = await reader.read();
+        if (done) break;
+        totalBytes += value.byteLength;
+        if (totalBytes > MAX_BODY_BYTES) {
+          await reader.cancel();
+          return reply({ error: "Request is too large." }, 413);
+        }
+        chunks.push(value);
+      }
+    } finally {
+      reader.releaseLock();
+    }
+    const bytes = new Uint8Array(totalBytes);
+    let offset = 0;
+    for (const chunk of chunks) {
+      bytes.set(chunk, offset);
+      offset += chunk.byteLength;
+    }
+    rawBody = new TextDecoder().decode(bytes);
   }
   let body: { confirm?: boolean };
   try { body = JSON.parse(rawBody); } catch { return reply({ error: "Invalid request" }, 400); }
