@@ -2,6 +2,18 @@
 
 Last checked: 19 November 2026
 
+## Further score-save reliability work — 19 November 2026
+
+Additional source changes were committed after the previous batch:
+
+- General Knowledge quiz now uses a stable per-attempt operation ID, prevents duplicate answers, and exposes a retry action when cloud confirmation fails.
+- Vocabulary challenge now keeps a stable operation ID through retries, reports device-local versus cloud-saved status, and handles storage/cloud failures without losing the visible result.
+- English alphabet reading quiz now has a retryable cloud-save path.
+- Learning games now keep a stable operation ID for each game run and offer a retry action; this applies to quiz games and Memory Match.
+- Reading and Writing comprehension quiz now retains its save ID for retries and resets it only for a new attempt.
+
+These remain source-level improvements. No new Android runtime, cross-account privacy, or live Supabase save pass is claimed. Pages with older cloud-save calls still need review; a repository search is a triage aid and not proof that every result path has been exhaustively tested.
+
 ## Additional engineering batch — 19 November 2026
 
 The following source improvements were committed after the initial handoff review. They are source changes, not Android or live-account acceptance passes:
