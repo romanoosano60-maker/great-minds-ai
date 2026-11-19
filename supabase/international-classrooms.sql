@@ -314,7 +314,60 @@ begin
     raise exception 'Verify the guardian account email before giving consent';
   end if;
   if p_code is null or length(trim(p_code)) <> 64
-     or trim(p_code) !~ '^[0-9a-fA-F]{64}
+     or trim(p_code) !~ '^[0-9a-fA-F]{64} encode(extensions.digest(trim(p_code), 'sha256'), 'hex');
+  v_legacy_hash := md5(trim(p_code));
+
+  select c.student_id into v_student
+  from private.guardian_consent_codes c
+  where c.code_hash in (v_hash, v_legacy_hash)
+    and c.used_at is null and c.expires_at > now()
+  for update;
+
+  if v_student is null then
+    raise exception 'Consent code is invalid, expired, or already used';
+  end if;
+  if v_student = v_guardian then
+    raise exception 'A student account cannot approve its own guardian consent';
+  end if;
+
+  insert into public.guardian_relationships(student_id, guardian_id, relationship_status, consented_at, revoked_at)
+  values (v_student, v_guardian, 'active', now(), null)
+  on conflict (student_id) do update set
+    guardian_id = excluded.guardian_id,
+    relationship_status = 'active',
+    consented_at = now(),
+    revoked_at = null
+  where public.guardian_relationships.relationship_status = 'revoked';
+
+  get diagnostics v_rows = row_count;
+  if v_rows = 0 then
+    raise exception 'A guardian is already linked to this student; revoke or contact support before changing it';
+  end if;
+
+  update private.guardian_consent_codes
+  set used_at = now()
+  where code_hash in (v_hash, v_legacy_hash);
+
+  update public.classroom_members
+  set parent_consent_status = 'approved',
+      membership_status = case when membership_status = 'rejected' then 'pending' else membership_status end
+  where user_id = v_student and membership_status in ('pending', 'rejected');
+
+  return 'Guardian consent recorded. Classroom membership still requires teacher approval.';
+end;
+$function$;
+revoke all on function private.redeem_guardian_consent_code(text, boolean)
+  from public, anon;
+grant execute on function private.redeem_guardian_consent_code(text, boolean)
+  to authenticated;
+
+
+-- The normalized unique index is created once above as
+-- classrooms_classroom_code_unique. A second equivalent index was removed
+-- by migration 20261110_drop_duplicate_classroom_code_index.sql.
+ then
+    raise exception 'Enter the full 64-character consent code';
+  end if;
 
   v_hash := encode(extensions.digest(trim(p_code), 'sha256'), 'hex');
   v_legacy_hash := md5(trim(p_code));
