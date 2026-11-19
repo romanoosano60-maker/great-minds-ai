@@ -675,3 +675,12 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - The homework page now clears any in-flight display and refreshes the visible assignments when the Supabase session changes to a newly signed-in account in another page. Sign-out still clears the secure homework display and removes the Realtime channel.
 - These are client-side reliability and display-isolation improvements. Supabase RLS remains the authorization boundary; no production database policy, schema, Auth setting, secret, account or learner record was changed.
 - Verification required: static workflow, Pages deployment, and owner tests with two distinct test accounts/tabs/devices. UI hardening is not a substitute for database uniqueness and RLS enforcement.
+
+
+## Connected dashboard account-switch privacy hardening — 19 November 2026
+
+- Secure Student, Parent and Teacher cloud dashboard pages now respond to both sign-out and sign-in session changes originating in another page.
+- On sign-out, each page invalidates pending loads, clears its cloud-only record panels, resets the role/consent approval state and removes its Realtime channel.
+- On a new sign-in, each page clears the prior account's displayed records first, re-fetches the authenticated user, and re-checks the relevant active guardian link or approved teacher status before loading any new cloud records.
+- This reduces stale cross-account display risk in a shared browser. Supabase RLS remains the actual data authorization boundary. It is not proof against all cross-account access; separate-account and multi-device acceptance tests remain required.
+- No production schema, policy, Auth setting, secret, account or learner record was changed.
