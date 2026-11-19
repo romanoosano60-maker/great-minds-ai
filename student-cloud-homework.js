@@ -22,8 +22,8 @@
   };
   if(!Number.isSafeInteger(row.classroom_id)||row.classroom_id<=0||!row.subject||!row.title||!row.instructions||!row.due_at||!Number.isInteger(row.max_points)||row.max_points<1||row.max_points>100)
    return {ok:false,message:"Check the classroom ID and all assignment fields."};
-  const {error}=await client.from("homework_assignments").insert(row);
-  if(error){console.warn("Homework assignment insert failed:",error);return {ok:false,message:"Could not save. Check that this is your approved classroom and try again."};}
+  const {data,error}=await client.from("homework_assignments").insert(row).select("id").single();
+  if(error||!data?.id){console.warn("Homework assignment insert failed or was not confirmed:",error);return {ok:false,message:"The assignment could not be confirmed as saved. Refresh the classroom before retrying."};}
   return {ok:true,message:"Homework assignment saved to the classroom."};
  }
  async function listAssignments(classroomId){
@@ -38,8 +38,8 @@
   const {user,error:userError}=await currentUser();if(userError||!user)return {ok:false,message:"Sign in with the student account first."};
   const id=String(assignmentId||"").trim(),text=String(answer||"").trim().slice(0,3000);
   if(!id||!text)return {ok:false,message:"Enter an answer first."};
-  const {error}=await client.from("homework_submissions").insert({assignment_id:id,student_id:user.id,answer:text});
-  if(error){console.warn("Homework submission failed:",error);return {ok:false,message:error.code==="23505"?"You have already submitted this assignment.":"Submission not accepted. Check your approved classroom membership and parent consent."};}
+  const {data,error}=await client.from("homework_submissions").insert({assignment_id:id,student_id:user.id,answer:text}).select("id").single();
+  if(error||!data?.id){console.warn("Homework submission failed or was not confirmed:",error);return {ok:false,message:error?.code==="23505"?"You have already submitted this assignment.":"Submission not accepted or not confirmed. Check your approved classroom membership and parent consent, then refresh before retrying."};}
   return {ok:true,message:"Homework submitted to your classroom."};
  }
  async function isEnrolledStudent(classroomId){
@@ -71,8 +71,8 @@
   const {data:assignment,error:assignmentError}=await client.from("homework_assignments").select("max_points").eq("id",submission.assignment_id).maybeSingle();
   if(assignmentError||!assignment)return {ok:false,message:"The assignment details could not be loaded for this teacher account."};
   if(n>Number(assignment.max_points))return {ok:false,message:"The score cannot be higher than the assignment maximum of "+assignment.max_points+" points."};
-  const {error}=await client.from("homework_submissions").update({score:n,feedback:String(feedback||"").trim().slice(0,1500),marked_by:user.id,marked_at:new Date().toISOString()}).eq("id",id);
-  if(error){console.warn("Homework marking failed:",error);return {ok:false,message:"Marking not accepted. Only the approved classroom teacher can mark this work."};}
+  const {data:updated,error}=await client.from("homework_submissions").update({score:n,feedback:String(feedback||"").trim().slice(0,1500),marked_by:user.id,marked_at:new Date().toISOString()}).eq("id",id).select("id").maybeSingle();
+  if(error||!updated?.id){console.warn("Homework marking failed or no row was updated:",error);return {ok:false,message:"Marking was not confirmed. The submission may no longer be available or database permissions may have blocked the update. Refresh before retrying."};}
   return {ok:true,message:"Mark and feedback saved."};
  }
  window.gmHomeworkCloud={currentUser,createAssignment,listAssignments,isEnrolledStudent,submitAnswer,listSubmissions,markSubmission};
