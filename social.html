@@ -177,13 +177,17 @@ document.getElementById("score").textContent="Score: "+score;
 choices.appendChild(b);
 });
 }
+let socialFoundationSaveId=null,socialFoundationSaved=false,socialFoundationSaving=false;
+function socialFoundationNewId(){if(window.crypto&&typeof window.crypto.randomUUID==="function")return window.crypto.randomUUID();return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16)})}
+function showSocialFoundationRetry(message){const feedback=document.getElementById("quizFeedback");feedback.textContent=message;let b=document.getElementById("social-foundation-cloud-retry");if(!b){b=document.createElement("button");b.id="social-foundation-cloud-retry";b.type="button";b.textContent="Retry cloud save";b.addEventListener("click",saveSocialFoundationCloud);feedback.insertAdjacentElement("afterend",b)}}
+async function saveSocialFoundationCloud(){if(socialFoundationSaved||socialFoundationSaving)return;socialFoundationSaving=true;try{if(typeof window.gmSaveStudentProgress!=="function"){showSocialFoundationRetry("Your score remains visible here. Secure cloud saving is unavailable; please retry.");return}const r=await window.gmSaveStudentProgress({subject:"Social Studies",activity_key:"social-studies-foundations",score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"social-studies-page",id:socialFoundationSaveId||(socialFoundationSaveId=socialFoundationNewId())});if(r&&r.saved){socialFoundationSaved=true;document.getElementById("quizFeedback").textContent+=" Cloud progress saved.";const b=document.getElementById("social-foundation-cloud-retry");if(b)b.remove()}else showSocialFoundationRetry("Cloud save was not confirmed: "+(r&&r.reason?String(r.reason):"Please retry."))}catch(e){showSocialFoundationRetry("Cloud save failed; your score remains visible. Please retry.")}finally{socialFoundationSaving=false}}
 function nextQuestion(){
 current++;
 if(current>=questions.length){
 document.getElementById("question").textContent="🎉 Quiz complete!";
 document.getElementById("choices").replaceChildren();
 document.getElementById("quizFeedback").textContent="Final score: "+score+" out of "+questions.length;
-if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"Social Studies",activity_key:"social-studies-foundations",score:score,max_score:questions.length,correct_count:score,question_count:questions.length,source:"social-studies-page"}).then(r=>{document.getElementById("quizFeedback").textContent+=(r.saved?" Cloud progress saved.":" Cloud save pending: "+(r.reason||"not confirmed"))}).catch(()=>{document.getElementById("quizFeedback").textContent+=" Cloud save could not be confirmed; your result remains visible here."})}
+saveSocialFoundationCloud()
 return;
 }
 showQuestion();
