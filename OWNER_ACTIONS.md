@@ -684,3 +684,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - On a new sign-in, each page clears the prior account's displayed records first, re-fetches the authenticated user, and re-checks the relevant active guardian link or approved teacher status before loading any new cloud records.
 - This reduces stale cross-account display risk in a shared browser. Supabase RLS remains the actual data authorization boundary. It is not proof against all cross-account access; separate-account and multi-device acceptance tests remain required.
 - No production schema, policy, Auth setting, secret, account or learner record was changed.
+
+
+## International Classrooms account-switch display hardening — 19 November 2026
+
+- The International Classrooms page now handles explicit Supabase SIGNED_IN and SIGNED_OUT events. It clears the classroom/member/guardian display and removes the prior Realtime channel before processing the new session.
+- On sign-out it also clears the password and guardian-consent code/checkbox from the page. On sign-in it refreshes classroom records under the newly authenticated account rather than retaining the previous account's cards.
+- This is client-side stale-display protection. Database RLS and server-side RPC authorization remain the actual access controls; separate-account tests are still required. No Supabase policies, schema, secrets, accounts or learner records were changed.
