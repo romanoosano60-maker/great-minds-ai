@@ -782,3 +782,10 @@ No production Supabase secrets, RLS policies, or live database functions were ch
 - Bounded bearer-token length before account lookup and added `Vary: Origin` to the fixed-origin CORS response.
 - Made duplicate submissions resilient to a concurrent request from another device: if the database's one-open-request unique index wins a race, the endpoint retrieves and returns the existing open request rather than reporting a generic server failure. It still never deletes account or learning data.
 - Source change only. The Supabase Edge Function deployment and a two-device concurrent-request test are not confirmed by this repository commit. The existing database unique index is relied upon as the concurrency boundary.
+
+
+## Consent SQL reference final-tail validation — 19 November 2026
+
+- A fresh re-fetch found a damaged duplicate fragment appended after the final comment in `supabase/international-classrooms.sql`. Removed the trailing fragment, leaving one complete `private.redeem_guardian_consent_code` definition, the 64-character hexadecimal validation, its grants, and the final explanatory comment.
+- This is a repository reference-file correction only. It was not applied to the live Supabase database. Do not rerun the full reference SQL on production.
+- The guardian page exposes a per-child revoke action and refreshes classroom state after the RPC. Source review confirms the RPC is scoped to the signed-in guardian and selected student; live cross-account/revocation behaviour still requires dedicated test accounts.
