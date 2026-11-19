@@ -54,10 +54,39 @@ Deno.serve(async (req: Request) => {
       return json({ error: "AI Teacher is available only to approved teachers and accounts with an active guardian link. Please ask a parent or administrator for help." }, 403);
     }
 
-    // Enforce the limit on the actual body bytes, not only the optional Content-Length header.
-    const rawBody = await req.text();
-    if (new TextEncoder().encode(rawBody).byteLength > 12000) {
+    // Reject an oversized declared body early, then enforce the cap while
+    // streaming so a client cannot force unbounded request-body buffering.
+    const MAX_BODY_BYTES = 12000;
+    const declaredLength = Number(req.headers.get("content-length"));
+    if (Number.isFinite(declaredLength) && declaredLength > MAX_BODY_BYTES) {
       return json({ error: "Your message is too long. Please shorten it." }, 413);
+    }
+    let rawBody = "";
+    if (req.body) {
+      const reader = req.body.getReader();
+      const chunks: Uint8Array[] = [];
+      let totalBytes = 0;
+      try {
+        while (true) {
+          const { done, value } = await reader.read();
+          if (done) break;
+          totalBytes += value.byteLength;
+          if (totalBytes > MAX_BODY_BYTES) {
+            await reader.cancel();
+            return json({ error: "Your message is too long. Please shorten it." }, 413);
+          }
+          chunks.push(value);
+        }
+      } finally {
+        reader.releaseLock();
+      }
+      const bytes = new Uint8Array(totalBytes);
+      let offset = 0;
+      for (const chunk of chunks) {
+        bytes.set(chunk, offset);
+        offset += chunk.byteLength;
+      }
+      rawBody = new TextDecoder().decode(bytes);
     }
     let body: any;
     try { body = JSON.parse(rawBody); } catch {
