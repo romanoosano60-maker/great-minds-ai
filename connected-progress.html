@@ -22,10 +22,10 @@ function safe(s){return String(s??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&
 function completed(d){return (d.homework||[]).filter(h=>h.submitted).length}
 function earned(d){return Math.floor(Math.max(0,Number(d.stars)||0)/5)}
 </script><script>
-const d=getData();document.getElementById('name').textContent=d.student;
-document.getElementById('stats').innerHTML=[['Stars',d.stars],['Points',d.points],['Activities',d.lessons],['Certificates',earned(d)]].map(([n,v])=>`<div class="stat"><b>${Number(v)||0}</b>${n}</div>`).join('');
-document.getElementById('next').textContent=`${5-(Number(d.stars)||0)%5} more star(s) until the next certificate.`;
-document.getElementById('activity').innerHTML=(d.homework||[]).length?d.homework.map(h=>`<div class="entry"><b>${safe(h.subject)}</b> — ${safe(h.question)}<p>${h.submitted?(h.correct?'✓ Correct (10/10)':'Submitted (0/10)'):'Awaiting answer'}</p></div>`).join(''):'No homework yet. Open the Teacher Dashboard to assign one.';
+const d=getData(),p=d.profileV2||{},stars=(Number(d.stars)||0)+(Number(p.stars)||0),points=(Number(d.points)||0)+(Number(p.points)||0),activities=(Number(d.lessons)||0)+(Number(p.lessons)||0),allHomework=[...(Array.isArray(d.homework)?d.homework:[]),...(Array.isArray(p.homework)?p.homework:[])];document.getElementById('name').textContent=d.student;
+document.getElementById('stats').innerHTML=[['Stars',stars],['Points',points],['Activities',activities],['Certificates',Math.floor(stars/5)]].map(([n,v])=>`<div class="stat"><b>${Number(v)||0}</b>${n}</div>`).join('');
+document.getElementById('next').textContent=`${5-stars%5} more star(s) until the next certificate.`;
+document.getElementById('activity').innerHTML=allHomework.length?allHomework.map(h=>`<div class="entry"><b>${safe(h.subject)}</b> — ${safe(h.question||h.title)}<p>${h.submitted?(h.correct?'✓ Correct (10/10)':'Submitted (score recorded)'):'Awaiting answer'}</p></div>`).join(''):'No homework yet. Open the Teacher Dashboard to assign one.';
 </script><script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script><script src="supabase-config.js"></script><script src="student-cloud-progress.js"></script><script>
 async function refreshSecureProgress(){
  const status=document.getElementById("cloudProgressStatus");
