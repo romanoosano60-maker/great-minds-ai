@@ -314,7 +314,11 @@ begin
     raise exception 'Verify the guardian account email before giving consent';
   end if;
   if p_code is null or length(trim(p_code)) <> 64
-     or trim(p_code) !~ '^[0-9a-fA-F]{64} encode(extensions.digest(trim(p_code), 'sha256'), 'hex');
+     or trim(p_code) !~ '^[0-9a-fA-F]{64}$' then
+    raise exception 'Enter the full 64-character consent code';
+  end if;
+
+  v_hash := encode(extensions.digest(trim(p_code), 'sha256'), 'hex');
   v_legacy_hash := md5(trim(p_code));
 
   select c.student_id into v_student
