@@ -139,21 +139,11 @@ function grammarAnswer(value){
 document.getElementById("grammarResult").textContent=
 value==="apple"?"✅ Correct! Apple is a noun.":"Try again!";
 }
-let score=0;
-let answered=false;
-function quiz(value){
-const result=document.getElementById("result");
-if(answered){result.textContent="You have completed this question.";return;}
-answered=true;
-if(value==="D"){
-score++;
-result.textContent="🎉 Correct! Well done!";
-}else{
-result.textContent="Not quite. The correct answer is D.";
-}
-document.getElementById("score").textContent="Score: "+score;
-if(window.gmSaveStudentProgress){window.gmSaveStudentProgress({subject:"English",activity_key:"english-alphabet-reading-quiz",score:score,max_score:1,correct_count:score,question_count:1,source:"english-9"}).then(r=>{result.textContent+=(r&&r.saved?" Cloud progress saved to your secure learning profile.":" Cloud save was not confirmed: "+(r&&r.reason?String(r.reason):"please try again later."))}).catch(()=>{result.textContent+=" Cloud save could not be confirmed; this score is still shown on this screen."})}
-}
+let score=0,answered=false,english9SaveId=null,english9Saving=false,english9Saved=false;
+function english9NewId(){if(window.crypto&&typeof window.crypto.randomUUID==="function")return window.crypto.randomUUID();return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16)})}
+function showEnglish9Retry(message){const result=document.getElementById("result");result.textContent=message;let b=document.getElementById("english9CloudRetry");if(!b){b=document.createElement("button");b.id="english9CloudRetry";b.type="button";b.textContent="Retry cloud save";b.addEventListener("click",saveEnglish9Cloud);result.insertAdjacentElement("afterend",b)}}
+async function saveEnglish9Cloud(){if(english9Saved||english9Saving||!answered)return;english9Saving=true;const b=document.getElementById("english9CloudRetry");if(b)b.disabled=true;try{if(typeof window.gmSaveStudentProgress!=="function"){showEnglish9Retry("Your answer is recorded on this screen. Secure cloud saving is unavailable; please retry when connected.");return}const r=await window.gmSaveStudentProgress({subject:"English",activity_key:"english-alphabet-reading-quiz",score,max_score:1,correct_count:score,question_count:1,source:"english-9",id:english9SaveId||(english9SaveId=english9NewId())});if(r&&r.saved){english9Saved=true;document.getElementById("result").textContent+=" Cloud progress saved to your secure learning profile.";const retry=document.getElementById("english9CloudRetry");if(retry)retry.remove()}else showEnglish9Retry("Cloud save was not confirmed: "+(r&&r.reason?String(r.reason):"Please retry."))}catch(e){showEnglish9Retry("Cloud save could not be confirmed; your score remains visible. Please retry.")}finally{english9Saving=false;const retry=document.getElementById("english9CloudRetry");if(retry)retry.disabled=false}}
+function quiz(value){const result=document.getElementById("result");if(answered){result.textContent="You have completed this question.";return;}answered=true;if(value==="D"){score++;result.textContent="🎉 Correct! Well done!";}else{result.textContent="Not quite. The correct answer is D.";}document.getElementById("score").textContent="Score: "+score;english9SaveId=english9NewId();saveEnglish9Cloud()}
 </script>
 <script>function gmSpeakSafe(text){
  const synth=window.speechSynthesis;
