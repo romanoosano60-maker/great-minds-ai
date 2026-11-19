@@ -757,3 +757,9 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Corrected a malformed consent-code validation condition in `supabase/international-classrooms.sql`. A comment had been accidentally inserted inside the regular-expression literal, leaving the PL/pgSQL conditional malformed. The condition now checks for exactly 64 hexadecimal characters using `^[0-9a-fA-F]{64}$`.
 - This was a repository SQL reference-file repair. It was **not** applied to the live database; the connected project had a separate guardian-consent hardening function/migration recorded as applied on 9 November. Do not re-run the entire reference SQL file against production as a shortcut.
 - The source static workflow and Pages deployment for this correction must finish before it is considered published. Live database behaviour still requires the consent journey test with separate test accounts.
+
+
+### Follow-up validation of classroom SQL reference — 19 November 2026
+- Re-reviewed the complete consent-redemption function after the first edit and found a duplicated, damaged tail left in the same reference SQL file. Removed that duplicate fragment and restored the full conditional: exactly 64 hexadecimal characters are required before hashing and redemption.
+- Re-fetched the committed file and verified it contains one `private.redeem_guardian_consent_code` definition, a complete `^[0-9a-fA-F]{64}$` validation condition, the explicit error branch, and the rest of the function through its grants.
+- This remains a repository reference-file repair only. The live Supabase migration was not changed by this edit; do not run the entire SQL file on production. Confirm live consent redemption only with dedicated test accounts and the already-applied migration history.
