@@ -658,3 +658,12 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - This aligns the two local demonstration views with the Student and Parent dashboards, which already include the Student Profile V2 summary.
 - Scope remains browser-local demonstration data. This change does not make local rewards authoritative cloud records and does not establish cross-device sync. Secure cloud progress remains a separate signed-in Supabase view.
 - Verification pending: latest static workflow and Pages deployment for this commit, followed by Android owner acceptance testing.
+
+
+## Four-mission shared rewards alignment — 19 November 2026
+
+- Student Profile now includes supported local practice rewards in its displayed star/point totals and calculates practice certificate milestones consistently at five stars per certificate.
+- Connected Practice displays the combined local Student Profile and connected-practice demo totals.
+- The local Parent and Teacher dashboard summaries now include the same combined demo totals, including certificate count.
+- This improves consistency across local demo pages only. It does not change Supabase records, establish cross-device synchronization, or make local demo totals authoritative cloud records. Authenticated cloud progress remains separately displayed under the secure progress sections.
+- Static checks and Pages deployment are pending for this source batch. Android acceptance testing is still required.
