@@ -113,8 +113,29 @@ async function failClosedMedia(message){
 }
 $("mic").onclick=async()=>{if(!room)return;try{micOn=await room.localParticipant.setMicrophoneEnabled(!micOn);$("mic").textContent=micOn?"🔇 Mute microphone":"🎙️ Turn microphone on"}catch(e){await failClosedMedia("Microphone could not be safely changed: "+e.message)}};
 $("camera").onclick=async()=>{if(!room)return;try{cameraOn=await room.localParticipant.setCameraEnabled(!cameraOn);$("camera").textContent=cameraOn?"📷 Turn camera off":"📷 Turn camera on"}catch(e){await failClosedMedia("Camera could not be safely changed: "+e.message)}};
-$("leave").onclick=async()=>{try{if(tokenRole==="teacher")await invoke("end");if(room)await room.disconnect();room=null;$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;status(tokenRole==="teacher"?"You ended the supervised classroom call. All participants have been disconnected.":"You left the call.")}catch(e){status("Could not leave safely: "+e.message)}};
-$("end").onclick=async()=>{try{await invoke("end");if(room)await room.disconnect();room=null;micOn=false;cameraOn=false;$("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;status("The teacher ended the classroom call. All participants have been disconnected.")}catch(e){status("Could not end the classroom call: "+e.message)}};
+async function stopLocalCall(){
+ const activeRoom=room;room=null;micOn=false;cameraOn=false;
+ $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;
+ $("mic").textContent="🎙️ Turn microphone on";$("camera").textContent="📷 Turn camera on";
+ $("tiles").replaceChildren();
+ if(activeRoom)await activeRoom.disconnect();
+}
+$("leave").onclick=async()=>{
+ let serverError=null,localError=null;
+ if(tokenRole==="teacher"){try{await invoke("end")}catch(e){serverError=e}}
+ try{await stopLocalCall()}catch(e){localError=e}
+ if(serverError)status("You left locally, but the server could not confirm that the classroom ended. Other participants may still be connected: "+serverError.message);
+ else if(localError)status("The leave request was sent, but local media cleanup reported an error: "+localError.message);
+ else status(tokenRole==="teacher"?"You left and the server confirmed the classroom ended.":"You left the call. Your local media was stopped.");
+};
+$("end").onclick=async()=>{
+ let serverError=null,localError=null;
+ try{await invoke("end")}catch(e){serverError=e}
+ try{await stopLocalCall()}catch(e){localError=e}
+ if(serverError)status("Your local call was disconnected, but the server could not confirm that other participants were removed: "+serverError.message);
+ else if(localError)status("The server ended the classroom call, but local media cleanup reported an error: "+localError.message);
+ else status("The teacher ended the classroom call. All participants have been disconnected.");
+};
 
 // Stop local media immediately if the call page is left, refreshed, or closed.
 window.addEventListener("pagehide",()=>{
