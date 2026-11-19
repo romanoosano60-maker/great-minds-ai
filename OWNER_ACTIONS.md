@@ -816,3 +816,14 @@ Security advisor findings:
 - Live privilege checks confirm authenticated users can update `classroom_members.membership_status`, cannot update `parent_consent_status`, and do not have table-wide UPDATE. The protected consent field is set/revoked through SECURITY DEFINER guardian-consent RPCs only. The live per-child revoke RPC is executable by authenticated users; its private implementation is also granted to authenticated.
 - Therefore the final teacher policy correctly relies on the protected `parent_consent_status='approved'` field and does not directly query guardian_relationships. Removed the extra direct relationship EXISTS clause that had been added to the repository reference file in the preceding review, and documented the security rationale in the SQL file.
 - No live database changes were made. This was a source-reference alignment and read-only privilege verification.
+
+
+## Read-only classroom data privilege verification — 19 November 2026
+
+Live grants checked for the authenticated role:
+- `guardian_relationships`: SELECT only; no direct INSERT, UPDATE or DELETE.
+- `classroom_members`: SELECT only at table level; membership-status updates are limited to the granted column and governed by RLS. No direct INSERT or DELETE.
+- `student_learning_progress`: SELECT and INSERT only; no UPDATE or DELETE (append-only student history).
+- `account_deletion_requests`: no direct SELECT, INSERT, UPDATE or DELETE; request intake is service-role-only through the Edge Function.
+
+Together with the earlier column check (`parent_consent_status` cannot be updated by authenticated clients), this confirms guardian links and consent cannot be directly forged by ordinary authenticated clients. This is a read-only live verification; no permissions were changed.
