@@ -1,7 +1,7 @@
 # Great Minds AI — Account deletion workflow
 
 ## Current status
-A **request-only** Edge Function is deployed as `account-deletion-request` (version 5, JWT verification enabled). It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
+A **request-only** Edge Function is deployed as `account-deletion-request` (live version 7, JWT verification enabled). The repository source has additional hardening that is not yet deployed. It verifies the signed-in user and email, rejects accounts marked as student, checks for an approved teacher profile or guardian account/active guardian link, checks classroom ownership, and records a request. It NEVER deletes an Auth user or app data.
 
 The adult request form is now included on the International Classrooms page. It requires sign-in and an explicit confirmation. The request table is live with RLS enabled, no direct anon/authenticated access, and service-role-only access. It currently contains zero requests.
 
@@ -13,7 +13,7 @@ The adult request form is now included on the International Classrooms page. It 
 
 ## Live components
 - `public.account_deletion_requests`: live, RLS enabled; no anon/authenticated table privileges; service_role can insert.
-- `account-deletion-request`: deployed version 5, JWT verification on, request-only.
+- `account-deletion-request`: live deployed version 7, JWT verification on, request-only.
 - Adult request form: `international-classrooms.html`.
 - Source: `supabase/functions/account-deletion-request/index.ts`.
 - SQL source: `supabase/account-deletion-requests.sql`.
@@ -63,3 +63,10 @@ Do not invent durations. Before launch, approve retention periods and legal basi
 - The live deletion-request table currently contains an open request requiring classroom transfer. Do not process it or change classroom ownership without the account holder's explicit, case-specific instruction and a verified transfer/closure plan.
 - No Auth user, classroom, student record, homework, consent record, RLS policy, or secret was changed during this audit.
 - Still not implemented/verified: controlled server-side deletion execution, full session revocation, child-data disposition, backup/processor deletion, approved retention schedule, and live Android tests using disposable accounts.
+
+
+## 19 November 2026 — current live/source distinction and wording clarification
+
+- The current live Edge Function remains ACTIVE version 7 with JWT verification enabled. The latest GitHub source includes streaming enforcement of the 3 KB request-body cap and duplicate-request race recovery, but that newer source has **not** been deployed to Supabase.
+- The request page now says accurately that eligibility is based on an email-verified guardian account with an active child link or an approved teacher. It explicitly states that email verification and a self-declaration do not independently prove legal adulthood or guardianship.
+- The endpoint remains request-only and does not delete accounts, revoke every session, or erase child learning data.
