@@ -11,6 +11,7 @@
     return String(value == null ? "" : value).trim().slice(0, max);
   }
   async function saveProgress(record) {
+    if (!record || typeof record !== "object" || Array.isArray(record)) return {saved:false,localSaved:false,reason:"A valid progress record is required."};
     const subject = clean(record.subject, MAX_SUBJECT);
     const activityKey = clean(record.activity_key, MAX_ACTIVITY);
     const source = clean(record.source || "lesson", MAX_SOURCE);
@@ -34,9 +35,9 @@
       const {error}=await db.from("student_learning_progress").insert(row);
       if(error){
         if(error.code==="23505"&&operationId){
-          const {data:existing,error:lookupError}=await db.from("student_learning_progress").select("id,student_id,subject,activity_key,score,max_score,source").eq("id",operationId).maybeSingle();
+          const {data:existing,error:lookupError}=await db.from("student_learning_progress").select("id,student_id,subject,activity_key,score,max_score,correct_count,question_count,source").eq("id",operationId).maybeSingle();
           if(lookupError)throw lookupError;
-          if(existing&&existing.student_id===user.id&&existing.subject===subject&&existing.activity_key===activityKey&&existing.score===score&&existing.max_score===maxScore&&existing.source===source)return {saved:true,localSaved:true,idempotent:true};
+          if(existing&&existing.student_id===user.id&&existing.subject===subject&&existing.activity_key===activityKey&&existing.score===score&&existing.max_score===maxScore&&existing.correct_count===correct&&existing.question_count===questions&&existing.source===source)return {saved:true,localSaved:true,idempotent:true};
           return {saved:false,localSaved,reason:"This save ID already exists with different progress. Please contact support before retrying."};
         }
         if(error.code==="42501"||error.code==="PGRST301")return {saved:false,localSaved,reason:localSaved?"Saved on this device. Cloud sync needs approved parent/guardian consent or account access.":"Your progress could not be saved on this device or to the cloud."};
