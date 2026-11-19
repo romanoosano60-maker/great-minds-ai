@@ -23,7 +23,7 @@ function completed(d){return (d.homework||[]).filter(h=>h.submitted).length}
 function earned(d){return Math.floor(Math.max(0,Number(d.stars)||0)/5)}
 </script><script>
 const answers=['10','blue','earth','5','cold'],subjects=['Mathematics','English','Science','Mathematics','English'],idStorageKey='gm_connected_practice_cloud_ids_v1';
-function refresh(){const d=getData();document.getElementById('stats').innerHTML=[['Stars',d.stars],['Points',d.points],['Certificates',earned(d)]].map(([n,v])=>`<div class="stat"><b>${Number(v)||0}</b>${n}</div>`).join('')}
+function refresh(){const d=getData(),p=d.profileV2||{},stars=(Number(d.stars)||0)+(Number(p.stars)||0),points=(Number(d.points)||0)+(Number(p.points)||0);document.getElementById('stats').innerHTML=[['Stars',stars],['Points',points],['Certificates',Math.floor(stars/5)]].map(([n,v])=>`<div class="stat"><b>${Number(v)||0}</b>${n}</div>`).join('')}
 function newPracticeOperationId(){if(window.crypto&&typeof window.crypto.randomUUID==='function')return window.crypto.randomUUID();return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==='x'?r:(r&3|8)).toString(16)})}
 function getPracticeOperationIds(){try{const value=JSON.parse(localStorage.getItem(idStorageKey)||'{}');return value&&typeof value==='object'?value:{}}catch(e){return {}}}
 function showPracticeCloudRetry(index,message){const result=document.getElementById('result');result.textContent=message;let retry=document.getElementById('practice-cloud-retry');if(!retry){retry=document.createElement('button');retry.id='practice-cloud-retry';retry.type='button';retry.textContent='Retry cloud save';retry.addEventListener('click',()=>savePracticeCloud(index));result.insertAdjacentElement('afterend',retry)}}
