@@ -835,3 +835,16 @@ Together with the earlier column check (`parent_consent_status` cannot be update
 - Existing request-only behaviour remains unchanged: the endpoint verifies an authenticated adult-controlled account, creates a manual-review request, and does not delete an Auth account or learning data.
 - Source commit: `9eb4c5d45abf89edd1317a6a42528bbe5e351018`.
 - **Not deployed:** live Supabase account-deletion-request remains on the previously audited version until the owner explicitly approves a production function update. Static checks and deployment status for this source commit are pending.
+
+
+## Guardian consent RPC security-definer review — 19 November 2026
+
+Read-only review of every live SECURITY DEFINER routine in the `public` and `private` schemas:
+- All reviewed routines use an empty search_path, avoiding implicit object resolution through an attacker-controlled schema.
+- Privileged guardian consent, code generation/redemption, per-child revocation, classroom joining and AI quota operations live in the non-exposed `private` schema.
+- Public RPC entry points are SECURITY INVOKER wrappers, not public SECURITY DEFINER routines. The reviewed wrappers are executable by authenticated users and not by anon.
+- Consent redemption requires the authenticated caller, explicit affirmative consent, a confirmed email, a full 64-character code, a live unexpired unused code, and prevents self-consent. It does not replace an existing active guardian link; classroom membership still requires teacher approval.
+- Per-child revocation checks that the caller is the active guardian for the exact student ID, then revokes only that child and blocks that child's classroom membership. Other linked children are not changed.
+- Classroom join RPC limits attempts to 20 per account/day and validates the code format. AI quota routine is not directly executable by anon or authenticated clients; the eligible-user wrapper checks approved-teacher or active guardian/student status.
+- Limitation: email confirmation plus an explicit guardian affirmation is not independent proof of legal adulthood or legal guardianship. Adult/guardian verification remains a product/legal acceptance blocker before public launch.
+- No database functions, grants, or policies were changed during this review.
