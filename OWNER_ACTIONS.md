@@ -796,3 +796,15 @@ No production Supabase secrets, RLS policies, or live database functions were ch
 - Corrected the final teacher membership UPDATE policy in `supabase/international-classrooms.sql` to match migration `20261110_require_active_guardian_for_classroom_approval.sql`.
 - Teachers can approve a membership only when the protected consent field is approved, and they cannot set that consent field to approved unless an active `guardian_relationships` row exists for that student.
 - This is a repository SQL reference correction only. It has NOT been applied to the live Supabase project. Do not rerun the entire reference SQL on production; review/apply the dedicated migration only through the normal migration workflow if live status is not already confirmed.
+
+
+## Live Supabase security-advisor and deployment audit — 19 November 2026
+
+Read-only checks against project `ryuchmmnyjyldwouidyy` confirmed the project is ACTIVE_HEALTHY and the relevant classroom migrations are recorded as applied, including `20261110_require_active_guardian_for_classroom_approval` and `20261110_fix_teacher_rls_guardian_visibility`.
+
+Security advisor findings:
+- Leaked Password Protection is DISABLED. Owner action: enable it in Supabase Auth password/security settings when available, then test password creation/change. No setting was changed.
+- Three RLS-without-policy INFO findings: `private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`. The first two are private-schema tables with no client policies. The account-deletion request table explicitly revokes all anon/authenticated table privileges and grants access only to service_role; its no-policy RLS posture is intentional. Do not add broad client policies just to silence the advisor.
+- The live `account-deletion-request` Edge Function is still version 7 and its deployed source does not yet include the latest GitHub hardening (token length bound, Vary: Origin, and concurrent duplicate-request recovery). The repository source is updated, but deployment was NOT performed. Owner approval is required before replacing the live function.
+- The live `ai-teacher` function is version 8 with JWT verification enabled. Its live source matches the reviewed guarded request flow. Its runtime success still depends on configured secrets; no secrets were inspected or changed.
+- The Pages deployment for commit `22715713246f69e41dcb5c58e0d15c7ab8d8589e` completed successfully. Static checks passed for the same commit.
