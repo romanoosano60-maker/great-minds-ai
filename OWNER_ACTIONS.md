@@ -691,3 +691,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - The International Classrooms page now handles explicit Supabase SIGNED_IN and SIGNED_OUT events. It clears the classroom/member/guardian display and removes the prior Realtime channel before processing the new session.
 - On sign-out it also clears the password and guardian-consent code/checkbox from the page. On sign-in it refreshes classroom records under the newly authenticated account rather than retaining the previous account's cards.
 - This is client-side stale-display protection. Database RLS and server-side RPC authorization remain the actual access controls; separate-account tests are still required. No Supabase policies, schema, secrets, accounts or learner records were changed.
+
+
+## 19 November 2026 — Secure homework write confirmation
+
+- Secure assignment creation, student answer submission, and teacher marking now request the affected row back from Supabase and only report success when a saved/updated row is returned.
+- Teacher marking now treats a zero-row update (including a row hidden by database permissions) as unconfirmed instead of claiming the mark was saved.
+- This is client-side success-reporting hardening only. Supabase RLS remains the authorization boundary; separate-account permission tests are still required.
