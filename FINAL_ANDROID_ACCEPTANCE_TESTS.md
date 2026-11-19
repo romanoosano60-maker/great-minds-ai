@@ -41,11 +41,12 @@
 1. Open Mathematics and complete one quiz.
 2. Open Science and complete one lesson or question set.
 3. Open Social Studies/Geography and inspect the atlas or maps.
-4. Open the Picture Library and test animals, birds, machines, cars, trains, and ships.
-5. Open the 3D/space experience and confirm the solar-system/rocket scene displays correctly.
-6. Rotate the phone only if needed; do not treat portrait-only behavior as a failure unless a page becomes unusable.
+4. Open the 3D/space experience and confirm the solar-system/rocket scene displays correctly.
+5. Rotate the phone only if needed; do not treat portrait-only behavior as a failure unless a page becomes unusable.
 
-**Pass:** Each tested subject loads, controls work, and graphics remain visible without freezing.
+**Previously owner-confirmed:** Picture Library sections for animals, birds, machines, cars, trains, and ships were reported working. Do not repeat this test unless a later change causes a regression.
+
+**Pass:** Each newly tested subject loads, controls work, and graphics remain visible without freezing.
 
 ## Test 4 — Student account and cloud progress
 
@@ -110,13 +111,22 @@
 5. Reload the main page and repeat any failed step once on a stable connection.
 6. Record any error exactly; do not repeatedly submit account-deletion or password-recovery requests.
 
+## Previously owner-reported checks (do not repeat without a regression)
+
+| Area | Owner-reported result | Evidence status |
+|---|---|---|
+| Picture Library: animals, birds, machines, cars, trains and ships | PASS reported by owner | Historical report; exact test date and screenshot not recorded here |
+| Teacher, Student and Parent classroom coordination | PASS reported by owner on 9 Nov 2026 | Owner report; not independently reproduced |
+| Basic password recovery and new-password sign-in | PASS reported by owner on 11 Nov 2026 | Partial overall; old-password rejection and session edge cases remain unverified |
+| Student Space saving, history and sign-out | PASS reported by owner on 12 Nov 2026 | Owner report; not independently reproduced |
+
 ## Final result sheet
 
 | Area | Result | Evidence / notes |
 |---|---|---|
 | Published site and navigation | NOT TESTED | |
 | English and audio | NOT TESTED | |
-| Other subjects and picture library | NOT TESTED | |
+| Other subjects / 3D space | NOT TESTED | |
 | Student cloud progress | NOT TESTED | |
 | Teacher classroom/homework | NOT TESTED | |
 | Parent cross-device view | NOT TESTED | |
