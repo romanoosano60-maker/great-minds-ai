@@ -775,3 +775,10 @@ A source-level review of the current AI Teacher and classroom-call endpoints fou
 - Account deletion remains request-only. It verifies a signed-in, email-confirmed eligible adult account, checks classroom ownership, and records a manual-review request. No Auth account, learning record, consent record, storage object, or session is automatically deleted. A documented retention and supervised child-account deletion process is still required.
 
 No production Supabase secrets, RLS policies, or live database functions were changed by this review. Cross-account Android acceptance tests and live service tests remain outstanding.
+
+
+## Account-deletion request endpoint hardening — 19 November 2026
+
+- Bounded bearer-token length before account lookup and added `Vary: Origin` to the fixed-origin CORS response.
+- Made duplicate submissions resilient to a concurrent request from another device: if the database's one-open-request unique index wins a race, the endpoint retrieves and returns the existing open request rather than reporting a generic server failure. It still never deletes account or learning data.
+- Source change only. The Supabase Edge Function deployment and a two-device concurrent-request test are not confirmed by this repository commit. The existing database unique index is relied upon as the concurrency boundary.
