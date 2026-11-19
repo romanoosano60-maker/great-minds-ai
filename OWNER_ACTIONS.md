@@ -649,3 +649,12 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 - Corrected the classroom destination label in `gm-continuation-navigation.html` so the displayed filename matches the real `safe-international-classroom-v3.html` page. The underlying destination was already the v3 page; this removes a misleading filename from the navigation review.
 - This is a source-level navigation correction only. It does not count as an end-to-end navigation test, a secure classroom test, or an Android device pass.
 - The continuation demo dashboards, records and rewards pages remain explicitly browser-local demonstrations; they are not the live Supabase student/parent/teacher dashboards and must not be counted as integrated production records.
+
+
+## Four-mission rewards consistency correction — 19 November 2026
+
+- Connected Progress now combines the existing shared-demo totals with the Student Profile V2 summary when showing stars, points, activity count, certificate milestones and homework activity.
+- Connected Certificates now uses the same combined star total when calculating certificate eligibility and the next milestone.
+- This aligns the two local demonstration views with the Student and Parent dashboards, which already include the Student Profile V2 summary.
+- Scope remains browser-local demonstration data. This change does not make local rewards authoritative cloud records and does not establish cross-device sync. Secure cloud progress remains a separate signed-in Supabase view.
+- Verification pending: latest static workflow and Pages deployment for this commit, followed by Android owner acceptance testing.
