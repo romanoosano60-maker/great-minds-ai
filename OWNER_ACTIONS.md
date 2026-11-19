@@ -2,6 +2,16 @@
 
 Last checked: 19 November 2026
 
+## Additional learning-flow coverage — 19 November 2026
+
+Further reliability changes were committed:
+
+- Story Studio comprehension now keeps a stable score operation ID and offers a retry button after an unconfirmed cloud save.
+- Adaptive Learning check-ins now use a stable operation ID per completed check-in and provide a retry path.
+- Home Science's five-question quiz now uses a stable operation ID and retryable cloud save; its device-local demo history remains separate from confirmed cloud progress.
+
+No learner text, story writing, voice recording or other free-form child content was added to cloud score records by these changes. Only quiz score metadata is passed to the progress helper.
+
 ## Further score-save reliability work — 19 November 2026
 
 Additional source changes were committed after the previous batch:
