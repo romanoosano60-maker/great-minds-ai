@@ -95,18 +95,26 @@ function answer(n){
  qi++;document.getElementById('quizScore').textContent='Score: '+score+' / '+qs.length;
  setTimeout(()=>{if(run===quizRun)renderQ();},700);
 }
+function storyNewSaveId(){if(window.crypto&&typeof window.crypto.randomUUID==="function")return window.crypto.randomUUID();return "xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx".replace(/[xy]/g,c=>{const r=Math.random()*16|0;return (c==="x"?r:(r&3|8)).toString(16)})}
+let storySaveId=null,storySaving=false,storySaved=false;
+function showStoryRetry(message){const status=document.getElementById('quizCloudStatus');status.textContent=message;let b=document.getElementById('storyQuizCloudRetry');if(!b){b=document.createElement('button');b.id='storyQuizCloudRetry';b.type='button';b.textContent='Retry cloud save';b.addEventListener('click',saveStoryQuizScore);status.insertAdjacentElement('afterend',b)}}
 async function saveStoryQuizScore(){
- if(scoreSaveStarted)return;scoreSaveStarted=true;
- const status=document.getElementById('quizCloudStatus');
- if(typeof window.gmSaveStudentProgress!=='function'){status.textContent='Cloud progress is not available on this page. Your score is shown here; your writing stays on this device.';return;}
+ if(storySaving||storySaved||qi<qs.length)return;
+ storySaving=true;scoreSaveStarted=true;storySaveId=storySaveId||storyNewSaveId();
+ const status=document.getElementById('quizCloudStatus');const retry=document.getElementById('storyQuizCloudRetry');if(retry)retry.disabled=true;
+ if(typeof window.gmSaveStudentProgress!=='function'){showStoryRetry('Cloud progress is not available on this page. Your score is shown here; your writing stays on this device. Retry when connected.');storySaving=false;return;}
  status.textContent='Checking your signed-in student account and consent before saving…';
  try{
-  const result=await window.gmSaveStudentProgress({subject:'English',activity_key:'english-story-studio-comprehension',score:score,max_score:qs.length,correct_count:score,question_count:qs.length,source:'english-story-studio'});
-  status.textContent=result&&result.saved?'✅ Story quiz score saved to your protected student progress. Your writing stays on this device.':(result&&result.reason?result.reason:'Cloud save could not be confirmed.')+' Your writing stays on this device.';
- }catch(error){console.warn('Story quiz cloud progress was not saved:',error);status.textContent='Cloud save could not be confirmed. Your score remains visible here; your writing stays on this device.';}
+  const result=await window.gmSaveStudentProgress({subject:'English',activity_key:'english-story-studio-comprehension',score:score,max_score:qs.length,correct_count:score,question_count:qs.length,source:'english-story-studio',id:storySaveId});
+  if(result&&result.saved){storySaved=true;status.textContent='✅ Story quiz score saved to your protected student progress. Your writing stays on this device.';const b=document.getElementById('storyQuizCloudRetry');if(b)b.remove();}
+  else showStoryRetry((result&&result.reason?result.reason:'Cloud save could not be confirmed.')+' Your writing stays on this device; please retry.');
+ }catch(error){console.warn('Story quiz cloud progress was not saved:',error);showStoryRetry('Cloud save could not be confirmed. Your score remains visible here; your writing stays on this device. Please retry.');}
+ finally{storySaving=false;const b=document.getElementById('storyQuizCloudRetry');if(b)b.disabled=false;}
 }
 function restartQuiz(){
- quizRun++;qi=0;score=0;scoreSaveStarted=false;
+ if(storySaving)return;
+ quizRun++;qi=0;score=0;scoreSaveStarted=false;storySaveId=null;storySaved=false;
+ const oldRetry=document.getElementById('storyQuizCloudRetry');if(oldRetry)oldRetry.remove();
  document.getElementById('quizFeedback').textContent='';
  document.getElementById('quizCloudStatus').textContent='Complete all four questions to attempt a new secure progress save. Your writing stays on this device.';
  renderQ();
