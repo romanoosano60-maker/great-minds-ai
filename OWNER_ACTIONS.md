@@ -2,6 +2,19 @@
 
 Last checked: 19 November 2026
 
+## Additional engineering batch — 19 November 2026
+
+The following source improvements were committed after the initial handoff review. They are source changes, not Android or live-account acceptance passes:
+
+- Added stable operation IDs and retry buttons for failed cloud progress saves in Guided Research, English More Practice, Social Studies Foundations, Computer Studies Basics, the Social Studies main and expanded challenges, Connected Practice, and the Beginner/Pro/Advanced level challenge component used across subject pages.
+- Improved `student-cloud-progress.js` validation and duplicate-record matching, including correct-answer and question-count fields.
+- Earlier in this work session, the five extra-practice pages (Mathematics, Science, Computer Studies, Social Studies and English) were given clearer cloud-save status and retry behaviour.
+- Corrected the AI Teacher readiness page: the active backend is Supabase Edge Function version 8, not the obsolete Cloudflare `POST /ask` route. Required secret names and the outstanding 503/502 end-to-end issue are now described accurately.
+- Refreshed Supabase and classroom checklists to distinguish existing project setup and owner-reported classroom success from independent role/privacy tests.
+- Added direct links from legacy local-only Parent and Teacher demos to their separate connected dashboards.
+
+Verification boundary: repository static checks can confirm source structure and syntax, but they do not prove that Supabase secrets are present, that cloud inserts succeed, that role isolation is correct at runtime, or that the pages work on the Samsung Android device. The eight individual acceptance pages remain separate evidence tasks; demo checklist ticks are not live tests.
+
 ## Current engineering handoff — 19 November 2026 (historical detail below is date-labelled)
 
 The following are the current deployed backend versions recorded in the latest source/deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
