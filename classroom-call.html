@@ -73,13 +73,19 @@ async function start(){
    if(tokenRole!=="teacher"&&teacherIdentity&&participant.identity===teacherIdentity){
     const activeRoom=room;
     if(activeRoom){try{await activeRoom.disconnect()}catch(_disconnectError){}if(room===activeRoom)room=null;}
-    $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;
+    micOn=false;cameraOn=false;
+    $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;
+    $("mic").textContent="🎙️ Turn microphone on";$("camera").textContent="📷 Turn camera on";
+    $("tiles").replaceChildren();
     status("The teacher has left. This supervised classroom session has ended.");
    }
   });
   room.on(RoomEvent.Disconnected,()=>{
-   $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;
-   status("You have disconnected from the classroom call.");
+   micOn=false;cameraOn=false;
+   $("leave").disabled=true;$("mic").disabled=true;$("camera").disabled=true;$("end").disabled=true;
+   $("mic").textContent="🎙️ Turn microphone on";$("camera").textContent="📷 Turn camera on";
+   $("tiles").replaceChildren();
+   status("You have disconnected from the classroom call. Local call controls have been reset.");
   });
   await room.connect(data.server_url,data.token);
   for(const p of room.remoteParticipants.values())for(const pub of p.trackPublications.values())if(pub.track)addTrack(pub.track,p);
