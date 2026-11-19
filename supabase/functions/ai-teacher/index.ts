@@ -17,11 +17,10 @@ Deno.serve(async (req: Request) => {
   if (req.method === "OPTIONS") return new Response("ok", { headers: cors });
   if (req.method !== "POST") return json({ error: "Method not allowed." }, 405);
 
-  const apiKey = Deno.env.get("OPENAI_API_KEY");
   const supabaseUrl = Deno.env.get("SUPABASE_URL") || "https://ryuchmmnyjyldwouidyy.supabase.co";
   const publishableKey = Deno.env.get("SUPABASE_PUBLISHABLE_KEY") || Deno.env.get("SUPABASE_ANON_KEY");
-  if (!apiKey || !publishableKey) {
-    return json({ error: "The AI service is not fully configured. Please ask an administrator." }, 503);
+  if (!publishableKey) {
+    return json({ error: "The sign-in service is temporarily unavailable. Please ask an administrator." }, 503);
   }
 
   const authorization = req.headers.get("authorization") || "";
@@ -108,6 +107,13 @@ Deno.serve(async (req: Request) => {
       role: m?.role === "assistant" ? "assistant" : "user",
       content: String(m?.content || "").slice(0, 800)
     })) : [];
+
+    // Check provider configuration only after authentication and eligibility
+    // checks, so anonymous callers cannot probe the paid-service configuration.
+    const apiKey = Deno.env.get("OPENAI_API_KEY");
+    if (!apiKey) {
+      return json({ error: "The AI service is not fully configured. Please ask an administrator." }, 503);
+    }
 
     // Consume a free database-enforced daily quota before any paid AI request.
     const quotaResponse = await fetch(`${supabaseUrl}/rest/v1/rpc/consume_ai_teacher_quota`, {
