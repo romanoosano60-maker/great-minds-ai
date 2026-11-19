@@ -710,3 +710,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 
 - International Classrooms now clears classroom name, country, generated classroom code, join code, password, consent code and consent checkbox on sign-out and when the authenticated account changes. This reduces accidental disclosure or reuse of one account's classroom details by the next account using the same browser.
 - The teacher must generate a fresh classroom code after signing in again. This is a browser-side hygiene improvement, not a substitute for database authorization or separate-account testing.
+
+
+## 19 November 2026 — Classroom call leave fallback
+
+- Leave and end-call controls now attempt the server-side end action separately from local cleanup. Regardless of server response, the local room is disconnected, participant tiles are cleared, and media controls are disabled/reset.
+- If the server cannot confirm ending the room, the page explicitly warns that other participants may remain connected. This avoids falsely reporting a global end while still allowing the current device to stop its local call.
+- Live multi-device testing is still required to verify LiveKit disconnect behaviour and server-side room termination.
