@@ -750,3 +750,10 @@ No database schema, RLS policy, secret, Edge Function, account, classroom, or le
 5. Decide and document retention periods, guardian consent evidence, consent revocation handling, support contact and backup-erasure schedule before public use. Email confirmation or a self-declared relationship alone is not proof of legal guardianship.
 
 **Completion boundary:** these actions cannot be truthfully marked complete by repository edits. The app is not 100% complete until the owner-side settings and device/account tests pass, the AI Teacher receives a live answer, and an approved account-deletion lifecycle is implemented and verified. Advertising, pricing, and marketing remain out of scope until that point.
+
+
+## SQL reference repair — 19 November 2026
+
+- Corrected a malformed consent-code validation condition in `supabase/international-classrooms.sql`. A comment had been accidentally inserted inside the regular-expression literal, leaving the PL/pgSQL conditional malformed. The condition now checks for exactly 64 hexadecimal characters using `^[0-9a-fA-F]{64}$`.
+- This was a repository SQL reference-file repair. It was **not** applied to the live database; the connected project had a separate guardian-consent hardening function/migration recorded as applied on 9 November. Do not re-run the entire reference SQL file against production as a shortcut.
+- The source static workflow and Pages deployment for this correction must finish before it is considered published. Live database behaviour still requires the consent journey test with separate test accounts.
