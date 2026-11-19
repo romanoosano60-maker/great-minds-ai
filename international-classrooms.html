@@ -90,7 +90,7 @@ $('submitDeleteRequest').onclick=async()=>{
  finally{button.disabled=false;button.textContent='Submit account-deletion request'}
 };
 $('refresh').onclick=refresh;
-const {data:authListener}=setup().auth.onAuthStateChange((_event,session)=>{user=session?.user||null;if(user){msg('authStatus','Signed in: '+(user.email||'account')+'.');setTimeout(()=>refresh(),0)}else{classroomRefreshRequest++;msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.')}});
+const {data:authListener}=setup().auth.onAuthStateChange((event,session)=>{if(event!=='SIGNED_IN'&&event!=='SIGNED_OUT')return;user=session?.user||null;classroomRefreshRequest++;const root=$('classrooms');root.replaceChildren();if(liveChannel){const channel=liveChannel;liveChannel=null;client.removeChannel(channel).catch(()=>{});}if(event==='SIGNED_OUT'||!user){$('password').value='';$('guardianCode').value='';$('guardianAffirms').checked=false;msg('authStatus','Not signed in.');msg('classrooms','Sign in to load classroom information.');msg('guardianStatus','Sign in to use the consent process.');return}msg('authStatus','Signed in: '+(user.email||'account')+'. Checking this account’s classroom access…');setTimeout(()=>refresh(),0);});
 session().then(current=>{if(current){msg('authStatus','Signed in: '+(current.email||'account')+'.');refresh()}}).catch(e=>msg('authStatus','Session check failed: '+e.message));
 window.addEventListener('pagehide',()=>{if(liveChannel&&client)client.removeChannel(liveChannel);authListener?.subscription?.unsubscribe()});
 </script><script src="auth-recovery.js"></script></body></html>
