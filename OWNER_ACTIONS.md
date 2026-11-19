@@ -863,3 +863,10 @@ Read-only review of every live SECURITY DEFINER routine in the `public` and `pri
 - The AI Teacher Edge Function now rejects a declared Content-Length above 12,000 bytes before reading and enforces the same limit while streaming the body. This prevents the function from buffering an unbounded body before applying the previous byte-size check.
 - Authentication, approved-teacher/active-guardian authorization, daily quota consumption, child-safety instructions, `store:false`, and generic upstream errors are unchanged.
 - Source-only change. The live AI Teacher function remains version 8 until an explicitly approved deployment; no secrets were read or modified.
+
+
+## AI Teacher configuration-probe reduction — 19 November 2026
+
+- Moved the OpenAI API-key presence check until after bearer-token verification and eligible teacher/guardian/student authorization. Anonymous callers now receive the normal sign-in/authorization response rather than learning whether the paid AI provider secret is configured.
+- The Supabase publishable key check remains early because it is required to validate the access token. No secret values are exposed, logged, or changed.
+- Source-only change; live AI Teacher remains version 8 pending explicit owner approval for deployment.
