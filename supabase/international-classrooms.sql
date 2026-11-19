@@ -207,6 +207,15 @@ with check (
       and tp.approved = true
   )
   and (membership_status <> 'approved' or parent_consent_status = 'approved')
+  and (
+    parent_consent_status <> 'approved'
+    or exists (
+      select 1
+      from public.guardian_relationships gr
+      where gr.student_id = classroom_members.user_id
+        and gr.relationship_status = 'active'
+    )
+  )
 );
 
 -- Keep the guardian code table inaccessible to all direct client queries.
