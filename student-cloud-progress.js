@@ -23,7 +23,7 @@
     const level = ["beginner","pro","advanced"].includes(String(record.level || "").toLowerCase()) ? String(record.level).toLowerCase() : null;
     const localRecord = {id:operationId,subject,activity_key:activityKey,score,max_score:maxScore,correct_count:correct,question_count:questions,source,level,completed_at:new Date().toISOString()};
     let localSaved = false;
-    try { const key="gm_independent_pending_progress"; const old=JSON.parse(localStorage.getItem(key)||"[]"); const rows=Array.isArray(old)?old:[]; rows.push(localRecord); localStorage.setItem(key,JSON.stringify(rows.slice(-300))); localSaved = true; } catch(e) { console.warn("Local independent progress could not be stored:",e); }
+    try { const key="gm_independent_pending_progress"; const old=JSON.parse(localStorage.getItem(key)||"[]"); const rows=Array.isArray(old)?old:[]; if(operationId){const existingIndex=rows.findIndex(item=>item&&item.id===operationId);if(existingIndex>=0)rows[existingIndex]=localRecord;else rows.push(localRecord);}else rows.push(localRecord); localStorage.setItem(key,JSON.stringify(rows.slice(-300))); localSaved = true; } catch(e) { console.warn("Local independent progress could not be stored:",e); }
     const db=window.greatMindsDB;
     if (!db || !db.auth || !db.from) return {saved:false,localSaved,reason:localSaved?"Saved on this device. Secure cloud sync is not connected on this page.":"Your progress could not be saved on this device or to the cloud."};
     try {
