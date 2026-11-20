@@ -22,7 +22,9 @@
     const operationId = record.id == null ? null : clean(record.id, 36);
     if (!subject || !activityKey || !source || !Number.isInteger(score) || !Number.isInteger(maxScore) || maxScore <= 0 || score < 0 || score > maxScore || (correct !== null && (!Number.isInteger(correct) || correct < 0 || correct > maxScore)) || (questions !== null && (!Number.isInteger(questions) || questions <= 0)) || (correct !== null && questions !== null && correct > questions) || (operationId !== null && !UUID_RE.test(operationId))) return { saved:false, localSaved:false, reason:"The progress record did not pass validation." };
     const level = ["beginner","pro","advanced"].includes(String(record.level || "").toLowerCase()) ? String(record.level).toLowerCase() : null;
-    const localRecord = {id:operationId,subject,activity_key:activityKey,score,max_score:maxScore,correct_count:correct,question_count:questions,source,level,completed_at:new Date().toISOString()};
+    let studentNickname = null;
+    try { const profile = JSON.parse(localStorage.getItem("gm_independent_student_profile") || "null"); if (profile && typeof profile.nickname === "string") studentNickname = clean(profile.nickname, 35) || null; } catch (e) {}
+    const localRecord = {id:operationId,student_nickname:studentNickname,subject,activity_key:activityKey,score,max_score:maxScore,correct_count:correct,question_count:questions,source,level,completed_at:new Date().toISOString()};
     let localSaved = false;
     try { const key="gm_independent_pending_progress"; const old=JSON.parse(localStorage.getItem(key)||"[]"); const rows=Array.isArray(old)?old:[]; if(operationId){const existingIndex=rows.findIndex(item=>item&&item.id===operationId);if(existingIndex>=0)rows[existingIndex]=localRecord;else rows.push(localRecord);}else rows.push(localRecord); localStorage.setItem(key,JSON.stringify(rows.slice(-300))); localSaved = true; } catch(e) { console.warn("Local independent progress could not be stored:",e); }
     const db=window.greatMindsDB;
