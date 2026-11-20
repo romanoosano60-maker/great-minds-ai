@@ -52,9 +52,11 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
 (function(){
  const el=id=>document.getElementById(id);const status=el('parentCloudStatus'),records=el('cloudRecords');
  let cloudChannel=null;
- function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('parent-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
+ function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('parent-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'guardian_relationships',filter:'guardian_id=eq.'+user.id},()=>refreshGuardianAccess()).subscribe();}
  let db=null,user=null,cloudLoadRequest=0,activeGuardianLink=false;
  async function verifyActiveGuardian(userId){const {data,error}=await db.from('guardian_relationships').select('student_id').eq('guardian_id',userId).eq('relationship_status','active').limit(1);if(error)throw error;activeGuardianLink=!!data&&data.length>0;return activeGuardianLink;}
+ function clearLinkedRecords(message){cloudLoadRequest++;activeGuardianLink=false;records.textContent='Child progress is unavailable until an active guardian link is confirmed.';el('cloudHomeworkRecords').textContent='Child homework is unavailable until an active guardian link is confirmed.';say(message);}
+ async function refreshGuardianAccess(){if(!db||!user)return;const checkedUserId=user.id;try{const linked=await verifyActiveGuardian(checkedUserId);if(!user||user.id!==checkedUserId)return;if(!linked){clearLinkedRecords('The guardian link is no longer active. Child records have been cleared from this page.');return;}await load();}catch(e){if(user&&user.id===checkedUserId)clearLinkedRecords('Guardian access could not be rechecked. Child records were hidden until access can be confirmed.');}}
  function say(t){status.textContent=t}
  function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  async function load(){
