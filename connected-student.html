@@ -59,6 +59,8 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  const status=el('cloudStatus'),saveBtn=el('saveCloudProgress');
  let db=null,user=null,cloudHistoryRequest=0,activeStudentLink=false;
  async function verifyActiveStudentLink(userId){const {data,error}=await db.from('guardian_relationships').select('guardian_id').eq('student_id',userId).eq('relationship_status','active').limit(1);if(error)throw error;activeStudentLink=!!data&&data.length>0;return activeStudentLink;}
+ function clearCloudHistory(message){cloudHistoryRequest++;activeStudentLink=false;saveBtn.disabled=true;el('studentCloudRecords').textContent=message;}
+ async function refreshStudentAccess(){if(!db||!user){clearCloudHistory('Sign in to view cloud history.');return false}const checkedUserId=user.id;try{const linked=await verifyActiveStudentLink(checkedUserId);if(!user||user.id!==checkedUserId){clearCloudHistory('Account changed. Sign in again to view cloud history.');return false}if(!linked){clearCloudHistory('Guardian link is not active. Cloud history and saving are disabled.');setStatus('No active guardian link. Cloud progress is disabled.');return false}saveBtn.disabled=false;return true}catch(e){clearCloudHistory('Guardian access could not be verified. Cloud history is hidden.');setStatus('Guardian access check failed. Cloud progress is disabled.');return false}}
  function setStatus(t){status.textContent=t}
  function escCloud(x){return String(x??'').replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]))}
  async function loadCloudHistory(){
@@ -93,7 +95,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   user=data.user;if(await verifyActiveStudentLink(user.id)){saveBtn.disabled=false;setStatus('Student account and active guardian link confirmed. Your cloud save is ready.');await loadCloudHistory();watchCloud()}else{saveBtn.disabled=true;setStatus('Account signed in, but guardian consent is not linked yet. Complete the parent consent process before cloud saving.');}
   }catch(e){setStatus('Sign-in failed: '+e.message)}finally{passwordField.value=''}
  });
- el('refreshStudentCloud').addEventListener('click',loadCloudHistory);
+ el('refreshStudentCloud').addEventListener('click',async()=>{if(await refreshStudentAccess())await loadCloudHistory()});
  el('cloudLogout').addEventListener('click',async()=>{
   el('cloudPassword').value='';user=null;activeStudentLink=false;cloudHistoryRequest++;saveBtn.disabled=true;
   el('studentCloudRecords').textContent='Sign in to view cloud history.';
@@ -106,6 +108,8 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
  });
  saveBtn.addEventListener('click',async()=>{
   if(!db||!user){setStatus('Please sign in first.');return}
+  const savingUserId=user.id;
+  if(!await refreshStudentAccess()||!user||user.id!==savingUserId){setStatus('Cloud save stopped because the Student account or active guardian link could not be verified.');return}
   saveBtn.disabled=true;setStatus('Saving progress securely…');
   const d=read(),stars=Number(d.stars||0)+Number(d.profileV2?.stars||0),
    points=Number(d.points||0)+Number(d.profileV2?.points||0),
@@ -115,6 +119,8 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
    score:points,max_score:Math.max(points,1),source:'student_dashboard_snapshot',
    completed_at:now};
   const {error}=await db.from('student_learning_progress').insert(row);
+  if(!user||user.id!==savingUserId){clearCloudHistory('Account changed during save. Sign in again to view cloud history.');setStatus('Account changed while saving. Please sign in again.');return}
+  if(!activeStudentLink){clearCloudHistory('Guardian link is no longer active. Cloud history is hidden.');setStatus('Guardian link is no longer active. Cloud save was stopped.');return}
   saveBtn.disabled=false;
   if(error){setStatus('Cloud save was not accepted: '+error.message+'. Check that the Parent account is linked and approved.');return}
   setStatus('Saved to Supabase: '+lessons+' lessons, '+stars+' stars and '+points+' points. Your linked Parent account can now refresh its cloud view.');
