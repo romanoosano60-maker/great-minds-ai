@@ -1243,3 +1243,14 @@ Additional follow-up: the same stale-response guard was added to `international-
 - Engineering source preparation is complete for the five workstreams, but live password recovery, latest deployment after these commits, and owner Android acceptance tests remain unverified. Do not label the app 100% complete until these pass.
 
 - Extended the shared recovery button to the remaining teacher sign-in utility pages (`supabase-connect.html` and `connected-dashboards.html`), so all six reviewed sign-in entry pages expose the same recovery route. The helper relies on the shared public Supabase client configuration and never stores or logs the entered password.
+
+
+## 2026-11-20 latest repository and Pages verification
+
+- Latest main-branch commit inspected: `0b034ff6e0834f8278ef9293f5feab360381eeb3` — “Document AI Teacher live and repository version difference”.
+- GitHub Actions static repository checks for this exact commit completed successfully.
+- GitHub Pages build and deployment for this exact commit completed successfully.
+- These checks confirm repository audit and Pages publication only; they do not prove Android runtime behavior, cross-family RLS isolation, consent/revocation behavior, or a successful AI Teacher answer.
+- AI Teacher remains intentionally held for owner approval: repository source has request-size and authentication-order hardening that is not yet present in the active Supabase function version 8. Do not deploy the Edge Function or change live Auth settings without the owner's explicit approval.
+- Remaining owner/runtime work: enable leaked-password protection if available on the project plan; test two separate families and two separate teachers; verify guardian consent/revocation and account switching on separate sessions/devices; test AI Teacher with authorised and unauthorised accounts; complete Android microphone/read-aloud and classroom-call tests; define and test child-data export, retention and deletion.
+- No production database, Auth setting, secret, Edge Function, or child record was changed in this verification.
