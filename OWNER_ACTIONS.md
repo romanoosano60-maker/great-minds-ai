@@ -1000,3 +1000,10 @@ Read-only comparison of the active Supabase `account-deletion-request` function 
 **Owner approval required:** review and explicitly approve deployment of the repository version before updating the live function. No Edge Function was deployed or changed during this audit. Also enable Supabase Auth leaked-password protection in project Auth settings after owner review; the current security advisor still reports this as a WARN. The three RLS-enabled/no-policy INFO findings concern private/service-only usage or the service-managed deletion-request table; do not add broad client policies merely to silence the linter.
 
 **Privacy qualification:** the current consent flow uses a separate verified email account and an explicit parent/guardian affirmation, but the app itself correctly states that this does not independently establish legal adulthood or guardianship. A real launch needs an approved guardian-verification and consent process, plus documented retention, export, deletion, and backup-handling procedures.
+
+
+## 2026-11-20 live AI Teacher endpoint comparison
+
+Read-only comparison found the active Supabase `ai-teacher` function is version 8 with JWT verification enabled, while repository source `supabase/functions/ai-teacher/index.ts` (SHA `1ea32dcfafaf7ac38b36f8c188e024ee5ec4de4e`) has additional request-body hardening. Both versions check actual body size, but version 8 first buffers the complete body with `req.text()`; repository source rejects an oversized declared Content-Length early and enforces the 12,000-byte limit while streaming. The repository source is therefore safer against unbounded request buffering. This comparison did not test an actual AI answer or verify the configured provider secret.
+
+**Owner approval required:** review and explicitly approve deployment of the repository AI Teacher function before changing the live version. No Edge Function or secret was changed during this audit. A successful authorized Android answer and an unauthorized-user denial still require end-to-end testing.
