@@ -128,7 +128,7 @@ async function cloudHomeworkRefresh(){
   const mine=sub.rows.find(x=>x.student_id===who.user.id);
   if(who.user.id===a.teacher_id){
    card.append(el('strong','Teacher view — submissions in your classroom.'));if(!sub.rows.length)card.append(el('p','No submissions yet.'));
-   for(const s of sub.rows){const item=el('div',undefined,'answer');item.append(el('p','Student account: '+String(s.student_id).slice(0,8)+'…'),el('p','Answer: '+s.answer),el('p',s.score===null?'Awaiting marking':'Score: '+s.score+'/'+a.max_points));
+   for(const s of sub.rows){const item=el('div',undefined,'answer');item.append(el('p','Learner submission'),el('p','Answer: '+s.answer),el('p',s.score===null?'Awaiting marking':'Score: '+s.score+'/'+a.max_points));
     const score=el('input');score.type='number';score.min=0;score.max=a.max_points;score.placeholder='Score';score.value=s.score===null?'':s.score;
     const feedback=el('textarea');feedback.maxLength=1500;feedback.placeholder='Feedback';feedback.value=s.feedback||'';
     const markButton=btn('Save mark',async()=>{const key='mark:'+s.id;if(cloudHomeworkActions.has(key))return;const n=Number(score.value);if(score.value===''||!Number.isInteger(n)||n<0||n>a.max_points){alert('Enter a whole-number score within the maximum.');return}cloudHomeworkActions.add(key);markButton.disabled=true;markButton.textContent='Saving…';try{const r=await api.markSubmission(s.id,n,feedback.value);alert(r.message);if(r.ok)await cloudHomeworkRefresh()}catch(error){status.textContent='Marking could not be confirmed. Refresh the submission before retrying.'}finally{cloudHomeworkActions.delete(key);markButton.disabled=false;markButton.textContent='Save mark'}});item.append(el('label','Mark score'),score,el('label','Teacher feedback'),feedback,markButton);card.append(item);
@@ -141,7 +141,7 @@ async function cloudHomeworkRefresh(){
     const submitButton=btn('Submit homework',async()=>{const key='submit:'+a.id;if(cloudHomeworkActions.has(key))return;cloudHomeworkActions.add(key);submitButton.disabled=true;submitButton.textContent='Submitting…';try{const r=await api.submitAnswer(a.id,answer.value);alert(r.message);if(r.ok)await cloudHomeworkRefresh()}catch(error){status.textContent='Submission could not be confirmed. Refresh the assignment before retrying.'}finally{cloudHomeworkActions.delete(key);submitButton.disabled=false;submitButton.textContent='Submit homework'}});card.append(el('p','Submit your answer for this classroom assignment.'),answer,submitButton);
    }else if(sub.rows.length){
     card.append(el('p','Parent/guardian view — linked student submissions allowed by Supabase are shown below.'));
-    sub.rows.forEach(s=>card.append(el('div','Student account '+s.student_id.slice(0,8)+'… • '+s.answer+' • '+(s.score===null?'Awaiting marking':'Score '+s.score+'/'+a.max_points)+' • '+(s.feedback||'No feedback yet'),'answer')));
+    sub.rows.forEach(s=>card.append(el('div','Learner • '+s.answer+' • '+(s.score===null?'Awaiting marking':'Score '+s.score+'/'+a.max_points)+' • '+(s.feedback||'No feedback yet'),'answer')));
    }else{
     card.append(el('p','This account can view the assignment, but is not enrolled as the student. No linked submission is visible yet.'));
    }
