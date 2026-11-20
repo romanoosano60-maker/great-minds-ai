@@ -1034,3 +1034,11 @@ Added `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` (late
 - Re-read `secure-network.html` and `international-classrooms.html`. The classroom form currently stores a free-text country value, and Local versus International network type is not represented as a distinct database field. The secure-network screen accurately warns that country-based access boundaries are not yet implemented and tested.
 - No SQL, RLS policy, account, secret, or live database setting was changed. Do not add a front-end-only country selector and call it a security control. The next backend change needs a reviewed schema/RLS design, followed by allowed/denied tests across two countries, two families, and separate teacher accounts.
 - This was a read-only source audit. It does not constitute Android runtime testing, a cross-account privacy acceptance test, or launch clearance.
+
+
+## 2026-11-20 parent dashboard guardian-revocation display hardening
+
+- Source review found that the Parent Cloud dashboard listened for new progress and homework records but did not listen for changes to the signed-in guardian's relationship. If a guardian link was revoked while the dashboard stayed open, previously rendered child records could remain visible in that tab until it was refreshed or signed out.
+- Updated `connected-parent.html` to subscribe to changes for the signed-in guardian's `guardian_relationships` rows, re-check active-link status, and clear the displayed cloud progress/homework when the link is no longer active or the re-check fails. Existing database RLS remains the authoritative access control.
+- Re-fetched the changed file and verified the subscription, re-check helper, and clearing helper are present in the committed source (commit `4fdb9a2e670971f402046c5a5f4cf9f01d91e91f`).
+- This is a source-level defensive display change only. Realtime delivery, revocation timing, separate-account isolation, and Android behavior still require runtime testing. No live database policy, schema, account, or secret was changed.
