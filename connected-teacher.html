@@ -54,7 +54,7 @@ document.getElementById('planform').onsubmit=e=>{e.preventDefault();const d=read
 render();
 (function(){
  let cloudChannel=null;
- function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('teacher-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).subscribe();}
+ function watchCloud(){if(!db||!user)return;if(cloudChannel)db.removeChannel(cloudChannel);cloudChannel=db.channel('teacher-cloud-'+user.id).on('postgres_changes',{event:'*',schema:'public',table:'student_learning_progress'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'homework_submissions'},()=>load()).on('postgres_changes',{event:'*',schema:'public',table:'classroom_members'},()=>load()).subscribe();}
  const $=id=>document.getElementById(id);let db=null,user=null,cloudLoadRequest=0,teacherApproved=false;
  async function verifyApprovedTeacher(userId){const {data,error}=await db.from('teacher_profiles').select('approved').eq('user_id',userId).maybeSingle();if(error)throw error;teacherApproved=!!data&&data.approved===true;return teacherApproved;}
  function say(s){$('teacherCloudStatus').textContent=s}
