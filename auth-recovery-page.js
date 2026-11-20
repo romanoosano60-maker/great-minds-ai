@@ -9,10 +9,19 @@
   let recoverySessionReady = false;
 
   function showRecoveryForm() {
-    // Supabase has accepted the recovery session. Remove token-bearing URL
-    // fragments from the visible address and browser history immediately.
-    if (window.location.hash) {
-      window.history.replaceState(window.history.state, document.title, window.location.pathname + window.location.search);
+    // Supabase has accepted the recovery session. Remove implicit-flow
+    // token fragments and PKCE authorization codes from the visible URL
+    // and browser history immediately.
+    const cleanUrl = new URL(window.location.href);
+    const hadSensitiveUrlData = !!cleanUrl.hash || cleanUrl.searchParams.has("code");
+    cleanUrl.hash = "";
+    cleanUrl.searchParams.delete("code");
+    if (hadSensitiveUrlData) {
+      window.history.replaceState(
+        window.history.state,
+        document.title,
+        cleanUrl.pathname + cleanUrl.search
+      );
     }
     recoverySessionReady = true;
     form.hidden = false;
