@@ -933,3 +933,16 @@ No database migrations or live settings were changed in this follow-up. Source r
 - This repairs the repeatable SQL reference so rerunning that grant script would not broaden client permissions. It does NOT change the live Supabase database; no SQL was executed against production.
 - Live grants were previously checked read-only on 19 November. Recheck the live grants after any future migration that touches classroom-member permissions. Do not rerun an older copy of the grant script.
 - The final teacher approval policy intentionally relies on the protected consent column; the live migration history and prior privilege check confirm this design. Cross-account runtime tests remain outstanding.
+
+
+## Live Supabase policy and privilege parity check — 20 November 2026
+
+Read-only queries were run against the connected production project after the latest repository changes.
+
+- The live RLS policy definitions for `classrooms`, `teacher_profiles`, `classroom_members`, `guardian_relationships`, `student_learning_progress`, `homework_assignments`, and `homework_submissions` were inspected. The key live student/guardian/teacher progress and homework policy conditions match the reviewed repository design: own student rows, active linked guardian rows, and approved-teacher access limited to approved membership plus approved parent-consent status.
+- Live `classroom_members` column privileges confirm authenticated clients can SELECT the listed membership columns and UPDATE only `membership_status`. There is no client UPDATE privilege on `parent_consent_status`; this supports the design where guardian consent is changed through the protected consent routine.
+- Live table grants show no anon/PUBLIC grants on the reviewed child/classroom tables. Authenticated access to homework assignment writes remains governed by RLS and approved teacher ownership. The account-deletion intake and private usage/join-attempt tables have no direct anon/authenticated table grants in the inspected grant view.
+- The Supabase Security Advisor still reports leaked-password protection disabled. It also reports three informational RLS-enabled/no-policy findings for service-only/private tables: `private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`. The inspected grant list shows no direct anon/authenticated table grants for these tables; keep them service-only and do not add broad policies merely to silence the informational lint.
+- Owner action: enable leaked-password protection in Supabase Auth settings, then test password signup/change/recovery with a disposable adult-controlled account.
+
+This was a read-only live policy/grant inspection. No database DDL, policies, grants, secrets, or Auth settings were changed. It is not a substitute for synthetic two-family/two-teacher cross-account runtime tests on separate sessions/devices.
