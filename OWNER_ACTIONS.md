@@ -991,3 +991,12 @@ After an approved deployment, test an authorised parent/teacher/student account,
 - The first fragment-cleanup change passed static repository checks and GitHub Pages deployment (commit `34004069d42ae04d84bb8ea44ce52a9380d4d7ef`). A follow-up now also clears PKCE authorization codes (commit `db546af3f5ad96c49eef317eb85aa12e1da4db4c`).
 - This is source-level URL hygiene only. It does not prove a real recovery email, PKCE exchange, password update, or Android browser flow; those still require an owner-controlled test account and device.
 - No Supabase Auth settings, passwords, secrets, sessions, or database records were changed.
+
+
+## 2026-11-20 live account-deletion endpoint comparison
+
+Read-only comparison of the active Supabase `account-deletion-request` function (version 7, JWT verification enabled) against repository source `supabase/functions/account-deletion-request/index.ts` (SHA `b547d1a65031070805483b814c67620ef22feeb8`) found deployment drift. The repository source includes `Vary: Origin`, bounds the bearer-token length, rejects oversized declared bodies and enforces the 3,000-byte limit while streaming, and handles a unique-index race by retrieving the existing open request. The active version 7 does not include those newer protections. The endpoint is request-only in both versions: it records a manual-review request and does not delete an Auth account or learning data.
+
+**Owner approval required:** review and explicitly approve deployment of the repository version before updating the live function. No Edge Function was deployed or changed during this audit. Also enable Supabase Auth leaked-password protection in project Auth settings after owner review; the current security advisor still reports this as a WARN. The three RLS-enabled/no-policy INFO findings concern private/service-only usage or the service-managed deletion-request table; do not add broad client policies merely to silence the linter.
+
+**Privacy qualification:** the current consent flow uses a separate verified email account and an explicit parent/guardian affirmation, but the app itself correctly states that this does not independently establish legal adulthood or guardianship. A real launch needs an approved guardian-verification and consent process, plus documented retention, export, deletion, and backup-handling procedures.
