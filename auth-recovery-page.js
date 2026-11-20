@@ -9,6 +9,11 @@
   let recoverySessionReady = false;
 
   function showRecoveryForm() {
+    // Supabase has accepted the recovery session. Remove token-bearing URL
+    // fragments from the visible address and browser history immediately.
+    if (window.location.hash) {
+      window.history.replaceState(window.history.state, document.title, window.location.pathname + window.location.search);
+    }
     recoverySessionReady = true;
     form.hidden = false;
     status.textContent = "Choose a new password of at least 8 characters.";
