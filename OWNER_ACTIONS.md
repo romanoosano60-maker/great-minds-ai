@@ -1007,3 +1007,14 @@ Read-only comparison of the active Supabase `account-deletion-request` function 
 Read-only comparison found the active Supabase `ai-teacher` function is version 8 with JWT verification enabled, while repository source `supabase/functions/ai-teacher/index.ts` (SHA `1ea32dcfafaf7ac38b36f8c188e024ee5ec4de4e`) has additional request-body hardening. Both versions check actual body size, but version 8 first buffers the complete body with `req.text()`; repository source rejects an oversized declared Content-Length early and enforces the 12,000-byte limit while streaming. The repository source is therefore safer against unbounded request buffering. This comparison did not test an actual AI answer or verify the configured provider secret.
 
 **Owner approval required:** review and explicitly approve deployment of the repository AI Teacher function before changing the live version. No Edge Function or secret was changed during this audit. A successful authorized Android answer and an unauthorized-user denial still require end-to-end testing.
+
+
+## 2026-11-20 guardian-consent control audit
+
+Read-only inspection of live Supabase functions and table metadata confirmed:
+- Consent codes are generated as 64 hexadecimal characters from two UUIDs, stored as SHA-256 hashes, expire after 24 hours, and are consumed under a row lock; a guardian email must be confirmed and the explicit affirmation must be true.
+- A student cannot redeem their own code. A student can have only one active guardian relationship at a time; replacing an existing active guardian is blocked until the prior link is revoked or support reviews it.
+- Authenticated clients have SELECT access to consent status but no UPDATE privilege on `classroom_members.parent_consent_status`; the teacher's update permission is limited to `membership_status`. This prevents a teacher from directly setting guardian consent.
+- Per-child revocation checks that the signed-in guardian owns the active link, revokes only that child's relationship, and blocks that child's classroom memberships. The all-children revocation function similarly affects only active links belonging to the signed-in guardian.
+
+Remaining privacy hardening to review before launch: no rate-limit was found in the consent-code creation function, and no automatic cleanup/retention job was confirmed for expired or used consent-code hashes. The current flow is still an account-based affirmation, not independent legal guardian verification. Do not represent this as legally verified consent. These were read-only checks; no live data or database objects were changed.
