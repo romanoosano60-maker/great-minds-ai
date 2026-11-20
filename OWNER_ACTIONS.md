@@ -1018,3 +1018,10 @@ Read-only inspection of live Supabase functions and table metadata confirmed:
 - Per-child revocation checks that the signed-in guardian owns the active link, revokes only that child's relationship, and blocks that child's classroom memberships. The all-children revocation function similarly affects only active links belonging to the signed-in guardian.
 
 Remaining privacy hardening to review before launch: no rate-limit was found in the consent-code creation function, and no automatic cleanup/retention job was confirmed for expired or used consent-code hashes. The current flow is still an account-based affirmation, not independent legal guardian verification. Do not represent this as legally verified consent. These were read-only checks; no live data or database objects were changed.
+
+
+## 2026-11-20 proposed guardian consent rate-limit migration (repository only)
+
+Added `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` (latest source commit `a86a733cc183d2853ffed612df30ea5d80277f18`). It adds a private per-student issuance counter, limits each student account to 3 new consent codes per one-hour window, and opportunistically deletes used/expired code hashes older than 30 days when a new code is requested. The raw consent code remains returned only to the signed-in student; only its SHA-256 hash is stored. The private counter table has RLS enabled and no direct privileges for public, anon, authenticated or service_role; only the SECURITY DEFINER issuance function updates it.
+
+**Not deployed:** this is a proposed migration in GitHub only. It has not been applied to the live Supabase database and must be reviewed and approved before migration. Cleanup is opportunistic, not a scheduled retention job; a separate scheduled cleanup is still a possible future improvement. The limit is per student account and does not independently prevent abuse across multiple accounts. Legal guardian verification remains unresolved.
