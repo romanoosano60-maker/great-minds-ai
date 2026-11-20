@@ -870,3 +870,24 @@ Read-only review of every live SECURITY DEFINER routine in the `public` and `pri
 - Moved the OpenAI API-key presence check until after bearer-token verification and eligible teacher/guardian/student authorization. Anonymous callers now receive the normal sign-in/authorization response rather than learning whether the paid AI provider secret is configured.
 - The Supabase publishable key check remains early because it is required to validate the access token. No secret values are exposed, logged, or changed.
 - Source-only change; live AI Teacher remains version 8 pending explicit owner approval for deployment.
+
+
+
+## Focused learning-data and student-space source audit — 20 November 2026
+
+The following points were checked directly against the current default-branch source. They are source findings, not live account/device acceptance tests.
+
+- `student-cloud-progress.js` writes structured quiz metadata (subject, activity key, score, maximum score, correct/question counts, source and completion time) to `student_learning_progress`. It does not include free-form learner answers in those score rows. The helper also keeps a device-local pending copy; cloud confirmation is reported separately, and retry IDs are checked for idempotency.
+- `student-cloud-homework.js` deliberately submits the learner's written homework answer (up to 3,000 characters) to `homework_submissions.answer`. This is different from quiz-score metadata. The privacy/data inventory, parent notice, retention schedule, export/deletion process and support workflow must explicitly cover written homework content and who can read it.
+- The independent student profile page (`independent-student.html`) uses browser localStorage for its nickname, level and saved history. Its “Save my completed work” action copies locally available records into device-local history; it does not call the authenticated cloud progress helper. Treat this as a local prototype/learning space, not a cloud-synced student account or a substitute for the connected student dashboard.
+- The connected parent, student and teacher pages listen for authentication sign-in/sign-out changes and clear their in-memory account-specific view state before reloading data. This is a useful source safeguard, but separate-account testing on two devices is still required to prove RLS and relationship isolation.
+- Do not add free-form child answers, story text, voice recordings or chat transcripts to quiz-score tables. Keep homework content in its dedicated table with narrow RLS, an approved retention period and a tested deletion/export path.
+
+### Follow-up actions from this audit
+
+1. Update the child/parent privacy notice and data inventory to distinguish quiz metadata from written homework submissions.
+2. Decide whether the independent local student space remains a clearly labelled offline/demo mode or is replaced by the connected, guardian-approved student flow before launch.
+3. Test a written homework submission with synthetic text, then verify that only the linked approved teacher and authorized guardian can access it, and that unrelated students/guardians cannot.
+4. Verify account closure, guardian revocation and retention handling for homework text as well as score metadata.
+5. Keep all these items marked “source reviewed; runtime not yet verified” until the real-device and separate-account tests are recorded.
+
