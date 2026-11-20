@@ -946,3 +946,17 @@ Read-only queries were run against the connected production project after the la
 - Owner action: enable leaked-password protection in Supabase Auth settings, then test password signup/change/recovery with a disposable adult-controlled account.
 
 This was a read-only live policy/grant inspection. No database DDL, policies, grants, secrets, or Auth settings were changed. It is not a substitute for synthetic two-family/two-teacher cross-account runtime tests on separate sessions/devices.
+
+
+## Live database function, storage and performance review — 20 November 2026
+
+Read-only checks against the connected Supabase project:
+
+- Reviewed all current `SECURITY DEFINER` functions in the `public` and `private` schemas. Every returned function has an explicit empty `search_path` setting. Client-executable private routines are limited to authenticated callers where intended; internal quota, score-enforcement and legacy account-wide revocation routines are not executable by authenticated/anonymous clients. The eligible-user quota wrapper is separately granted to authenticated/service-role callers.
+- The live Storage catalog currently returns no buckets and no Storage RLS policies. This means the current project is not using Supabase Storage buckets for learner files in the inspected database. If photos, voice recordings, certificates or uploads are added later, create private buckets and explicit per-user/classroom policies before enabling uploads.
+- Performance Advisor reports two multiple-permissive-policy notices: homework-assignment SELECT (teacher management plus student/guardian read) and student-progress SELECT (student, guardian and approved-teacher read paths). These represent separate intended audience paths; do not merge or weaken them without preserving each access condition. A future optimization can split teacher assignment management's broad ALL policy into operation-specific policies and then re-run tests.
+- Performance Advisor also lists five currently unused indexes. Do not remove them solely on this snapshot: the app is still in development/testing, and the indexes may become useful as classroom and homework usage grows.
+
+The Pages deployment and static repository checks for the preceding documentation/source update both completed successfully. No production SQL, Storage settings, Auth settings, policies, grants, secrets or indexes were changed during this review.
+
+Outstanding: enable leaked-password protection in Auth; perform synthetic two-family/two-teacher isolation tests; decide and document retention/export/deletion for written homework; and run runtime tests for guardian consent, revocation, classroom membership and account switching.
