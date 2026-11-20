@@ -7,7 +7,7 @@ begin;
 create table if not exists private.guardian_consent_code_issuance (
   student_id uuid primary key references auth.users(id) on delete cascade,
   window_started_at timestamptz not null,
-  issue_count integer not null check (issue_count between 1 and 3),
+  issue_count integer not null,
   last_issued_at timestamptz not null
 );
 
