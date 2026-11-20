@@ -43,8 +43,10 @@ function status(id,message){$(id).textContent=message}
 function esc(value){return String(value==null?"":value).replace(/[&<>"']/g,function(c){return {"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]})}
 function dateKey(value){const d=new Date(value);if(Number.isNaN(d.getTime()))return "Date not recorded";return d.toLocaleDateString(undefined,{year:"numeric",month:"long",day:"numeric"})}
 function renderHistory(){
- const saved=read(SAVED),root=$("historyList");
- if(!saved.length){root.textContent="No saved work yet. Start a lesson, complete an activity, then return here and press Save my completed work.";return}
+ const root=$("historyList"),profile=getProfile();
+ if(!profile||!profile.nickname){root.textContent="Sign in to your independent learning space to view that learner's saved history.";return}
+ const saved=read(SAVED).filter(function(r){return r&&r.student_nickname===profile.nickname});
+ if(!saved.length){root.textContent="No saved work for this learner yet. Complete an activity, then return here and press Save my completed work.";return}
  const groups={};
  saved.slice().sort((a,b)=>new Date(b.completed_at)-new Date(a.completed_at)).forEach(function(r){const day=dateKey(r.completed_at);if(!groups[day])groups[day]=[];groups[day].push(r)});
  root.innerHTML=Object.keys(groups).map(function(day){
@@ -63,7 +65,7 @@ const existing=getProfile();if(existing){$("studentName").value=existing.nicknam
 $("saveWork").addEventListener("click",function(){
  const pending=read(PENDING),saved=read(SAVED),seen=new Set(saved.map(function(r){return r.local_id}));let added=0;
  pending.forEach(function(r){
-  const stamp=r.completed_at||new Date().toISOString(),fingerprint=[r.subject,r.activity_key,r.score,r.max_score,r.source,stamp].join("|");
+  const stamp=r.completed_at||new Date().toISOString(),nickname=(getProfile()||{}).nickname||"Learner",fingerprint=[nickname,r.subject,r.activity_key,r.score,r.max_score,r.source,stamp].join("|");
   if(seen.has(fingerprint))return;
   saved.push({local_id:fingerprint,student_nickname:(getProfile()||{}).nickname||"Learner",subject:r.subject,activity_key:r.activity_key,score:r.score,max_score:r.max_score,correct_count:r.correct_count,question_count:r.question_count,source:r.source,completed_at:stamp});seen.add(fingerprint);added++;
  });
@@ -71,7 +73,7 @@ $("saveWork").addEventListener("click",function(){
   const demo=JSON.parse(localStorage.getItem("greatMindsConnectedDemoV1")||"{}");
   (Array.isArray(demo.quizzes)?demo.quizzes:[]).forEach(function(r){
    const stamp=r.completedAt||new Date().toISOString(),subject=String(r.subject||"Learning"),score=Number(r.correct!=null?r.correct:r.score),max=Number(r.questions||r.total||100);
-   const fingerprint=[subject,r.source||"subject-quiz",score,max,stamp].join("|");if(seen.has(fingerprint))return;
+   const nickname=(getProfile()||{}).nickname||"Learner",fingerprint=[nickname,subject,r.source||"subject-quiz",score,max,stamp].join("|");if(seen.has(fingerprint))return;
    saved.push({local_id:fingerprint,student_nickname:(getProfile()||{}).nickname||"Learner",subject:subject,activity_key:r.source||"completed-quiz",score:score,max_score:max,source:r.source||"subject-quiz",completed_at:stamp});seen.add(fingerprint);added++;
   });
  }catch(e){}
