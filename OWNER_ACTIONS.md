@@ -924,3 +924,12 @@ Additional source files reviewed: least-privilege grants, guardian-consent revoc
 - No evidence in these reviewed files establishes automated deletion of a child's progress, homework answers, consent records, or storage objects. Data retention, export, and completed deletion processing still require a documented and tested operational workflow.
 
 No database migrations or live settings were changed in this follow-up. Source review only; live policy parity and cross-account tests remain outstanding.
+
+
+## Classroom grant reference consistency repair — 20 November 2026
+
+- A follow-up comparison found that `supabase/least-privilege-grants.sql` granted table-wide UPDATE on `classroom_members`, even though the live read-only privilege verification recorded on 19 November confirmed that authenticated users have only column-level UPDATE on `membership_status` and cannot update `parent_consent_status`.
+- Corrected the repository reference script to grant SELECT on `classroom_members` and UPDATE only on `membership_status`. The guardian-consent field remains protected for the guardian-consent SECURITY DEFINER RPC workflow.
+- This repairs the repeatable SQL reference so rerunning that grant script would not broaden client permissions. It does NOT change the live Supabase database; no SQL was executed against production.
+- Live grants were previously checked read-only on 19 November. Recheck the live grants after any future migration that touches classroom-member permissions. Do not rerun an older copy of the grant script.
+- The final teacher approval policy intentionally relies on the protected consent column; the live migration history and prior privilege check confirm this design. Cross-account runtime tests remain outstanding.
