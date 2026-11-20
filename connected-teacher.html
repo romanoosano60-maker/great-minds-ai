@@ -73,7 +73,7 @@ render();
   const pr=$('teacherCloudProgress');pr.replaceChildren();
   if(p.error){pr.textContent='Progress could not be loaded for this account.'}
   else if(!p.data.length){pr.textContent='No consented student progress is visible yet.'}
-  else p.data.forEach(x=>{const d=document.createElement('div');d.className='item';d.textContent='Student account '+x.student_id.slice(0,8)+'… • '+x.subject+' • '+x.score+'/'+x.max_score+' • '+x.activity_key;pr.append(d)});
+  else p.data.forEach(x=>{const d=document.createElement('div');d.className='item';d.textContent='Learner • '+x.subject+' • '+x.score+'/'+x.max_score+' • '+x.activity_key;pr.append(d)});
   const s=await db.from('homework_submissions').select('id,assignment_id,student_id,answer,score,feedback,submitted_at').order('submitted_at',{ascending:false}).limit(100);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   const hr=$('teacherCloudHomework');hr.replaceChildren();
   if(s.error){hr.textContent='Homework submissions could not be loaded for this account.';say('Signed in. Some classroom data is unavailable.');return}
@@ -81,7 +81,7 @@ render();
   const ids=[...new Set(s.data.map(x=>x.assignment_id))];
   const a=await db.from('homework_assignments').select('id,title,subject,max_points').in('id',ids);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   const byId=new Map((a.data||[]).map(x=>[x.id,x]));
-  s.data.forEach(x=>{const as=byId.get(x.assignment_id)||{};const d=document.createElement('div');d.className='item';d.textContent=(as.subject||'Homework')+' — '+(as.title||'Assignment')+' • student '+x.student_id.slice(0,8)+'… • '+(x.score===null?'Awaiting marking':x.score+'/'+as.max_points)+' • '+x.answer;hr.append(d)});
+  s.data.forEach(x=>{const as=byId.get(x.assignment_id)||{};const d=document.createElement('div');d.className='item';d.textContent=(as.subject||'Homework')+' — '+(as.title||'Assignment')+' • Learner • '+(x.score===null?'Awaiting marking':x.score+'/'+as.max_points)+' • '+x.answer;hr.append(d)});
   say('Cloud overview loaded for the approved teacher account.');
  }
  $('teacherCloudLogin').addEventListener('click',async()=>{user=null;teacherApproved=false;cloudLoadRequest++;$('teacherCloudProgress').textContent='Checking teacher account…';$('teacherCloudHomework').textContent='Checking teacher account…';if(cloudChannel){const channel=cloudChannel;cloudChannel=null;db?.removeChannel(channel).catch(()=>{})}const passwordField=$('teacherCloudPassword');if(!db){passwordField.value='';say('Cloud service unavailable.');return}const email=$('teacherCloudEmail').value.trim(),password=passwordField.value;if(!email||!password){passwordField.value='';say('Enter your teacher test account details.');return}try{say('Signing in…');const r=await db.auth.signInWithPassword({email,password});if(r.error){say('Sign-in failed. Check account details.');return}user=r.data.user;if(!await verifyApprovedTeacher(user.id)){say('Account signed in, but teacher approval is not active. Cloud teacher records remain unavailable.');return}say('Approved teacher account confirmed.');await load();watchCloud()}catch(e){say('Sign-in failed: '+e.message)}finally{passwordField.value=''}});
