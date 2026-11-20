@@ -983,3 +983,11 @@ A read-only comparison was made between the active Supabase Edge Function and th
 - Owner decision required before deploying the newer Edge Function. No deployment, secret read, secret edit or live configuration change was performed during this comparison.
 
 After an approved deployment, test an authorised parent/teacher/student account, an unauthorised account, malformed and oversized bodies, quota exhaustion, and a normal child-safe question. The current AI Teacher runtime answer path is not yet accepted as complete.
+
+
+## 2026-11-20 password recovery URL hardening
+
+- After Supabase confirms a password-recovery session, the recovery page now removes both implicit-flow token fragments and PKCE `code` parameters from the visible URL and browser history.
+- The first fragment-cleanup change passed static repository checks and GitHub Pages deployment (commit `34004069d42ae04d84bb8ea44ce52a9380d4d7ef`). A follow-up now also clears PKCE authorization codes (commit `db546af3f5ad96c49eef317eb85aa12e1da4db4c`).
+- This is source-level URL hygiene only. It does not prove a real recovery email, PKCE exchange, password update, or Android browser flow; those still require an owner-controlled test account and device.
+- No Supabase Auth settings, passwords, secrets, sessions, or database records were changed.
