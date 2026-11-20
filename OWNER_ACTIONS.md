@@ -960,3 +960,13 @@ Read-only checks against the connected Supabase project:
 The Pages deployment and static repository checks for the preceding documentation/source update both completed successfully. No production SQL, Storage settings, Auth settings, policies, grants, secrets or indexes were changed during this review.
 
 Outstanding: enable leaked-password protection in Auth; perform synthetic two-family/two-teacher isolation tests; decide and document retention/export/deletion for written homework; and run runtime tests for guardian consent, revocation, classroom membership and account switching.
+
+
+## Learner account-ID display minimisation — 20 November 2026
+
+- Removed the shortened Supabase student account IDs from the authenticated Teacher Cloud Overview and secure Homework Manager teacher/guardian submission displays.
+- Replaced those UI labels with the neutral term “Learner” / “Learner submission”. The underlying database IDs, row-level policies, assignment links and marking operations are unchanged.
+- Re-fetched both edited files and confirmed there are no remaining `student_id.slice` or `String(s.student_id).slice` display fragments in `connected-teacher.html` or `homework.html`.
+- Static repository checks passed for the Homework Manager update; the combined Pages build for the latest source change is still running at the time of this note.
+
+This is a display minimisation improvement only. It does not replace RLS or the outstanding cross-account runtime tests.
