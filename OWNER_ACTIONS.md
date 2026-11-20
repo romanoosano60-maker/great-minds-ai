@@ -912,3 +912,15 @@ Reviewed the current repository SQL and connected Parent, Teacher, and Student p
 - Existing guardian consent verifies an email-confirmed account and an explicit declaration; it does not independently verify legal guardian identity.
 
 Status: source-level review completed; runtime isolation tests remain outstanding.
+
+
+## Follow-up access and lifecycle review — 20 November 2026
+
+Additional source files reviewed: least-privilege grants, guardian-consent revocation migration, account-deletion request intake, and classroom ownership deletion safeguard.
+
+- Child/classroom tables revoke broad default privileges from PUBLIC/anon/authenticated and grant only the listed authenticated operations; RLS remains the row-level enforcement layer.
+- The current per-child guardian revocation routine disables that child's classroom consent/membership without changing other linked children. The older account-wide revocation function is explicitly revoked from client execution.
+- Account deletion remains a request-and-human-review process, not automatic erasure. The SQL intake table is service-role only; classroom ownership has an ON DELETE RESTRICT safeguard so a teacher account cannot silently orphan owned classrooms.
+- No evidence in these reviewed files establishes automated deletion of a child's progress, homework answers, consent records, or storage objects. Data retention, export, and completed deletion processing still require a documented and tested operational workflow.
+
+No database migrations or live settings were changed in this follow-up. Source review only; live policy parity and cross-account tests remain outstanding.
