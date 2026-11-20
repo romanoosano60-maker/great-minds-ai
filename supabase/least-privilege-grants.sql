@@ -8,7 +8,10 @@ revoke all privileges on table public.classrooms, public.teacher_profiles,
   public.student_learning_progress from public, anon, authenticated;
 grant select, insert on table public.classrooms to authenticated;
 grant select on table public.teacher_profiles to authenticated;
-grant select, update on table public.classroom_members to authenticated;
+grant select on table public.classroom_members to authenticated;
+-- Teachers may change only the membership decision. Guardian consent is
+-- protected and may be changed only through the guardian-consent RPC.
+grant update (membership_status) on table public.classroom_members to authenticated;
 grant select on table public.guardian_relationships to authenticated;
 grant select, insert on table public.student_learning_progress to authenticated;
 commit;
@@ -16,4 +19,5 @@ commit;
 -- Note: guardian relationship creation/redeeming and classroom join-code
 -- operations are handled through the existing restricted RPC functions.
 -- Teacher approval updates are restricted by the classroom_members UPDATE RLS
--- policy and must only be performed by an approved classroom owner.
+-- policy and the column-level grant above; parent_consent_status is not
+-- directly updateable by authenticated clients.
