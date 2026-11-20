@@ -970,3 +970,16 @@ Outstanding: enable leaked-password protection in Auth; perform synthetic two-fa
 - Static repository checks passed for the Homework Manager update; the combined Pages build for the latest source change is still running at the time of this note.
 
 This is a display minimisation improvement only. It does not replace RLS or the outstanding cross-account runtime tests.
+
+
+## AI Teacher live-version parity check — 20 November 2026
+
+A read-only comparison was made between the active Supabase Edge Function and the repository source.
+
+- Supabase currently reports `ai-teacher` ACTIVE at version 8 with JWT verification enabled.
+- The active version 8 reads the request with `req.text()` before checking the 12,000-byte limit, and checks whether `OPENAI_API_KEY` exists before bearer-token verification and account eligibility.
+- The repository source `supabase/functions/ai-teacher/index.ts` includes the newer streamed request-body byte cap (including early Content-Length rejection) and delays the provider-key presence check until after authentication and eligible-account verification.
+- Therefore, the repository's hardened AI Teacher source is ahead of the live version 8. Do not describe those source protections as active in production yet.
+- Owner decision required before deploying the newer Edge Function. No deployment, secret read, secret edit or live configuration change was performed during this comparison.
+
+After an approved deployment, test an authorised parent/teacher/student account, an unauthorised account, malformed and oversized bodies, quota exhaustion, and a normal child-safe question. The current AI Teacher runtime answer path is not yet accepted as complete.
