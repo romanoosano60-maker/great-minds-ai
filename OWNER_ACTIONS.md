@@ -891,3 +891,24 @@ The following points were checked directly against the current default-branch so
 4. Verify account closure, guardian revocation and retention handling for homework text as well as score metadata.
 5. Keep all these items marked “source reviewed; runtime not yet verified” until the real-device and separate-account tests are recorded.
 
+
+
+## Classroom and family data-access source review — 20 November 2026
+
+Reviewed the current repository SQL and connected Parent, Teacher, and Student page queries.
+
+### Positive source findings
+- Student learning-progress inserts are restricted to the signed-in student ID and require an active guardian relationship. Student reads are scoped to their own rows; active guardians read only rows for their linked child accounts; approved teachers read only students with approved classroom membership and approved parent-consent status in their own approved classrooms.
+- Homework submissions are readable by the submitting student, the active linked guardian, and the approved teacher for the matching classroom only when that student's membership and parent-consent status are approved.
+- Teacher membership approval is limited to the teacher's own classroom and an approved teacher profile. The protected parent-consent status is not directly updateable by the teacher client.
+- The Parent, Teacher, and Student pages query the relevant tables and rely on Supabase RLS for row-level scope; the Teacher page does not treat its front-end approval check as the security boundary.
+- Account-change/sign-out handlers clear displayed records and remove realtime subscriptions before checking the new session.
+
+### Important limitations / next tests
+- This was a repository source review, not a live Supabase policy simulation or Android end-to-end test. Do not treat it as proof against cross-account access until synthetic accounts are tested.
+- Run a two-family test (Parent A/Child A and Parent B/Child B) and two approved teachers in separate classrooms. Verify each parent cannot read the other family's progress or homework, each teacher cannot read another classroom's student records, and a pending/rejected or consent-revoked student disappears from teacher access.
+- Test realtime events after account switching and sign-out on separate browser tabs/devices.
+- The Parent page checks for at least one active guardian link before loading. Its data requests are not manually filtered to a specific child in the browser; privacy depends on the reviewed database RLS policies. Keep RLS as the enforcement boundary and verify the live policy set matches the repository migrations.
+- Existing guardian consent verifies an email-confirmed account and an explicit declaration; it does not independently verify legal guardian identity.
+
+Status: source-level review completed; runtime isolation tests remain outstanding.
