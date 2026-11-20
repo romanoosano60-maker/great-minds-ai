@@ -1042,3 +1042,11 @@ Added `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` (late
 - Updated `connected-parent.html` to subscribe to changes for the signed-in guardian's `guardian_relationships` rows, re-check active-link status, and clear the displayed cloud progress/homework when the link is no longer active or the re-check fails. Existing database RLS remains the authoritative access control.
 - Re-fetched the changed file and verified the subscription, re-check helper, and clearing helper are present in the committed source (commit `4fdb9a2e670971f402046c5a5f4cf9f01d91e91f`).
 - This is a source-level defensive display change only. Realtime delivery, revocation timing, separate-account isolation, and Android behavior still require runtime testing. No live database policy, schema, account, or secret was changed.
+
+
+## 2026-11-20 teacher dashboard classroom-change refresh
+
+- Source review found the Teacher Cloud overview refreshed for learning-progress and homework-submission changes, but not for classroom membership or guardian-consent changes. This could leave an already-open dashboard showing stale classroom-derived records after a membership/consent change.
+- Updated `connected-teacher.html` to also refresh its cloud overview when a `classroom_members` realtime event is received. The queries continue to rely on database RLS and approved-teacher checks; the realtime listener is only a display-refresh mechanism.
+- Re-fetched the file and verified the new subscription is present in committed source (commit `61770f6598064593d3750b00425065e2f4edca72`).
+- This source change does not itself verify realtime delivery or guarantee immediate clearing if a teacher's own approval is revoked; `teacher_profiles` is not in the currently documented Realtime publication. Live revocation, separate-account isolation, and Android tests remain outstanding. No database publication, schema, RLS policy, account, or secret was changed.
