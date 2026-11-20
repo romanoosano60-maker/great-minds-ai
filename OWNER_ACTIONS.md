@@ -1050,3 +1050,11 @@ Added `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` (late
 - Updated `connected-teacher.html` to also refresh its cloud overview when a `classroom_members` realtime event is received. The queries continue to rely on database RLS and approved-teacher checks; the realtime listener is only a display-refresh mechanism.
 - Re-fetched the file and verified the new subscription is present in committed source (commit `61770f6598064593d3750b00425065e2f4edca72`).
 - This source change does not itself verify realtime delivery or guarantee immediate clearing if a teacher's own approval is revoked; `teacher_profiles` is not in the currently documented Realtime publication. Live revocation, separate-account isolation, and Android tests remain outstanding. No database publication, schema, RLS policy, account, or secret was changed.
+
+
+## 2026-11-20 student cloud guardian-access recheck
+
+- Source review found the Student cloud history and save controls relied on the guardian-link status cached at sign-in. If the active guardian relationship was revoked later, a student could still see previously rendered history until a refresh and the save button could remain enabled until the database rejected an insert.
+- Updated `connected-student.html` so an explicit cloud-history refresh and each cloud-save attempt re-query the signed-in student's active guardian relationship. If the link is absent, the check fails, or the account changes during the check/save, cloud history is cleared, saving is disabled, and the page reports that access could not be confirmed.
+- Re-fetched the committed file and verified the access recheck helper, refresh handler, pre-save check, account-switch guard and clear-on-revocation behavior (commit `a3996a914c3956d04a61da4f4e3b76c0a6b2c23c`).
+- This is client-side display/flow hardening only. Database RLS remains the actual authorization boundary and must reject any insert after consent revocation. The guardian_relationships table is not currently listed in the documented Realtime publication, so this change does not promise instant automatic clearing while a page is idle; a user refresh or save attempt rechecks access. Live revocation, concurrent session-change, RLS denial and Android tests remain required. No database, publication, policy, account, or secret was changed.
