@@ -177,3 +177,16 @@ The current completion package was compared against `GREAT_MINDS_MASTER_GUIDE.md
 ### Final completion decision
 
 The repository documentation and backend inventory have been reconciled into one package. This completes the documentation consolidation and source-level audit work that can be responsibly completed without owner-controlled accounts/devices or legal decisions. It does **not** mean the app is fully launch-ready. The remaining work is explicitly separated into owner acceptance, administrator configuration, legal/privacy approval, and Android packaging. Preserve the working home screen and do not use real children's personal data until those gates pass.
+
+
+## 12. Unified source-code completion package — 24 November 2026
+
+A dedicated source-code package has been added at `SOURCE_CODE_COMPLETION_PACKAGE_2026-11-24.md`. It maps each subject and companion page, shared frontend helpers, role dashboards, classroom and homework components, Supabase SQL and Edge Functions. It defines one integration order and a common definition of done for every module.
+
+The source package also makes the following known gaps explicit so they are not mistakenly reported as complete:
+- Family, Local School and International Network are not yet distinct database network types; country-based RLS boundaries are not implemented/tested.
+- Some subject/activity progress integrations do not pass a stable per-attempt UUID, so repeated submission is not guaranteed idempotent for every activity.
+- The shared progress helper stores a device-local copy but does not guarantee automatic deferred cloud synchronization.
+- AI Teacher authenticated runtime, LiveKit separate-device calls, Android acceptance, privacy/legal approval and native Android packaging remain unverified or outstanding.
+
+This is a source architecture/index and audit package, not a monolithic code bundle. Keep modules separate, preserve the working home screen, and make only evidence-based, reversible changes. The source package does not alter learner data, RLS policies, database schema or secrets.
