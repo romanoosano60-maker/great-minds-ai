@@ -26,7 +26,7 @@
 | Social Studies | `social-studies.html`, `social-extra.html` | Civic/community learning, quiz, language/audio and progress |
 | History | `history.html` | Evidence/source learning, quiz and progress |
 | Geography / World Atlas | `geography.html` | Continents, countries, flags, capitals, oceans, landmarks, quiz |
-| Home Science | `home-science.html` | Safe everyday-life lessons, adult guidance for practical activities, speech and progress |
+| Home Science | `home-science.html` | Safe everyday-life lessons, adult guidance for practical activities, speech and progress |\n| Life Skills & Wellbeing | `life-skills.html` | Feelings, communication, healthy habits, personal/digital safety, responsibility, teamwork and problem-solving |
 | Computer Studies | `computer.html`, `computer-extra.html` | Computer basics, typing/coding/robotics, internet safety, quiz and progress |
 | General Knowledge | `general-knowledge.html` | Curated age-appropriate facts, quiz and progress |
 | Encyclopedia | `encyclopedia.html` | Curated topic search and category filters; no unrestricted child web browsing |
@@ -106,3 +106,8 @@ A source item is complete only when the changed file is committed, fetched back 
 ## Update — 24 November 2026: Discovery & Creativity Centre
 
 Added `discovery-creativity.html` and linked it from the home dashboard's Complete Educational Subjects page. The centre contains eight child-friendly stations: Young Inventors Lab, Space Explorer, Animal Kingdom, Creative Art Studio, Young Entrepreneurs, World Explorer, Science Experiment Centre, and Puzzle & Logic Centre. Interactive browser activities include idea prompts, factual questions, a pretend-coin arithmetic challenge, a pattern puzzle, and a supervised shadow-observation guide. The page does not request or submit personal information and does not claim cloud progress tracking. Source-level checks confirmed eight station cards, unique activity element IDs, the home-page link, and the expected interaction functions. **Still required:** open the GitHub Pages deployment on an Android device and test the link, layout, buttons, and activity feedback. This addition does not close the separate security, cloud-sync, AI Teacher, classroom-call, privacy/legal, or release-readiness items listed above.
+
+
+## Update — 24 November 2026: Life Skills & Wellbeing
+
+Added `life-skills.html` and linked it from the home dashboard immediately after Discovery & Creativity Centre. The new subject covers eight areas: Understanding Feelings, Kind Communication, Healthy Daily Habits, Personal Safety, Digital Safety, Responsibility & Routines, Teamwork & Friendship, and Calm Problem-Solving. It includes an eight-question interactive quiz and adult-guidance prompts. It does not request personal information or claim cloud progress tracking. GitHub accepted the page commit `3c35ec0bc7aa5bf1499ca43ff84768f188c87d5d` and the home-page link commit `6fa94d9d7fc751b89922f0a91603f083c3a6539c`. **Not yet independently re-fetched or tested in GitHub Pages/Android during this pass.** The source map should include Life Skills alongside Home Science. Remaining acceptance checks are the link, responsive layout, quiz feedback/restart and child-safe wording on an Android device.
