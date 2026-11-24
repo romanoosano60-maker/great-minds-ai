@@ -310,3 +310,12 @@ Do not mark these flows complete until the live acceptance tests pass. Do not en
 - Adult account-deletion handling and retention process, privacy/consent/legal review, and Android packaging/store readiness.
 
 Static source inspection and deployment status are not substitutes for these live acceptance tests.
+
+
+### 24 November 2026 — additional classroom and learning-progress source audit
+- Reviewed `classroom-call.html`: microphone/camera remain opt-in; guardian observer controls are disabled; teacher disconnect and local media-control failures trigger local call cleanup; leave/end status distinguishes local cleanup from server confirmation.
+- Reviewed the deployed call-token function alongside the page: teacher ownership/approval, approved membership, active guardian relationship, teacher presence, guardian observer-only access, WSS endpoint and 10-minute token lifetime are enforced in the backend. LiveKit secrets and separate-device behavior still require owner verification.
+- Reviewed guardian consent SQL and interface: 64-character high-entropy one-time code, SHA-256 storage for new codes, 24-hour expiry, verified guardian email, explicit guardian affirmation, student self-consent denial, teacher approval still required, and per-child consent revocation.
+- Reviewed `student-cloud-progress.js`: input validation, signed-in user requirement, RLS-based access, and UUID-based duplicate-retry comparison are present. Some integrations omit a stable operation ID, so not every activity is guaranteed idempotent on retry.
+- Independent Student local history is device-only and must not be described as secure cross-device parent sync. Cloud save failures are reported separately from local saves.
+- No RLS policies, database schema, secrets, or learner records were changed in this source audit. These findings were added to `FINAL_COMPLETION_PACKAGE_2026-11-24.md`; live account/device acceptance remains outstanding.
