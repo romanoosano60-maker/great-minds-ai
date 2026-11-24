@@ -69,7 +69,7 @@ render();
  async function load(){
   if(!db||!user||!teacherApproved){say('Sign in with an approved teacher account first.');return}
   say('Loading records allowed by classroom security rules…');const requestId=++cloudLoadRequest,requestedUserId=user.id;
-  const p=await db.from('student_learning_progress').select('student_id,subject,activity_key,score,max_score,completed_at').order('completed_at',{ascending:false}).limit(100);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
+  const p=await db.from('student_learning_progress').select('student_id,subject,activity_key,score,max_score,source,completed_at').order('completed_at',{ascending:false}).limit(100);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   const pr=$('teacherCloudProgress');pr.replaceChildren();
   if(p.error){pr.textContent='Progress could not be loaded for this account.'}
   else if(!p.data.length){pr.textContent='No consented student progress is visible yet.'}
