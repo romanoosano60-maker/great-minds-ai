@@ -75,15 +75,15 @@ for (const file of jsFiles) {
 
 // Parse executable inline scripts too. This catches syntax errors in page scripts
 // that the standalone .js pass cannot see. JSON/template script blocks are excluded.
-const inlineScriptPattern = /<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/gi;
-const executableType = /(?:^|\\s)(?:type\\s*=\\s*)(?:"(?:module|text\\/javascript|application\\/javascript)"|'(?:module|text\\/javascript|application\\/javascript)'|(?:module|text\\/javascript|application\\/javascript))(?:\\s|$)/i;
+const inlineScriptPattern = /<script\b([^>]*)>([\s\S]*?)<\/script\s*>/gi;
+const executableType = /(?:^|\s)(?:type\s*=\s*)(?:"(?:module|text\/javascript|application\/javascript)"|'(?:module|text\/javascript|application\/javascript)'|(?:module|text\/javascript|application\/javascript))(?:\s|$)/i;
 for (const file of htmlFiles) {
   const source = readFileSync(file, "utf8");
   let match;
   while ((match = inlineScriptPattern.exec(source))) {
     const attrs = match[1] || "";
     const code = match[2] || "";
-    const hasType = /\\btype\\s*=/i.test(attrs);
+    const hasType = /\btype\s*=/i.test(attrs);
     if (hasType && !executableType.test(attrs)) continue;
     if (!code.trim()) continue;
     inlineScriptsChecked++;
