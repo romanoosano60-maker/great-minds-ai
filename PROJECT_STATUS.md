@@ -1254,3 +1254,8 @@ Additional follow-up: the same stale-response guard was added to `international-
 - AI Teacher remains intentionally held for owner approval: repository source has request-size and authentication-order hardening that is not yet present in the active Supabase function version 8. Do not deploy the Edge Function or change live Auth settings without the owner's explicit approval.
 - Remaining owner/runtime work: enable leaked-password protection if available on the project plan; test two separate families and two separate teachers; verify guardian consent/revocation and account switching on separate sessions/devices; test AI Teacher with authorised and unauthorised accounts; complete Android microphone/read-aloud and classroom-call tests; define and test child-data export, retention and deletion.
 - No production database, Auth setting, secret, Edge Function, or child record was changed in this verification.
+
+
+## Current-status reconciliation — 24 November 2026
+
+This file is a chronological project history. Older entries may describe earlier prototypes, backend versions, database counts or integrations and are retained for audit history; they are not the current status ledger. Later source/backend work supersedes older snapshots where explicitly documented. Use [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md) as the single source of truth for current deployed function versions, present integration boundaries, security findings, and outstanding acceptance/launch gates. In particular, do not use older statements that all connected dashboards are local-only as a description of the newer cloud-backed panels; those local demo panels still exist but are distinct from the authenticated cloud panels.
