@@ -71,7 +71,7 @@ window.addEventListener('storage',event=>{if(event.key===KEY)render()});
   if(requestId!==cloudHistoryRequest||!user||user.id!==requestedUserId)return;
   if(error){box.textContent='Cloud history is not available for this account.';return}
   if(!data||!data.length){box.textContent='No cloud lesson results saved yet. Complete a quiz while signed in to save it.';return}
-  box.innerHTML=data.map(r=>'<div class="item"><b>'+escCloud(r.subject)+'</b><p>'+escCloud(r.activity_key)+' — '+escCloud(r.score)+' / '+escCloud(r.max_score)+'</p><small>'+escCloud(r.source)+' • '+escCloud(new Date(r.completed_at).toLocaleString())+'</small></div>').join('');
+  box.innerHTML=data.map(r=>'<div class="item"><b>'+escCloud(r.subject)+'</b><p>'+escCloud(r.activity_key)+' — '+(r.source==='student_dashboard_snapshot'?'Points total: '+escCloud(r.score):'Score: '+escCloud(r.score)+' / '+escCloud(r.max_score))+'</p><small>'+escCloud(r.source)+' • '+escCloud(new Date(r.completed_at).toLocaleString())+'</small></div>').join('');
  }
  function init(){
   const cfg=window.greatMindsSupabaseConfig;
