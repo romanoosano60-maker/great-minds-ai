@@ -241,3 +241,8 @@ These are source corrections. They do not replace browser/device interaction tes
 ## Safe architecture design prepared — 24 November 2026
 
 Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md). It records the current device-local versus immediate cloud-save behaviour, explains why anonymous legacy local progress must not be automatically uploaded, specifies identity-bound idempotent deferred-sync acceptance tests, separates Family relationships from Local/International classroom types, and lays out a reviewed migration/RLS test sequence. **No network schema migration or automatic upload process was deployed.**
+
+
+## Short owner handover
+
+For the next real-device session, start with [TOMORROW_OWNER_TEST_SESSION_2026-11-24.md](TOMORROW_OWNER_TEST_SESSION_2026-11-24.md). It groups the Android, AI Teacher, audio, separate-account, guardian-consent, homework and optional call checks into one ordered run.
