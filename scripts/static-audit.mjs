@@ -59,6 +59,7 @@ for (const file of htmlFiles) {
 }
 
 const syntaxFailures = [];
+let inlineScriptsChecked = 0;
 for (const file of jsFiles) {
   const result = spawnSync(process.execPath, ["--check", "--input-type=module"], {
     input: readFileSync(file, "utf8"),
@@ -72,7 +73,35 @@ for (const file of jsFiles) {
   }
 }
 
+// Parse executable inline scripts too. This catches syntax errors in page scripts
+// that the standalone .js pass cannot see. JSON/template script blocks are excluded.
+const inlineScriptPattern = /<script\\b([^>]*)>([\\s\\S]*?)<\\/script\\s*>/gi;
+const executableType = /(?:^|\\s)(?:type\\s*=\\s*)(?:"(?:module|text\\/javascript|application\\/javascript)"|'(?:module|text\\/javascript|application\\/javascript)'|(?:module|text\\/javascript|application\\/javascript))(?:\\s|$)/i;
+for (const file of htmlFiles) {
+  const source = readFileSync(file, "utf8");
+  let match;
+  while ((match = inlineScriptPattern.exec(source))) {
+    const attrs = match[1] || "";
+    const code = match[2] || "";
+    const hasType = /\\btype\\s*=/i.test(attrs);
+    if (hasType && !executableType.test(attrs)) continue;
+    if (!code.trim()) continue;
+    inlineScriptsChecked++;
+    const result = spawnSync(process.execPath, ["--check", "--input-type=module"], {
+      input: code,
+      encoding: "utf8"
+    });
+    if (result.status !== 0) {
+      syntaxFailures.push({
+        file: relative(root, file) + " (inline script)",
+        output: (result.stderr || result.stdout || "Inline JavaScript syntax check failed").trim()
+      });
+    }
+  }
+}
+
 console.log(`Scanned ${htmlFiles.length} HTML files and ${jsFiles.length} JavaScript files.`);
+console.log(`Parsed ${inlineScriptsChecked} executable inline script blocks.`);
 console.log(`Checked ${checkedRefs.length} local href/src references.`);
 
 if (missing.length || syntaxFailures.length) {
