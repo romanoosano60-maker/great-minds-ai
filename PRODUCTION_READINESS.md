@@ -172,3 +172,24 @@ GitHub Actions run results for that exact commit:
 **What this does not establish:** every interactive control works in a browser, every HTML inline script has been runtime-tested, Supabase policies pass positive/negative account tests, AI Teacher returns an authenticated answer, LiveKit calls work on separate devices, Android microphone/camera/audio work, or legal/privacy approval has been obtained. The audit script does not perform HTML validation, accessibility testing, external image/CDN checks, SQL migration execution, or browser end-to-end tests.
 
 The new Discovery & Creativity and Life Skills pages are included in the repository revision covered by this automated audit. Their source links and local references passed the audit; their interactive behaviour still needs Android acceptance.
+
+
+## Extended inline-script audit and source corrections — 24 November 2026
+
+The static audit was extended to parse executable inline JavaScript in HTML pages as well as standalone `.js` files. On commit `6dbe648b3d10b035c8b120942e8c8d98fb0716c2`, GitHub Actions run [45394883512](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45394883512) passed:
+- 63 HTML files scanned.
+- 10 standalone JavaScript files parsed.
+- 132 executable inline script blocks parsed.
+- 619 local `href`/`src` references checked.
+- No missing local references or JavaScript syntax failures.
+
+The stricter pass exposed and source corrections were committed for:
+- `connected-parent.html`: replaced the parent progress-list HTML-string rendering with DOM nodes and `textContent`, avoiding HTML interpretation of record values.
+- `connected-practice.html`: corrected a missing statement separator after the answer-handler assignment.
+- `english.html`: closed the English additional-practice initialization IIFE.
+
+These are source corrections. They do not replace browser/device interaction tests or Supabase authorization tests.
+
+## Safe architecture design prepared — 24 November 2026
+
+Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md). It records the current device-local versus immediate cloud-save behaviour, explains why anonymous legacy local progress must not be automatically uploaded, specifies identity-bound idempotent deferred-sync acceptance tests, separates Family relationships from Local/International classroom types, and lays out a reviewed migration/RLS test sequence. **No network schema migration or automatic upload process was deployed.**
