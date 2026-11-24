@@ -67,6 +67,7 @@ const questions=[
 {q:"Which is a renewable energy source?",a:["Coal","Sunlight","Petrol"],correct:1,why:"Sunlight is naturally replenished."},
 {q:"How many emirates make up the United Arab Emirates?",a:["Five","Seven","Nine"],correct:1,why:"The UAE is a federation of seven emirates."},
 {q:"What should you do when an AI tool gives you an important fact?",a:["Believe it without checking","Check it with trusted sources or an adult","Share it immediately"],correct:1,why:"AI can make mistakes; check important information."}
+];
 let index=0,score=0,answered=false,finished=false;
 const qEl=document.getElementById("knowledgeQuestion"),aEl=document.getElementById("knowledgeAnswers"),fEl=document.getElementById("knowledgeFeedback"),sEl=document.getElementById("knowledgeScore"),next=document.getElementById("knowledgeNext"),retry=document.getElementById("knowledgeRetry");
 function show(){const q=questions[index];qEl.textContent=(index+1)+". "+q.q;aEl.replaceChildren();fEl.textContent="";answered=false;next.hidden=false;next.textContent=index===questions.length-1?"Finish":"Next question";retry.hidden=true;q.a.forEach((answer,i)=>{const b=document.createElement("button");b.type="button";b.textContent=answer;b.addEventListener("click",()=>{if(answered||finished)return;answered=true;aEl.querySelectorAll("button").forEach(x=>x.disabled=true);if(i===q.correct){score++;fEl.textContent="Correct! "+q.why}else{fEl.textContent="Not quite. "+q.why} sEl.textContent="Score: "+score+" / "+questions.length});aEl.appendChild(b)})}
