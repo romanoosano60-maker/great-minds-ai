@@ -39,8 +39,8 @@ Verification boundary: repository static checks can confirm source structure and
 
 ## Current engineering handoff — 19 November 2026 (historical detail below is date-labelled)
 
-The following are the current deployed backend versions recorded in the latest source/deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
-- AI Teacher: ACTIVE version 8; JWT verification enabled.
+The following are the current deployed backend versions confirmed by the 24 November 2026 deployment audit. Older version numbers in dated historical notes below describe earlier checkpoints and are not current:
+- AI Teacher: ACTIVE version 9; JWT verification enabled; raw Responses API output parsing and upstream timeout handling were repaired on 24 November 2026.
 - Classroom call token: ACTIVE version 9; JWT verification enabled; WSS-only LiveKit endpoint and server-side consent/membership checks.
 - Account deletion request: ACTIVE version 7; JWT verification enabled; request-only, not automatic deletion.
 - AI Teacher frontend is configured for the Supabase Edge Function. The Cloudflare `/ask` Worker is an older alternative template and is not the active frontend route.
