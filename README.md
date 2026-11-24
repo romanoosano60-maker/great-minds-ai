@@ -1,16 +1,20 @@
-# great-minds-ai
-Great Minds AI is an interactive educational app for children, featuring AI teachers, science, English, mathematics, educational games, and collaborative learning.
+# Great Minds AI
 
-## Current completion package
-Use [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md) as the latest consolidated handover for source/backend status, remaining Android and account tests, child-safety gates, and publishing readiness.
+Great Minds AI is an interactive educational app for children, featuring learning subjects, educational games, student progress, parent/teacher supervision and classroom features.
 
-## Main project guide
-Use [GREAT MINDS MASTER GUIDE](GREAT_MINDS_MASTER_GUIDE.md) for integration steps, child-safety requirements and acceptance tests.
+## Start here
 
-Start the app at [index.html](index.html), then open the [Unified Learning & Classroom Hub](connected-dashboards.html).
+**[Open the Consolidated Completion Package — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md)**
 
-## Project checklists
-- [Consolidated engineering handover (10 November 2026)](ENGINEERING_HANDOVER_2026-11-10.md)
-- [Owner actions and remaining tests](OWNER_ACTIONS.md)
-- [Project status](PROJECT_STATUS.md)
-- [Production readiness](PRODUCTION_READINESS.md)
+This is the single source of truth for current completion status, verified backend versions, source-audit results, security findings, outstanding owner tests, child-safety gates and launch readiness. Older documents retain historical detail and must be read with their dated reconciliation notes.
+
+## Project files
+
+- [Open the app](index.html)
+- [Unified Learning & Classroom Hub](connected-dashboards.html)
+- [Master Integration & Completion Guide](GREAT_MINDS_MASTER_GUIDE.md)
+- [Production Readiness Checklist](PRODUCTION_READINESS.md)
+- [Owner Actions and Test Log](OWNER_ACTIONS.md)
+- [Historical Project Status](PROJECT_STATUS.md)
+
+Keep Great Minds AI separate from the Dubai Life project. Preserve the confirmed colourful rocket home screen. Do not enter real children's personal data until the privacy, consent, security and owner-acceptance gates in the consolidated package are complete.
