@@ -73,7 +73,7 @@ render();
   const pr=$('teacherCloudProgress');pr.replaceChildren();
   if(p.error){pr.textContent='Progress could not be loaded for this account.'}
   else if(!p.data.length){pr.textContent='No consented student progress is visible yet.'}
-  else p.data.forEach(x=>{const d=document.createElement('div');d.className='item';d.textContent='Learner • '+x.subject+' • '+x.score+'/'+x.max_score+' • '+x.activity_key;pr.append(d)});
+  else p.data.forEach(x=>{const d=document.createElement('div');d.className='item';d.textContent='Learner • '+x.subject+' • '+(x.source==='student_dashboard_snapshot'?'Points total: '+x.score:'Score: '+x.score+'/'+x.max_score)+' • '+x.activity_key;pr.append(d)});
   const s=await db.from('homework_submissions').select('id,assignment_id,student_id,answer,score,feedback,submitted_at').order('submitted_at',{ascending:false}).limit(100);if(requestId!==cloudLoadRequest||!user||user.id!==requestedUserId)return;
   const hr=$('teacherCloudHomework');hr.replaceChildren();
   if(s.error){hr.textContent='Homework submissions could not be loaded for this account.';say('Signed in. Some classroom data is unavailable.');return}
