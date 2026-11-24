@@ -195,3 +195,12 @@ This is a source architecture/index and audit package, not a monolithic code bun
 ## Update — 24 November 2026: Discovery & Creativity Centre
 
 Added `discovery-creativity.html` and linked it from the home dashboard's Complete Educational Subjects page. The centre contains eight child-friendly stations: Young Inventors Lab, Space Explorer, Animal Kingdom, Creative Art Studio, Young Entrepreneurs, World Explorer, Science Experiment Centre, and Puzzle & Logic Centre. Interactive browser activities include idea prompts, factual questions, a pretend-coin arithmetic challenge, a pattern puzzle, and a supervised shadow-observation guide. The page does not request or submit personal information and does not claim cloud progress tracking. Source-level checks confirmed eight station cards, unique activity element IDs, the home-page link, and the expected interaction functions. **Still required:** open the GitHub Pages deployment on an Android device and test the link, layout, buttons, and activity feedback. This addition does not close the separate security, cloud-sync, AI Teacher, classroom-call, privacy/legal, or release-readiness items listed above.
+
+
+## 24 November 2026 — subject expansion reconciliation
+
+Two additional learning destinations are now part of the home dashboard source:
+- **Discovery & Creativity Centre** — eight activity stations, including inventing, space, animals, art, entrepreneurship, world exploration, science observation and puzzles. Source addition and home link were previously recorded in the source completion package.
+- **Life Skills & Wellbeing** — eight learning areas covering feelings, kind communication, healthy habits, personal safety, digital safety, responsibility, teamwork and calm problem-solving, with an eight-question quiz. GitHub accepted the page commit `3c35ec0bc7aa5bf1499ca43ff84768f188c87d5d` and home-link commit `6fa94d9d7fc751b89922f0a91603f083c3a6539c`.
+
+These are committed source changes, not proof of a successful live Pages or Android test. The subject additions do not close the separate AI Teacher authenticated-response, LiveKit configuration/cross-device call, network separation, progress idempotency/deferred sync, leaked-password protection, privacy/legal, Android packaging or owner acceptance gates. Use the source completion package for the detailed subject map and technical acceptance checklist.
