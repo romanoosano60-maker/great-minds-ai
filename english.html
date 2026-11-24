@@ -69,6 +69,7 @@ function show(){answered=false;$("gmQMeta").textContent="Question "+(at+1)+" of 
 $("gmQNext").addEventListener("click",()=>{if(!answered||completed)return;at++;if(at<bank.length){show();return}completed=true;cloudSaveId=gmEnglishPracticeId();$("gmQMeta").textContent="Challenge complete";$("gmQText").textContent="You completed all "+bank.length+" questions!";$("gmQChoices").replaceChildren();$("gmQFeedback").textContent="Final score: "+score+" out of "+bank.length+". Keep learning!";$("gmQNext").hidden=true;saveEnglishPractice()});
 $("gmQRestart").addEventListener("click",()=>{if(cloudSaving)return;at=0;score=0;answered=false;completed=false;cloudSaveId=null;cloudSaved=false;const old=$("gmQCloudRetry");if(old)old.remove();$("gmQScore").textContent="Score: 0 / "+bank.length;$("gmQRestart").disabled=false;show()});
 
+})();
 </script>
 
 
