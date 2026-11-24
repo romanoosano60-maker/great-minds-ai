@@ -190,3 +190,8 @@ The source package also makes the following known gaps explicit so they are not 
 - AI Teacher authenticated runtime, LiveKit separate-device calls, Android acceptance, privacy/legal approval and native Android packaging remain unverified or outstanding.
 
 This is a source architecture/index and audit package, not a monolithic code bundle. Keep modules separate, preserve the working home screen, and make only evidence-based, reversible changes. The source package does not alter learner data, RLS policies, database schema or secrets.
+
+
+## Update — 24 November 2026: Discovery & Creativity Centre
+
+Added `discovery-creativity.html` and linked it from the home dashboard's Complete Educational Subjects page. The centre contains eight child-friendly stations: Young Inventors Lab, Space Explorer, Animal Kingdom, Creative Art Studio, Young Entrepreneurs, World Explorer, Science Experiment Centre, and Puzzle & Logic Centre. Interactive browser activities include idea prompts, factual questions, a pretend-coin arithmetic challenge, a pattern puzzle, and a supervised shadow-observation guide. The page does not request or submit personal information and does not claim cloud progress tracking. Source-level checks confirmed eight station cards, unique activity element IDs, the home-page link, and the expected interaction functions. **Still required:** open the GitHub Pages deployment on an Android device and test the link, layout, buttons, and activity feedback. This addition does not close the separate security, cloud-sync, AI Teacher, classroom-call, privacy/legal, or release-readiness items listed above.
