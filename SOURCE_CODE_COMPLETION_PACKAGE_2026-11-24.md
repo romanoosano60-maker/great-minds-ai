@@ -111,3 +111,19 @@ Added `discovery-creativity.html` and linked it from the home dashboard's Comple
 ## Update — 24 November 2026: Life Skills & Wellbeing
 
 Added `life-skills.html` and linked it from the home dashboard immediately after Discovery & Creativity Centre. The new subject covers eight areas: Understanding Feelings, Kind Communication, Healthy Daily Habits, Personal Safety, Digital Safety, Responsibility & Routines, Teamwork & Friendship, and Calm Problem-Solving. It includes an eight-question interactive quiz and adult-guidance prompts. It does not request personal information or claim cloud progress tracking. GitHub accepted the page commit `3c35ec0bc7aa5bf1499ca43ff84768f188c87d5d` and the home-page link commit `6fa94d9d7fc751b89922f0a91603f083c3a6539c`. **Not yet independently re-fetched or tested in GitHub Pages/Android during this pass.** The source map should include Life Skills alongside Home Science. Remaining acceptance checks are the link, responsive layout, quiz feedback/restart and child-safe wording on an Android device.
+
+
+## Automated repository audit and deployment — 24 November 2026
+
+**Verified latest main commit:** `0783b5226c7d9a8040d1a5cfc0a268aacaecbdc9`.
+
+GitHub Actions run results for that exact commit:
+- Static repository checks run [45393641709](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45393641709): completed successfully.
+- Static audit log: scanned **63 HTML files** and **10 standalone JavaScript files**, checked **619 local `href`/`src` references**, and reported PASS with no missing local references and no JavaScript syntax failures.
+- GitHub Pages build/deployment run [45393642325](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45393642325): build, artifact upload and deploy jobs all completed successfully.
+
+**What this establishes:** the latest repository revision passed the repository's configured local-reference and standalone-JavaScript syntax checks, and the GitHub Pages deployment workflow completed successfully for that revision.
+
+**What this does not establish:** every interactive control works in a browser, every HTML inline script has been runtime-tested, Supabase policies pass positive/negative account tests, AI Teacher returns an authenticated answer, LiveKit calls work on separate devices, Android microphone/camera/audio work, or legal/privacy approval has been obtained. The audit script does not perform HTML validation, accessibility testing, external image/CDN checks, SQL migration execution, or browser end-to-end tests.
+
+The new Discovery & Creativity and Life Skills pages are included in the repository revision covered by this automated audit. Their source links and local references passed the audit; their interactive behaviour still needs Android acceptance.
