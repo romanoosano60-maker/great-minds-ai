@@ -1080,3 +1080,39 @@ Added `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` (late
 ## Current-status reconciliation — 24 November 2026
 
 This file is a chronological engineering and owner-test log. Older entries intentionally preserve what was true at the time; do not treat historical function versions or deployment statements as current. The current inventory has been rechecked: AI Teacher v9 ACTIVE, Classroom Call Token v9 ACTIVE, Account Deletion Request v7 ACTIVE, all with JWT verification enabled. For the authoritative reconciled status, completed source audits, unresolved risks and final acceptance gates, use [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md). Do not infer that a source change or deployment alone constitutes a successful Android, real-account or cross-device test.
+
+
+## Current owner handover — 24 November 2026
+
+This addendum supersedes older function-version statements in historical sections above. Current deployment snapshot: `ai-teacher` v9 ACTIVE, `classroom-call-token` v9 ACTIVE, and `account-deletion-request` v7 ACTIVE; JWT verification is enabled on all three. AI Teacher's authenticated answer, provider-secret presence, LiveKit secret presence and separate-device calls remain unverified.
+
+### New subject pages to include in the next Android pass
+- [ ] Open the Discovery & Creativity Centre from the home dashboard. Try each of its eight stations and check feedback, touch controls and narrow-screen layout.
+- [ ] Open Life Skills & Wellbeing from the home dashboard. Check all eight learning areas, complete the eight-question quiz, and confirm score/restart feedback.
+- [ ] Confirm both pages open from the published GitHub Pages site, not just from a GitHub source preview.
+
+### Tomorrow's owner-only acceptance session — recommended order
+Use adult-controlled fictional test accounts and no real child personal information.
+
+1. **Home and new subjects:** open the published app; test home navigation, Discovery & Creativity, Life Skills, and any missing/blank pages.
+2. **AI Teacher:** test a live Mathematics answer with an approved adult-controlled account, then verify an unrelated account is denied. Test microphone, Listen, Stop and leaving the page.
+3. **Learning and audio:** test English ABC/phonics, matching pictures, vowels, vocabulary, stories, and the subject audio Stop controls.
+4. **Family/classroom permissions:** with separate test accounts, verify teacher approval, guardian consent, student join, consent revocation, and that unauthorised accounts cannot access records.
+5. **Progress/homework:** complete one quiz and verify its cloud record; publish, submit and mark one fictional homework task; confirm the linked guardian sees only the permitted record from another device.
+6. **Calls:** only if LiveKit secrets are configured, test teacher/student/guardian on separate devices; confirm guardian observer-only and camera/microphone OFF until deliberately enabled.
+7. **Release decisions:** review child privacy/legal documents, data retention/deletion, leaked-password protection, and Android packaging. These are not passed merely by completing the app navigation tests.
+
+### What is already prepared on the development side
+- Discovery & Creativity Centre and Life Skills & Wellbeing source pages have been committed and linked from `index.html`.
+- The source completion package and final completion package now document both subject additions.
+- The latest GitHub fetch verified that both home links exist, both pages are present, the eight Life Skills learning areas and quiz are in source, and all eight Discovery station headings are present.
+- These checks verify repository source only. They do not confirm the public Pages deployment or Android runtime behaviour.
+
+### Remaining development-side work not to mislabel as owner testing
+- Continue source-level review of shared progress IDs/retry paths, local-versus-cloud status, language/audio lifecycle, and internal links across all pages.
+- Review the network-separation design and prepare a safe migration proposal; do not deploy schema/RLS changes without a separately reviewed migration and positive/negative access tests.
+- Review deferred progress-sync design and prepare an idempotent authenticated queue proposal; do not silently upload local child data.
+- Review AI Teacher and LiveKit configuration requirements without exposing secrets in chat or browser code.
+- Consolidate the final release/Android packaging specification after the web app acceptance pass.
+
+No item above is marked live-tested unless a real account/device test result is recorded.
