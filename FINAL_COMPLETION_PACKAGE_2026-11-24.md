@@ -113,3 +113,34 @@ The performance advisor also reports five informational unused-index notices and
 - Multiple permissive SELECT policies affect homework assignments and student learning progress. These policies represent distinct teacher, student, and linked-guardian access paths.
 
 Do not remove indexes or merge policies solely to clear advisor notices. First capture representative query plans/workload evidence and prove that any proposed policy consolidation preserves every teacher, student, and guardian access boundary. These findings are performance-review items, not permission to weaken RLS.
+
+
+## 10. Classroom, guardian-consent and student-progress source audit — 24 November 2026
+
+A further source-level review was completed after the initial consolidated audit. This section records what was verified in repository code; it does not claim that separate accounts or Android devices have passed live tests.
+
+### Supervised classroom call page
+- The call page accepts only a numeric classroom identifier and the supported audio/video modes and start/join/end actions.
+- It obtains the current signed-in Supabase session and sends the user's access token to the JWT-protected `classroom-call-token` Edge Function.
+- Microphone and camera are not enabled automatically. The participant must deliberately opt in; guardian-observer controls remain disabled.
+- If the teacher disconnects, student/guardian clients disconnect and reset local media controls. A local media-control failure also triggers fail-closed disconnection.
+- Leaving, ending, or navigating away attempts local room disconnection and media cleanup. The UI distinguishes a failed server-side end confirmation from a successful local leave.
+- The backend independently checks teacher ownership/approval, approved membership, active guardian relationship, teacher presence before student/guardian join, observer-only guardian permissions, encrypted WSS endpoint, and 10-minute token lifetime.
+- LiveKit secret configuration and real two-device call behavior remain unverified. Do not claim that calls are operational until the owner completes the separate-device test.
+
+### Guardian consent and revocation
+- The student-generated consent code is a 64-character high-entropy token, stored as a SHA-256 hash for new codes, expires after 24 hours, and is displayed once for private sharing.
+- Redemption requires a signed-in guardian account with verified email and an explicit affirmative guardian declaration. A student cannot approve their own consent.
+- A guardian relationship is created through the protected database function; classroom membership still requires teacher approval.
+- The interface supports revoking consent for one selected child. The database function blocks that child's classroom memberships and leaves other linked children unchanged.
+- This is account-based consent, not independent proof of legal guardianship. Legal/privacy review and any stronger guardian-verification requirement remain launch blockers.
+
+### Secure student progress helper
+- The shared helper validates subject/activity lengths, integer score bounds, optional correct/question counts, level values and UUID operation IDs before attempting a cloud insert.
+- It writes a device-local history copy and then uses the current signed-in account for the cloud insert; database RLS remains the authority for who may write/read progress.
+- When a UUID operation ID is supplied, duplicate retries are checked against the existing row and accepted only when the stored record matches the attempted record. A conflicting reuse is rejected.
+- Cloud failures are reported separately from local device saves; the local independent-student history is explicitly device-only and is not a secure cross-device parent sync.
+- Some lesson integrations call the helper without a stable operation ID. Those records rely on the database-generated row ID and are not guaranteed idempotent on repeated submissions. This is a retry/duplicate-review item; do not claim every lesson save is duplicate-proof.
+
+### Source audit conclusion
+The code contains meaningful fail-closed call controls, guardian consent protections and progress validation. No policy relaxation or database mutation was made during this source review. Required owner acceptance still includes real teacher/student/guardian accounts, consent and revocation, unrelated-account denial, cross-device parent visibility, LiveKit configuration, and Android call/media tests.
