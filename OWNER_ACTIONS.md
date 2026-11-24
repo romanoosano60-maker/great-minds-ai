@@ -1136,3 +1136,25 @@ These are source corrections. They do not replace browser/device interaction tes
 ## Safe architecture design prepared — 24 November 2026
 
 Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md). It records the current device-local versus immediate cloud-save behaviour, explains why anonymous legacy local progress must not be automatically uploaded, specifies identity-bound idempotent deferred-sync acceptance tests, separates Family relationships from Local/International classroom types, and lays out a reviewed migration/RLS test sequence. **No network schema migration or automatic upload process was deployed.**
+
+
+## Live Supabase configuration and advisor audit — 24 November 2026
+
+Read-only checks against project `ryuchmmnyjyldwouidyy` confirmed:
+- Project status: `ACTIVE_HEALTHY`; PostgreSQL 17.11.
+- Edge Functions: `ai-teacher` ACTIVE v9, `classroom-call-token` ACTIVE v9, `account-deletion-request` ACTIVE v7; JWT verification enabled for all three.
+- Applied migration history currently ends at `20261110` entries. The repository file `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` is **not present in the live applied migration list**. Read-only SQL also confirmed `private.guardian_consent_code_issuance` does not yet exist, while `private.create_guardian_consent_code()` exists and is executable by `authenticated`, not `anon`. Therefore the additional three-per-hour code-issuance limit in that file is not active in production. It remains pending a properly versioned, reviewed migration; do not assume the source file alone changed the live database.
+- Organization plan: **Free**. Supabase's current [password security documentation](https://supabase.com/docs/guides/auth/password-security) says leaked-password protection is available on Pro and above. The Auth advisor still reports it disabled; enabling it requires an owner plan decision/upgrade, not a source-code edit.
+
+### Security Advisor
+
+- Three informational `RLS Enabled No Policy` findings: `private.ai_teacher_daily_usage`, `private.classroom_join_attempts`, and `public.account_deletion_requests`.
+- Read-only privilege checks confirmed `anon` and `authenticated` have no direct SELECT/INSERT/UPDATE/DELETE privileges on these three tables. The private tables are intentionally closed; `account_deletion_requests` is accessed through the privileged server-side workflow. Do not add broad client policies merely to silence the notices.
+- One warning: `Leaked Password Protection Disabled`, constrained by the current Free plan as described above.
+
+### Performance and health advisors
+
+- Health advisor: no findings.
+- Performance advisor: five indexes are currently reported unused, and two tables have multiple permissive SELECT policies (`homework_assignments`, `student_learning_progress`). In this low-traffic project, unused-index notices are not grounds to remove protective/query-support indexes. The SELECT policies represent separate teacher, student and guardian access paths; do not merge or weaken them without a measured query-plan review and full positive/negative RLS tests.
+
+No Supabase schema, policies, secrets, or plan settings were changed during this read-only audit. Provider secret presence and authenticated AI/LiveKit runtime success remain unverified.
