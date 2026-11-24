@@ -108,7 +108,7 @@ Older statements in this document saying that no Supabase AI Teacher endpoint is
 ### Additional child-consent hardening
 - The teacher UPDATE policy requires `parent_consent_status='approved'` before membership can be approved. Authenticated clients cannot update that consent column; the guardian-consent server-side RPC sets it only after validating the one-time code and active relationship.
 - The classroom-call token endpoint independently verifies the student's active guardian relationship before issuing a student token.
-- `classroom-call-token` is currently ACTIVE version 7 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
+- `classroom-call-token` is currently ACTIVE version 9 with JWT verification and WSS-only LiveKit URLs. Microphone and camera start OFF and require deliberate participant action.
 - Supabase confirms RLS is enabled on all 11 inspected application tables and no direct anon table privileges are present. Three intentionally closed tables continue to produce informational no-policy notices.
 
 ### Repository integrity checks
@@ -141,3 +141,11 @@ This section supersedes older historical status bullets above wherever they conf
 - A historical Pages build was recorded as successful for commit `4bca9d69c03090727974d5a9538e385a2c9d17e7`; this does not prove the latest source changes are deployed or that the current public URL is reachable. The current live deployment/final URL remains unconfirmed, and the latest source commits have no reported CI workflow/status results.
 - The owner has reported successful teacher/student/parent coordination in an earlier test session; that report is retained. A fresh persisted end-to-end homework/consent/revocation acceptance pass is still required before marking the complete workflow verified.
 - The earlier note that the AI usage table had RLS disabled is superseded: the current advisor reports RLS enabled with no client policy.
+
+
+### Consolidated continuation — 24 November 2026
+- Current deployed Edge Function inventory: `ai-teacher` ACTIVE v9, `classroom-call-token` ACTIVE v9, and `account-deletion-request` ACTIVE v7; JWT verification is enabled on all three.
+- AI Teacher v9 reads text from the raw Responses API REST output structure as well as `output_text`, and times out the upstream request after 25 seconds. Secret presence and a successful authenticated answer remain unverified.
+- Connected Student, Parent and Teacher dashboards now distinguish dashboard points snapshots from quiz scores. This is a source-only display correction; database schema, RLS and stored learner records were not changed.
+- The local Teacher Dashboard remains a browser-local prototype; use the Connected Teacher Dashboard for the server-backed workflow, subject to its outstanding live authorization tests.
+- Classroom call source continues to require approved teacher ownership, approved membership plus active guardian relationship for students, observer-only linked guardian access, teacher presence before student/guardian join, short-lived tokens and deliberate media opt-in. LiveKit secret presence and real-device call tests remain open.
