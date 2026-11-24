@@ -291,3 +291,22 @@ The account-deletion endpoint is request-only. It records an eligible adult's re
 - Reconcile the user's previously reported cross-device tests with fresh end-to-end records for classroom membership, cloud learning progress and homework submission/marking. Existing test rows alone do not prove the complete workflow.
 
 Do not mark these flows complete until the live acceptance tests pass. Do not enter real child information during unfinished tests.
+
+
+## 24 November 2026 — consolidated continuation audit
+
+- AI Teacher is deployed as Supabase Edge Function version 9 with JWT verification enabled. The raw Responses API parser now reads generated text from the REST `output[].content[]` structure as well as the convenience `output_text` field, and the upstream request has a 25-second timeout. The server-side OpenAI secret cannot be inspected from this audit; a successful authenticated answer is still an owner/device acceptance test.
+- Student, Parent and Teacher connected cloud dashboards now distinguish `student_dashboard_snapshot` rows from quiz results. Dashboard snapshots are labelled as points totals, not quiz scores. The teacher query now selects the `source` field required for that distinction. These were source-only display changes; no schema, RLS policy or learner record was changed.
+- The separate `teacher-dashboard.html` remains an explicitly local prototype. It stores lesson plans and feedback in browser localStorage and directs approved cloud classroom work to `connected-teacher.html`. Do not use it as a secure class register or for real child data.
+- Live Supabase Edge Functions remain: `ai-teacher` version 9, `classroom-call-token` version 9 and `account-deletion-request` version 7, all with JWT verification enabled at the time of this audit.
+- The call-token source enforces approved teacher ownership, approved classroom membership, active guardian relationship and linked-guardian observer access. Students/guardians are denied joining until the teacher is connected; only the approved owner-teacher can start/end calls. Tokens are short-lived (10 minutes); guardian observers cannot publish audio/video. These source rules still require separate-account/device tests and confirmed LiveKit secret configuration.
+- No database permissions, RLS policies, schema, indexes, secrets or child records were changed during this continuation.
+
+### Remaining acceptance evidence
+- Authenticated AI answer and unrelated-account denial.
+- Separate teacher/student/guardian accounts for classroom start/join/end, guardian observer, consent revocation and teacher disconnect.
+- Parent-only linked-child visibility, student progress save, homework publish/submit/mark and second-device refresh.
+- Android home/navigation, audio, image/gallery, camera/microphone opt-in and network/session failure checks.
+- Adult account-deletion handling and retention process, privacy/consent/legal review, and Android packaging/store readiness.
+
+Static source inspection and deployment status are not substitutes for these live acceptance tests.
