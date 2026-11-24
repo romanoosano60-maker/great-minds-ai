@@ -156,3 +156,19 @@ This section supersedes older historical status bullets above wherever they conf
 This checklist retains its historical acceptance criteria. Its older opening inventory is a dated snapshot and is superseded by [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md), the single current status source.
 
 Current backend inventory rechecked on 24 November: AI Teacher v9 ACTIVE, Classroom Call Token v9 ACTIVE, Account Deletion Request v7 ACTIVE; JWT verification enabled for all three. AI Teacher authenticated response, LiveKit secret configuration, separate-account/cross-device tests, Android acceptance, child privacy/legal review, and native Android packaging remain outstanding. See the consolidated package before interpreting any older checklist line as current.
+
+
+## Automated repository audit and deployment — 24 November 2026
+
+**Verified latest main commit:** `0783b5226c7d9a8040d1a5cfc0a268aacaecbdc9`.
+
+GitHub Actions run results for that exact commit:
+- Static repository checks run [45393641709](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45393641709): completed successfully.
+- Static audit log: scanned **63 HTML files** and **10 standalone JavaScript files**, checked **619 local `href`/`src` references**, and reported PASS with no missing local references and no JavaScript syntax failures.
+- GitHub Pages build/deployment run [45393642325](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45393642325): build, artifact upload and deploy jobs all completed successfully.
+
+**What this establishes:** the latest repository revision passed the repository's configured local-reference and standalone-JavaScript syntax checks, and the GitHub Pages deployment workflow completed successfully for that revision.
+
+**What this does not establish:** every interactive control works in a browser, every HTML inline script has been runtime-tested, Supabase policies pass positive/negative account tests, AI Teacher returns an authenticated answer, LiveKit calls work on separate devices, Android microphone/camera/audio work, or legal/privacy approval has been obtained. The audit script does not perform HTML validation, accessibility testing, external image/CDN checks, SQL migration execution, or browser end-to-end tests.
+
+The new Discovery & Creativity and Life Skills pages are included in the repository revision covered by this automated audit. Their source links and local references passed the audit; their interactive behaviour still needs Android acceptance.
