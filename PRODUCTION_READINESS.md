@@ -149,3 +149,10 @@ This section supersedes older historical status bullets above wherever they conf
 - Connected Student, Parent and Teacher dashboards now distinguish dashboard points snapshots from quiz scores. This is a source-only display correction; database schema, RLS and stored learner records were not changed.
 - The local Teacher Dashboard remains a browser-local prototype; use the Connected Teacher Dashboard for the server-backed workflow, subject to its outstanding live authorization tests.
 - Classroom call source continues to require approved teacher ownership, approved membership plus active guardian relationship for students, observer-only linked guardian access, teacher presence before student/guardian join, short-lived tokens and deliberate media opt-in. LiveKit secret presence and real-device call tests remain open.
+
+
+## Current status authority — 24 November 2026
+
+This checklist retains its historical acceptance criteria. Its older opening inventory is a dated snapshot and is superseded by [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md), the single current status source.
+
+Current backend inventory rechecked on 24 November: AI Teacher v9 ACTIVE, Classroom Call Token v9 ACTIVE, Account Deletion Request v7 ACTIVE; JWT verification enabled for all three. AI Teacher authenticated response, LiveKit secret configuration, separate-account/cross-device tests, Android acceptance, child privacy/legal review, and native Android packaging remain outstanding. See the consolidated package before interpreting any older checklist line as current.
