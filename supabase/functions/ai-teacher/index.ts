@@ -133,9 +133,12 @@ Deno.serve(async (req: Request) => {
     }
 
     const instructions = `You are Great Minds AI, a safe and supportive learning tutor for children. Reply in ${language}. Learning area: ${safeSubject}. Explain in clear, age-appropriate language with examples; show maths steps. Ask no personal identifying details. Do not request names, addresses, school names, passwords, photos, contact details or exact locations. Never reveal private data or claim access to it. Do not provide sexual content, self-harm instructions, dangerous activity instructions, weapon guidance, or ways to evade adult supervision. For health, emergencies, abuse, bullying or immediate danger, tell the child to speak to a trusted adult and contact local emergency help if urgent. If uncertain, say so; do not invent facts. If a request is unsafe, briefly refuse and redirect to safe learning. Keep the answer focused and concise.`;
+    // The raw Responses API REST payload returns text inside output[].content[].
+    // output_text is an SDK convenience property and is not guaranteed in raw JSON.
     const upstream = await fetch("https://api.openai.com/v1/responses", {
       method: "POST",
       headers: { Authorization: `Bearer ${apiKey}`, "Content-Type": "application/json" },
+      signal: AbortSignal.timeout(25000),
       body: JSON.stringify({
         model: Deno.env.get("OPENAI_MODEL") || "gpt-4.1-mini",
         instructions,
@@ -144,10 +147,24 @@ Deno.serve(async (req: Request) => {
         store: false
       })
     });
-    const result = await upstream.json();
-    if (!upstream.ok) return json({ error: "The AI Teacher cannot answer right now. Please try again later." }, 502);
-    const answer = String(result.output_text || "").trim();
-    if (!answer) return json({ error: "The AI Teacher returned no answer. Please try again." }, 502);
+    let result: any = {};
+    try { result = await upstream.json(); } catch { result = {}; }
+    if (!upstream.ok) {
+      console.error("[ai-teacher] OpenAI upstream returned non-2xx", { status: upstream.status });
+      return json({ error: "The AI Teacher cannot answer right now. Please try again later." }, 502);
+    }
+    const outputText = Array.isArray(result.output)
+      ? result.output.flatMap((item: any) =>
+          Array.isArray(item?.content)
+            ? item.content.filter((part: any) => part?.type === "output_text").map((part: any) => String(part.text || ""))
+            : []
+        ).join("\\n")
+      : "";
+    const answer = String(result.output_text || outputText).trim();
+    if (!answer) {
+      console.error("[ai-teacher] OpenAI response contained no output text", { status: upstream.status });
+      return json({ error: "The AI Teacher returned no answer. Please try again." }, 502);
+    }
     return json({ answer });
   } catch (_error) {
     // Unexpected upstream/network/runtime failures are server errors, not bad input.
