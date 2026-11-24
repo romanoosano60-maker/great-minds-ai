@@ -27,11 +27,11 @@ The home page routes to the core learning areas and includes the independent stu
 Supabase project status: **ACTIVE_HEALTHY**.
 
 Active Edge Functions, all with JWT verification enabled:
-- `ai-teacher` — version 8.
+- `ai-teacher` — version 9 (updated during this continuation).
 - `classroom-call-token` — version 9.
 - `account-deletion-request` — version 7.
 
-The AI Teacher frontend points to the Supabase Edge Function, not the old Cloudflare `/ask` route. The current source authenticates the user, checks approved-teacher or active-guardian/student-link eligibility, validates the request, applies the database quota, and calls the AI provider server-side. The provider key must remain in Supabase Function Secrets. The secret value/presence cannot be read through this audit, and a successful authenticated AI answer has not been confirmed. The previously reported “AI service is not fully configured” message therefore remains an end-to-end test item, not a confirmed repair.
+The AI Teacher frontend points to the Supabase Edge Function, not the old Cloudflare `/ask` route. The current source authenticates the user, checks approved-teacher or active-guardian/student-link eligibility, validates the request, applies the database quota, and calls the AI provider server-side. During this continuation, a concrete response-parsing defect was corrected: the function previously read `output_text` from the raw REST JSON only, although the raw Responses API can return generated text under `output[].content[]`. Version 9 now reads both formats, logs only non-sensitive configuration/status diagnostics, and applies a 25-second upstream timeout. The provider key must remain in Supabase Function Secrets. The secret value/presence cannot be read through this audit, and a successful authenticated AI answer has not been confirmed. The previously reported configuration message remains an end-to-end test item because server secret presence cannot be inspected through this audit. The earlier HTTP 502 empty-answer path has been addressed in version 9, but a successful authenticated answer is still not confirmed.
 
 The classroom call function checks classroom ownership/membership and active guardian links before issuing tokens. The account-deletion function accepts an eligible adult's request for manual review; it does not delete the account or child data automatically.
 
