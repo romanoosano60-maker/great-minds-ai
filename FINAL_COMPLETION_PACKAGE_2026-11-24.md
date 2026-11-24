@@ -144,3 +144,36 @@ A further source-level review was completed after the initial consolidated audit
 
 ### Source audit conclusion
 The code contains meaningful fail-closed call controls, guardian consent protections and progress validation. No policy relaxation or database mutation was made during this source review. Required owner acceptance still includes real teacher/student/guardian accounts, consent and revocation, unrelated-account denial, cross-device parent visibility, LiveKit configuration, and Android call/media tests.
+
+
+## 11. Cross-document comparison and authoritative status — 24 November 2026
+
+The current completion package was compared against `GREAT_MINDS_MASTER_GUIDE.md`, `PRODUCTION_READINESS.md`, `OWNER_ACTIONS.md`, `PROJECT_STATUS.md`, and `README.md`. The older records contain useful dated history, but several opening summaries and older entries predate later backend/source changes. They must not be read as current deployment status.
+
+### Document authority and how to use the records
+
+| Document | Purpose after reconciliation | Authority |
+|---|---|---|
+| `FINAL_COMPLETION_PACKAGE_2026-11-24.md` | Single current status, verified source/backend facts, risks, acceptance gates and launch decision | **Primary source of truth** |
+| `GREAT_MINDS_MASTER_GUIDE.md` | Integration architecture and detailed working guide | Supporting guide; follow the 24 Nov addendum for current status |
+| `PRODUCTION_READINESS.md` | Launch and child-safety gate checklist | Supporting checklist; 24 Nov addendum supersedes older opening snapshot |
+| `OWNER_ACTIONS.md` | Detailed chronological test and engineering log | Historical evidence; older version numbers/status entries are superseded by dated later entries and this package |
+| `PROJECT_STATUS.md` | Historical engineering record and task chronology | Historical log; do not use older statements as present-day deployment facts |
+| `README.md` | Entry point to project and current package | Points to this primary package |
+
+### Reconciled facts
+
+- **Backend inventory (current recheck):** `ai-teacher` v9 ACTIVE, `classroom-call-token` v9 ACTIVE, and `account-deletion-request` v7 ACTIVE; JWT verification is enabled on all three. Older references to AI Teacher v6/v8, call-token v7, or deletion-request v5 are historical snapshots, not the current inventory.
+- **AI Teacher:** parser/timeout repair is deployed in v9. A successful authenticated child-safe answer and secret presence have not been verified; this remains an acceptance test, not a completed runtime feature.
+- **Classroom calling:** source-level authorization and media safeguards were reviewed. LiveKit secret presence and real teacher/student/guardian device calls remain unverified.
+- **Connected dashboards:** cloud panels use signed-in sessions and database RLS; shared-browser demo panels remain demonstrations and must not be confused with secure cloud records.
+- **Independent Student space:** nickname and history are browser/device local. It is not cross-device parent sync.
+- **Learning progress:** validated signed-in cloud writes and UUID retry comparison exist. Some activity integrations omit stable operation IDs, so not all activity saves are guaranteed idempotent. Device-local pending history is not an automatic deferred cloud-sync queue.
+- **Guardian consent:** high-entropy one-time code, hash storage, expiry, verified guardian email, explicit guardian declaration, and per-child revocation are present in the reviewed flow. This does not independently prove legal guardianship.
+- **Security:** three informational no-client-policy notices are intentional for closed tables; leaked-password protection remains disabled. Do not broaden RLS to silence notices.
+- **Performance:** five unused-index notices and two multiple-permissive-SELECT notices remain for evidence-led review; do not remove indexes or merge policies without query plans and authorization-equivalence review.
+- **Child safety and launch:** privacy/consent/legal review, retention/deletion/export procedures, real account boundary tests, Android acceptance and native packaging remain launch gates.
+
+### Final completion decision
+
+The repository documentation and backend inventory have been reconciled into one package. This completes the documentation consolidation and source-level audit work that can be responsibly completed without owner-controlled accounts/devices or legal decisions. It does **not** mean the app is fully launch-ready. The remaining work is explicitly separated into owner acceptance, administrator configuration, legal/privacy approval, and Android packaging. Preserve the working home screen and do not use real children's personal data until those gates pass.
