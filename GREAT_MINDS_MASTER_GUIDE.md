@@ -319,3 +319,6 @@ Static source inspection and deployment status are not substitutes for these liv
 - Reviewed `student-cloud-progress.js`: input validation, signed-in user requirement, RLS-based access, and UUID-based duplicate-retry comparison are present. Some integrations omit a stable operation ID, so not every activity is guaranteed idempotent on retry.
 - Independent Student local history is device-only and must not be described as secure cross-device parent sync. Cloud save failures are reported separately from local saves.
 - No RLS policies, database schema, secrets, or learner records were changed in this source audit. These findings were added to `FINAL_COMPLETION_PACKAGE_2026-11-24.md`; live account/device acceptance remains outstanding.
+
+
+> **Status authority — 24 November 2026:** This guide is the detailed integration reference, not the current status ledger. Use [FINAL COMPLETION PACKAGE — 24 November 2026](FINAL_COMPLETION_PACKAGE_2026-11-24.md) as the single source of truth for current backend versions, completed source audits, outstanding tests and launch readiness. Earlier sections in this guide preserve historical snapshots; dated later addenda supersede older statements.
