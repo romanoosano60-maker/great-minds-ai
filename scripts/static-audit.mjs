@@ -115,5 +115,5 @@ if (missing.length || syntaxFailures.length) {
   }
   process.exitCode = 1;
 } else {
-  console.log("PASS: local references resolve and standalone JavaScript files parse.");
+  console.log("PASS: local references resolve; standalone and inline JavaScript parse.");
 }
