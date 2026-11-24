@@ -104,3 +104,11 @@ A feature is complete only when its required evidence exists at the correct leve
 5. Complete privacy/legal and retention decisions, then Android packaging and store preparation.
 
 **Current conclusion:** the source and backend contain substantial completed work, but Great Minds AI is not yet independently verified as a fully working, child-safe, store-ready product. The remaining work is concentrated in live AI verification, separate-account/cross-device acceptance, Android audio/call tests, guardian/legal safeguards, deployment confirmation, and native packaging.
+
+## 9. Performance advisor snapshot — 24 November 2026
+
+The performance advisor also reports five informational unused-index notices and two warnings about multiple permissive SELECT policies:
+- Unused-index notices affect indexes on homework assignments, homework submissions, classrooms, and account-deletion requests.
+- Multiple permissive SELECT policies affect homework assignments and student learning progress. These policies represent distinct teacher, student, and linked-guardian access paths.
+
+Do not remove indexes or merge policies solely to clear advisor notices. First capture representative query plans/workload evidence and prove that any proposed policy consolidation preserves every teacher, student, and guardian access boundary. These findings are performance-review items, not permission to weaken RLS.
