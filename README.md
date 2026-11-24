@@ -10,6 +10,8 @@ This is the single source of truth for current completion status, verified backe
 
 ## Project files
 
+- [Unified Source-Code Completion Package](SOURCE_CODE_COMPLETION_PACKAGE_2026-11-24.md) — subject-by-subject source map, shared systems, backend inventory, known engineering gaps and one-pass integration order.
+
 - [Open the app](index.html)
 - [Unified Learning & Classroom Hub](connected-dashboards.html)
 - [Master Integration & Completion Guide](GREAT_MINDS_MASTER_GUIDE.md)
