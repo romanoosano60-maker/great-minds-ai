@@ -51,7 +51,7 @@ No production user, child learning record, classroom, RLS policy, schema, index,
 - Permanent home and learning navigation are present.
 - Subject lesson pages, vocabulary, story and practice areas are present.
 - Audio stop/cleanup protections were added to reviewed learning pages.
-- AI Teacher server-side integration and eligibility/quota checks are implemented in source and deployed as Edge Function version 8.
+- AI Teacher server-side integration and eligibility/quota checks are implemented in source and deployed as Edge Function version 9; raw Responses API output parsing and upstream timeout handling were repaired in this continuation.
 - Supervised classroom call-token authorization is implemented in source and deployed as version 9.
 - Adult account-deletion request intake is deployed as version 7 and explicitly remains manual-review only.
 - Classroom, consent, homework, student progress and role-specific RLS policies exist in the reviewed database.
