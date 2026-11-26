@@ -382,3 +382,16 @@ This continuation adds the following source-level progress and deployment eviden
 - Privacy/legal review, data retention/deletion/export decisions, and launch-country approval before public release.
 
 The source and static tests are not substitutes for live service, device, legal, or child-safety acceptance.
+
+### Additional subject quiz repairs — 26 November 2026
+
+The primary Mathematics quiz (`math.html`) and Science quiz (`science.html`) have now also been updated:
+
+- One stable UUID is created for each completed attempt.
+- Manual cloud retries reuse that UUID and the same score payload.
+- Learners receive an explicit retry action when cloud saving is unavailable or unconfirmed.
+- Restart is blocked while a save is in flight and resets the previous attempt after completion.
+
+Commits: `5482c19` (Mathematics), `8d8579b` (Science), with owner documentation in the latest `OWNER_ACTIONS.md`. The 5482c19 static workflow passed. The consolidated Pages deployment and static workflow for the subsequent source state must finish before describing all these changes as live.
+
+The remaining subject-page audit still includes older quiz integrations that submit without a stable caller-supplied operation ID or do not expose a learner retry action (for example, legacy Geography/History and expanded practice blocks). Those should be brought into the same pattern before declaring all subject progress integrations complete.
