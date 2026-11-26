@@ -1164,3 +1164,15 @@ No Supabase schema, policies, secrets, or plan settings were changed during this
 - [ ] Test the published challenge engine on Android for English, Mathematics, Science and at least one other subject; complete all three levels and exercise the cloud retry path using fictional adult-controlled test accounts.
 - [ ] Verify that retrying a failed save creates no duplicate cloud row and that switching accounts never transfers a queued result.
 - [ ] Complete the separate-device parent/student/teacher, classroom consent, AI Teacher and video-call tests recorded above.
+
+## 26 November 2026 — English Explorer retry and operation identity
+
+Completed a targeted repair in `english.html`:
+
+- English Explorer now creates one UUID for each completed quiz attempt and reuses that same ID for every cloud retry.
+- The local history record stores the same operation ID, allowing the cloud helper to recognise an exact duplicate safely.
+- Added explicit cloud-save confirmation, failure messaging and a learner-visible retry button. The retry path retains the original score and operation ID rather than creating a second cloud record.
+- Restarting the quiz clears the previous attempt state; restart is blocked while a cloud save is in flight.
+- The separate 20-question English practice already had a stable per-attempt ID and visible retry handling; this update addresses the previously identified English Explorer gap.
+
+Source-level validation and the repository static checks are required before treating this repair as deployed. Android and live Supabase/RLS acceptance tests remain outstanding.
