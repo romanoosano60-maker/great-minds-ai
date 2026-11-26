@@ -348,3 +348,16 @@ No schema, RLS policy, classroom, guardian relationship or membership was change
 The pending migration `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` has been reviewed against the live function, privileges and existing indexes. A controlled apply procedure and rollback plan are documented in [GUARDIAN_CONSENT_RATE_LIMIT_REVIEW_2026-11-26.md](GUARDIAN_CONSENT_RATE_LIMIT_REVIEW_2026-11-26.md).
 
 The migration is **not applied**. The live database still has no issuance-counter table and the current code-generation function has no three-per-hour rate limit. Production application requires the owner's explicit approval. No consent codes, guardian links, classroom memberships or learner records were changed during review.
+
+
+## 16. Classroom network status clarity and regression coverage — 26 November 2026
+
+The classroom setup screen has been clarified so it no longer implies that a standard classroom record is already a Local School or International Network:
+
+- The page now identifies itself as a **Classroom Setup Pilot**.
+- The teacher-entered country is explicitly labelled as unverified display-only data and not a country-based access control.
+- The creation confirmation identifies the result as a standard classroom record.
+- The Secure Network hub distinguishes the current guardian relationship model from the future Local and International network types.
+- A new regression test file checks these safety-critical disclosures, and the static CI workflow now runs all `scripts/*.test.mjs` files, not only the progress-sync tests.
+
+The regression tests and deployment checks for the latest commit are running. This is a transparency and regression-prevention improvement; it does not implement country verification, Local/International database types, partnership approval, or new RLS boundaries.
