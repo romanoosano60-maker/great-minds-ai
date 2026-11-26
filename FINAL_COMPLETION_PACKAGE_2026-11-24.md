@@ -395,3 +395,16 @@ The primary Mathematics quiz (`math.html`) and Science quiz (`science.html`) hav
 Commits: `5482c19` (Mathematics), `8d8579b` (Science), with owner documentation in the latest `OWNER_ACTIONS.md`. The 5482c19 static workflow passed. The consolidated Pages deployment and static workflow for the subsequent source state must finish before describing all these changes as live.
 
 The remaining subject-page audit still includes older quiz integrations that submit without a stable caller-supplied operation ID or do not expose a learner retry action (for example, legacy Geography/History and expanded practice blocks). Those should be brought into the same pattern before declaring all subject progress integrations complete.
+
+## 26 November 2026 — Follow-up combined source audit
+
+### Deployed source repairs
+- Confirmed the consolidated 26 November deployment for commit `7b3b079333728f760ce7f6968266cad0b0052f99` completed successfully; its static repository checks also completed successfully.
+- Added stable per-attempt operation IDs and a learner-visible cloud-save retry action to the primary History and Geography quizzes.
+- Added the same stable-ID/retry pattern to the expanded History, Geography and Computer Studies challenges. Retry reuses the original result; restarting a finished challenge clears the prior attempt state, and restart is blocked while a save is in flight.
+- Updated owner instructions to record these changes and the remaining acceptance boundaries.
+
+### Still not verified
+- These are repository/source and CI checks, not real Android, live Supabase RLS, separate-account, parent visibility, AI answer, or LiveKit acceptance tests.
+- Other legacy and expanded lesson save call sites still need a full systematic audit. A successful helper call must not be inferred from a locally visible score.
+- No production database schema, RLS policy, consent workflow, secrets, or user data were changed.
