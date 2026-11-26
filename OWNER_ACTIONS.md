@@ -1224,3 +1224,15 @@ The edits are source-level and require the latest static workflow and Pages depl
 - General Knowledge and Home Science expanded challenges now use stable operation IDs, visible retry controls, and safe restart-state reset.
 - Reading & Writing expanded challenge now has a stable attempt ID and learner-visible retry; free-form writing remains device-side.
 - English primary language challenge and reading-comprehension quiz now use stable attempt IDs and learner-visible cloud-save retry controls.
+
+## 26 November 2026 — Consolidated owner acceptance checklist
+
+1. Open the latest deployed app on Android and test home, subject navigation, audio, picture matching, Discovery & Creativity, Life Skills, and quiz retries.
+2. Create/use separate made-up Student A, Student B, Parent A and Teacher accounts. Verify Student A's queued/offline records never appear under Student B; only Parent A sees the linked child's records; only approved teachers see their own approved classroom learners.
+3. Test guardian consent absent, granted, revoked, and restored. Check classroom join remains pending until required consent and teacher approval are satisfied.
+4. Verify AI Teacher returns an authenticated answer, and separately verify a LiveKit teacher/student/guardian-observer call on different devices with mic/camera off until opted in.
+5. Decide verified country source, local-school criteria, international partnership approvals, guardian consent scope, and Supabase plan. Do not use real cross-border learner data before these boundaries are implemented and tested.
+6. Approve or reject the pending guardian-consent code rate-limit migration after reviewing its design; it has not been applied.
+7. Complete privacy notice, data retention/deletion/export, safeguarding and launch-country legal review before any public launch.
+
+Assistant-side source repairs recorded today: Encyclopedia challenge and Science additional-practice challenge now have stable attempt IDs and learner-visible retry controls. Final CI/deployment for these latest edits must be checked before treating them as live.
