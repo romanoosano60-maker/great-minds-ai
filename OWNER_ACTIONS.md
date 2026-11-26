@@ -1223,3 +1223,4 @@ The edits are source-level and require the latest static workflow and Pages depl
 - Follow-up: expanded Mathematics and Science challenges now use stable operation IDs and learner-visible retry controls; restarting clears the prior attempt and is blocked during an active save.
 - General Knowledge and Home Science expanded challenges now use stable operation IDs, visible retry controls, and safe restart-state reset.
 - Reading & Writing expanded challenge now has a stable attempt ID and learner-visible retry; free-form writing remains device-side.
+- English primary language challenge and reading-comprehension quiz now use stable attempt IDs and learner-visible cloud-save retry controls.
