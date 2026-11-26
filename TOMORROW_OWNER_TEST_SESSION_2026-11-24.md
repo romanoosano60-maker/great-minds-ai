@@ -60,3 +60,22 @@ For each test, record: **Pass / Fail / Not available**, the page name, exact err
 ## What a pass does not mean
 
 Passing the phone checks does not itself grant legal approval, confirm compliance in every launch country, complete account/data deletion, or publish a native Android app. Privacy/legal review, data-retention decisions, Supabase Auth settings, country/network separation and Android packaging remain separate release gates.
+
+
+## 8. Identity-bound offline progress sync — added 26 November
+
+Run this only with test accounts and made-up learner details. Do not use a real child's personal data.
+
+1. Confirm the phone is online and sign in as **Student Test Account A**.
+2. Complete one short lesson or quiz. Confirm the page reports whether the score was saved to the cloud or kept locally.
+3. Turn on Airplane mode. Complete another short quiz while Account A is still signed in. The expected result is a device save and a queued cloud-sync message; the app must not claim that the cloud save has already completed.
+4. While still offline, do not clear browser data or site storage. Restore internet access.
+5. Sign out of Account A and sign in as **Student Test Account B**. Refresh the parent/teacher views for Account B. Confirm Account A's queued record does not appear under Account B.
+6. Sign out of B and sign back in as Account A. Allow the page to finish loading, or complete one more small lesson. The pending queue should retry only for Account A.
+7. Sign in to the linked Parent Test Account A. Refresh cloud progress and confirm the queued score appears under the correct child.
+8. If testing guardian-consent denial, first use a separate student test account with no active guardian relationship. Its progress should remain queued. After the guardian completes the approved consent flow, sign back in as that same student and confirm retry succeeds.
+9. Check that older anonymous local history is not silently uploaded to either test account.
+
+**Pass conditions:** no Account A record appears under Account B; no anonymous legacy record is uploaded; the cloud record appears only after the same student account is verified and the existing RLS/guardian relationship allows it; a pending item is not described as cloud-saved before confirmation.
+
+The automated CI suite covers 17 helper-level cases. This phone session is still required because simulated database clients do not replace real Android, browser-storage, Supabase-session and RLS testing.
