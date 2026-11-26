@@ -1212,3 +1212,11 @@ The primary History Detective and Geography World Explorer quiz completion flows
 - retain the device-side demo-history copy separately from the authenticated cloud write.
 
 The edits are source-level and require the latest static workflow and Pages deployment to pass. Real Android and live Supabase/RLS testing remain required. The additional expanded History/Geography challenge blocks still need a full per-activity review; this repair covers the primary quizzes only.
+
+## 26 November 2026 — Expanded challenge retry follow-up
+
+- History expanded challenge: stable operation ID, same-payload retry, visible cloud-save status and retry control; restart resets the prior attempt and is blocked during an active save.
+- Geography expanded challenge: same safeguards.
+- Computer Studies expanded challenge: same safeguards.
+- Primary History and Geography quizzes also use stable per-attempt IDs and visible retries.
+- Static checks and the Pages deployment must pass for the latest combined commit. These changes still require Android and live Supabase acceptance tests.
