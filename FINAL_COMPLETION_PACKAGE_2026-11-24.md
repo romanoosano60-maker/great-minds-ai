@@ -408,3 +408,4 @@ The remaining subject-page audit still includes older quiz integrations that sub
 - These are repository/source and CI checks, not real Android, live Supabase RLS, separate-account, parent visibility, AI answer, or LiveKit acceptance tests.
 - Other legacy and expanded lesson save call sites still need a full systematic audit. A successful helper call must not be inferred from a locally visible score.
 - No production database schema, RLS policy, consent workflow, secrets, or user data were changed.
+- Added the same stable-ID and visible retry pattern to expanded Mathematics and Science challenges, including safe restart-state reset. This extends the earlier History, Geography and Computer Studies expanded-challenge repairs.
