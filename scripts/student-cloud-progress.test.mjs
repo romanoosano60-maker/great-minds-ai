@@ -295,6 +295,21 @@ test("drops expired queue entries without uploading them", async () => {
   assert.equal(db.calls.inserted.length, 0);
 });
 
+
+test("registers sign-in and network-reconnect retry triggers", async () => {
+  const pending = queuedItem(700);
+  const db = database();
+  const env = environment(db, [], [pending]);
+  assert.equal(typeof db.calls.authListener, "function");
+  assert.equal(typeof env.listeners.online, "function");
+  db.calls.authListener("SIGNED_IN", { user: { id: STUDENT_A } });
+  assert.equal(env.timers.length, 1);
+  env.timers.shift()();
+  await new Promise(resolve => setImmediate(resolve));
+  assert.equal(env.readQueue().length, 0);
+  assert.equal(db.calls.inserted.length, 1);
+});
+
 test("loads progress through the signed-in account and bounded query", async () => {
   const rows = [{ subject: "English", activity_key: "vowels", score: 4, max_score: 5 }];
   const db = database({ rows });
