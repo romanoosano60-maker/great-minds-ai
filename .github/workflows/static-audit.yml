@@ -20,5 +20,7 @@ jobs:
         uses: actions/setup-node@v4
         with:
           node-version: "22"
+      - name: Test authenticated student progress helper
+        run: node --test scripts/student-cloud-progress.test.mjs
       - name: Run static audit
         run: node scripts/static-audit.mjs
