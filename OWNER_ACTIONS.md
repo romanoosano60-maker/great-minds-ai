@@ -1,6 +1,6 @@
 # Great Minds AI — Owner Actions and Final Test Checklist
 
-Last checked: 19 November 2026
+Last checked: 26 November 2026
 
 ## Additional learning-flow coverage — 19 November 2026
 
@@ -504,29 +504,22 @@ Read-only source trace completed for the five primary subject pages and the shar
 - The shared script maps those five filenames to their corresponding subject banks and renders Beginner, Pro, and Advanced levels.
 - The level-bank script also defines Geography, History, Home Science, Vocabulary, Creative Arts, General Knowledge, and Little Learners Encyclopedia banks, and aliases the supported extra pages. This source inspection does not prove every mapped page exists or loads correctly in a browser.
 
-### Cloud-save trace and reliability gap
-- On completion, the level challenge calls `window.gmSaveStudentProgress` when available and passes the subject, activity key, score, maximum score, correct count, question count, source, and level.
-- `student-cloud-progress.js` validates the core score fields, writes a local pending-progress record, checks the signed-in Supabase user, then attempts an insert into `student_learning_progress`. It returns a result distinguishing cloud-saved from local-only.
-- The helper currently does not preserve the optional `level` field in the local pending record or cloud row. The challenge caller includes it, but the helper drops it; do not assume level-specific results are retained in the database.
-- The challenge completion handler catches the save promise with an empty handler and displays only “Challenge complete” and the score. The returned `saved` / `localSaved` / `reason` state is not shown to the learner. Therefore, the interface can look complete even when cloud sync failed.
-- The local pending records are stored, but this helper contains no retry/synchronisation worker that later uploads queued records. Treat them as device-local fallback records, not guaranteed deferred cloud sync.
-- Some pages include their own existing quiz-save handlers in addition to the shared level challenge. These separate activities must be tested independently; one successful save does not prove every activity saves.
+### Cloud-save trace and reliability — updated 26 November
+- The shared level challenge calls `window.gmSaveStudentProgress` with subject, activity key, score, maximum score, correct count, question count, source, level and a stable per-attempt UUID. It retains the ID for its retry button and shows cloud-confirmed versus unconfirmed status.
+- `student-cloud-progress.js` validates score fields, saves a device-local history copy, checks the authenticated Supabase user, and attempts an RLS-protected insert into `student_learning_progress`.
+- A bounded identity-bound queue is now implemented. It stores only minimal score/activity metadata, owner account UUID, operation UUID and creation time. It is capped at 100 entries and expires entries after 30 days.
+- Queue entries are created only for new saves tied to a verified signed-in user or a cached session awaiting server verification. A cached-session entry is not uploaded until `getUser()` confirms the same account. Retries are triggered on initial session, sign-in, token refresh, network reconnection, and through `gmSyncPendingStudentProgress()`.
+- Account A's queued record is never uploaded as Account B. Legacy anonymous local history is not auto-uploaded. The helper rejects conflicting reuse of a local or cloud operation ID.
+- Seventeen automated tests pass in GitHub Actions, covering ownership, RLS denial, offline cached-session handling, same-account retry, account switching, legacy non-upload, queue bounds/expiry and duplicate handling. The updated source is merged and deployed.
+- The optional `level` value is retained in local history but is not written to the cloud table because `student_learning_progress` has no declared `level` column. Do not insert an undeclared column.
+- Some subject pages have their own quiz-save handlers in addition to the shared level challenge. They must be tested independently; one successful save does not prove every activity saves.
 
 ### Next safe implementation steps
-1. Add visible completion save feedback for cloud success versus device-only fallback, using the helper's returned result and without exposing technical error details to children.
-2. Decide and implement a deliberate retry/sync path for local pending records, with duplicate protection and server/RLS validation; do not silently upload old records without testing account changes and ownership.
-3. Decide whether level should be stored in a dedicated database column or encoded in an approved, validated activity field. Do not attempt to insert an undeclared column into the live table.
-4. Add automated/static checks for page script references, filename-to-bank mapping, and question structure.
-5. Run Android tests for online save, offline completion, signed-out completion, later sign-in, and guardian-consent/RLS rejection. Mark cloud persistence complete only after the returned status and database row are verified for the intended account.
-
-This remains a source trace, not a live browser or Android runtime test. No Supabase schema, policy, function, secret, learner record, or production app source was modified.
-
-
-### Follow-up page inventory verification (15 November 2026)
-- Checked the repository root: all 12 bank page files exist — English, Mathematics, Science, Social Studies, Geography, History, Computer Studies, Home Science, Vocabulary, Creative Arts, General Knowledge, and Encyclopedia.
-- Checked each of the seven additional subject pages (Geography, History, Home Science, Vocabulary, Creative Arts, General Knowledge, and Encyclopedia): each includes the shared `assets/js/level-challenges.js` script reference. Together with the five primary pages above, all 12 subject pages are wired to the shared level script in source.
-- Checked all seven declared extra-page aliases against the repository root: each alias page exists and maps to a defined primary bank.
-- This verifies file presence and script references only; it does not replace browser execution, console inspection, or Android completion tests.
+1. Run the Android offline/reconnect test sequence in `TOMORROW_OWNER_TEST_SESSION_2026-11-24.md` using separate made-up test accounts A and B.
+2. Confirm real Supabase RLS denial when guardian consent is absent, then same-account retry after the guardian link is active.
+3. Verify parent and teacher dashboards show only records authorized by RLS after queued records sync.
+4. Review activity pages that omit caller-supplied IDs; the helper creates an ID per call, but a new user-triggered call without the original ID is a new operation rather than a retry.
+5. Decide whether level should be added as a reviewed database column in a future migration; until then it remains local metadata.
 
 
 ## 15 November 2026 — challenge save feedback and local record accuracy
