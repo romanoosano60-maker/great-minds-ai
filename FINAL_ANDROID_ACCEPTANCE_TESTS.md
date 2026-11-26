@@ -146,3 +146,22 @@
 5. **Guardian privacy:** use separate adult-controlled test accounts to verify that an unrelated parent cannot read a student's records, an unrelated teacher cannot read another classroom's records, and revoked guardian consent removes the previously granted access as intended.
 
 **Important:** source review and successful GitHub deployment do not prove Supabase secrets, RLS isolation, Auth settings, or Android behaviour. Mark these checks NOT TESTED until observed in the live project/device.
+
+
+## Test 9 — Offline progress and account-switch isolation
+
+Use fictional test accounts only. Keep the same Chrome profile on the same phone so the device retry queue is exercised.
+
+1. Sign in as Student A while online and complete a small quiz that reports a cloud-save status.
+2. Confirm the result is either cloud-confirmed or visibly queued; do not interpret a device-only message as a cloud save.
+3. Turn on Airplane mode. Complete another short quiz and confirm the score remains visible with a clear offline/device or queued status.
+4. While still offline, sign out Student A and sign in as Student B if the app permits the cached sign-in flow. Student B must not see Student A's private progress.
+5. Restore the connection. Keep Student B signed in and allow the sync attempt to run. Confirm Student A's queued record is not uploaded under Student B.
+6. Sign out Student B, sign in again as Student A, and trigger the page's retry/check-sync action if shown.
+7. Confirm Student A's queued record appears only in Student A's cloud progress after a successful sync. Then sign in as linked Parent A and confirm only the permitted linked learner records are visible.
+8. Repeat one save with guardian consent absent (using a test-only consent state) and confirm it is not shown as cloud-saved. Restore consent and retry the same record; confirm there is no duplicate score.
+9. Confirm legacy anonymous local history is not silently uploaded to either account.
+
+**Pass:** queued progress remains bound to its originating account; Student B never receives Student A's record; Student A can sync after re-authentication; retries do not duplicate results; parent visibility follows the approved relationship and RLS.
+
+**Safety:** Do not change production consent or RLS settings to perform this test. Use approved test accounts and a controlled test environment.
