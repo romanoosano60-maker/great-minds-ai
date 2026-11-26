@@ -198,7 +198,7 @@ Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_S
 - Every queued record is bound to its owner UUID and is uploaded only after the same account is verified. Account switching does not transfer queued progress.
 - Legacy anonymous local history is not auto-uploaded.
 - The queue is limited to 100 entries and 30 days; its payload contains score/activity metadata only.
-- Seventeen automated tests pass. Real Android, separate-account and live Supabase RLS acceptance tests are still required.
+- Twenty automated tests pass. Real Android, separate-account and live Supabase RLS acceptance tests are still required.
 
 **Still not implemented:** separate Local School and International classroom database types or verified country-based access boundaries. The current free-text classroom country and absence of verified teacher/student/guardian country fields are not sufficient to enforce cross-border rules. No network schema migration was deployed.
 
