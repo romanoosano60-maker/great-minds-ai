@@ -22,7 +22,7 @@ The helper uses the existing RLS-protected insert path. The database remains the
 
 ## 2. Implemented retry design and remaining acceptance tests
 
-The source implementation is merged into `main` and deployed to GitHub Pages. Seventeen automated tests pass in GitHub Actions. They cover validation, local-only saves, signed-in ownership, no-session behaviour, guardian-consent/RLS denial, same-account retry, cached-session verification, account switching, legacy-history non-upload, generated operation IDs, duplicate conflicts, queue limits/expiry, sign-in/reconnect triggers and bounded reads.
+The source implementation is merged into `main` and deployed to GitHub Pages. Twenty automated tests pass in GitHub Actions. They cover validation, local-only saves, signed-in ownership, no-session behaviour, guardian-consent/RLS denial, same-account retry, cached-session verification, account switching, legacy-history non-upload, generated operation IDs, duplicate conflicts, queue limits/expiry, sign-in/reconnect triggers and bounded reads.
 
 ### Required owner/device tests before treating cloud sync as accepted
 
@@ -77,7 +77,7 @@ The three concepts should not be represented as three interchangeable classroom 
 
 ## 5. Current engineering disposition
 
-**Completed:** identity-bound deferred progress retry is implemented in source, merged and deployed; 17 automated tests pass; legacy anonymous history is explicitly excluded from auto-upload; network semantics and the migration/test sequence are documented.
+**Completed:** identity-bound deferred progress retry is implemented in source, merged and deployed; 20 automated tests pass; legacy anonymous history is explicitly excluded from auto-upload; network semantics and the migration/test sequence are documented.
 
 **Not claimed complete:** real Android/offline account acceptance, separate-account Supabase RLS tests, network schema migration, verified country data, cross-border collaboration controls, production guardian-code rate limiting, authenticated AI response, LiveKit call tests, legal/privacy approval, or native Android packaging.
 
