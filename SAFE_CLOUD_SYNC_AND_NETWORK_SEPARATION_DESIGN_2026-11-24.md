@@ -1,44 +1,41 @@
 # Great Minds AI — Safe Cloud Sync and Network Separation Design
 
 Date: 24 November 2026  
-Status: engineering design prepared; **no database migration or data backfill is applied by this document**.
+Status: identity-bound progress retry is implemented in source and deployed; **no network schema migration or data backfill is applied by this document**.
 
 This document closes the design work that can be completed safely from source inspection. It deliberately does not claim that the proposed systems are deployed or tested.
 
-## 1. Current progress-storage behaviour found in source
+## 1. Current progress-storage behaviour
 
-The shared helper `student-cloud-progress.js`:
-- Validates subject/activity names, score ranges, optional correct/question counts, level values and optional UUID operation IDs.
-- Writes score metadata to the browser key `gm_independent_pending_progress` as a device-local copy.
-- Attempts an immediate authenticated insert into `public.student_learning_progress` when a Supabase client and signed-in user are available.
-- Uses the supplied operation UUID as the database row ID when present and checks a duplicate row before treating a repeated insert as idempotently saved.
-- Returns separate `saved` and `localSaved` flags so a local copy is not described as a cloud save.
+The shared helper `student-cloud-progress.js` now:
+- Validates subject/activity names, score ranges, optional correct/question counts and UUID operation IDs. It generates a UUID when a caller omits one.
+- Writes a device-local history copy to `gm_independent_pending_progress`.
+- Attempts an immediate insert into `public.student_learning_progress` only after checking the signed-in account.
+- Uses the operation UUID as the cloud row ID and treats an exact duplicate as idempotent success; a duplicate with different immutable values is a conflict.
+- Returns separate `saved`, `localSaved` and `queued` state so a device copy or queued record is not described as cloud-confirmed.
+- Stores new retry items in `gm_authenticated_progress_sync_queue`, bound to the owner account UUID. It queues only newly created progress records tied to a verified account, or a cached session awaiting later server verification.
+- Never auto-uploads legacy anonymous local history. Cached-session items are not uploaded until a later `getUser()` call confirms the same account.
+- Retries on initial authenticated session, sign-in, token refresh, network reconnection and explicit calls to `gmSyncPendingStudentProgress()`.
+- Caps the queue at 100 entries and expires entries after 30 days. Queue payloads contain only score/activity metadata, not learner nicknames, free-form writing, audio, contact details or precise location.
 
-The helper does **not** currently provide an automatic deferred queue-drain/synchronisation process. Existing device-local records are not reliably bound to the authenticated account that created them. Therefore, silently uploading old local records later could attach one person's activity to another person's account on a shared device.
+The helper uses the existing RLS-protected insert path. The database remains the authority for guardian consent and row ownership; the browser queue does not bypass RLS.
 
-## 2. Safe future cloud-sync design
+## 2. Implemented retry design and remaining acceptance tests
 
-Do not auto-upload legacy anonymous local records. A safe implementation should:
+The source implementation is merged into `main` and deployed to GitHub Pages. Seventeen automated tests pass in GitHub Actions. They cover validation, local-only saves, signed-in ownership, no-session behaviour, guardian-consent/RLS denial, same-account retry, cached-session verification, account switching, legacy-history non-upload, generated operation IDs, duplicate conflicts, queue limits/expiry, sign-in/reconnect triggers and bounded reads.
 
-1. Create new queue entries only while an authenticated session is present and the current account is verified as the intended learner.
-2. Store a stable UUID operation ID, authenticated owner ID, schema version, created timestamp and only the minimum score metadata required.
-3. Require the existing approved guardian relationship/consent gate for any child cloud write; do not infer consent from local storage or a selected role.
-4. On retry, confirm the current session user ID exactly matches the queue owner ID. If not, leave the entry local and ask the correct account holder to sign in.
-5. Submit through the existing RLS-protected data path with the stable operation ID. A duplicate ID with matching immutable values is success; a duplicate ID with different values is a conflict requiring review, not overwrite.
-6. Remove a local queue item only after the server confirms the exact operation ID and record owner. Keep a visible distinction between device-only, waiting-to-retry, and cloud-confirmed progress.
-7. Apply bounded retry/backoff and a queue size/age limit. Never store child free-form writing, voice recordings, contact details or precise location in the progress queue.
-8. Provide an adult-controlled way to clear device-local demo data without deleting cloud records.
-
-### Required tests before enabling deferred sync
+### Required owner/device tests before treating cloud sync as accepted
 
 - No signed-in account: local-only entry is not uploaded.
-- Account A creates an entry; Account B signs in on the same device: A's entry is not uploaded as B.
-- Guardian consent absent/revoked: upload is denied and the local copy remains clearly device-only.
-- Same operation UUID + same immutable record: one cloud row only.
-- Same operation UUID + changed score/activity/owner: conflict is reported; no overwrite.
-- Network failure then retry: exactly one cloud row after eventual success.
-- Sign-out during a retry: queue processing stops and no next account inherits the item.
+- Account A creates an offline entry; Account B signs in on the same device: A's entry is not uploaded as B.
+- Account A signs back in: only A's queued entry may sync.
+- Guardian consent absent/revoked: upload is denied and the local copy remains queued; after consent is restored, the same account can retry.
+- Network failure then reconnect: exactly one cloud row after eventual success.
+- Sign-out during a retry: no next account inherits the item.
 - Parent/teacher reads: RLS exposes only records permitted by the existing relationship and classroom policies.
+- Browser storage disabled/full: the page reports that local/queue storage could not be confirmed; it must not claim cloud save unless the server confirms it.
+
+A caller that omits an operation ID receives a generated ID for that invocation and its internal queue retry. A separate later call without the original ID is a new operation; older pages with user-triggered retry should retain their own per-attempt ID.
 
 ## 3. Family, Local School and International Network model
 
@@ -80,9 +77,9 @@ The three concepts should not be represented as three interchangeable classroom 
 
 ## 5. Current engineering disposition
 
-**Completed in this design pass:** source behaviour documented, unsafe legacy auto-sync explicitly ruled out, future identity-bound idempotent sync contract specified, network semantics separated, migration sequence and positive/negative security tests specified.
+**Completed:** identity-bound deferred progress retry is implemented in source, merged and deployed; 17 automated tests pass; legacy anonymous history is explicitly excluded from auto-upload; network semantics and the migration/test sequence are documented.
 
-**Not claimed complete:** deferred sync implementation, network schema migration, country data verification, RLS changes, production database deployment, authenticated AI response, LiveKit call tests, legal/privacy approval, or Android acceptance.
+**Not claimed complete:** real Android/offline account acceptance, separate-account Supabase RLS tests, network schema migration, verified country data, cross-border collaboration controls, production guardian-code rate limiting, authenticated AI response, LiveKit call tests, legal/privacy approval, or native Android packaging.
 
 No secret values, service-role credentials, or child personal data belong in GitHub Pages source or this document.
 
