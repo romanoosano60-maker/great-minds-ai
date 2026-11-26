@@ -1188,3 +1188,15 @@ Completed a source-level repair in `creative-arts.html`:
 - Restart is blocked while a cloud save is in flight and clears the prior attempt state afterward.
 
 The source update is committed. Automated repository checks and Pages deployment must complete before calling it deployed. Real-device and live Supabase/RLS acceptance remain pending.
+
+## 26 November 2026 — Mathematics and Science quiz save repair
+
+Completed source-level repairs in `math.html` and `science.html` for the primary subject quizzes:
+
+- Each completed quiz attempt receives one stable UUID.
+- Cloud retries reuse the same operation ID and score payload.
+- Added learner-visible retry buttons and clear cloud-confirmed versus not-confirmed messages.
+- Prevented restarting while a cloud save is in flight; restarting a finished attempt clears its prior retry state.
+- Existing local demo-history behavior is retained separately from authenticated cloud progress.
+
+Source commits: Mathematics `5482c19`; Science `8d8579b`. Static checks and Pages deployment are pending for the latest consolidated branch state. Real Android and live Supabase/RLS acceptance remain pending.
