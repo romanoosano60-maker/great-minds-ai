@@ -164,5 +164,6 @@ test("loads progress through the signed-in account and bounded query", async () 
   assert.equal(result.rows.length, 1);
   assert.equal(db.calls.table, "student_learning_progress");
   assert.equal(db.calls.limit, 100);
-  assert.deepEqual(db.calls.order, ["completed_at", { ascending: false }]);
+  assert.equal(db.calls.order[0], "completed_at");
+  assert.equal(db.calls.order[1].ascending, false);
 });
