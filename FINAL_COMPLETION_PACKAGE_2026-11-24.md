@@ -341,3 +341,10 @@ The existing Family Network is represented by guardian relationships. Local Scho
 5. Review whether the current global guardian link is intended to authorize every future classroom membership or whether consent must be recorded separately per classroom.
 
 No schema, RLS policy, classroom, guardian relationship or membership was changed during this audit.
+
+
+## 15. Guardian-consent rate-limit migration review — 26 November 2026
+
+The pending migration `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` has been reviewed against the live function, privileges and existing indexes. A controlled apply procedure and rollback plan are documented in [GUARDIAN_CONSENT_RATE_LIMIT_REVIEW_2026-11-26.md](GUARDIAN_CONSENT_RATE_LIMIT_REVIEW_2026-11-26.md).
+
+The migration is **not applied**. The live database still has no issuance-counter table and the current code-generation function has no three-per-hour rate limit. Production application requires the owner's explicit approval. No consent codes, guardian links, classroom memberships or learner records were changed during review.
