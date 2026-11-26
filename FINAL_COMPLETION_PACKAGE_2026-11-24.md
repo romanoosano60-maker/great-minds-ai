@@ -299,7 +299,7 @@ The source-side progress conflict guard and automated tests are prepared and CI-
 
 ## 13. Identity-bound offline progress sync — source implementation prepared 26 November 2026
 
-A source implementation of deferred progress retry was prepared on an engineering branch, verified by automated tests, and merged into `main` at commit `4619a60beb6b297599f87100030160befbac5aa0`. The GitHub Pages deployment triggered by that merge is being verified separately.
+A source implementation of deferred progress retry was prepared on an engineering branch, verified by automated tests, and merged into `main` at commit `4619a60beb6b297599f87100030160befbac5aa0`. The GitHub Pages deployment completed successfully on 26 November (workflow run `45778488849`). The source is now published, but real Android and separate-account acceptance tests are still required.
 
 - New queue key: `gm_authenticated_progress_sync_queue`.
 - Queue entries are created only for new progress saves made while a signed-in account is verified, or while a cached session identifies the account during a network outage. Cached-session entries are **not uploaded** until a later server-side `getUser()` check confirms that the same account is signed in.
@@ -312,3 +312,32 @@ A source implementation of deferred progress retry was prepared on an engineerin
 - PR [#2 — Add identity-bound offline progress sync](https://github.com/romanoosano60-maker/great-minds-ai/pull/2) is merged. CI passed with all 17 tests and the static audit. Do not describe the feature as live until the Pages deployment is confirmed.
 
 **Not yet proven:** real Android offline/reconnect behaviour, real Supabase RLS denial and recovery with separate accounts, queue behaviour under browser storage restrictions, or parent visibility after cross-device sync. These remain owner acceptance tests. No Supabase database or production data was changed for this source implementation.
+
+
+## 14. Classroom and network-separation schema recheck — 26 November 2026
+
+A read-only inspection of the live classroom schema, RLS policies, constraints and database functions refined the network-separation design.
+
+### What exists now
+
+- `public.classrooms` stores `classroom_name`, `Subject`, free-text `Country`, `teacher_id`, and both legacy `classroom code` and `classroom_code` columns. It has no `network_type`, normalized ISO country code, or verified-country field.
+- `public.teacher_profiles` contains only `user_id`, `approved`, and `created_at`. It has no country field or country-verification state.
+- `public.classroom_members` stores `membership_status` and `parent_consent_status`. Its RLS allows a student, linked active guardian, or approved owning teacher to read the relevant membership; only an approved owning teacher can update membership status, and an approved membership cannot be set unless parent consent is approved.
+- Classroom membership is inserted through `private.join_classroom_by_code(text)`, a `SECURITY DEFINER` function with an empty search path. It requires an authenticated user, limits join-code attempts to 20 per user per day, validates the code format, and creates a pending membership. It sets the membership's parent-consent status to approved when an active guardian relationship already exists. The function does not check country or network type.
+- `public.guardian_relationships` records the active/revoked parent-child link. This is separate from classroom ownership and teacher approval.
+
+### Safety conclusion
+
+The current country value is teacher-entered free text, and there is no trusted country on the student, guardian or approved teacher profile. Therefore a database cannot reliably decide whether a student is in the same country as a classroom or whether a proposed collaboration is cross-border. Adding a `network_type` label alone would not enforce a real country boundary.
+
+The existing Family Network is represented by guardian relationships. Local School and International Network remain intended product categories, not separate enforced database network types. Do not use real cross-border student data on the assumption that the current screens enforce country boundaries.
+
+### Safe next implementation sequence
+
+1. Decide the authoritative country source and verification process for approved school/teacher accounts. A teacher-entered country string alone must not be treated as verified.
+2. Decide whether local-school access should be limited by the verified country of the learner's guardian, the school, or both.
+3. Define international collaboration as an explicit school-to-school partnership, with approval from both approved teacher/school accounts and active guardian consent for each participating learner.
+4. Only then add normalized country fields, network/partnership records, RLS checks and positive/negative tests. Keep old classroom rows unclassified until their country and ownership are reviewed.
+5. Review whether the current global guardian link is intended to authorize every future classroom membership or whether consent must be recorded separately per classroom.
+
+No schema, RLS policy, classroom, guardian relationship or membership was changed during this audit.
