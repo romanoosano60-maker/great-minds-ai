@@ -168,7 +168,7 @@ The current completion package was compared against `GREAT_MINDS_MASTER_GUIDE.md
 - **Classroom calling:** source-level authorization and media safeguards were reviewed. LiveKit secret presence and real teacher/student/guardian device calls remain unverified.
 - **Connected dashboards:** cloud panels use signed-in sessions and database RLS; shared-browser demo panels remain demonstrations and must not be confused with secure cloud records.
 - **Independent Student space:** nickname and history are browser/device local. It is not cross-device parent sync.
-- **Learning progress:** validated signed-in cloud writes and UUID retry comparison exist. Some activity integrations omit stable operation IDs, so not all activity saves are guaranteed idempotent. Device-local pending history is not an automatic deferred cloud-sync queue.
+- **Learning progress:** the shared helper now generates UUID operation IDs, rejects conflicting duplicate records, and provides a bounded identity-bound retry queue for new authenticated progress. The queue is deployed, never auto-uploads legacy anonymous history, and retries only after the same account is verified. Seventeen automated tests pass; real Android and separate-account RLS acceptance tests remain outstanding. Some older activity pages still omit caller-supplied per-attempt IDs, so a separate user-triggered completion call without the original ID is treated as a new operation.
 - **Guardian consent:** high-entropy one-time code, hash storage, expiry, verified guardian email, explicit guardian declaration, and per-child revocation are present in the reviewed flow. This does not independently prove legal guardianship.
 - **Security:** three informational no-client-policy notices are intentional for closed tables; leaked-password protection remains disabled. Do not broaden RLS to silence notices.
 - **Performance:** five unused-index notices and two multiple-permissive-SELECT notices remain for evidence-led review; do not remove indexes or merge policies without query plans and authorization-equivalence review.
@@ -185,8 +185,8 @@ A dedicated source-code package has been added at `SOURCE_CODE_COMPLETION_PACKAG
 
 The source package also makes the following known gaps explicit so they are not mistakenly reported as complete:
 - Family, Local School and International Network are not yet distinct database network types; country-based RLS boundaries are not implemented/tested.
-- Some subject/activity progress integrations do not pass a stable per-attempt UUID, so repeated submission is not guaranteed idempotent for every activity.
-- The shared progress helper stores a device-local copy but does not guarantee automatic deferred cloud synchronization.
+- Some subject/activity progress integrations do not pass their own stable per-attempt UUID. The helper generates an ID for each invocation and preserves it for internal queue retries, but a later separate invocation without the original ID is a new operation.
+- Identity-bound deferred cloud synchronization is now implemented and deployed for new authenticated progress records; real Android and separate-account RLS acceptance remains outstanding. Legacy anonymous local records are not automatically uploaded.
 - AI Teacher authenticated runtime, LiveKit separate-device calls, Android acceptance, privacy/legal approval and native Android packaging remain unverified or outstanding.
 
 This is a source architecture/index and audit package, not a monolithic code bundle. Keep modules separate, preserve the working home screen, and make only evidence-based, reversible changes. The source package does not alter learner data, RLS policies, database schema or secrets.
