@@ -25,4 +25,5 @@ Keep Great Minds AI separate from the Dubai Life project. Preserve the confirmed
 ## Next owner test session
 
 - [Tomorrow's Owner Test Session](TOMORROW_OWNER_TEST_SESSION_2026-11-24.md) — concise Android, AI Teacher, audio, account, classroom and homework acceptance checklist.
-- [Safe Cloud Sync and Network Separation Design](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md) — prepared engineering design and migration/test sequence; no database changes applied.
+- [Safe Cloud Sync and Network Separation Design](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md) — identity-bound progress sync is implemented; Local/International network separation still requires a verified-country design and migration.
+- [Guardian Consent Rate-Limit Review](GUARDIAN_CONSENT_RATE_LIMIT_REVIEW_2026-11-26.md) — reviewed production migration, verification steps and rollback plan; explicit owner approval is still required before applying.
