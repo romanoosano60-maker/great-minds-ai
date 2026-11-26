@@ -68,7 +68,7 @@ If the migration causes an issue immediately after application and before it is 
 - Re-run the function ACL and RLS checks. Do not delete consent-code rows, guardian relationships or classroom memberships as part of rollback.
 - Reconcile the Supabase migration history through the supported migration workflow; do not manually edit the migration-history table.
 
-Rollback removes the rate-limit counter history. It must not be used casually after the rate limit has been relied on as an active safeguard.
+A reviewed SQL template is stored at [supabase/rollbacks/20261120_rate_limit_guardian_consent_codes.rollback.sql](supabase/rollbacks/20261120_rate_limit_guardian_consent_codes.rollback.sql). It restores the exact pre-migration function definition captured on 26 November and drops only the new table and indexes. Review the file against the live schema immediately before any use. Rollback removes the rate-limit counter history. It must not be used casually after the rate limit has been relied on as an active safeguard.
 
 ## 6. Decision still required
 
