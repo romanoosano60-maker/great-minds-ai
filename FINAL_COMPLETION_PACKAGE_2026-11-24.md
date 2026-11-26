@@ -299,7 +299,7 @@ The source-side progress conflict guard and automated tests are prepared and CI-
 
 ## 13. Identity-bound offline progress sync — source implementation prepared 26 November 2026
 
-A source implementation of deferred progress retry was prepared on an engineering branch, verified by automated tests, and merged into `main` at commit `4619a60beb6b297599f87100030160befbac5aa0`. The GitHub Pages deployment completed successfully on 26 November (latest documentation/source workflow run `45779135226`). The source is published, but real Android and separate-account acceptance tests are still required.
+A source implementation of deferred progress retry was prepared on an engineering branch, verified by automated tests, and merged into `main` at commit `4619a60beb6b297599f87100030160befbac5aa0`. The GitHub Pages deployment completed successfully on 26 November (latest documentation/source workflow run `45779300875`). The source is published, but real Android and separate-account acceptance tests are still required.
 
 - New queue key: `gm_authenticated_progress_sync_queue`.
 - Queue entries are created only for new progress saves made while a signed-in account is verified, or while a cached session identifies the account during a network outage. Cached-session entries are **not uploaded** until a later server-side `getUser()` check confirms that the same account is signed in.
@@ -309,7 +309,7 @@ A source implementation of deferred progress retry was prepared on an engineerin
 - Retry is triggered on initial authenticated session, sign-in, token refresh, network reconnection, and by the exposed `gmSyncPendingStudentProgress()` function.
 - Legacy anonymous local history is not scanned or uploaded. It remains device-only.
 - The test suite now has 17 passing cases, including same-account retry, account-switch isolation, cached-session/offline handling, legacy-history non-upload, queue bounds/expiry, duplicate verification and existing progress validation. The repository static audit also passes.
-- PR [#2 — Add identity-bound offline progress sync](https://github.com/romanoosano60-maker/great-minds-ai/pull/2) is merged. CI passed with all 17 tests and the static audit. GitHub Pages deployment is confirmed successful in run `45779135226`.
+- PR [#2 — Add identity-bound offline progress sync](https://github.com/romanoosano60-maker/great-minds-ai/pull/2) is merged. CI passed with all 17 tests and the static audit. GitHub Pages deployment is confirmed successful in run `45779300875`.
 
 **Not yet proven:** real Android offline/reconnect behaviour, real Supabase RLS denial and recovery with separate accounts, queue behaviour under browser storage restrictions, or parent visibility after cross-device sync. These remain owner acceptance tests. No Supabase database or production data was changed for this source implementation.
 
