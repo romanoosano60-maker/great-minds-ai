@@ -85,3 +85,19 @@ The three concepts should not be represented as three interchangeable classroom 
 **Not claimed complete:** deferred sync implementation, network schema migration, country data verification, RLS changes, production database deployment, authenticated AI response, LiveKit call tests, legal/privacy approval, or Android acceptance.
 
 No secret values, service-role credentials, or child personal data belong in GitHub Pages source or this document.
+
+
+## Live-schema validation — 26 November 2026
+
+The live database confirms that the proposed country boundary cannot yet be enforced safely:
+
+- `classrooms.Country` is free text. The table has no network type or normalized country code.
+- `teacher_profiles` has only an approval flag and no country or country-verification field.
+- There is no trusted country field on student or guardian records.
+- Classroom membership is created through `private.join_classroom_by_code(text)`. It is authenticated, rate-limited to 20 code attempts per user/day, and creates a pending membership. It does not inspect country or network type.
+- Membership approval remains constrained by teacher approval and the existing parent-consent status RLS check.
+- An active guardian relationship currently causes a new classroom join request to receive `parent_consent_status='approved'`. Confirm whether this global guardian consent is intended to cover all future classrooms or whether consent must be classroom-specific before extending the model.
+
+**Do not treat a free-text country or a UI label as a security boundary.** First choose and verify the authoritative country source. Then design an explicit approved school-to-school partnership for international collaboration, including both approved teacher/school owners and guardian approval for each participating learner. Existing classrooms should remain unclassified until their country and ownership are reviewed.
+
+No production schema, RLS policy or classroom membership was changed during this inspection.
