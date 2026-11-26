@@ -435,3 +435,8 @@ The remaining subject-page audit still includes older quiz integrations that sub
 
 ### Definition of completion
 The code package can be considered source-complete only after the latest CI and Pages deployment succeed. The product cannot be declared fully production-ready until the owner acceptance tests and jurisdiction/consent decisions above are completed and recorded. Do not report 100% or public-launch approval before that evidence exists.
+
+### Additional profile retry safeguard — 26 November 2026
+- The standalone Student Profile V2 quiz-save action now creates one stable operation ID per submitted result and exposes a learner-visible **Retry cloud save** control if the secure cloud write is not confirmed.
+- Retrying resubmits the same score and operation ID rather than adding a second local quiz record. The profile remains explicitly labelled as a same-device demonstration and is not the authoritative connected cloud dashboard.
+- Static repository checks passed for this source update, and the corresponding GitHub Pages deployment completed successfully (commit `5a97fe1c1cf03fa514cd2383339eba548a7a5807`; static run `45794968806`; Pages run `45794967687`).
