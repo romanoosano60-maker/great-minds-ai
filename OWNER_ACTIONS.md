@@ -1151,3 +1151,16 @@ Read-only checks against project `ryuchmmnyjyldwouidyy` confirmed:
 - Performance advisor: five indexes are currently reported unused, and two tables have multiple permissive SELECT policies (`homework_assignments`, `student_learning_progress`). In this low-traffic project, unused-index notices are not grounds to remove protective/query-support indexes. The SELECT policies represent separate teacher, student and guardian access paths; do not merge or weaken them without a measured query-plan review and full positive/negative RLS tests.
 
 No Supabase schema, policies, secrets, or plan settings were changed during this read-only audit. Provider secret presence and authenticated AI/LiveKit runtime success remain unverified.
+
+
+## Follow-up source and deployment verification — 26 November 2026
+
+- Confirmed GitHub Pages workflow run [45779135226](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45779135226) completed successfully: build, report-build-status, and deploy jobs all have conclusion `success`.
+- Re-fetched `assets/js/level-challenges.js` from the repository. The shared Beginner/Pro/Advanced challenge flow already generates one UUID when a level challenge is completed, stores that same ID with its local history record, and reuses it for the cloud-save attempt and any manual retry. It blocks overlapping save attempts and removes the retry control after a confirmed save. The retry preserves the original result rather than generating a fresh operation ID.
+- The shared challenge engine contains 12 subject banks with five questions per level. This remains a short starter bank, not a full curriculum. Question accuracy, age suitability, randomized answer presentation, local-history persistence and the authenticated cloud-save retry path still need Android/browser and real-account acceptance tests.
+- No live Supabase schema, RLS policy, secret, or account setting was changed in this follow-up. Local/International network enforcement and the guardian-code rate-limit migration remain separate reviewed changes requiring owner decisions and security testing.
+
+### Owner acceptance items still open
+- [ ] Test the published challenge engine on Android for English, Mathematics, Science and at least one other subject; complete all three levels and exercise the cloud retry path using fictional adult-controlled test accounts.
+- [ ] Verify that retrying a failed save creates no duplicate cloud row and that switching accounts never transfers a queued result.
+- [ ] Complete the separate-device parent/student/teacher, classroom consent, AI Teacher and video-call tests recorded above.
