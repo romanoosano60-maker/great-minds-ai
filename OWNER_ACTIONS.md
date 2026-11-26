@@ -510,7 +510,7 @@ Read-only source trace completed for the five primary subject pages and the shar
 - A bounded identity-bound queue is now implemented. It stores only minimal score/activity metadata, owner account UUID, operation UUID and creation time. It is capped at 100 entries and expires entries after 30 days.
 - Queue entries are created only for new saves tied to a verified signed-in user or a cached session awaiting server verification. A cached-session entry is not uploaded until `getUser()` confirms the same account. Retries are triggered on initial session, sign-in, token refresh, network reconnection, and through `gmSyncPendingStudentProgress()`.
 - Account A's queued record is never uploaded as Account B. Legacy anonymous local history is not auto-uploaded. The helper rejects conflicting reuse of a local or cloud operation ID.
-- Seventeen automated tests pass in GitHub Actions, covering ownership, RLS denial, offline cached-session handling, same-account retry, account switching, legacy non-upload, queue bounds/expiry and duplicate handling. The updated source is merged and deployed.
+- Twenty automated tests pass in GitHub Actions, covering ownership, RLS denial, offline cached-session handling, same-account retry, account switching, legacy non-upload, queue bounds/expiry and duplicate handling. The updated source is merged and deployed.
 - The optional `level` value is retained in local history but is not written to the cloud table because `student_learning_progress` has no declared `level` column. Do not insert an undeclared column.
 - Some subject pages have their own quiz-save handlers in addition to the shared level challenge. They must be tested independently; one successful save does not prove every activity saves.
 
