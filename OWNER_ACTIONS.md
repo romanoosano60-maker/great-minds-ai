@@ -1221,3 +1221,4 @@ The edits are source-level and require the latest static workflow and Pages depl
 - Primary History and Geography quizzes also use stable per-attempt IDs and visible retries.
 - Static checks and the Pages deployment must pass for the latest combined commit. These changes still require Android and live Supabase acceptance tests.
 - Follow-up: expanded Mathematics and Science challenges now use stable operation IDs and learner-visible retry controls; restarting clears the prior attempt and is blocked during an active save.
+- General Knowledge and Home Science expanded challenges now use stable operation IDs, visible retry controls, and safe restart-state reset.
