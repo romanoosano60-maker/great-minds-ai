@@ -418,3 +418,20 @@ The remaining subject-page audit still includes older quiz integrations that sub
 - Reviewed the connected Student, Parent and Teacher dashboard source. Each page re-checks the authenticated role/link or approved-teacher state after sign-in/account changes, clears prior cloud views on sign-out, and uses request-generation guards to avoid rendering stale responses. This is source inspection only; actual cross-account isolation still depends on live Supabase RLS and must be tested with separate accounts.
 - The standalone Student Profile V2 page is a local-device prototype: its activity history, profile fields, points and stars are read from browser local storage. Do not treat it as the authoritative cloud progress record or assume it synchronises across devices. The connected Student dashboard is the separate cloud-backed view.
 - Latest source-level changes in this continuation: stable retry handling was added to English primary and reading quizzes, Reading & Writing expanded challenge, General Knowledge and Home Science expanded challenges, plus the earlier subject retry repairs. A syntax issue introduced during the Reading & Writing edit was identified by CI and corrected in a follow-up commit; final verification is pending on that latest commit.
+
+## 26 November 2026 — Final consolidated audit additions
+
+### Latest lesson-save improvements
+- Encyclopedia challenge: stable per-attempt operation ID, learner-visible cloud-save status and retry, retry reuses the original score, restart clears old attempt state and is blocked while a save is in progress.
+- Science additional-practice challenge: the same stable-ID and visible retry safeguards; its earlier silent cloud-save failure path has been replaced.
+- Combined with prior repairs, the audited progress-save pages now include visible retry handling for the primary and expanded quizzes across English, Mathematics, Science, History, Geography, Computer Studies, General Knowledge, Home Science, Reading & Writing, Creative Arts and other extended practice pages. This is a source audit, not proof of successful cloud writes for every account.
+
+### Consolidated status
+- **Source work completed:** identity-bound offline progress queue; stable per-attempt retry handling across audited quiz flows; connected dashboard request/account guards; local-vs-cloud progress distinctions; lesson navigation and learning-area additions; owner and production documentation.
+- **CI evidence:** the previous latest static repository checks passed (20 automated tests). The current changes require their own final CI run and deployment before being called live.
+- **Owner acceptance still required:** Android device review; separate Student A/Student B and Parent A/Teacher account tests; classroom join/approval and guardian-consent tests; real AI Teacher answer; LiveKit multi-device call; final legal/privacy/launch-country review.
+- **Owner decisions still required:** authoritative country-verification source and local-school eligibility; international school partnership approval model; whether guardian approval is per classroom or a reusable parent-child relationship; whether to upgrade Supabase to Pro for leaked-password protection; explicit approval before applying the guardian-consent rate-limit migration.
+- **Production safety:** no production schema, RLS policies, secrets, consent configuration or user records were changed in this audit.
+
+### Definition of completion
+The code package can be considered source-complete only after the latest CI and Pages deployment succeed. The product cannot be declared fully production-ready until the owner acceptance tests and jurisdiction/consent decisions above are completed and recorded. Do not report 100% or public-launch approval before that evidence exists.
