@@ -409,3 +409,4 @@ The remaining subject-page audit still includes older quiz integrations that sub
 - Other legacy and expanded lesson save call sites still need a full systematic audit. A successful helper call must not be inferred from a locally visible score.
 - No production database schema, RLS policy, consent workflow, secrets, or user data were changed.
 - Added the same stable-ID and visible retry pattern to expanded Mathematics and Science challenges, including safe restart-state reset. This extends the earlier History, Geography and Computer Studies expanded-challenge repairs.
+- Added stable per-attempt IDs, visible cloud-save retry, duplicate-safe same-result retry, and safe restart-state reset to the expanded General Knowledge and Home Science challenges. The primary quizzes on these pages already had their own cloud retry flows.
