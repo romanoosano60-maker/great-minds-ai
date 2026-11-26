@@ -268,3 +268,30 @@ Read-only checks against project `ryuchmmnyjyldwouidyy` confirmed:
 - Performance advisor: five indexes are currently reported unused, and two tables have multiple permissive SELECT policies (`homework_assignments`, `student_learning_progress`). In this low-traffic project, unused-index notices are not grounds to remove protective/query-support indexes. The SELECT policies represent separate teacher, student and guardian access paths; do not merge or weaken them without a measured query-plan review and full positive/negative RLS tests.
 
 No Supabase schema, policies, secrets, or plan settings were changed during this read-only audit. Provider secret presence and authenticated AI/LiveKit runtime success remain unverified.
+
+
+## 12. Follow-up engineering and live-service audit — 26 November 2026
+
+A further read-only audit and a small source reliability improvement were completed on 26 November. This addendum supersedes earlier assumptions only where it states a newer verified fact.
+
+### Live Supabase recheck
+
+- Project `ryuchmmnyjyldwouidyy` remains `ACTIVE_HEALTHY`, running PostgreSQL 17.11.
+- Applied migration history still ends with entries dated 10 November 2026. The repository migration `supabase/migrations/20261120_rate_limit_guardian_consent_codes.sql` is not applied.
+- The live private function `private.create_guardian_consent_code()` is owned by `postgres`, is `SECURITY DEFINER`, has an empty search path, and its current execute ACL is limited to `postgres` and `authenticated`. Its current body generates a 64-character random code, stores a SHA-256 hash, expires it after 24 hours, and marks prior unused codes as used. **It does not yet enforce the proposed three-code-per-hour issuance limit.**
+- The issuance-counter table `private.guardian_consent_code_issuance` does not exist in production. The migration remains a pending production security improvement and must be applied through a reviewed/versioned workflow after owner approval.
+- Live RLS policy inspection reconfirmed that student progress inserts require `student_id = auth.uid()` and an active guardian relationship. Students can read their own progress; active linked guardians can read the linked learner's progress; approved teachers can read only progress for approved, consented classroom members.
+- The two current classroom country values are `Rwanda` and `UAE`. The existing classroom schema still has no normalized country-code or network-type fields. These two values are not sufficient evidence to classify a classroom as an approved international collaboration. Existing rows must remain unclassified for cross-border sharing until owners and guardian approvals are explicitly recorded.
+- Current Security Advisor findings remain three informational RLS/no-policy notices on intentionally closed operational/request tables and one warning for disabled leaked-password protection. Health Advisor returned no findings. No database schema, policy, secret, user, classroom or progress row was changed during this read-only audit.
+
+### Progress-save reliability improvement
+
+- The shared `student-cloud-progress.js` helper now rejects a reused operation UUID when the existing device-local record has different immutable progress values. It no longer silently replaces that local record.
+- Added nine automated Node tests covering input validation, device-only save behaviour, authenticated student ownership, no-session handling, RLS/guardian-consent denial, exact duplicate acceptance, conflicting cloud duplicate rejection, conflicting local duplicate protection, and bounded progress reads.
+- The GitHub Actions workflow now runs these tests before the repository static audit.
+- Draft PR: [#1 — Add automated student progress safety tests](https://github.com/romanoosano60-maker/great-minds-ai/pull/1). The first CI run passed all 9 tests and the existing static audit (63 HTML files, 10 standalone JavaScript files, 132 executable inline script blocks, and 619 local references). This PR remains separate from `main` until the final branch check and merge decision.
+- This improvement does **not** implement deferred cloud sync. Legacy anonymous local records remain device-only and must not be automatically uploaded to whichever account later signs in. Some lesson integrations still omit stable operation IDs and need a separate caller-by-caller reliability pass.
+
+### Current disposition
+
+The source-side progress conflict guard and automated tests are prepared and CI-verified on the draft PR. Production rate limiting, safe deferred sync, network separation, live AI response, LiveKit calls, Android acceptance, legal/privacy review and Android packaging remain outstanding. No completion percentage is increased on the basis of a source test alone.
