@@ -1176,3 +1176,15 @@ Completed a targeted repair in `english.html`:
 - The separate 20-question English practice already had a stable per-attempt ID and visible retry handling; this update addresses the previously identified English Explorer gap.
 
 Source-level validation and the repository static checks are required before treating this repair as deployed. Android and live Supabase/RLS acceptance tests remain outstanding.
+
+## 26 November 2026 — Creative Arts cloud-save retry repair
+
+Completed a source-level repair in `creative-arts.html`:
+
+- Each completed Art Challenge now receives a stable per-attempt UUID.
+- The same result object and UUID are reused for cloud retries, avoiding accidental duplicate attempts when the learner retries a failed request.
+- Added explicit cloud-confirmed, device-local, and unconfirmed status messaging with a visible retry button.
+- The learner's score remains visible if local storage or cloud saving fails; device storage is only claimed after a successful local write.
+- Restart is blocked while a cloud save is in flight and clears the prior attempt state afterward.
+
+The source update is committed. Automated repository checks and Pages deployment must complete before calling it deployed. Real-device and live Supabase/RLS acceptance remain pending.
