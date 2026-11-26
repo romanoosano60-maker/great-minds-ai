@@ -47,7 +47,7 @@ function environment(db = null, initialRows = [], initialQueue = []) {
 }
 
 function database({ user = { id: STUDENT_A }, insertError = null, existing = null, rows = [] } = {}) {
-  const state = { user, insertError, existing, rows };
+  const state = { user, insertError, existing, rows, userError: null, session: user ? { user } : null, sessionError: null };
   const calls = { table: null, inserted: [], selected: null, filters: [], order: null, limit: null, authListener: null };
   const query = {
     insert: async row => {
@@ -66,7 +66,8 @@ function database({ user = { id: STUDENT_A }, insertError = null, existing = nul
     calls,
     client: {
       auth: {
-        getUser: async () => ({ data: { user: state.user }, error: null }),
+        getUser: async () => ({ data: { user: state.user }, error: state.userError }),
+        getSession: async () => ({ data: { session: state.session }, error: state.sessionError }),
         onAuthStateChange(callback) {
           calls.authListener = callback;
           return { data: { subscription: { unsubscribe() {} } } };
@@ -161,6 +162,25 @@ test("retries a queued record after access is restored for the same account", as
   assert.equal(db.calls.inserted.length, 2);
   assert.equal(db.calls.inserted[1].id, OPERATION_ID);
   assert.equal(db.calls.inserted[1].student_id, STUDENT_A);
+});
+
+
+test("queues offline saves against the cached session but waits for server verification", async () => {
+  const db = database();
+  db.state.userError = { message: "offline" };
+  db.state.session = { user: { id: STUDENT_A } };
+  const env = environment(db);
+  const result = await env.api.gmSaveStudentProgress(validRecord());
+  assert.equal(result.saved, false);
+  assert.equal(result.queued, true);
+  assert.equal(db.calls.inserted.length, 0);
+  assert.equal(env.readQueue()[0].owner_id, STUDENT_A);
+  db.state.userError = null;
+  db.state.user = { id: STUDENT_A };
+  const retry = await env.api.gmSyncPendingStudentProgress();
+  assert.equal(retry.synced, 1);
+  assert.equal(retry.pending, 0);
+  assert.equal(db.calls.inserted.length, 1);
 });
 
 test("never transfers account A's queued progress to account B", async () => {
