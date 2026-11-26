@@ -267,6 +267,7 @@
     const db = window.greatMindsDB;
     let user = null;
     let authCheckFailed = false;
+    let cachedSessionOnly = false;
     if (db && db.auth && typeof db.auth.getUser === "function" && typeof db.from === "function") {
       installSyncListener(db);
       try {
@@ -275,6 +276,20 @@
         else user = userData && userData.user ? userData.user : null;
       } catch (_) {
         authCheckFailed = true;
+      }
+      // If the network prevents server verification, bind a new queue item to the
+      // locally cached session only. It is never uploaded until getUser() verifies
+      // that the same account is signed in again.
+      if (authCheckFailed && typeof db.auth.getSession === "function") {
+        try {
+          const { data: sessionData, error: sessionError } = await db.auth.getSession();
+          const cachedUser = sessionData && sessionData.session && sessionData.session.user;
+          if (!sessionError && cachedUser && UUID_RE.test(String(cachedUser.id || ""))) {
+            user = cachedUser;
+            cachedSessionOnly = true;
+            authCheckFailed = false;
+          }
+        } catch (_) {}
       }
     }
 
@@ -334,6 +349,12 @@
       question_count: questions,
       source
     };
+    if (cachedSessionOnly) {
+      const queued = addToQueue(queueItemFor(user, row));
+      return { saved: false, localSaved, queued: queued.saved, reason: queued.saved
+        ? "Saved on this device. Secure cloud sync is queued for the cached account and will retry only after that same account is verified online."
+        : "Saved locally, but the secure sync queue is full or unavailable. Sign in again when connected." };
+    }
     const result = await tryCloudInsert(db, user, row);
     if (result.saved) {
       removeFromQueue(operationId, user.id);
