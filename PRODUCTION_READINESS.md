@@ -1,6 +1,6 @@
 # Great Minds AI — Production Readiness Checklist
 
-Last reviewed: 9 November 2026
+Last reviewed: 26 November 2026
 
 This document separates source-code work from live-service and device verification. A page that works with browser storage is a prototype, not a connected account or international classroom.
 
@@ -190,9 +190,17 @@ The stricter pass exposed and source corrections were committed for:
 
 These are source corrections. They do not replace browser/device interaction tests or Supabase authorization tests.
 
-## Safe architecture design prepared — 24 November 2026
+## Safe progress synchronisation implemented — 26 November 2026
 
-Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md). It records the current device-local versus immediate cloud-save behaviour, explains why anonymous legacy local progress must not be automatically uploaded, specifies identity-bound idempotent deferred-sync acceptance tests, separates Family relationships from Local/International classroom types, and lays out a reviewed migration/RLS test sequence. **No network schema migration or automatic upload process was deployed.**
+Added [SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md](SAFE_CLOUD_SYNC_AND_NETWORK_SEPARATION_DESIGN_2026-11-24.md) and implemented the identity-bound progress retry queue in `student-cloud-progress.js`. The code is merged into `main` and was included in a successful GitHub Pages deployment (run `45778488849`).
+
+- Only new progress records created for a verified signed-in account, or a cached session awaiting later server verification, can enter the retry queue.
+- Every queued record is bound to its owner UUID and is uploaded only after the same account is verified. Account switching does not transfer queued progress.
+- Legacy anonymous local history is not auto-uploaded.
+- The queue is limited to 100 entries and 30 days; its payload contains score/activity metadata only.
+- Seventeen automated tests pass. Real Android, separate-account and live Supabase RLS acceptance tests are still required.
+
+**Still not implemented:** separate Local School and International classroom database types or verified country-based access boundaries. The current free-text classroom country and absence of verified teacher/student/guardian country fields are not sufficient to enforce cross-border rules. No network schema migration was deployed.
 
 
 ## Live Supabase configuration and advisor audit — 24 November 2026
