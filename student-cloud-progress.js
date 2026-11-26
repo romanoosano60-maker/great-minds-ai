@@ -19,6 +19,7 @@
   const PERMANENT_DB_ERRORS = new Set(["23514", "23502", "22001", "22P02", "23503"]);
   let syncInProgress = false;
   let syncListenerInstalled = false;
+  let onlineListenerInstalled = false;
 
   function clean(value, max) {
     return String(value == null ? "" : value).trim().slice(0, max);
@@ -211,18 +212,24 @@
   }
 
   function installSyncListener(db) {
-    if (syncListenerInstalled || !db || !db.auth || typeof db.auth.onAuthStateChange !== "function") return;
-    try {
-      db.auth.onAuthStateChange((event, session) => {
-        if (!session || !session.user || !["INITIAL_SESSION", "SIGNED_IN", "TOKEN_REFRESHED"].includes(event)) return;
-        // Defer the call so no Supabase method is awaited inside its auth callback.
-        if (typeof window.setTimeout === "function") {
-          window.setTimeout(() => { syncPendingProgress(); }, 0);
-        }
-      });
-      syncListenerInstalled = true;
-    } catch (error) {
-      console.warn("Great Minds AI progress sync listener could not be installed:", error);
+    if (!db || !db.auth) return;
+    if (!syncListenerInstalled && typeof db.auth.onAuthStateChange === "function") {
+      try {
+        db.auth.onAuthStateChange((event, session) => {
+          if (!session || !session.user || !["INITIAL_SESSION", "SIGNED_IN", "TOKEN_REFRESHED"].includes(event)) return;
+          // Defer the call so no Supabase method is awaited inside its auth callback.
+          if (typeof window.setTimeout === "function") {
+            window.setTimeout(() => { syncPendingProgress(); }, 0);
+          }
+        });
+        syncListenerInstalled = true;
+      } catch (error) {
+        console.warn("Great Minds AI progress sync listener could not be installed:", error);
+      }
+    }
+    if (!onlineListenerInstalled && typeof window.addEventListener === "function") {
+      window.addEventListener("online", () => { syncPendingProgress(); });
+      onlineListenerInstalled = true;
     }
   }
 
@@ -375,4 +382,5 @@
   window.gmSaveStudentProgress = saveProgress;
   window.gmLoadMyStudentProgress = loadMyProgress;
   window.gmSyncPendingStudentProgress = syncPendingProgress;
+  installSyncListener(window.greatMindsDB);
 })();
