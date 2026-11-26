@@ -233,3 +233,15 @@ No Supabase schema, policies, secrets, or plan settings were changed during this
 **Owner decisions:** authoritative country verification and local-school access criteria; approved international partnership model; per-classroom vs reusable guardian consent; Supabase Pro upgrade decision for leaked-password protection; approval of the un-applied guardian-consent rate-limit migration.
 
 No live database schema, RLS policies, secrets, consent settings, or learner data were changed as part of this source audit.
+
+
+## Verification reconciliation — 26 November 2026
+
+The latest verification evidence has now been checked against the GitHub Actions run records:
+
+- Static repository checks: **success**, run [45795203603](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45795203603), for documentation/source package commit `7e126574d5115a82e20cc796ca32b3a5d47a086b`.
+- GitHub Pages build and deployment: **success**, run [45795202996](https://github.com/romanoosano60-maker/great-minds-ai/actions/runs/45795202996), for the latest application-code commit `5a97fe1c1cf03fa514cd2383339eba548a7a5807`.
+- The deployment run is tied to the application-code commit, while the later documentation-only commit has its own successful static-check run. Do not describe the Pages run as deploying the documentation-only commit.
+- This closes the source/CI/deployment gate for the listed code changes. It does **not** close Android acceptance, live Supabase RLS/account-isolation checks, guardian-consent/classroom tests, authenticated AI Teacher response, LiveKit multi-device testing, or jurisdiction/retention decisions.
+
+The remaining work is therefore owner-side acceptance and explicit product/security decisions, not an outstanding CI failure. No production database migration or RLS change was applied.
