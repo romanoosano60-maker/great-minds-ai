@@ -1200,3 +1200,15 @@ Completed source-level repairs in `math.html` and `science.html` for the primary
 - Existing local demo-history behavior is retained separately from authenticated cloud progress.
 
 Source commits: Mathematics `5482c19`; Science `8d8579b`. Static checks and Pages deployment are pending for the latest consolidated branch state. Real Android and live Supabase/RLS acceptance remain pending.
+
+## 26 November 2026 — History and Geography retry integration
+
+The primary History Detective and Geography World Explorer quiz completion flows now:
+
+- create one stable operation ID for the completed attempt;
+- reuse the exact same score payload when the learner retries cloud saving;
+- show a visible Retry cloud save action when saving is unavailable or unconfirmed;
+- distinguish cloud-confirmed progress from an unconfirmed result; and
+- retain the device-side demo-history copy separately from the authenticated cloud write.
+
+The edits are source-level and require the latest static workflow and Pages deployment to pass. Real Android and live Supabase/RLS testing remain required. The additional expanded History/Geography challenge blocks still need a full per-activity review; this repair covers the primary quizzes only.
