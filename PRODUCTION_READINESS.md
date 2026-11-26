@@ -223,3 +223,13 @@ Read-only checks against project `ryuchmmnyjyldwouidyy` confirmed:
 - Performance advisor: five indexes are currently reported unused, and two tables have multiple permissive SELECT policies (`homework_assignments`, `student_learning_progress`). In this low-traffic project, unused-index notices are not grounds to remove protective/query-support indexes. The SELECT policies represent separate teacher, student and guardian access paths; do not merge or weaken them without a measured query-plan review and full positive/negative RLS tests.
 
 No Supabase schema, policies, secrets, or plan settings were changed during this read-only audit. Provider secret presence and authenticated AI/LiveKit runtime success remain unverified.
+
+## Final combined gate — 26 November 2026
+
+**Source improvements recorded:** stable-ID cloud retry handling now covers the audited Encyclopedia and Science additional-practice challenges in addition to the prior subject repairs. The app's identity-bound retry queue and connected dashboard source guards remain part of the combined package.
+
+**Do not mark production-ready yet.** The current source changes need a successful final CI run and Pages deployment. Then the owner must complete Android acceptance, separate-account/guardian/teacher access tests, classroom consent/approval, authenticated AI Teacher, multi-device LiveKit, and privacy/jurisdiction review.
+
+**Owner decisions:** authoritative country verification and local-school access criteria; approved international partnership model; per-classroom vs reusable guardian consent; Supabase Pro upgrade decision for leaked-password protection; approval of the un-applied guardian-consent rate-limit migration.
+
+No live database schema, RLS policies, secrets, consent settings, or learner data were changed as part of this source audit.
