@@ -308,7 +308,7 @@ A source implementation of deferred progress retry has been added on a separate 
 - Queue size is capped at 100 entries and entries expire after 30 days. The queue contains only the minimum score/activity metadata; it does not contain learner nicknames, free-form writing, audio, contact details or location.
 - Retry is triggered on initial authenticated session, sign-in, token refresh, network reconnection, and by the exposed `gmSyncPendingStudentProgress()` function.
 - Legacy anonymous local history is not scanned or uploaded. It remains device-only.
-- The test suite now has 16 passing cases, including same-account retry, account-switch isolation, cached-session/offline handling, legacy-history non-upload, queue bounds/expiry, duplicate verification and existing progress validation. The repository static audit also passes.
+- The test suite now has 17 passing cases, including same-account retry, account-switch isolation, cached-session/offline handling, legacy-history non-upload, queue bounds/expiry, duplicate verification and existing progress validation. The repository static audit also passes.
 - Draft PR: [#2 — Add identity-bound offline progress sync](https://github.com/romanoosano60-maker/great-minds-ai/pull/2). CI passed on the current branch revision. The PR must be merged and Pages deployment confirmed before describing this source implementation as live.
 
 **Not yet proven:** real Android offline/reconnect behaviour, real Supabase RLS denial and recovery with separate accounts, queue behaviour under browser storage restrictions, or parent visibility after cross-device sync. These remain owner acceptance tests. No Supabase database or production data was changed for this source implementation.
