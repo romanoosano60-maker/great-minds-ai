@@ -361,3 +361,24 @@ The classroom setup screen has been clarified so it no longer implies that a sta
 - A new regression test file checks these safety-critical disclosures, and the static CI workflow now runs all `scripts/*.test.mjs` files, not only the progress-sync tests.
 
 The regression tests and deployment checks for the latest commit are running. This is a transparency and regression-prevention improvement; it does not implement country verification, Local/International database types, partnership approval, or new RLS boundaries.
+
+## 26 November 2026 — consolidated continuation update
+
+This continuation adds the following source-level progress and deployment evidence after the 24 November snapshot above:
+
+- Identity-bound offline progress retry is present in `student-cloud-progress.js`. The queue is account-bound, bounded, expires old entries, does not auto-upload legacy anonymous history, and waits for server verification before uploading a cached-session item. Account-switch isolation and duplicate-operation handling are covered by automated tests.
+- Level Challenge, English Explorer and Creative Arts challenge now use stable per-attempt operation IDs and learner-visible cloud retry/status handling. English Explorer and Creative Arts retain the same operation ID and result on retry; local-save status is only shown after successful device storage.
+- Classroom setup and network hub pages explicitly distinguish the current pilot/family-link model from Local School and International Network types that are not separately enforced in the database. Teacher-entered country is not represented as verified security evidence.
+- Guardian consent-code rate limiting has been reviewed and documented, but its migration remains unapplied pending explicit owner approval.
+- The latest confirmed source audit for commit `fb8915ed8aefe8c178694addb8e656f558cf7a1e` passed: 20 automated tests, 63 HTML files, 10 JavaScript files, 132 executable inline scripts and 619 local references. GitHub Pages deployment for that commit succeeded.
+- The next source package includes Creative Arts retry changes in commit `8300b2f799f90efdee828cdf9cd2951c8dd7bd25` and documentation in commit `4fa38b5c1bebcd8dbd1f9a9dd20aeed280bfde42`. At the time of this update, the static checks for the documentation commit have passed; its Pages build is still running. Do not describe the Creative Arts change as live until that deployment succeeds.
+
+### Remaining release blockers — unchanged
+
+- Real Android acceptance testing and real Supabase/RLS tests with separate fictional test accounts.
+- Verified country source and approved criteria for Local School membership and cross-border partnerships; no country/network database boundary is currently enforced.
+- Explicit owner approval before applying the reviewed guardian-consent rate-limit migration.
+- Authenticated AI Teacher answer test, LiveKit call test, and end-to-end parent/student/teacher classroom and homework tests.
+- Privacy/legal review, data retention/deletion/export decisions, and launch-country approval before public release.
+
+The source and static tests are not substitutes for live service, device, legal, or child-safety acceptance.
